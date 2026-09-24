@@ -1,0 +1,14 @@
+{
+  "name": "ro-glue",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local glue for roBrowserLegacy: static server + GRF(0x200/0x300, standard DES) asset server + WebSocket->TCP relay (allow-listed)",
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

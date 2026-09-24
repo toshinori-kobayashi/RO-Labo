@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="euc-kr" ?>
+<clientinfo>
+    <servicetype>japan</servicetype>
+    <servertype>sakray</servertype>
+    <connection>
+        <display>RO PreRE</display>
+        <desc>Pre-Renewal Test Server</desc>
+        <balloon>EXP x10 / Drop x5</balloon>
+        <address>54.65.172.5</address>
+        <port>6900</port>
+        <version>55</version>
+        <langtype>2</langtype>
+    </connection>
+</clientinfo>

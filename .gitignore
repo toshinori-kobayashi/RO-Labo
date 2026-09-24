@@ -1,0 +1,18 @@
+# サーバ資料は別端末にある。このリポジトリには入れない。
+/RO/
+
+# 再インストールできる実行環境と依存
+/tools/node/
+/tools/downloads/
+**/node_modules/
+
+# 上流の配布物と、過去ビルドの退避。実行中のビルドは client/robrowser。
+/tools/roBrowserLegacy-dist/
+/backup/
+
+# 実行ログと受信パケットダンプ
+/notes/*.log
+/notes/rx-dump.txt
+
+# jRO の bgi_temp.bmp を分割したログイン背景。手元利用のみで、再配布しない。
+/client/clientdata/**/t_*.bmp
