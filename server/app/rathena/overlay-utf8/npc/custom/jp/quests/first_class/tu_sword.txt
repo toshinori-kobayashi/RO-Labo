@@ -1,0 +1,2497 @@
+//===== rAthena Script ======================================= 
+//= Swordman Class Tutorial and Job Specific Quest
+//===== By: ================================================== 
+//= Fix up by Jukka
+//===== Current Version: ===================================== 
+//= 1.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Swordman training quest.
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working
+//= 1.1 optimized [Lupus]
+//= 1.2 Fixed a typo on NPC name. [SinSloth]
+//= 1.3 Fixed experience gains to match upcoming rate adjustments. [SinSloth]
+//= 1.4 Misc. updates. [L0ne_W0lf]
+//= 1.5 Added Renewal Izlude coordinates.
+//= 1.6 Added Pre-Renewal support. [Euphy]
+//============================================================ 
+
+// Shurank
+//============================================================
+izlude_in,82,163,3	script	シュランク::Shurank	733,{
+	mes "[シュランク]";
+	if(Class == Job_Novice || Class == Job_Baby){
+		mes "まだ";
+		mes "将来のことで";
+		mes "迷っているようだな。";
+		next;
+		mes "[シュランク]";
+		mes "差し出がましいようだが、";
+		mes "力の道を";
+		mes "進むことを勧めよう。";
+		mes "剣士に…なるのだ。";
+		next;
+		mes "[シュランク]";
+		mes "剣の道に命を懸ける覚悟があるなら、左手にいる剣士協会の担当者に話しかけるといい。";
+		next;
+		mes "[シュランク]";
+		mes "何をするにせよ、";
+		mes "悔いのない人生を送ってほしい。そしてもし剣士になったなら、";
+		mes "また私のところへ来るといい…";
+		close;
+	}
+	if(BaseClass == Job_Swordman && (eaclass()&(EAJL_2|EAJL_UPPER|EAJL_THIRD))){
+		mes "その装いから見るに、";
+		mes "お前は";
+		if(Sex == SEX_MALE)
+			mes "剣を扱う男のようだな。";
+		else
+			mes "剣を扱う女のようだな。";
+		mes "その目を見れば分かる、";
+		mes "数々の戦いを見てきたのだろう。";
+		next;
+		mes "[シュランク]";
+		mes "お前に教えられることはもう何もない。だが見込みのある新人剣士を見かけたら、私のところへ寄越してくれ。";
+		close;
+	}
+	if(BaseClass != Job_Swordman){
+		mes "ようこそ、冒険者よ。";
+		mes "もし知り合いに";
+		mes "新人の剣士がいたら、";
+		mes "私のところへ寄越してくれ。";
+		next;
+		mes "[シュランク]";
+		mes "私の専門は、転職したばかりの新人剣士に基礎を教えることでな。";
+		next;
+		mes "[シュランク]";
+		mes "誰もが剣を扱えれば理想的なのだが、";
+		mes "残念ながらお前に教えられることは何もなさそうだ。お前の職の技は…";
+		mes "私には縁のないものでな。";
+		close;
+	}
+	switch(tu_swordman){
+	case 23:
+		mes "やあ、友よ。";
+		mes "もうこれ以上";
+		mes "教えることは何もない…";
+		next;
+		mes "[シュランク]";
+		mes "腕を磨くには、";
+		mes "この広い世界を巡り、あらゆる戦いを経験することだ。そして常に鍛錬を怠るな。";
+		close;
+	case 22:
+		mes "これが私から";
+		mes "お前への最後の講義になる。";
+		mes "よく聞くといい、";
+		mes "これから";
+		mes "マグナムブレイクについて話す。";
+		next;
+		mes "[シュランク]";
+		mes "マグナムブレイクは、レベル10で習得できるが、習得には^5D478Bバッシュ レベル5^000000が必要だ。使用すると、術者の周囲にいる敵全体に範囲ダメージを与える。";
+		next;
+		mes "[シュランク]";
+		mes "マグナムブレイクを受けた敵は";
+		mes "火属性攻撃によって吹き飛ばされる。その後は一時的に武器の火属性ダメージが20%上昇するぞ。";
+		next;
+		mes "[シュランク]";
+		mes "マグナムブレイクは";
+		mes "敵に囲まれたときに向いているが、術者自身にも多少のダメージが入ることを覚えておけ。";
+		next;
+		set .@chk_magnum, getskilllv("SM_MAGNUM");
+		if(.@chk_magnum > 5){
+			mes "[シュランク]";
+			mes "マグナムブレイクの訓練を積んでいるようだな。強力なスキルだが、すべての剣士に向いているわけではない。それでも覚えておいて損はないだろう。";
+			next;
+			mes "[シュランク]";
+			mes "これはお前の";
+			mes "これまでの努力へのささやかな褒美だ。だがその才能で驕り高ぶるなよ！";
+			set tu_swordman, 23;
+			completequest 8228;
+			if (checkre(3))
+				getexp 186,0;
+			else
+				getexp 1860,0;
+			getitem 1113,1; //Scimiter
+			next;
+			mes "[シュランク]";
+			mes "剣士のスキルについて、私が教えられることはこれで全てだ。お前の職とスキルについての疑問が、少しでも晴れていればいいのだが。";
+			next;
+			mes "[シュランク]";
+			mes "あの";
+			mes "殺人犯の件だが、もう我々の手を離れたことだ。今のところ、我々にできることは";
+			mes "何もない。";
+			next;
+			mes "[シュランク]";
+			mes "ただ、";
+			mes "お前が知ったこの情報は";
+			mes "胸に秘めて";
+			mes "おいてほしい。これはかなり機密性の高い話でな…";
+			next;
+			mes "[シュランク]";
+			mes "とにかく、もう心配する必要はない。だが助けが必要になったら、またお前に頼むとしよう。";
+			next;
+			mes "[シュランク]";
+			mes "よくやった。訓練を続けて^5D478Bジョブレベル40^000000に達すれば、ナイトやクルセイダーに転職できるぞ。";
+			next;
+			mes "[シュランク]";
+			mes "さて…";
+			mes "我々剣士は感傷的にはなりにくい性分だが、お前と出会えて良かったと思っている。励んで、立派な剣士になれ。";
+			close;
+		}
+		mes "[シュランク]";
+		mes "剣士のスキルについて、私が教えられることはこれで全てだ。お前の職とスキルについての疑問が、少しでも晴れていればいいのだが。";
+		next;
+		mes "[シュランク]";
+		mes "あの";
+		mes "殺人犯の件だが、もう我々の手を離れたことだ。今のところ、我々にできることは何もない。";
+		next;
+		mes "[シュランク]";
+		mes "ただ、";
+		mes "お前が知ったこの情報は";
+		mes "胸に秘めて";
+		mes "おいてほしい。これはかなり機密性の高い話でな…";
+		next;
+		mes "[シュランク]";
+		mes "とにかく、もう心配する必要はない。だが助けが必要になったら、またお前に頼むとしよう。";
+		next;
+		mes "[シュランク]";
+		mes "よくやった。訓練を続けて^5D478Bジョブレベル40^000000に達すれば、ナイトやクルセイダーに転職できるぞ。";
+		next;
+		mes "[シュランク]";
+		mes "さて…";
+		mes "我々剣士は感傷的にはなりにくい性分だが、お前と出会えて良かったと思っている。励んで、立派な剣士になれ。";
+		next;
+		mes "[シュランク]";
+		mes "行く前に、これを受け取ってくれ。";
+		mes "これから強くなっていく中で役立ててくれればと思う。達者でな。";
+		set tu_swordman, 23;
+		completequest 8228;
+		getitem 1113,1; //Scimiter
+		close;
+	case 21:
+		mes "おお、戻ったか。ちょうど";
+		mes "デクィーから連絡があってな。お前はよくやってくれたようだし、この経験を存分に活かしているようだ。";
+		next;
+		mes "[シュランク]";
+		mes "そろそろ剣士のスキルについて、もう少し学んでおくといいだろう。まずは剣熟練について話そう。";
+		next;
+		mes "[シュランク]";
+		mes "剣熟練には2種類ある。";
+		mes "^5D478B片手剣熟練^000000と";
+		mes "^5D478B両手剣熟練^000000だ。どちらも";
+		mes "レベルを上げるほど攻撃力が上がるパッシブスキルだ。";
+		next;
+		mes "[シュランク]";
+		mes "片手剣熟練は";
+		mes "ダガーと片手剣のダメージを上げ、両手剣熟練は両手剣のダメージを上げる。";
+		next;
+		set .@chk_hanson, getskilllv("SM_SWORD");
+		set .@chk_yangson, getskilllv("SM_TWOHAND");
+		if((.@chk_hanson > 9) || (.@chk_yangson > 9)){
+			mes "[シュランク]";
+			mes "おお、剣の扱い方を見れば、剣熟練を極めたのが分かるぞ。実に感心だ。";
+			next;
+			mes "[シュランク]";
+			mes "その功績を";
+			mes "称えて、";
+			mes "ささやかな";
+			mes "褒美をやろう。";
+			set tu_swordman, 22;
+			changequest 8227,8228;
+			if (checkre(3))
+				getexp 186,0;
+			else
+				getexp 1860,0;
+			next;
+			mes "[シュランク]";
+			mes "次はマグナムブレイクについて教えよう。";
+			mes "準備ができたら、ここに来るといい。";
+			close;
+		}
+		mes "[シュランク]";
+		mes "次はマグナムブレイクについて教えよう。";
+		mes "準備ができたら、ここに来るといい。";
+		set tu_swordman, 22;
+		close;
+	case 13:
+		mes "早くゲフェンのデクィーに会いに行くといい。場所は覚えているな？";
+		close;
+	case 12:
+		mes "エンデュアの";
+		mes "訓練の";
+		mes "調子はどうだ？";
+		next;
+		set .@chk_endure, getskilllv("SM_ENDURE");
+		if(.@chk_endure > 1){
+			mes "[シュランク]";
+			mes "その肌に浮かぶ強さの輝きを見れば、そんなことを聞くまでもなかったな。よくやった～";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[シュランク]";
+			mes "ああ、また";
+			mes "お前に頼みがある。ゲフェンのデクィーが";
+			mes "何か頼みたいことがあるようだ、会いに行ってくれ。";
+			next;
+			mes "[シュランク]";
+			mes "急いでデクィーに会いに行き、頼まれたことを終えたら私のところへ戻ってきてくれ。";
+			close;
+		} else {
+			mes "[シュランク]";
+			mes "うむ…";
+			mes "まだ";
+			mes "十分ではないようだな。";
+			mes "その間に、";
+			mes "もっと励むといい！";
+			close;
+		}
+	case 11:
+		mes "エンデュアの";
+		mes "使い方は";
+		mes "もう覚えたか？";
+		next;
+		set .@chk_endure, getskilllv("SM_ENDURE");
+		if((.@chk_endure > 0) && (.@chk_endure < 2)){
+			mes "[シュランク]";
+			mes "エンデュアの";
+			mes "使い方は";
+			mes "もう分かっているようだな。それでも基本をおさらいしておいて損はないだろう…";
+			next;
+			mes "[シュランク]";
+			mes "気づいているだろうが、ダメージを受けると一瞬怯んでしまう。だから連続で攻撃してくる敵は、反撃も回避もしにくく危険なのだ。";
+			next;
+			mes "[シュランク]";
+			mes "エンデュアを発動すれば、攻撃をものともせず動ける。ダメージは受けるが、敵の攻撃に怯まされにくくなる。つまり反撃したり、必要なら逃げたりできるということだ。";
+			next;
+			mes "[シュランク]";
+			mes "もちろんエンデュアはずっと使い続けられるものではない。だがエンデュアの";
+			mes "レベルを上げるほど、効果の持続時間は長くなる。それとエンデュアにも硬直時間があることを覚えておけ。";
+			next;
+			mes "[シュランク]";
+			mes "もうエンデュアを覚えているなら、これ以上説明することはなさそうだ。よくやった。";
+			erasequest 8221;
+			setquest 8222;
+			set tu_swordman, 13;
+			next;
+			mes "[シュランク]";
+			mes "ああ、また";
+			mes "お前に頼みがある。ゲフェンのデクィーが";
+			mes "何か頼みたいことがあるようだ、会いに行ってくれ。";
+			next;
+			mes "[シュランク]";
+			mes "急いでデクィーに会いに行き、頼まれたことを終えたら私のところへ戻ってきてくれ。";
+			close2;
+			end;
+		} else if(.@chk_endure > 1){
+			mes "[シュランク]";
+			mes "その肌に浮かぶ強さの輝きを見れば、そんなことを聞くまでもなかったな。よくやった～";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[シュランク]";
+			mes "ああ、また";
+			mes "お前に頼みがある。ゲフェンのデクィーが";
+			mes "何か頼みたいことがあるようだ、会いに行ってくれ。";
+			next;
+			mes "[シュランク]";
+			mes "急いでデクィーに会いに行き、頼まれたことを終えたら私のところへ戻ってきてくれ。";
+			close;
+		} else {
+			mes "[シュランク]";
+			mes "覚えて…いない？";
+			mes "できるだけ早く覚えることを勧める。エンデュアはどんな剣士にとってもかけがえのないスキルだからな！";
+			close;
+		}
+	case 10:
+		mes "そろそろ";
+		mes "エンデュアについて";
+		mes "私が知る全てを";
+		mes "お前に話すときが来たようだ。";
+		next;
+		set .@chk_endure, getskilllv("SM_ENDURE");
+		if(.@chk_endure == 0){
+			mes "[シュランク]";
+			mes "気づいているだろうが、ダメージを受けると一瞬怯んでしまう。だから連続で攻撃してくる敵は、反撃も回避もしにくく危険なのだ。";
+			next;
+			mes "[シュランク]";
+			mes "エンデュアを発動すれば、攻撃をものともせず動ける。ダメージは受けるが、敵の攻撃に怯まされにくくなる。つまり反撃したり、必要なら逃げたりできるということだ。";
+			next;
+			mes "[シュランク]";
+			mes "もちろんエンデュアはずっと使い続けられるものではない。だがエンデュアの";
+			mes "レベルを上げるほど、効果の持続時間は長くなる。それとエンデュアにも硬直時間があることを覚えておけ。";
+			next;
+			mes "[シュランク]";
+			mes "よし。ではエンデュアの訓練に励んでくれ。敵の攻撃に";
+			mes "耐えられるようになれば、";
+			mes "立派な剣士になれるぞ！";
+			set tu_swordman, 11;
+			changequest 8220,8221;
+			close;
+		} else if((.@chk_endure > 0) && (.@chk_endure < 2)){
+			mes "[シュランク]";
+			mes "エンデュアの";
+			mes "使い方は";
+			mes "もう分かっているようだな。それでも基本をおさらいしておいて損はないだろう…";
+			next;
+			mes "[シュランク]";
+			mes "気づいているだろうが、ダメージを受けると一瞬怯んでしまう。だから連続で攻撃してくる敵は、反撃も回避もしにくく危険なのだ。";
+			next;
+			mes "[シュランク]";
+			mes "エンデュアを発動すれば、攻撃をものともせず動ける。ダメージは受けるが、敵の攻撃に怯まされにくくなる。つまり反撃したり、必要なら逃げたりできるということだ。";
+			next;
+			mes "[シュランク]";
+			mes "もちろんエンデュアはずっと使い続けられるものではない。だがエンデュアの";
+			mes "レベルを上げるほど、効果の持続時間は長くなる。それとエンデュアにも硬直時間があることを覚えておけ。";
+			next;
+			mes "[シュランク]";
+			mes "もうエンデュアを覚えているなら、これ以上説明することはなさそうだ。よくやった。";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			next;
+			mes "[シュランク]";
+			mes "ああ、また";
+			mes "お前に頼みがある。ゲフェンのデクィーが";
+			mes "何か頼みたいことがあるようだ、会いに行ってくれ。";
+			next;
+			mes "[シュランク]";
+			mes "急いでデクィーに会いに行き、頼まれたことを終えたら私のところへ戻ってきてくれ。";
+			close;
+		} else if(.@chk_endure > 1){
+			mes "[シュランク]";
+			mes "うむ。だがその肌に浮かぶ強さの輝きを見れば、今さらエンデュアを教えるのは時間の無駄のようだな。よくやった！";
+			set tu_swordman, 13;
+			erasequest 8221;
+			setquest 8222;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[シュランク]";
+			mes "ああ、また";
+			mes "お前に頼みがある。ゲフェンのデクィーが";
+			mes "何か頼みたいことがあるようだ、会いに行ってくれ。";
+			next;
+			mes "[シュランク]";
+			mes "急いでデクィーに会いに行き、頼まれたことを終えたら私のところへ戻ってきてくれ。";
+			close;
+		}
+	case 9:
+		mes "プロボックについて";
+		mes "もっと学んで";
+		mes "いるところか？";
+		next;
+		set .@chk_provoke, getskilllv("SM_PROVOKE");
+		if((.@chk_provoke > 4) && (.@chk_provoke < 10)){
+			mes "[シュランク]";
+			mes "おお、プロボックについてかなり理解が深まっているようだな。その努力にささやかな褒美をやろう。";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+			mes "[シュランク]";
+			mes "次に会うときは、^5D478Bエンデュア^000000について話そう。学ぶ準備ができたら、また来るといい。";
+			close;
+		} else if(.@chk_provoke == 10){
+			mes "[シュランク]";
+			mes "プ、プロボックを";
+			mes "極めたのか？大したものだ！";
+			mes "立派な剣士になろうと";
+			mes "決意を";
+			mes "固めたようだな。";
+			mes "ささやかな褒美だ…";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[シュランク]";
+			mes "次に会うときは、^5D478Bエンデュア^000000について話そう。学ぶ準備ができたら、また来るといい。";
+			close;
+		} else {
+			mes "[シュランク]";
+			mes "うむ、";
+			mes "成長は認めるが、まだ十分ではない。プロボックをもっと極めてからでないと";
+			mes "先の講義には進めないぞ。";
+			close;
+		}
+	case 8:
+		mes "おお、戻ったか。";
+		mes "プロボックの訓練の";
+		mes "調子は";
+		mes "どうだ？";
+		next;
+		set .@chk_provoke, getskilllv("SM_PROVOKE");
+		if((.@chk_provoke > 0) && (.@chk_provoke < 5)){
+			mes "[シュランク]";
+			mes "おお、";
+			mes "使えるようになったんだな。全く使えなかった頃から見ればかなりの進歩だ。プロボックの詳細をおさらいしておこう。";
+			next;
+			mes "[シュランク]";
+			mes "プロボックを効果的に使うには、";
+			mes "仕組みを理解する必要がある。プロボックは敵を激昂させ、";
+			mes "お前を攻撃したがらせるのだ。";
+			next;
+			mes "[シュランク]";
+			mes "挑発された敵は攻撃力が上がって危険になるが、防御力は下がるため倒しやすくなる。";
+			next;
+			mes "[シュランク]";
+			mes "理想を言えば、敵がある程度弱ってからプロボックを使えば手早く倒せる。まあ、これはお前次第だがな。";
+			next;
+			mes "[シュランク]";
+			mes "それとプロボックのレベルが高いほど、対象の攻撃力上昇と防御力低下も大きくなる。";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるプロボックは、バッシュと同じく少量のSPを消費する。使用中にSP切れを起こさないよう気をつけろ。";
+			next;
+			mes "[シュランク]";
+			mes "よし、プロボックを十分に使いこなせるようになったら戻ってくるといい。それまで訓練を続けろ。";
+			set tu_swordman, 9;
+			close;
+		} else if((.@chk_provoke > 4) && (.@chk_provoke < 10)){
+			mes "[シュランク]";
+			mes "おお、プロボックについてかなり理解が深まっているようだな。その努力にささやかな褒美をやろう。";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+			mes "[シュランク]";
+			mes "次に会うときは、^5D478Bエンデュア^000000について話そう。学ぶ準備ができたら、また来るといい。";
+			close;
+		} else if(.@chk_provoke == 10){
+			mes "[シュランク]";
+			mes "プ、プロボックを";
+			mes "極めたのか？大したものだ！";
+			mes "立派な剣士になろうと";
+			mes "決意を";
+			mes "固めたようだな。";
+			mes "ささやかな褒美だ…";
+			set tu_swordman, 10;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "次に会うときは、^5D478Bエンデュア^000000について話そう。学ぶ準備ができたら、また来るといい。";
+			close;
+		} else {
+			mes "[シュランク]";
+			mes "まだプロボックを覚えていないのか？剣士たるもの、せめてプロボックくらいは使えるようになるべきだと私は思うぞ！";
+			close;
+		}
+	case 7:
+		mes "おお、戻ったか。新米剣士にしては";
+		mes "なかなかの腕前だな。それで、";
+		mes "デクィーからの伝言は？";
+		next;
+		mes "[シュランク]";
+		mes "そうか…";
+		mes "よし、それは片付いたようだし、";
+		mes "剣士のスキルについて続けて教えよう。今度はプロボックだ。";
+		next;
+		set .@chk_provoke, getskilllv("SM_PROVOKE");
+		if(.@chk_provoke == 0){
+			mes "[シュランク]";
+			mes "まだ";
+			mes "プロボックを覚えていないのか？";
+			mes "うむ。なおのこと";
+			mes "説明しておくべきだろうな。";
+			next;
+			mes "[シュランク]";
+			mes "プロボックを効果的に使うには、";
+			mes "仕組みを理解する必要がある。プロボックは敵を激昂させ、";
+			mes "お前を攻撃したがらせるのだ。";
+			next;
+			mes "[シュランク]";
+			mes "挑発された敵は攻撃力が上がって危険になるが、防御力は下がるため倒しやすくなる。";
+			next;
+			mes "[シュランク]";
+			mes "理想を言えば、敵がある程度弱ってからプロボックを使えば手早く倒せる。まあ、これはお前次第だがな。";
+			next;
+			mes "[シュランク]";
+			mes "それとプロボックのレベルが高いほど、対象の攻撃力上昇と防御力低下も大きくなる。";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるプロボックは、バッシュと同じく少量のSPを消費する。使用中にSP切れを起こさないよう気をつけろ。";
+			next;
+			mes "[シュランク]";
+			mes "ではプロボックの訓練に励むといい。";
+			mes "十分使いこなせるようになったら、また来るといい。";
+			set tu_swordman, 8;
+			changequest 8217,8218;
+			close;
+		} else if((.@chk_provoke > 0) && (.@chk_provoke < 5)){
+			mes "[シュランク]";
+			mes "うむ。プロボックの基本は分かっているようだが、もっと理解が深まるよう詳しく説明しておこう。";
+			next;
+			mes "[シュランク]";
+			mes "プロボックを効果的に使うには、";
+			mes "仕組みを理解する必要がある。プロボックは敵を激昂させ、";
+			mes "お前を攻撃したがらせるのだ。";
+			next;
+			mes "[シュランク]";
+			mes "挑発された敵は攻撃力が上がって危険になるが、防御力は下がるため倒しやすくなる。";
+			next;
+			mes "[シュランク]";
+			mes "理想を言えば、敵がある程度弱ってからプロボックを使えば手早く倒せる。まあ、これはお前次第だがな。";
+			next;
+			mes "[シュランク]";
+			mes "それとプロボックのレベルが高いほど、対象の攻撃力上昇と防御力低下も大きくなる。";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるプロボックは、バッシュと同じく少量のSPを消費する。使用中にSP切れを起こさないよう気をつけろ。";
+			next;
+			mes "[シュランク]";
+			mes "ではプロボックの訓練に励むといい。";
+			mes "十分使いこなせるようになったら、また来るといい。";
+			set tu_swordman, 9;
+			changequest 8218,8219;
+			close;
+		} else if((.@chk_provoke > 4) && (.@chk_provoke < 10)){
+			mes "[シュランク]";
+			mes "おお、プロボックについてかなり理解が深まっているようだな。その努力にささやかな褒美をやろう。";
+			set tu_swordman, 10;
+			changequest 8219,8220;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+			mes "[シュランク]";
+			mes "次に会うときは、^5D478Bエンデュア^000000について話そう。学ぶ準備ができたら、また来るといい。";
+			close;
+		} else if(.@chk_provoke == 10){
+			mes "[シュランク]";
+			mes "プ、プロボックを";
+			mes "極めたのか？大したものだ！";
+			mes "立派な剣士になろうと";
+			mes "決意を";
+			mes "固めたようだな。";
+			mes "ささやかな褒美だ…";
+			set tu_swordman, 10;
+			completequest 8218;
+			completequest 8219;
+			completequest 8220;
+			setquest 8221;
+			if (checkre(3))
+				getexp 126,0;
+			else
+				getexp 1260,0;
+			next;
+			mes "[シュランク]";
+			mes "次に会うときは、^5D478Bエンデュア^000000について話そう。学ぶ準備ができたら、また来るといい。";
+			close;
+		}
+	case 6:
+		mes "^5D478Bゲフェン^000000にいる^5D478Bデクィー^000000というナイトを訪ねてほしい。よく聞け、これが";
+		mes "彼に伝えてもらいたい伝言だ。";
+		next;
+		mes "[シュランク]";
+		mes "^0000FF殺人犯は";
+		mes "どうなった？^000000";
+		mes "^0000FF正体は突き止めたか？もし突き止めたなら、私たちはどうすればいい？^000000";
+		next;
+		mes "[シュランク]";
+		mes "その言葉どおりに伝えれば、デクィーには";
+		mes "何のことか分かるはずだ。彼の返事を覚えておいて、私に教えてくれ。";
+		next;
+		mes "[シュランク]";
+		mes "ゲフェンまでの道中のモンスターなら、それほど苦労はしないだろう。だがもし手に負えない相手に出会ったら、逃げるのは恥ではないぞ。";
+		next;
+		mes "[シュランク]";
+		mes "とはいえ、考えてみればゲフェンまでは少し時間がかかるな。よし、私が送ってやろう！健闘を祈る！";
+		next;
+		warp "gef_fild07",35,192;
+		close;
+	case 5:
+		mes "おお、戻ったか。プロボックについて教えると言ったが…";
+		next;
+		mes "[シュランク]";
+		mes "実はお前に頼みたい大事な用がある。難しいことではない、伝言を届けてもらうだけだ。";
+		next;
+		mes "[シュランク]";
+		mes "^5D478Bゲフェン^000000にいる^5D478Bデクィー^000000というナイトを訪ねてほしい。よく聞け、これが";
+		mes "彼に伝えてもらいたい伝言だ。";
+		next;
+		mes "[シュランク]";
+		mes "^0000FF殺人犯は";
+		mes "どうなった？^000000";
+		mes "^0000FF正体は突き止めたか？もし突き止めたなら、私たちはどうすればいい？^000000";
+		next;
+		mes "[シュランク]";
+		mes "その言葉どおりに伝えれば、デクィーには";
+		mes "何のことか分かるはずだ。彼の返事を覚えておいて、私に教えてくれ。";
+		next;
+		mes "[シュランク]";
+		mes "ゲフェンまでの道中のモンスターなら、それほど苦労はしないだろう。だがもし手に負えない相手に出会ったら、逃げるのは恥ではないぞ。";
+		next;
+		mes "[シュランク]";
+		mes "ワープサービスもあるが、";
+		mes "歩いて行くことを勧める。自分の力を試し、スキルを磨かなければ強くはなれないからな！";
+		set tu_swordman, 6;
+		changequest 8215,8216;
+		close;
+	case 4:
+		mes "バッシュを極めたようだし、";
+		mes "そろそろ剣士のスキルについてもっと学ぶ準備ができているだろう。";
+		next;
+		mes "[シュランク]";
+		mes "さて、^5D478BHP回復増加^000000というスキルは知っているな。";
+		mes "ダメージを受けたら、";
+		mes "受け止めることも与えることもできなければならない。";
+		next;
+		set .@chk_hp, getskilllv("SM_RECOVERY");
+		if(.@chk_hp == 0){
+			mes "[シュランク]";
+			mes "だがその";
+			mes "ひ弱な体つきを見るに、";
+			mes "HP回復増加をまるで覚えていないようだな…！";
+			next;
+			mes "[シュランク]";
+			mes "HP回復増加は";
+			mes "常時発動するパッシブスキルで、";
+			mes "SPも消費しない。";
+			next;
+			mes "[シュランク]";
+			mes "HPの自然回復速度が2倍になる。大したことないように思えるかもしれないが、戦闘後の休憩時間を短縮してくれるぞ。";
+			next;
+			mes "[シュランク]";
+			mes "ぜひとも";
+			mes "覚えておくべきスキルだ！もちろん、他にも同じくらい重要な剣士のスキルはあるがな…";
+			set tu_swordman, 5;
+			next;
+		} else if(.@chk_hp == 10){
+			mes "[シュランク]";
+			mes "おお！その健康的な顔色！";
+			mes "もうこのスキルを極めているようだな。日頃の鍛錬にささやかな褒美をやろう！";
+			set tu_swordman, 5;
+			if (checkre(3))
+				getexp 112,0;
+			else
+				getexp 1120,0;
+			next;
+		} else {
+			mes "[シュランク]";
+			mes "おお、多少は覚えているようだな。それでもHP回復増加について簡単に説明しておこう。";
+			next;
+			mes "[シュランク]";
+			mes "HP回復増加は";
+			mes "常時発動するパッシブスキルで、";
+			mes "SPも消費しない。";
+			next;
+			mes "[シュランク]";
+			mes "HPの自然回復速度が2倍になる。大したことないように思えるかもしれないが、戦闘後の休憩時間を短縮してくれるぞ。";
+			next;
+			mes "[シュランク]";
+			mes "HP回復増加はかなり重要なスキルだが、極めるかどうかは結局お前次第だ。";
+			set tu_swordman, 5;
+			next;
+		}
+		setquest 8215;
+		mes "[シュランク]";
+		mes "これでHP回復増加については十分に分かっただろう。次はプロボックについて教えよう。";
+		close;
+	case 3:
+		mes "バッシュの";
+		mes "真の力を";
+		mes "引き出したいなら、";
+		mes "極めておかねば";
+		mes "剣士として";
+		mes "認めるわけにはいかないぞ。";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if(.@chk_bash == 10){
+			mes "[シュランク]";
+			mes "その手のタコ…！";
+			mes "バッシュを極めた者だけがこんな手になる。よくやった、剣士よ。実に感心だ。";
+			next;
+			mes "[シュランク]";
+			mes "これまでの努力を称えて、ささやかな褒美をやろう。だがまだ気を抜くな！";
+			mes "基礎を身につけるまでは、まだ道のりが長いぞ。";
+			set tu_swordman, 4;
+			changequest 8213,8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		} else {
+			mes "[シュランク]";
+			mes "うむ、";
+			mes "バッシュをかなり使えているようだが、まだ極めてはいないな。真の力を引き出すため、極めることを勧めるぞ！";
+			close;
+		}
+	case 2:
+		mes "バッシュの";
+		mes "訓練に";
+		mes "励んでいるといいが。剣士として成長したいなら、";
+		mes "このスキルを極める必要が大いにあるぞ。";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if((.@chk_bash > 4) && (.@chk_bash < 10)){
+			mes "[シュランク]";
+			mes "うむ。まだバッシュを極めてはいないようだが、努力はしているようだな。";
+			next;
+			mes "[シュランク]";
+			mes "バッシュの使い方をおさらいしておこう。前にも聞いたなら、復習だと思ってくれ。";
+			next;
+			mes "[シュランク]";
+			mes "バッシュはレベル10で極められるアクティブスキルで、対象を叩きのめすことができる。つまり、";
+			mes "高いダメージを与える攻撃だ！";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるため、バッシュは使うたびに";
+			mes "SPを消費する。油断するとすぐSP切れになるぞ…！";
+			next;
+			mes "[シュランク]";
+			mes "その努力にささやかな褒美をやろう。強くなっていく中で、バッシュを使う大切さを";
+			mes "分かってくれるといいのだが。";
+			set tu_swordman, 3;
+			changequest 8212,8213;
+			if (checkre(3))
+				getexp 83,0;
+			else
+				getexp 830,0;
+			close;
+		} else if(.@chk_bash == 10){
+			mes "[シュランク]";
+			mes "その手のタコ…！";
+			mes "バッシュを極めた者だけがこんな手になる。よくやった、剣士よ。実に感心だ。";
+			next;
+			mes "[シュランク]";
+			mes "これまでの努力を称えて、ささやかな褒美をやろう。だがまだ気を抜くな！";
+			mes "基礎を身につけるまでは、まだ道のりが長いぞ。";
+			set tu_swordman, 4;
+			changequest 8212,8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		} else {
+			mes "[シュランク]";
+			mes "うむ、";
+			mes "バッシュをかなり使えているようだが、まだ極めてはいないな。真の力を引き出すため、極めることを勧めるぞ！";
+			close;
+		}
+	case 1:
+		mes "バッシュを使う技を";
+		mes "学んでいるか？私はバッシュこそが剣術の真髄だと固く信じているぞ！";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if((.@chk_bash > 0) && (.@chk_bash < 5)){
+			mes "[シュランク]";
+			mes "バッシュについて";
+			mes "多少は理解しているようだな。だがまだ十分ではない。詳しく説明しよう…";
+			next;
+			mes "[シュランク]";
+			mes "バッシュはレベル10で極められるアクティブスキルで、対象を叩きのめすことができる。つまり、";
+			mes "高いダメージを与える攻撃だ！";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるため、バッシュは使うたびに";
+			mes "SPを消費する。油断するとすぐSP切れになるぞ…！";
+			next;
+			mes "[シュランク]";
+			mes "さて、今のところバッシュについて話せるのはこれくらいだ。細かい機微については、自分自身で";
+			mes "戦いの中で体験するしかない。";
+			next;
+			mes "[シュランク]";
+			mes "それでも訓練の努力に免じて、ささやかな褒美をやろう。だがまだ";
+			mes "教えるべき基礎が残っているぞ！";
+			set tu_swordman, 2;
+			changequest 8211,8212;
+			if (checkre(3))
+				getexp 58,0;
+			else
+				getexp 580,0;
+			close;
+		} else if((.@chk_bash > 4) && (.@chk_bash < 10)){
+			mes "[シュランク]";
+			mes "うむ…";
+			mes "まだバッシュを極めていないのか。まあ、それでも多少は成長したようだな。";
+			next;
+			mes "[シュランク]";
+			mes "バッシュの使い方を説明しておこう。前にも聞いたなら、復習だと思ってくれ。";
+			next;
+			mes "[シュランク]";
+			mes "バッシュについて";
+			mes "多少は理解しているようだな。だがまだ十分ではない。詳しく説明しよう…";
+			next;
+			mes "[シュランク]";
+			mes "バッシュはレベル10で極められるアクティブスキルで、対象を叩きのめすことができる。つまり、";
+			mes "高いダメージを与える攻撃だ！";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるため、バッシュは使うたびに";
+			mes "SPを消費する。油断するとすぐSP切れになるぞ…！";
+			next;
+			mes "[シュランク]";
+			mes "さて、今のところバッシュについて話せるのはこれくらいだ。細かい機微については、自分自身で";
+			mes "戦いの中で体験するしかない。";
+			next;
+			mes "[シュランク]";
+			mes "お前の努力と忍耐に免じて、ささやかな褒美をやろう。受け取って、もっと強くなってくれ…";
+			set tu_swordman, 3;
+			changequest 8211,8213;
+			if (checkre(3))
+				getexp 83,0;
+			else
+				getexp 830,0;
+			next;
+			mes "[シュランク]";
+			mes "真の剣士たる者、バッシュを極めるべきだと私は思っている。剣士としてこのスキルを極めたら、また私のところへ来るといい。";
+			close;
+		} else if(.@chk_bash == 10){
+			mes "[シュランク]";
+			mes "その手のタコ…！";
+			mes "バッシュを極めた者だけがこんな手になる。よくやった、剣士よ。実に感心だ。";
+			next;
+			mes "[シュランク]";
+			mes "これまでの努力を称えて、ささやかな褒美をやろう。だがまだ気を抜くな！";
+			mes "基礎を身につけるまでは、まだ道のりが長いぞ。";
+			set tu_swordman, 4;
+			changequest 8211,8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		} else {
+			mes "[シュランク]";
+			mes "まだバッシュすら使えないのか…？叩きのめせない剣に何の意味がある！？";
+			mes "使い方を覚えたら";
+			mes "また私のところへ来るといい！";
+			close;
+		}
+	case 0:
+		mes "おお、戦友よ。";
+		mes "自己紹介させてくれ。私はシュランク・チェインリア、プロンテラ騎士団に仕えるナイトだ。";
+		next;
+		mes "[シュランク]";
+		mes "近頃の剣士たちが剣の道を本当に理解していないのではと、深く懸念している。それが後にナイトになるかもしれないと思うとな…";
+		next;
+		mes "[シュランク]";
+		mes "腕利きの剣士に";
+		mes "なろうと鍛錬しているか？";
+		mes "そうなら、まず";
+		mes "基礎を学ばねばならん。";
+		mes "その最初が^5D478Bバッシュ^000000スキルだ。";
+		next;
+		set .@chk_bash, getskilllv("SM_BASH");
+		if(.@chk_bash == 0){
+			mes "[シュランク]";
+			mes "^333333*ハッ*^000000";
+			mes "その柔らかく華奢な手！バッシュを覚えたことがないな？！バッシュも知らずにどうやって戦いを制するつもりだ？";
+			next;
+			mes "[シュランク]";
+			mes "さて、真の剣士になりたいなら、バッシュを覚えねばならん。疑いの余地はない、この基礎は必須だ！これを受け取って、バッシュを覚えるといい！";
+			set tu_swordman, 1;
+			if (checkre(3))
+				getexp 49,0;
+			else
+				getexp 490,0;
+			setquest 8211;
+			close;
+		} else if((.@chk_bash > 0) && (.@chk_bash < 5)){
+			mes "[シュランク]";
+			mes "バッシュについて";
+			mes "多少は理解しているようだな。だがまだ十分ではない。詳しく説明しよう…";
+			next;
+			mes "[シュランク]";
+			mes "バッシュはレベル10で極められるアクティブスキルで、対象を叩きのめすことができる。つまり、";
+			mes "高いダメージを与える攻撃だ！";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるため、バッシュは使うたびに";
+			mes "SPを消費する。油断するとすぐSP切れになるぞ…！";
+			next;
+			mes "[シュランク]";
+			mes "さて、今のところバッシュについて話せるのはこれくらいだ。細かい機微については、自分自身で";
+			mes "戦いの中で体験するしかない。";
+			next;
+			mes "[シュランク]";
+			mes "それでも訓練の努力に免じて、ささやかな褒美をやろう。だがまだ";
+			mes "教えるべき基礎が残っているぞ！";
+			set tu_swordman, 2;
+			setquest 8212;
+			if (checkre(3))
+				getexp 58,0;
+			else
+				getexp 580,0;
+			close;
+		} else if((.@chk_bash > 4) && (.@chk_bash < 10)){
+			mes "[シュランク]";
+			mes "バッシュにいくらか習熟してきたようだな。だがまだ十分ではない。説明しておこう…";
+			next;
+			mes "[シュランク]";
+			mes "バッシュはレベル10で極められるアクティブスキルで、対象を叩きのめすことができる。つまり、";
+			mes "高いダメージを与える攻撃だ！";
+			next;
+			mes "[シュランク]";
+			mes "アクティブスキルであるため、バッシュは使うたびに";
+			mes "SPを消費する。油断するとすぐSP切れになるぞ…！";
+			next;
+			mes "[シュランク]";
+			mes "さて、今のところバッシュについて話せるのはこれくらいだ。細かい機微については、自分自身で";
+			mes "戦いの中で体験するしかない。";
+			next;
+			mes "[シュランク]";
+			mes "それでも訓練の努力に免じて、ささやかな褒美をやろう。だがまだ";
+			mes "教えるべき基礎が残っているぞ！";
+			set tu_swordman, 3;
+			setquest 8213;
+			if (checkre(3))
+				getexp 83,0;
+			else
+				getexp 830,0;
+			next;
+			mes "[シュランク]";
+			mes "だが私の目から見て一流の剣士になりたいなら、バッシュを極めねばならんぞ！";
+			close;
+		} else if(.@chk_bash == 10){
+			mes "[シュランク]";
+			mes "その手のタコ…！";
+			mes "バッシュを極めた者だけがこんな手になる。よくやった、剣士よ。実に感心だ。";
+			next;
+			mes "[シュランク]";
+			mes "これまでの努力を称えて、ささやかな褒美をやろう。だがまだ気を抜くな！";
+			mes "基礎を身につけるまでは、まだ道のりが長いぞ。";
+			set tu_swordman, 4;
+			// completequest 8211;
+			// completequest 8212;
+			// completequest 8213;
+			setquest 8214;
+			if (checkre(3))
+				getexp 97,0;
+			else
+				getexp 970,0;
+			getitem 2503,1; //Muffler
+			close;
+		}
+	}
+	mes "…";
+	mes "……";
+	close;
+}
+
+// Daqu'ee
+//============================================================
+geffen,154,143,3	script	デクィー::Dequ'ee	734,{
+	if(BaseJob == Job_Novice){
+		mes "[デクィー]";
+		mes "よう。";
+		mes "ノービスでいるのに";
+		mes "うんざりしてるのか？";
+		mes "分かる、分かるぞ、";
+		mes "誰でも一度は";
+		mes "通る道だ。";
+		next;
+		mes "[デクィー]";
+		mes "強くなりたいなら、";
+		mes "剣士になることを考えてみないか？自分を律する必要はあるが、その職業はお前をタフな戦士に鍛え上げてくれるぞ。";
+		next;
+		mes "[デクィー]";
+		mes "最終的にはお前が決めることだ。";
+		mes "お前がどんな人生を送りたいかは分からないが、剣士という職業も真剣に考えてみるといい…";
+		close;
+	}
+	if(BaseClass == Job_Swordman && (eaclass()&(EAJL_2|EAJL_UPPER))){
+		mes "[デクィー]";
+		mes "おお…";
+		mes "剣を扱う仲間じゃないか！";
+		mes "調子はどうだ？";
+		next;
+		mes "[デクィー]";
+		mes "多くの人が";
+		mes "お前の剣の強さに頼っているはずだ。重い責任だが、戦いで仲間を失望させるわけにはいかないからな…";
+		close;
+	}
+	if(BaseClass != Job_Swordman){
+		mes "[デクィー]";
+		mes "やあ。";
+		mes "剣は好きじゃないんだろう？";
+		mes "もし好きなら、";
+		mes "話すこともあっただろうがな。";
+		next;
+		mes "[デクィー]";
+		mes "ああ。";
+		mes "あまり";
+		mes "会話が";
+		mes "弾まないな。";
+		mes "退屈だ…";
+		close;
+	}
+	if(tu_swordman > 20){
+		mes "[デクィー]";
+		mes "これからも";
+		mes "剣の道を";
+		mes "極めていってほしい。";
+		mes "剣を振るうことには";
+		mes "極意があるからな…";
+		close;
+	}
+	if(tu_swordman == 20){
+		mes "[デクィー]";
+		mes "ん…？";
+		mes "バンクリーを";
+		mes "見張ってるんじゃなかったのか？";
+		mes "何があった？";
+		next;
+		mes "[デクィー]";
+		mes "自殺…？";
+		mes "本気か！？";
+		mes "疑われてると気づいたくらいで";
+		mes "自ら命を絶つ必要はないはずだ。何か裏がありそうだな！";
+		next;
+		mes "[デクィー]";
+		mes "まあ、よくやってくれた。";
+		mes "残る3人の容疑者については、剣士協会のメンバーに見張らせておく。";
+		next;
+		mes "[デクィー]";
+		mes "とはいえ、あの3人からはもう新しい情報は出てこないだろう。";
+		mes "この事件はひとまず片付いたようだ。改めて、協力に感謝する。";
+		next;
+		mes "[デクィー]";
+		mes "そろそろシュランクに報告しに行ってはどうだ？まだ";
+		mes "剣術の手ほどきをしたいようだしな。";
+		set tu_swordman, 21;
+		changequest 8226,8227;
+		close2;
+		if (checkre(0))
+			warp "izlude",127,100;
+		else
+			warp "izlude",35,78;
+		end;
+	}
+	if(tu_swordman == 19){
+		mes "[デクィー]";
+		mes "まだこんなところで何してる？";
+		mes "急いでバンクリーの様子を見に行け！";
+		mes "何をしでかすか";
+		mes "分かったもんじゃないぞ！";
+		close;
+	}
+	if((tu_swordman == 17) || (tu_swordman == 18)){
+		mes "[デクィー]";
+		if(tu_swordman == 17){
+			mes "TheisWesomeof";
+			mes "ConBanfoevidehi";
+			mes "victkleyundncem";
+			mes "hekdlfiDrindkelsd";
+			next;
+		} else if(tu_swordman == 18){
+			mes "hekdlfiDrindkelsd";
+			mes "TheisWesomeof";
+			mes "ConBanfoevidehi";
+			mes "victkleyundncem";
+			next;
+		}
+		mes "[デクィー]";
+		mes "分かったぞ！";
+		mes "これは複雑な転置式の暗号だ。1人分のコードを残りから取り除けば読み解ける。それで、";
+		mes "殺人犯は誰だと思う？";
+		next;
+		switch(select("ハンス:バンクリー:ガイル:ムエトロ")) {
+		case 1:
+			mes "[デクィー]";
+			mes "ハンス…？";
+			mes "それは違う。";
+			mes "この暗号とは";
+			mes "さっき考えた";
+			mes "手順に合わない。もう一度";
+			mes "試してみてくれ！";
+			close;
+		case 2:
+			mes "[デクィー]";
+			mes "バンクリーの…？";
+			mes "おい、お前";
+			mes "正解かもしれないぞ。確認させてくれ…";
+			next;
+			mes "[デクィー]";
+			mes "ああ、バンクリーのパスワードを他から抜き出して、正しい順に読んでみると…";
+			next;
+			mes "[デクィー]";
+			mes "よし！バンクリーが殺人犯みたいだ！100%とは言い切れないが、この証拠はかなり決定的だぞ。";
+			next;
+			mes "[デクィー]";
+			mes "急いでモロクに行って、バンクリーが自暴自棄にならないか見張っててくれ。何かあったらすぐ報告してくれよ！";
+			set tu_swordman, 19;
+			changequest 8224,8225;
+			if (checkre(3))
+				getexp 162,0;
+			else
+				getexp 1620,0;
+			close2;
+			warp "moc_fild07",359,201;
+			end;
+		case 3:
+			mes "[デクィー]";
+			mes "ガイル…？";
+			mes "それは違う。";
+			mes "この暗号とは";
+			mes "さっき考えた";
+			mes "手順に合わない。もう一度";
+			mes "試してみてくれ！";
+			close;
+		case 4:
+			mes "[デクィー]";
+			mes "ムエトロ…？";
+			mes "それは違う。";
+			mes "この暗号とは";
+			mes "さっき考えた";
+			mes "手順に合わない。もう一度";
+			mes "試してみてくれ！";
+			close;
+		}
+	}
+	if(tu_swordman == 16){
+		mes "[デクィー]";
+		mes "この暗号は、正しい順番に並べ替えないと秘密が分からなさそうだな。";
+		next;
+		mes "[デクィー]";
+		mes "ふむ、お前が順番を推理してくれたら、それをもとに解読を試みてみるよ。";
+		next;
+		switch(select("ムエトロ:ハンス:ガイル:バンクリー")) {
+		case 1:
+			mes "[デクィー]";
+			mes "よし、ムエトロの";
+			mes "コードを最初に";
+			mes "使うとしよう。次は";
+			mes "誰の";
+			mes "コードにする？";
+			next;
+			switch(select("ハンス:ガイル:バンクリー")) {
+			case 1:
+				mes "[デクィー]";
+				mes "ハンス…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ガイル:バンクリー")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ムエトロ・ハンス、";
+					mes "ガイル・バンクリーの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "ConBanfoevidehi";
+					mes "victkleyundncem";
+					mes "TheisWesomeof";
+					mes "hekdlfiDrindkelsd";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ムエトロ・ハンス、";
+					mes "ガイル・バンクリーの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "ConBanfoevidehi";
+					mes "victkleyundncem";
+					mes "hekdlfiDrindkelsd";
+					mes "TheisWesomeof";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 2:
+				mes "[デクィー]";
+				mes "ガイルの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ハンス:バンクリー")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ムエトロ・ガイル、";
+					mes "ハンス・バンクリーの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "ConBanfoevidehi";
+					mes "TheisWesomeof";
+					mes "victkleyundncem";
+					mes "hekdlfiDrindkelsd";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ムエトロ・ガイル、";
+					mes "バンクリー・ハンスの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "ConBanfoevidehi";
+					mes "TheisWesomeof";
+					mes "hekdlfiDrindkelsd";
+					mes "victkleyundncem";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 3:
+				mes "[デクィー]";
+				mes "バンクリーの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ハンス:ガイル")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ムエトロ・バンクリー、";
+					mes "ハンス・ガイルの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "ConBanfoevidehi";
+					mes "hekdlfiDrindkelsd";
+					mes "victkleyundncem";
+					mes "TheisWesomeof";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ムエトロ・バンクリー、";
+					mes "ガイル・ハンスの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "ConBanfoevidehi";
+					mes "hekdlfiDrindkelsd";
+					mes "TheisWesomeof";
+					mes "victkleyundncem";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			}
+			break;
+		case 2:
+			mes "[デクィー]";
+			mes "よし、ハンスの";
+			mes "コードを最初に";
+			mes "使うとしよう。次は";
+			mes "誰の";
+			mes "コードにする？";
+			next;
+			switch(select("ムエトロ:ガイル:バンクリー")) {
+			case 1:
+				mes "[デクィー]";
+				mes "ムエトロの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ガイル:バンクリー")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ハンス・ムエトロ、";
+					mes "ガイル・バンクリーの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "victkleyundncem";
+					mes "ConBanfoevidehi";
+					mes "TheisWesomeof";
+					mes "hekdlfiDrindkelsd";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ハンス・ムエトロ、";
+					mes "バンクリー・ガイルの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "victkleyundncem";
+					mes "ConBanfoevidehi";
+					mes "hekdlfiDrindkelsd";
+					mes "TheisWesomeof";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 2:
+				mes "[デクィー]";
+				mes "ガイルの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ムエトロ:バンクリー")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ハンス・ガイル、";
+					mes "ムエトロ・バンクリーの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "victkleyundncem";
+					mes "TheisWesomeof";
+					mes "ConBanfoevidehi";
+					mes "hekdlfiDrindkelsd";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ハンス・ガイル、";
+					mes "バンクリー・ムエトロの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "victkleyundncem";
+					mes "TheisWesomeof";
+					mes "hekdlfiDrindkelsd";
+					mes "ConBanfoevidehi";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 3:
+				mes "[デクィー]";
+				mes "バンクリーの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ムエトロ:ガイル")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ハンス・バンクリー、";
+					mes "ムエトロ・ガイルの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "victkleyundncem";
+					mes "hekdlfiDrindkelsd";
+					mes "ConBanfoevidehi";
+					mes "TheisWesomeof";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ハンス・バンクリー、";
+					mes "ガイル・ムエトロの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "victkleyundncem";
+					mes "hekdlfiDrindkelsd";
+					mes "TheisWesomeof";
+					mes "ConBanfoevidehi";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			}
+			break;
+		case 3:
+			mes "[デクィー]";
+			mes "よし、ガイルの";
+			mes "コードを最初に";
+			mes "使うとしよう。次は";
+			mes "誰の";
+			mes "コードにする？";
+			next;
+			switch(select("ムエトロ:ハンス:バンクリー")) {
+			case 1:
+				mes "[デクィー]";
+				mes "ムエトロの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ハンス:バンクリー")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ガイル・ムエトロ、";
+					mes "ハンス・バンクリーの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "TheisWesomeof";
+					mes "ConBanfoevidehi";
+					mes "victkleyundncem";
+					mes "hekdlfiDrindkelsd";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "って思ったが…待てよ！";
+					next;
+					mes "[デクィー]";
+					mes "これなら";
+					mes "解読できる";
+					mes "気がする！ちょっと";
+					mes "手順を考えさせてくれ！";
+					set tu_swordman, 17;
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ガイル・ムエトロ、";
+					mes "バンクリー・ハンスの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "TheisWesomeof";
+					mes "ConBanfoevidehi";
+					mes "hekdlfiDrindkelsd";
+					mes "victkleyundncem";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 2:
+				mes "[デクィー]";
+				mes "ハンスの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ムエトロ:バンクリー")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ガイル・ハンス、";
+					mes "ムエトロ・バンクリーの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "TheisWesomeof";
+					mes "victkleyundncem";
+					mes "ConBanfoevidehi";
+					mes "hekdlfiDrindkelsd";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ガイル・ハンス、";
+					mes "バンクリー・ムエトロの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "TheisWesomeof";
+					mes "victkleyundncem";
+					mes "hekdlfiDrindkelsd";
+					mes "ConBanfoevidehi";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 3:
+				mes "[デクィー]";
+				mes "バンクリーの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ムエトロ:ハンス")) {
+				case 1:
+					mes "[デクィー]";
+					mes "ガイル・バンクリー、";
+					mes "ムエトロ・ハンスの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "TheisWesomeof";
+					mes "hekdlfiDrindkelsd";
+					mes "ConBanfoevidehi";
+					mes "victkleyundncem";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "ガイル・バンクリー、";
+					mes "ハンス・ムエトロの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "TheisWesomeof";
+					mes "hekdlfiDrindkelsd";
+					mes "victkleyundncem";
+					mes "ConBanfoevidehi";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			}
+			break;
+		case 4:
+			mes "[デクィー]";
+			mes "よし、バンクリーの";
+			mes "コードを最初に";
+			mes "使うとしよう。次は";
+			mes "誰の";
+			mes "コードにする？";
+			next;
+			switch(select("ムエトロ:ハンス:ガイル")) {
+			case 1:
+				mes "[デクィー]";
+				mes "ムエトロの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ハンス:ガイル")) {
+				case 1:
+					mes "[デクィー]";
+					mes "バンクリー・ムエトロ、";
+					mes "ハンス・ガイルの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "hekdlfiDrindkelsd";
+					mes "ConBanfoevidehi";
+					mes "victkleyundncem";
+					mes "TheisWesomeof";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "バンクリー・ムエトロ、";
+					mes "ガイル・ハンスの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "hekdlfiDrindkelsd";
+					mes "ConBanfoevidehi";
+					mes "TheisWesomeof";
+					mes "victkleyundncem";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 2:
+				mes "[デクィー]";
+				mes "ハンスの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ムエトロ:ガイル")) {
+				case 1:
+					mes "[デクィー]";
+					mes "バンクリー・ハンス、";
+					mes "ムエトロ・ガイルの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "hekdlfiDrindkelsd";
+					mes "victkleyundncem";
+					mes "ConBanfoevidehi";
+					mes "TheisWesomeof";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "バンクリー・ハンス、";
+					mes "ガイル・ムエトロの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					mes " ";
+					mes "hekdlfiDrindkelsd";
+					mes "victkleyundncem";
+					mes "TheisWesomeof";
+					mes "ConBanfoevidehi";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			case 3:
+				mes "[デクィー]";
+				mes "ガイルの…？";
+				mes "よし、じゃあ";
+				mes "3人目の";
+				mes "コードを持ってるのは";
+				mes "誰だと思う？";
+				next;
+				switch(select("ムエトロ:ハンス")) {
+				case 1:
+					mes "[デクィー]";
+					mes "バンクリー・ガイル、";
+					mes "ムエトロ・ハンスの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "hekdlfiDrindkelsd";
+					mes "TheisWesomeof";
+					mes "ConBanfoevidehi";
+					mes "victkleyundncem";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "って思ったが…待てよ！";
+					next;
+					mes "[デクィー]";
+					mes "これなら";
+					mes "解読できる";
+					mes "気がする！ちょっと";
+					mes "手順を考えさせてくれ！";
+					set tu_swordman, 18;
+					close;
+				case 2:
+					mes "[デクィー]";
+					mes "バンクリー・ガイル、";
+					mes "ハンス・ムエトロの順か。";
+					mes "じゃあ全部の";
+					mes "コードは…";
+					next;
+					mes "[デクィー]";
+					mes " ";
+					mes "hekdlfiDrindkelsd";
+					mes "TheisWesomeof";
+					mes "victkleyundncem";
+					mes "ConBanfoevidehi";
+					next;
+					mes "[デクィー]";
+					mes "違う…";
+					mes "とても";
+					mes "この状態じゃ";
+					mes "解読できない。";
+					mes "別の並びを試そう。";
+					close;
+				}
+			}
+			break;
+		}
+	}
+	if(tu_swordman == 15){
+		set .@hans$, "victkleyundncem";
+		set .@bang$, "hekdlfiDrindkelsd";
+		set .@mutr$, "ConBanfoevidehi";
+		set .@geil$, "TheisWesomeof";
+		mes "[デクィー]";
+		mes "おお、戻ったか。";
+		mes "ちょうど殺人犯の";
+		mes "正体につながる";
+		mes "新しい手がかりを掴んだところだ。";
+		next;
+		mes "[デクィー]";
+		mes "容疑者全員が、何らかの";
+		mes "暗号の断片を持っているという話を聞いた。その暗号をつなぎ合わせて解読できれば、殺人犯が誰か分かるはずだ。";
+		next;
+		mes "[デクィー]";
+		mes "容疑者全員から";
+		mes "暗号は聞き出せたか？まずは";
+		mes "ハンスが持っていた暗号を教えてくれ。";
+		next;
+		input .@inputstr$;
+		if(.@inputstr$ == .@hans$){
+			mes "[デクィー]";
+			mes "victkleyundncem？";
+			mes "たしかに";
+			mes "奇妙な響きだな。";
+			mes "次はバンクリーのを教えてくれ。";
+			next;
+			input .@inputstr$;
+			if(.@inputstr$ == .@bang$){
+				mes "[デクィー]";
+				mes "hekdlfiDrindkelsd…";
+				mes "一体何なんだそれは…？";
+				mes "たしかに不可解だ。";
+				mes "ムエトロのは？";
+				next;
+				input .@inputstr$;
+				if(.@inputstr$ == .@mutr$){
+					mes "[デクィー]";
+					mes "ConBanfoevidehi。";
+					mes "こいつは";
+					mes "解読するのに";
+					mes "骨が折れそうだ。よし、";
+					mes "次はガイルのを教えてくれ。";
+					next;
+					input .@inputstr$;
+					if(.@inputstr$ == .@geil$){
+						mes "[デクィー]";
+						mes "TheisWesomeof…";
+						mes "よし、上出来だ。";
+						mes "あとは";
+						mes "これが何を意味するのか";
+						mes "突き止めるだけだな。";
+						next;
+						mes "[デクィー]";
+						mes "こいつは";
+						mes "かなり難しそうだ。";
+						mes "何か考えはあるか？";
+						mes "これを解かなきゃならない、";
+						mes "今のところ唯一の";
+						mes "手がかりだからな…";
+						set tu_swordman, 16;
+						changequest 8223,8224;
+						close;
+					} else {
+						mes "[デクィー]";
+						mes "…本当にちゃんと";
+						mes "聞き取れたのか？もう一度確認してきたらどうだ？";
+						close;
+					}
+				} else {
+	
+					mes "[デクィー]";
+					mes "…本当にちゃんと";
+					mes "聞き取れたのか？もう一度確認してきたらどうだ？";
+					close;
+	
+				}
+			} else {
+				mes "[デクィー]";
+				mes "…本当にちゃんと";
+				mes "聞き取れたのか？もう一度確認してきたらどうだ？";
+				close;
+			}
+		} else {
+	
+			mes "[デクィー]";
+			mes "本当にそれで合ってるのか？";
+			mes "いや、違う気がするな。";
+			mes "その暗号を確認して、必要なら容疑者たちに";
+			mes "もう一度聞き直してきてくれるか？";
+			close;
+	
+		}
+	}
+	if(tu_swordman == 14){
+		mes "[デクィー]";
+		mes "モロクで容疑者たちを";
+		mes "尋問するよう";
+		mes "頼んだはずだが？";
+		mes "この捜査を";
+		mes "できるだけ早く";
+		mes "終わらせないといけないんだ！";
+		close;
+	}
+	if(tu_swordman == 13){
+		mes "[デクィー]";
+		mes "おお、来たか！";
+		mes "シュランクが";
+		mes "私を手伝うよう頼んでくれたんだな。";
+		mes "本当にありがたい。";
+		next;
+		mes "[デクィー]";
+		mes "もう察しがついているだろうが、私は今殺人事件を捜査している。要するに、殺人犯が誰なのか突き止める手伝いをしてほしいんだ。";
+		next;
+		mes "[デクィー]";
+		mes "被害者については、まあ機密情報でな。分かってくれるな？";
+		next;
+		mes "[デクィー]";
+		mes "さて、モロクに行って4人の容疑者を尋問してきてほしい。名前は^5D478Bムエトロ^000000、^5D478Bガイル^000000、^5D478Bハンス^000000、";
+		mes "そして^5D478Bバンクリー^000000だ。それほど難しくはないはずだ。";
+		next;
+		mes "[デクィー]";
+		mes "全員に話を聞いたら、戻って報告してくれ。それと特に大事なのは、容疑者から得た重要な手がかりを覚えておくか書き留めておくことだ";
+		mes "というのを忘れないでくれ。";
+		next;
+		mes "[デクィー]";
+		mes "それとこれは剣士協会の特別任務だということも忘れないでくれ。知ったことは全て秘密にしておくように。分かったか？";
+		next;
+		mes "[デクィー]";
+		mes "さあ行って、ムエトロ、ガイル、ハンス、バンクリーから何か聞き出せないか見てきてくれ。できるだけ早く殺人犯の正体を突き止めないと！";
+		next;
+		mes "[デクィー]";
+		mes "おっと、待てよ…";
+		mes "モロクはちょっと遠いな。よし、あの街の近くまで";
+		mes "送ってやろう。";
+		next;
+		set tu_swordman, 14;
+		changequest 8222,8223;
+		warp "moc_fild07",359,201;
+		close;
+	}
+	if((tu_swordman > 7) && (tu_swordman < 13)){
+		mes "[デクィー]";
+		mes "うむ…";
+		mes "まだシュランクから";
+		mes "特別な訓練を";
+		mes "受けているのか？";
+		next;
+		mes "[デクィー]";
+		mes "いいことだ。";
+		mes "近頃の剣士はどんどんだらしなくなってきているからな。誰かが新人たちをきちんと躾けないといけないんだ！";
+		close;
+	}
+	if(tu_swordman == 7){
+		mes "[デクィー]";
+		mes "こんなところで";
+		mes "何をしてる？";
+		mes "早く私の伝言を";
+		mes "シュランクに届けてくれ。";
+		next;
+		mes "[デクィー]";
+		mes "殺人犯の正体は";
+		mes "まだ確証はないが、";
+		mes "容疑者のリストはある、と伝えてくれ。";
+		mes "遅かれ早かれ、";
+		mes "正体は突き止められるはずだ、とな。";
+		close;
+	}
+	if(tu_swordman == 6){
+		mes "[デクィー]";
+		mes "おお…！";
+		mes "シュランクが寄越した";
+		mes "剣士だな？よかった、";
+		mes "待っていたんだ…";
+		next;
+		mes "[デクィー]";
+		mes "さあ、教えてくれ…";
+		mes "シュランクからの";
+		mes "伝言は何だ？";
+		next;
+		switch(select("殺人者…:殺人犯…")) {
+		case 1:
+			mes "[" + strcharinfo(0) + "]";
+			mes "何が";
+			mes "殺人者に起きたんだ？";
+			next;
+			switch(select("正体は…:黒幕は…")) {
+			case 1:
+				mes "[" + strcharinfo(0) + "]";
+				mes "正体は";
+				mes "突き止めたか？";
+				mes "もし突き止めたなら…";
+				next;
+				switch(select("なぜ何もせず…:私たちはどうすれば…")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "なぜ何もせず";
+					mes "座っているんだ？！";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯はどうなった？";
+					mes "正体は突き止めたか？もし突き止めたなら、なぜ何もせず座っているんだ？』とのことだな。";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "それは";
+					mes "私がシュランクから受け取るはずの伝言とは違うようだ。正確な言葉でないと";
+					mes "返事を送れないんだが…";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "私たちは";
+					mes "どうすればいい？";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯はどうなった？";
+					mes "正体は突き止めたか？もし突き止めたなら、私たちはどうすればいい？』とのことだな。";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "それは";
+					mes "私がシュランクから受け取るはずの伝言とは違うようだ。正確な言葉でないと";
+					mes "返事を送れないんだが…";
+					close;
+				}
+			case 2:
+				mes "[" + strcharinfo(0) + "]";
+				mes "黒幕が";
+				mes "誰か分かったのか？";
+				mes "もし突き止めたなら…";
+				next;
+				switch(select("なぜ何もせず…:私たちはどうすれば…")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "なぜ何もせず";
+					mes "座っているんだ？！";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯はどうなった？";
+					mes "黒幕が誰か分かったか？もし分かったなら、なぜ何もせず座っているんだ？』とのことだな。";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "それは";
+					mes "私がシュランクから受け取るはずの伝言とは違うようだ。正確な言葉でないと";
+					mes "返事を送れないんだが…";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "私たちは";
+					mes "どうすればいい？";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯はどうなった？";
+					mes "黒幕が誰か分かったか？もし分かったなら、私たちはどうすればいい？』とのことだな。";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "それは";
+					mes "私がシュランクから受け取るはずの伝言とは違うようだ。正確な言葉でないと";
+					mes "返事を送れないんだが…";
+					close;
+				}
+			}
+			break;
+		case 2:
+			mes "[" + strcharinfo(0) + "]";
+			mes "何が";
+			mes "殺人犯に起きたんだ？";
+			next;
+			switch(select("正体は…:黒幕は…")) {
+			case 1:
+				mes "[" + strcharinfo(0) + "]";
+				mes "正体は";
+				mes "突き止めたか？";
+				mes "もし突き止めたなら…";
+				next;
+				switch(select("なぜ何もせず…:私たちはどうすれば…")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "なぜ何もせず";
+					mes "座っているんだ？！";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯は";
+					mes "どうなった？正体は";
+					mes "突き止めたか？もし突き止めたなら、";
+					mes "なぜ何もせず座っているんだ？』";
+					mes "とのことだな。";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "それは";
+					mes "私がシュランクから受け取るはずの伝言とは違うようだ。正確な言葉でないと";
+					mes "返事を送れないんだが…";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "私たちは";
+					mes "どうすればいい？";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯は";
+					mes "どうなった？正体は";
+					mes "突き止めたか？もし突き止めたなら、";
+					mes "私たちはどうすればいい？』とのことだな。";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "その懸念は";
+					mes "よく分かる。";
+					mes "よし、では";
+					mes "こう答えてやってくれ。";
+					next;
+					mes "[デクィー]";
+					mes "殺人犯が";
+					mes "誰なのか、まだ";
+					mes "確証は得られていない。だが";
+					mes "容疑者のリストはあるし、";
+					mes "すぐに突き止められるはずだ。";
+					next;
+					mes "[デクィー]";
+					mes "わざわざここまで来てくれてありがとう。経験値で報いさせてくれ。";
+					set tu_swordman, 7;
+					changequest 8216,8217;
+					if (checkre(3))
+						getexp 112,0;
+					else
+						getexp 1120,0;
+					next;
+					mes "[デクィー]";
+					mes "気をつけて";
+					mes "な、";
+					mes "勇敢な剣士よ。";
+					next;
+					if (checkre(0))
+						warp "izlude",127,100;
+					else
+						warp "izlude",35,78;
+					close;
+				}
+			case 2:
+				mes "[" + strcharinfo(0) + "]";
+				mes "黒幕が";
+				mes "誰か分かったのか？";
+				mes "もし突き止めたなら…";
+				next;
+				switch(select("なぜ何もせず…:私たちはどうすれば…")) {
+				case 1:
+					mes "[" + strcharinfo(0) + "]";
+					mes "なぜ何もせず";
+					mes "座っているんだ？！";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯は";
+					mes "どうなった？黒幕が";
+					mes "誰か分かったか？";
+					mes "もし分かったなら、なぜ何もせず座っているんだ？』とのことだな。";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "それは";
+					mes "私がシュランクから受け取るはずの伝言とは違うようだ。正確な言葉でないと";
+					mes "返事を送れないんだが…";
+					close;
+				case 2:
+					mes "[" + strcharinfo(0) + "]";
+					mes "私たちは";
+					mes "どうすればいい？";
+					next;
+					mes "[デクィー]";
+					mes "シュランクが聞いているのは、";
+					mes "『殺人犯は";
+					mes "どうなった？黒幕が";
+					mes "誰か分かったか？";
+					mes "もし分かったなら、私たちは";
+					mes "どうすればいい？";
+					next;
+					mes "[デクィー]";
+					mes "うむ…";
+					mes "それは";
+					mes "私がシュランクから受け取るはずの伝言とは違うようだ。正確な言葉でないと";
+					mes "返事を送れないんだが…";
+					close;
+				}
+			}
+			break;
+		}
+	}
+	
+	mes "うーん…？";
+	mes "何か";
+	mes "私に用でもあるのか？";
+	close;
+}
+
+// Geil
+//============================================================
+morocc_in,51,101,3	script	ガイル::Geil	89,{
+	mes "[ガイル]";
+	if(tu_swordman == 15){
+		mes "お前、お上に寄越されたのか？いい加減にしてくれ！俺は殺人犯じゃない！誰が殺されたのかも知らないんだ！お前が探してる相手じゃない！";
+		next;
+		mes "[ガイル]";
+		mes "たしかに";
+		mes "変な奴が何か";
+		mes "この件に関係する暗号みたいなものを教えてきたが、それだけだ！俺が知ってるのはそれだけだ！俺は殺人犯でも共犯でも何でもない！";
+		next;
+		mes "[ガイル]";
+		mes "^5D478BTheisWesomeof^000000";
+		mes "それがその暗号だ。忘れられないなんて自分でも信じられないよ。";
+		mes "っていうか、あの時";
+		mes "酔っ払ってたと思うんだけどな。";
+		next;
+		mes "[ガイル]";
+		mes "この暗号の何がそんなに重要なんだ、それにどうしてお前らはいつまでも殺人の件で俺につきまとうんだ！？";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "お前、お上に寄越されたのか？いい加減にしてくれ！俺は殺人犯じゃない！誰が殺されたのかも知らないんだ！お前が探してる相手じゃない！";
+		next;
+		mes "[ガイル]";
+		mes "たしかに";
+		mes "変な奴が何か";
+		mes "この件に関係する暗号みたいなものを教えてきたが、それだけだ！俺が知ってるのはそれだけだ！俺は殺人犯でも共犯でも何でもない！";
+		next;
+		mes "[ガイル]";
+		mes "^5D478BTheisWesomeof^000000";
+		mes "それがその暗号だ。忘れられないなんて自分でも信じられないよ。";
+		mes "っていうか、あの時";
+		mes "酔っ払ってたと思うんだけどな。";
+		next;
+		mes "[ガイル]";
+		mes "この暗号の何がそんなに重要なんだ、それにどうしてお前らはいつまでも殺人の件で俺につきまとうんだ！？";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "誰もが";
+	mes "平和と調和の中で";
+	mes "生きようと";
+	mes "努めるべきだと思うんだ。";
+	next;
+	mes "[ガイル]";
+	mes "だが恐れや不信、パニックがいつも邪魔をして、世の中をおかしくしてしまう。俺たちは自分の中に、他人とうまくやっていく力を見つけないといけないんだ。そう思わないか？";
+	close;
+}
+
+// Meutro
+//============================================================
+morocc,82,292,5	script	ムエトロ::Muetro	84,{
+	mes "[ムエトロ]";
+	if(tu_swordman == 15){
+		mes "お前も";
+		mes "他の連中と同じだな。";
+		mes "俺が知ってる暗号が";
+		mes "欲しいんだろ？";
+		next;
+		mes "[ムエトロ]";
+		mes "^5D478BConBanfoevidehi^000000";
+		mes "これで満足か？なら";
+		mes "俺には構わず";
+		mes "殺人犯を捕まえてくれ。";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "お前も";
+		mes "他の連中と同じだな。";
+		mes "俺が知ってる暗号が";
+		mes "欲しいんだろ？";
+		next;
+		mes "[ムエトロ]";
+		mes "^5D478BConBanfoevidehi^000000";
+		mes "これで満足か？なら";
+		mes "俺には構わず";
+		mes "殺人犯を捕まえてくれ。";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "^666666*ため息*^000000";
+	mes "俺は精一杯やってるんだが、時々馬鹿げたことが起きて";
+	mes "どうにもできないこともあるんだ。";
+	next;
+	mes "[ムエトロ]";
+	mes "運命ってやつなんだろうな。どうにも";
+	mes "コントロールも理解もできないものからは逃げられない。";
+	close;
+}
+
+// Hans
+//============================================================
+morocc,240,72,3	script	ハンス::Hans	86,{
+	mes "[ハンス]";
+	if(tu_swordman == 15){
+		mes "助けてくれ！";
+		mes "頼む、助けてくれ！";
+		mes "俺は殺人犯じゃない！";
+		mes "ほとんど";
+		mes "無害な人間なんだ！";
+		next;
+		mes "[ハンス]";
+		mes "^5D478Bvictkleyundncem^000000";
+		mes "俺が知ってる暗号はこれだ。";
+		mes "変な奴が";
+		mes "前にこれを教えてきて、";
+		mes "近いうちに必要になるって言ってたんだ！";
+		next;
+		mes "[ハンス]";
+		mes "そいつはこの暗号が";
+		mes "俺の命を救うって言ってた。最初は";
+		mes "頭がおかしいと思ったけど、";
+		mes "なぜか忘れられないんだ。";
+		next;
+		mes "[ハンス]";
+		mes "まるで魔法か何かで俺の頭に焼き付けたみたいだ。頼むから放っておいてくれ、俺が知ってるのはこれで全部だ！";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "助けてくれ！";
+		mes "頼む、助けてくれ！";
+		mes "俺は殺人犯じゃない！";
+		mes "ほとんど";
+		mes "無害な人間なんだ！";
+		next;
+		mes "[ハンス]";
+		mes "^5D478Bvictkleyundncem^000000";
+		mes "俺が知ってる暗号はこれだ。";
+		mes "変な奴が";
+		mes "前にこれを教えてきて、";
+		mes "近いうちに必要になるって言ってたんだ！";
+		next;
+		mes "[ハンス]";
+		mes "そいつはこの暗号が";
+		mes "俺の命を救うって言ってた。最初は";
+		mes "頭がおかしいと思ったけど、";
+		mes "なぜか忘れられないんだ。";
+		next;
+		mes "[ハンス]";
+		mes "まるで魔法か何かで俺の頭に焼き付けたみたいだ。頼むから放っておいてくれ、俺が知ってるのはこれで全部だ！";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "すまない…";
+	mes "でも俺にはお前の力になれそうにない。今は自分のことで手一杯みたいでな…";
+	close;
+}
+
+// Bankley
+//============================================================
+morocc_in,12,156,3	script	バンクリー::Bankley	97,{
+	if(tu_swordman > 19){
+		mes "^3355FFバンクリーは哀れな";
+		mes "表情を浮かべていた。^000000";
+		mes "^3355FFその体はぴくりとも動かない。胸には長く深い傷があり、右手には血まみれのナイフが握られている。^000000";
+		close;
+	}
+	if(tu_swordman == 19){
+		mes "…";
+		mes "……";
+		next;
+		mes "^3355FF死んでいる！^000000";
+		next;
+		mes "^3355FFバンクリーは悲しく哀れな表情を浮かべていた。頬にはまだ血の気が残っており、死んだのはついさっきのようだ。";
+		mes "^3355FF胸には長く深い傷があり、右手には血まみれのナイフが握られている。^000000";
+		set tu_swordman, 20;
+		changequest 8225,8226;
+		close;
+	}
+	mes "[バンクリー]";
+	if(tu_swordman == 15){
+		mes "俺は誰も殺してない…！";
+		mes "俺は潔白だし、";
+		mes "隠すことなんて何もない！";
+		next;
+		mes "[バンクリー]";
+		mes "だけどな…";
+		mes "役に立つなら、変な奴からもらったこの奇妙な暗号を教えてやるよ。何かの手がかりのつもりらしいけどな。";
+		next;
+		mes "[バンクリー]";
+		mes "^5D478BhekdlfiDrindkelsd^000000";
+		mes "これが何を";
+		mes "意味するか分かるか？俺にはさっぱりだが、";
+		mes "知ってることは全部話したぞ！";
+		next;
+		mes "[バンクリー]";
+		mes "すごく理不尽な気分だ！";
+		mes "俺の潔白が証明されたら、";
+		mes "この精神的苦痛に対して補償でもしてくれるのか！？";
+		next;
+		mes "[バンクリー]";
+		mes "もう構わないでくれ、";
+		mes "時間の無駄ってもんだ。";
+		mes "本当の犯人を";
+		mes "探した方がいいぞ！";
+		close;
+	}
+	if(tu_swordman == 14){
+		mes "俺は誰も殺してない…！";
+		mes "俺は潔白だし、";
+		mes "隠すことなんて何もない！";
+		next;
+		mes "[バンクリー]";
+		mes "だけどな…";
+		mes "役に立つなら、変な奴からもらったこの奇妙な暗号を教えてやるよ。何かの手がかりのつもりらしいけどな。";
+		next;
+		mes "[バンクリー]";
+		mes "^5D478BhekdlfiDrindkelsd^000000";
+		mes "これが何を";
+		mes "意味するか分かるか？俺にはさっぱりだが、";
+		mes "知ってることは全部話したぞ！";
+		next;
+		mes "[バンクリー]";
+		mes "すごく理不尽な気分だ！";
+		mes "俺の潔白が証明されたら、";
+		mes "この精神的苦痛に対して補償でもしてくれるのか！？";
+		next;
+		mes "[バンクリー]";
+		mes "もう構わないでくれ、";
+		mes "時間の無駄ってもんだ。";
+		mes "本当の犯人を";
+		mes "探した方がいいぞ！";
+		set tu_swordman, 15;
+		close;
+	}
+	mes "今はまだ余裕がないけど、俺の夢は世界中を旅して、あらゆる素晴らしい街を訪れることなんだ！";
+	next;
+	mes "[バンクリー]";
+	mes "いつかきっと、この夢を";
+	mes "叶えるチャンスが来るはずさ。でも今は、精一杯生きていくしかないな。";
+	close;
+}

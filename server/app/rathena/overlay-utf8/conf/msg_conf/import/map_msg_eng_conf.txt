@@ -1,0 +1,645 @@
+// conf/msg_conf/map_msg.conf の末尾で import される上書きファイル。
+// UTF-8 で管理しビルド時に CP932 へ変換。プレイヤー向けメッセージのみ。
+// 行頭の // だけがコメント
+
+// Character not found.
+3: キャラクターが見つかりません。
+
+// Invisible: On
+11: 透明化: オン
+
+// You've been revived!
+16: 復活しました！
+
+// Night Mode Activated.
+59: 夜モードが有効になりました。
+
+// Day Mode Activated.
+60: 昼モードが有効になりました。
+
+// You can't open a shop on this cell.
+204: このマスでは露店を開けません。
+
+// Party modification is disabled on this map.
+227: このマップではパーティの変更ができません。
+
+// Guild modification is disabled on this map.
+228: このマップではギルドの変更ができません。
+
+// Your GM level doesn't authorize you to perform this action.
+246: あなたのGMレベルではこの操作を行う権限がありません。
+
+// This item cannot be traded.
+260: このアイテムは取引できません。
+
+// This item cannot be dropped.
+263: このアイテムは捨てられません。
+
+// This item cannot be stored.
+264: このアイテムは倉庫に預けられません。
+
+// %s has bought your item(s).
+265: %s があなたのアイテムを購入しました。
+
+// You can't drop items on this map.
+271: このマップではアイテムを捨てられません。
+
+// You can't trade on this map.
+272: このマップでは取引できません。
+
+// You can't open a shop on this map
+276: このマップでは露店を開けません
+
+// Invalid name.
+280: 名前が正しくありません。
+
+// You can't create chat rooms on this map.
+281: このマップではチャットルームを作成できません。
+
+// You need to be a party leader to use this command.
+282: このコマンドを使うにはパーティリーダーである必要があります。
+
+// Target character must be online and in your current party.
+283: 対象のキャラクターはオンラインで、かつ自分のパーティに所属している必要があります。
+
+// You cannot change party leaders on this map.
+287: このマップではパーティリーダーを変更できません。
+
+// This bounded item cannot be traded to that character.
+293: このバインドアイテムはそのキャラクターに譲渡できません。
+
+// This bounded item cannot be stored there.
+294: このバインドアイテムはそこには預けられません。
+
+//  -- Duels: %d/%d, Members: %d/%d, Max players: %d --
+370:  -- 決闘:%d/%d、参加者:%d/%d、最大人数:%d --
+
+//  -- Duels: %d/%d, Members: %d/%d --
+371:  -- 決闘:%d/%d、参加者:%d/%d --
+
+//  -- Duel has been created (Use @invite/@leave) --
+372:  -- 決闘が作成されました（@invite/@leave を使用）--
+
+//  -- Player %s invites %s to duel --
+373:  -- %s が %s を決闘に誘いました --
+
+// Blue -- Player %s invites you to PVP duel (Use @accept/@reject) --
+374: Blue -- %s があなたをPVP決闘に誘っています（@accept/@reject を使用）--
+
+//  <- Player %s has left the duel --
+375:  <- %s が決闘から離脱しました --
+
+//  -> Player %s has accepted the duel --
+376:  -> %s が決闘を受諾しました --
+
+//  -- Player %s has rejected the duel --
+377:  -- %s が決闘を拒否しました --
+
+// Item Failed. [%s] is cooling down. Wait %.1f minutes.
+379: アイテム使用失敗。[%s]は再使用待ち中です。あと%.1f分お待ちください。
+
+// Item Failed. [%s] is cooling down. Wait %d seconds.
+380: アイテム使用失敗。[%s]は再使用待ち中です。あと%d秒お待ちください。
+
+// You cannot create a memo in an instance.
+384: インスタンス内ではメモを作成できません。
+
+// You're not allowed to change emblem during WOE
+385: WoE中はエンブレムを変更できません
+
+// The chosen emblem was detected invalid
+386: 選択されたエンブレムは無効です
+
+// The chosen emblem was detected invalid as it contain too much transparency (limit=%d)
+387: 選択されたエンブレムは透過部分が多すぎるため無効です（上限=%d）
+
+// You cannot use this item while storage is open.
+388: 倉庫を開いている間はこのアイテムを使用できません。
+
+// Need disconnection to perform change-sex request...
+408: 性別変更を行うには再接続が必要です...
+
+// Your sex has been changed (need disconnection by the server)...
+409: 性別が変更されました（サーバーにより切断されます）...
+
+// Your account has not more authorised.
+420: このアカウントは認証が無効になりました。
+
+// Your account has been totally erased.
+421: このアカウントは完全に削除されました。
+
+// Your %s has been banished until %s 
+423: あなたの%sは%sまで利用停止されています 
+
+// Login-serv has been asked to %s the player '%.*s'.
+424: %sの実行をログインサーバーへ要求しました（対象: '%.*s'）。
+
+// The player '%.*s' doesn't exist.
+425: プレイヤー '%.*s' は存在しません。
+
+// Your GM level doesn't authorise you to %s the player '%.*s'.
+426: あなたのGMレベルでは%sを行う権限がありません（対象プレイヤー: '%.*s'）。
+
+// Login-server is offline. Impossible to %s the player '%.*s'.
+427: ログインサーバーがオフラインのため、%sを実行できません（対象プレイヤー: '%.*s'）。
+
+// VIP
+436: VIP
+
+// You are no longer VIP.
+438: VIPではなくなりました。
+
+// Cash Shop is disabled on this map.
+451: このマップではキャッシュショップを利用できません。
+
+// Your account time limit is: %d-%m-%Y %H:%M:%S.
+501: アカウントの利用期限は: %d-%m-%Y %H:%M:%S です。
+
+// Day Mode is activated
+502: 昼モードが有効になりました
+
+// Night Mode is activated
+503: 夜モードが有効になりました
+
+// Used %d kafra points and %d cash points. %d kafra and %d cash points remaining.
+504: カプラポイントを%d、キャッシュポイントを%d使用しました。残りカプラポイント%d、キャッシュポイント%dです。
+
+// Gained %d cash points. Total %d points.
+505: キャッシュポイントを%d獲得しました。合計%dポイントです。
+
+// Gained %d kafra points. Total %d points.
+506: カプラポイントを%d獲得しました。合計%dポイントです。
+
+// Removed %d kafra points. Total %d points.
+411: カプラポイントを%d削除しました。合計%dポイントです。
+
+// This player has been banned for %d minute(s).
+507: このプレイヤーは%d分間BANされました。
+
+// This player hasn't been banned (Ban option is disabled).
+508: このプレイヤーはBANされていません（BANオプションが無効です）。
+
+// You have %d new emails (%d unread)
+510: 新着メールが%d件あります（未読%d件）
+
+// Your instance has been reloaded.
+515: インスタンスが再読み込みされました。
+
+// Auction System is disabled.
+517: オークションシステムは無効になっています。
+
+// Shop is out of stock! Please come back later.
+534: ショップの在庫が切れています！また後でお越しください。
+
+// Hack on trade: character '%s' (account: %d) try to trade more items that he has.
+538: 取引不正の疑い: キャラクター '%s'（アカウント: %d）が所持数以上のアイテムを取引しようとしました。
+
+// This player has %d of a kind of item (id: %u), and tried to trade %d of them.
+539: このプレイヤーは%d個の同じアイテム（ID: %u）を所持していますが、%d個を取引しようとしました。
+
+// This player has been definitivly blocked.
+540: このプレイヤーは完全にブロックされました。
+
+// '%s' got %s's %s (chance: %0.02f%%)
+541: '%s' が %s の %s を入手しました（確率: %0.02f%%）
+
+// '%s' stole %s's %s (chance: %0.02f%%)
+542: '%s' が %s の %s を盗みました（確率: %0.02f%%）
+
+// Novice
+550: ノービス
+
+// Knight
+557: ナイト
+
+// Crusader
+563: クルセイダー
+
+// Wedding
+570: ウェディング
+
+// High Novice
+575: ハイノービス
+
+// Lord Knight
+582: ロードナイト
+
+// Paladin
+588: パラディン
+
+// Baby Novice
+595: ベビーノービス
+
+// Baby Knight
+602: ベビーナイト
+
+// Baby Crusader
+608: ベビークルセイダー
+
+// Super Baby
+615: スーパーベビー
+
+// Taekwon
+616: テコンドー
+
+// Star Gladiator
+617: スターグラディエイター
+
+// Soul Linker
+618: ソウルリンカー
+
+// Summer
+621: サマー
+
+// Gangsi
+622: キョンシー
+
+// Rune Knight
+625: ルーンナイト
+
+// Ranger
+627: レンジャー
+
+// Mechanic
+629: メカニック
+
+// Royal Guard
+631: ロイヤルガード
+
+// Baby Rune Knight
+638: ベビールーンナイト
+
+// Baby Ranger
+640: ベビーレンジャー
+
+// Baby Mechanic
+642: ベビーメカニック
+
+// Baby Royal Guard
+644: ベビーロイヤルガード
+
+// Expanded Super Novice
+651: 拡張スーパーノービス
+
+// Kagerou
+653: カゲロウ
+
+// Unknown Job
+655: 不明な職業
+
+// Tomb
+656: 墓
+
+// [ ^EE0000%s^000000 ]
+657: [ ^EE0000%s^000000 ]
+
+// Has met its demise
+658: 力尽きました
+
+// Time of death : ^EE0000%s^000000
+659: 死亡日時 : ^EE0000%s^000000
+
+// Defeated by
+660: 倒したプレイヤー
+
+// [^EE0000%s^000000]
+661: [^EE0000%s^000000]
+
+// You must be at least %d cells away from any NPC.
+662: NPCから%dセル以上離れている必要があります。
+
+// Duel: Can't use this item in duel.
+663: 決闘: このアイテムは決闘中に使用できません。
+
+// Can't create chat rooms in this area.
+665: このエリアではチャットルームを作成できません。
+
+// Pets are not allowed in Guild Wars.
+666: WoE中はペットを使用できません。
+
+// You can't catch any pet on this map.
+669: このマップではペットを捕まえられません。
+
+// Friend already exists.
+671: 既に友達に登録されています。
+
+// Name not found in list.
+672: 名前がリストに見つかりません。
+
+// This action can't be performed at the moment. Please try again later.
+673: この操作は現在実行できません。しばらくしてから再度お試しください。
+
+// Friend removed.
+674: 友達を削除しました。
+
+// Cannot send mails too fast!!
+675: メールを連続で送信することはできません！！
+
+// Alliances cannot be made during Guild Wars!
+676: WoE中は同盟を結ぶことができません！
+
+// Alliances cannot be broken during Guild Wars!
+677: WoE中は同盟を解消することができません！
+
+// You have been recovered!
+680: 回復しました！
+
+// Rune Knight T
+681: ルーンナイトT
+
+// Royal Guard T
+687: ロイヤルガードT
+
+// Hanbok
+694: ハンボク
+
+// Rebellion
+695: リベリオン
+
+// Oktoberfest
+696: オクトーバーフェスト
+
+// Summoner
+697: サモナー
+
+// Baby Summoner
+698: ベビーサモナー
+
+// Baby Ninja
+699: ベビー忍者
+
+// Item %u has been removed from your inventory.
+709: アイテム%uが所持品から削除されました。
+
+// Item %u has been removed from your cart.
+710: アイテム%uがカートから削除されました。
+
+// Item %u has been removed from your storage.
+711: アイテム%uが倉庫から削除されました。
+
+// You do not have enough %s (%u).
+712: %s（%u）が不足しています。
+
+// You do not have enough '%s'.
+713: '%s' が不足しています。
+
+// Item Shop List: %s (%u)
+714: アイテムショップリスト: %s（%u）
+
+// Point Shop List: '%s'
+715: ポイントショップリスト: '%s'
+
+// Your '%s' is now: %d
+716: あなたの '%s' は現在 %d です
+
+// Cannot transform into monster while in disguise.
+729: 変装中はモンスターに変身できません。
+
+// Transforming into monster is not allowed in Guild Wars.
+731: WoE中はモンスターへの変身はできません。
+
+// Gained
+741: 獲得
+
+// Lost
+742: 喪失
+
+// Experience %s Base:%ld (%0.2f%%) Job:%ld (%0.2f%%)
+743: 経験値%s ベース:%ld (%0.2f%%) ジョブ:%ld (%0.2f%%)
+
+// Baby Kagerou
+753: ベビーカゲロウ
+
+// Baby Star Gladiator
+756: ベビースターグラディエイター
+
+// You cannot join channel '%s'. Limit of %d has been met.
+760: チャンネル '%s' には参加できません。上限%dに達しています。
+
+// %s %s has joined.
+761: %s %s が参加しました。
+
+// You cannot leave channel '%s'.
+762: チャンネル '%s' から退出できません。
+
+// %s %s left.
+763: %s %s が退出しました。
+
+// You cannot change the color for channel '%s'.
+764: チャンネル '%s' の色は変更できません。
+
+// You're not allowed to ban a player.
+765: プレイヤーを追放する権限がありません。
+
+// You cannot kick a player from channel '%s'.
+766: チャンネル '%s' からプレイヤーをキックできません。
+
+// You're not allowed to kick a player.
+767: プレイヤーをキックする権限がありません。
+
+// %s %s has been kicked.
+768: %s %s がキックされました。
+
+// %s %s has been banned.
+769: %s %s が追放されました。
+
+// %s %s has been unbanned.
+770: %s %s の追放が解除されました。
+
+// Achievements are disabled.
+772: 実績機能は無効になっています。
+
+// Star Emperor
+782: スターエンペラー
+
+// Baby Star Emperor
+784: ベビースターエンペラー
+
+// <MSG>3455</MSG>
+788: <MSG>3455</MSG>
+
+// <MSG>3456,%d</MSG>
+789: <MSG>3456,%d</MSG>
+
+// <MSG>3456,%d</MSG>
+790: <MSG>3456,%d</MSG>
+
+// You are not allowed to use the attendance system.
+791: 出席システムを利用する権限がありません。
+
+// The private airship system is disabled.
+792: 個人飛行船システムは無効になっています。
+
+// You cannot use RODEX on this map.
+796: このマップではRODEXを使用できません。
+
+// Dragon Knight
+800: ドラゴンナイト
+
+// Meister
+801: マイスター
+
+// Windhawk
+805: ウィンドホーク
+
+// Imperial Guard
+806: インペリアルガード
+
+// Sky Emperor
+813: スカイエンペラー
+
+// Enchanting is not possible for your item's enchant grade.
+829: そのアイテムのエンチャントグレードではエンチャントできません。
+
+// You cannot use the Bank on this map.
+831: このマップでは銀行を利用できません。
+
+// rAthena Version %s %s
+1295: rAthenaバージョン %s %s
+
+// Cannot determine SVN/Git version.
+1296: SVN/Gitバージョンを特定できません。
+
+// Unknown channel '%s' (usage: %s <#channel_name>).
+1400: 不明なチャンネル '%s' です（使用法: %s <#channel_name>）。
+
+// Channel '%s' is password-protected (usage: %s <#channel_name> <password>).
+1401: チャンネル '%s' はパスワードで保護されています（使用法: %s <#channel_name> <password>）。
+
+// You're not in that channel (use '@join <#channel_name>').
+1402: そのチャンネルに参加していません（'@join <#channel_name>' を使用してください）。
+
+// You're now in the '%s' channel.
+1403: '%s' チャンネルに参加しました。
+
+// Channel name must start with '#'.
+1405: チャンネル名は '#' から始まる必要があります。
+
+// Channel length must be between 3 and %d.
+1406: チャンネル名の長さは3～%d文字の範囲で指定してください。
+
+// Channel '%s' is not available.
+1407: チャンネル '%s' は利用できません。
+
+// - #%s (%d users)
+1409: - #%s（%d人）
+
+// ---- Public Channels ----
+1410: ---- 公開チャンネル一覧 ----
+
+// Unknown color '%s'.
+1411: 不明な色 '%s' です。
+
+// You're not the owner of channel '%s'.
+1412: チャンネル '%s' のオーナーではありません。
+
+// '%s' channel color updated to '%s'.
+1413: '%s' チャンネルの色を '%s' に変更しました。
+
+// ---- Available options:
+1414: ---- 利用可能なオプション:
+
+// You're not part of the '%s' channel.
+1425: '%s' チャンネルに参加していません。
+
+// You've left the '%s' channel.
+1426: '%s' チャンネルから退出しました。
+
+// Your global chat is now binded to the '%s' channel.
+1431: 全体チャットが '%s' チャンネルに紐付けられました。
+
+// Your global chat is not binded to any channel.
+1432: 全体チャットはどのチャンネルにも紐付けられていません。
+
+// Your global chat is now unbinded from the '#%s' channel.
+1433: 全体チャットは '#%s' チャンネルとの紐付けが解除されました。
+
+// You're already in the '%s' channel.
+1434: 既に '%s' チャンネルに参加しています。
+
+// You're now in the '#%s' channel for '%s'.
+1435: '#%s' チャンネル（%s）に参加しました。
+
+// Channel password can't be over %d characters.
+1436: チャンネルのパスワードは%d文字を超えることはできません。
+
+// Player '%s' is banned from the '%s' channel.
+1437: プレイヤー '%s' は '%s' チャンネルから追放されています。
+
+// You're currently banned from the '%s' channel.
+1438: 現在 '%s' チャンネルから追放されています。
+
+// Channel '%s' contains no banned players.
+1439: チャンネル '%s' には追放されたプレイヤーがいません。
+
+// Player '%s' is not banned from this channel.
+1440: プレイヤー '%s' はこのチャンネルから追放されていません。
+
+// Player '%s' is unbanned from the '%s' channel.
+1441: プレイヤー '%s' は '%s' チャンネルの追放を解除されました。
+
+// Cleared all bans from the '%s' channel.
+1442: '%s' チャンネルの追放リストをすべて解除しました。
+
+// ---- '#%s' Ban List:
+1443: ---- '#%s' の追放リスト:
+
+// ---- Available Colors ----
+1444: ---- 利用可能な色一覧 ----
+
+// - %s
+1445: - %s
+
+// Unknown channel option '%s'.
+1447: 不明なチャンネルオプション '%s' です。
+
+// Channel '%s' deleted.
+1448: チャンネル '%s' を削除しました。
+
+// Option '%s' is already enabled (use '@channel setopt %s 0' to disable).
+1449: オプション '%s' は既に有効です（無効にするには '@channel setopt %s 0' を使用してください）。
+
+// Option '%s' is enabled for channel '#%s'.
+1450: オプション '%s' はチャンネル '#%s' で有効になりました。
+
+// Value '%d' for option '%s' is out of range (limit 0-10).
+1451: 値 '%d' はオプション '%s' の範囲外です（0～10の範囲で指定してください）。
+
+// Option '%s' is enabled for channel '#%s' at %d seconds.
+1452: オプション '%s' はチャンネル '#%s' で%d秒として有効になりました。
+
+// Option '%s' is disabled for channel '#%s'.
+1453: オプション '%s' はチャンネル '#%s' で無効になりました。
+
+// You're talking too fast!
+1455: 発言が速すぎます！
+
+// Ban failed for player '%s'.
+1464: プレイヤー '%s' の追放に失敗しました。
+
+// Player '%s' is already banned from this channel.
+1465: プレイヤー '%s' は既にこのチャンネルから追放されています。
+
+// Input the number of seconds (0-10) for the '%s' option.
+1466: '%s' オプションの秒数（0～10）を入力してください。
+
+// ---- My Channels ----
+1475: ---- 自分のチャンネル一覧 ----
+
+// You have not joined any channels.
+1476: まだどのチャンネルにも参加していません。
+
+// You can't withdraw that much money
+1495: その金額は引き出せません
+
+// Banking is disabled
+1496: 銀行機能は無効になっています
+
+// Roulette is disabled
+1497: ルーレットは無効になっています
+
+// You've entered a PK Zone.
+1503: PKゾーンに入りました。
+
+// You've entered a PK Zone (safe until level %d).
+1504: PKゾーンに入りました（レベル%dまでは安全です）。

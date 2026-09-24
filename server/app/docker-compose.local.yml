@@ -1,0 +1,51 @@
+# ローカル（Mac / colima）検証用の compose override
+#
+# 目的:
+#   NPC のパース、DB の文字コード、コンソールログの CP932 -> UTF-8 変換を
+#   AWS を使わずに手元で確認する。
+#
+# 使い方:
+#   cd app && cp .env.local.example .env
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml logs -f map-server
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml down
+#
+# 注意:
+#   ローカルでは /srv/ro-server は使わない。本体 docker-compose.yml の
+#   bind mount /srv/ro-server/mariadb はここで ./.local/mariadb に差し替える
+#   （マウント先 /var/lib/mysql をキーに上書きされる。docker compose config で確認できる）。
+#   ./.local/ は .gitignore 済み。
+#   ローカルの DB データを作り直したいときは down したあと ./.local/mariadb を削除する。
+
+services:
+  mariadb:
+    # awslogs は AWS 認証情報が無いとコンテナを起動できないので json-file にする
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    volumes:
+      - ./.local/mariadb:/var/lib/mysql
+      - ./rathena/sql-init:/docker-entrypoint-initdb.d:ro
+
+  login-server:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  char-server:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  map-server:
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

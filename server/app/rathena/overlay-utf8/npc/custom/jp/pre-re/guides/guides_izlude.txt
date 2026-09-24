@@ -1,0 +1,161 @@
+//===== rAthena Script =======================================
+//= Izlude Guides
+//===== By: ==================================================
+//= kobra_k88; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.5a
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Guides for the City of Izlude
+//===== Additional Comments: =================================
+//= 1.2 Optimized, updated common guide names [Lupus]
+//= 1.3 Updated the guide according to how it is on iRO, thanks [MasterOfMuppets]
+//=     to Muad_Dib
+//= 1.4 Fitted the many lines into 1 or 2, and corrected some typos [erKURITA]
+//= 1.5 Rescripted to official 10.3 standards. [L0ne_W0lf]
+//= 1.5a Fixed some errors with the loop[Samuray22]
+//	-Thanks to $ephiroth.
+//============================================================
+
+izlude,121,87,6	script	案内係#iz::Guide#iz	105,{
+	cutin "prt_soldier",2;
+	mes "[イズルード案内係]";
+	mes "イズルードへようこそ。";
+	mes "プロンテラの衛星都市です。";
+	mes "街のことで分からないことや";
+	mes "困ったことがあれば、";
+	mes "いつでも気軽に聞いてください。";
+	set .@loop1,1;
+	while(.@loop1) {
+		next;
+		switch(select("街の案内:ミニマップの印を消す:お知らせ:キャンセル")) {
+		case 1:
+			mes "[イズルード案内係]";
+			mes "以下のメニューから";
+			mes "行きたい場所を";
+			mes "選んでください。";
+			if (.@compass_check == 0) {
+				mes "ミニマップに";
+				mes "行き先の印を";
+				mes "つけましょうか？";
+				next;
+				if (select("はい:いいえ") == 1) set .@compass_check,1;
+			}
+			set .@loop2,1;
+			while(.@loop2) {
+				if (.@wait_button_chk == 0) set .@wait_button_chk,1;
+				else next;
+				
+				switch(select("^FF0000剣士協会^000000:剣士ホール:闘技場:イズルード港:武器屋:道具屋:キャンセル")) {
+				case 1:
+					mes "[イズルード案内係]";
+					mes "剣士協会は";
+					mes "イズルード西の島に";
+					mes "あります。剣士への転職を";
+					mes "考えているなら覗いてみましょう。";
+					if (.@compass_check)
+						viewpoint 1,52,140,0,0xFF0000;
+					break;
+				case 2:
+					mes "[イズルード案内係]";
+					mes "剣士ホールは";
+					mes "イズルードと繋がる";
+					mes "東の島にあります。";
+					if (.@compass_check)
+						viewpoint 1,214,130,1,0x00FF00;
+					break;
+				case 3:
+					mes "[イズルード案内係]";
+					mes "イズルードの闘技場は";
+					mes "街の北端に";
+					mes "あります。";
+					if (.@compass_check)
+						viewpoint 1,128,225,2,0x00FF00;
+					break;
+				case 4:
+					mes "[イズルード案内係]";
+					mes "イズルードの港は";
+					mes "街の北東にあります。";
+					mes "ここから船に乗れば";
+					mes "アルベルタや";
+					mes "ビョルン島へ行けます。";
+					if (.@compass_check)
+						viewpoint 1,200,180,3,0xFF0000;
+					break;
+				case 5:
+					mes "[イズルード案内係]";
+					mes "武器屋は";
+					mes "イズルードの";
+					mes "北西にあります。";
+					if (.@compass_check)
+						viewpoint 1,111,149,4,0xFF00FF;
+					break;
+				case 6:
+					mes "[イズルード案内係]";
+					mes "道具屋も";
+					mes "イズルードの北東で";
+					mes "すぐに見つかります。";
+					if (.@compass_check)
+						viewpoint 1,148,148,5,0xFF00FF;
+					break;
+				case 7:
+					mes "[イズルード案内係]";
+					mes "「ミニマップの印を";
+					mes "消す」を選んで";
+					mes "いただければ、";
+					mes "地図上の印を";
+					mes "消去できます。";
+					set .@loop2,0;
+					break;
+				}
+			}
+			break;
+		case 2:
+			viewpoint 2,237,41,0,0x00FF00;
+			viewpoint 2,237,41,1,0x0000FF;
+			viewpoint 2,46,345,2,0x00FF00;
+			viewpoint 2,175,220,3,0xFF0000;
+			viewpoint 2,134,221,4,0xFF0000;
+			viewpoint 2,204,214,5,0xFF0000;
+			set .@compass_check,0;
+			break;
+		case 3:
+			mes "[イズルード案内係]";
+			mes "魔法と技術の進歩により";
+			mes "情報システムが";
+			mes "更新されました。";
+			mes "これにより、ミニマップに";
+			mes "場所の印をつけて";
+			mes "案内できるようになりました。";
+			next;
+			mes "[イズルード案内係]";
+			mes "ミニマップは画面の";
+			mes "右上にあります。";
+			mes "見当たらない場合は";
+			mes "Ctrl+Tabキーを押すか、";
+			mes "基本情報の「Map」ボタンでも確認できます。";
+			next;
+			mes "[イズルード案内係]";
+			mes "ミニマップ上の";
+			mes "「+」「-」の記号で";
+			mes "拡大・縮小できます。";
+			mes "イズルードでの";
+			mes "冒険を";
+			mes "楽しんでください。";
+			break;
+		case 4:
+			mes "[イズルード案内係]";
+			mes "それでは、";
+			mes "イズルードで迷ったら";
+			mes "いつでも私に";
+			mes "聞いてくださいね。";
+			close2;
+			set .@loop1,0;
+			break;
+		}
+	}
+	cutin "prt_soldier",255;
+	end;
+}

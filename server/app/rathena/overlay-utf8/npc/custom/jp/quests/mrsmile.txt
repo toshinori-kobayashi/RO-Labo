@@ -1,0 +1,111 @@
+//===== rAthena Script ======================================= 
+//= Mr. Smile Quest
+//===== By: ================================================== 
+//= kobra_k88, Akaru
+//===== Current Version: ===================================== 
+//= 1.4a
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Trade Clover, Fluff and Jellopy for a Mr. Smile mask.
+//===== Additional Comments: ================================= 
+//= 1.4 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 1.4a Fixed a little Typo error in duplicates. (bugreport:749) [Samuray22]
+//============================================================ 
+
+-	script	Smile Assistance::SmileHelper	92,{
+	mes "[スマイル案内嬢]";
+	mes "はーい、はーい！";
+	mes "こちら、スマイル案内所です。";
+	mes "何かお手伝いできることはありますか？";
+	next;
+	switch(select("^3355FFミスタースマイル^000000とは？:^3355FFミスタースマイル^000000を作る:やめる")) {
+	case 1:
+		mes "[スマイル案内嬢]";
+		mes "^5577FFトリスタム3世陛下^000000の勅命による";
+		mes "国家的イベントだ。";
+		mes "ルーンミッドガッツ王国の民が、";
+		mes "もっと楽しい雰囲気で遊べるように！";
+		mes "私は^3355FF「スマイル案内所」^000000。";
+		mes "^3355FFルーンミッドガッツ王国中に笑顔を広める^000000という名目で、このイベントを率いている。";
+		next;
+		mes "[スマイル案内嬢]";
+		mes "簡単に手に入る品と";
+		mes "引き換えに、君に";
+		mes "^3355FF「ミスタースマイル」^000000を渡そう。";
+		mes "必要な品は以下の通りだ。";
+		next;
+		mes "[スマイル案内嬢]";
+		mes "^3355FFジェロピー×10^000000";
+		mes "^3355FF綿毛×10^000000";
+		mes "^3355FFクローバー×10^000000";
+		next;
+		mes "[スマイル案内嬢]";
+		mes "このイベントを通じて";
+		mes "みんなが笑顔になり、";
+		mes "人々が集い合い、";
+		mes "ラグナロクを世界一楽しいゲームにしていきたいのだ。";
+		close;
+	case 2:
+		if (countitem(909) > 9 && countitem(914) > 9 && countitem(705) > 9) {
+			mes "[スマイル案内嬢]";
+			mes "おめでとう！";
+			mes "このミスタースマイルを受け取ってくれ。";
+			next;
+			delitem 909,10; //Jellopy
+			delitem 914,10; //Fluff
+			delitem 705,10; //Clover
+			getitem 2278,1; //Mr_Smile
+			mes "[スマイル案内嬢]";
+			mes "トリスタム3世陛下は";
+			mes "ラグナロクをより良く、より楽しいものにすると約束された。";
+			next;
+			mes "以上の内容は";
+			mes "ルーンミッドガッツ王国";
+			mes "広報局により発表された。";
+			close;
+		}
+		else {
+			mes "[スマイル案内嬢]";
+			mes "おっと、残念だが";
+			mes "ミスタースマイルに必要な";
+			mes "品が足りないようだ。";
+			mes "^3355FFジェロピー×10^000000";
+			mes "^3355FF綿毛×10^000000";
+			mes "^3355FFクローバー×10^000000";
+			mes "上の必要品をもう一度確認してくれ。";
+			close;
+		}
+	case 3:
+		mes "[スマイル案内嬢]";
+		mes "訪ねてくれてありがとう。";
+		mes "我々……";
+		mes "ルーンミッドガッツ王国は";
+		mes "ラグナロクをより良く、";
+		mes "より楽しいゲームにしようとしている。";
+		next;
+		mes "[スマイル案内嬢]";
+		mes "どうか、君の";
+		mes "協力をお願いしたい。";
+		mes "以上の内容は";
+		mes "ルーンミッドガッツ王国広報局により発表された。";
+		close;
+	}
+}
+
+// Additional Smile Assistance staff
+alberta,113,53,4	duplicate(SmileHelper)	スマイル案内嬢#alb::Smile Assistance#alb	92
+aldebaran,136,135,4	duplicate(SmileHelper)	スマイル案内嬢#alde::Smile Assistance#alde	92
+geffen,119,107,4	duplicate(SmileHelper)	スマイル案内嬢#gef::Smile Assistance#gef	92
+moc_ruins,59,154,3	duplicate(SmileHelper)	スマイル案内嬢#moc::Smile Assistance#moc	92
+payon,186,104,5	duplicate(SmileHelper)	スマイル案内嬢#pay::Smile Assistance#pay	92
+prontera,157,187,4	duplicate(SmileHelper)	スマイル案内嬢#prt::Smile Assistance#prt	92
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= Fully working. 1.1 Optimized
+//= 1.2 updated Payon coords [Lupus]
+//= 1.3 fixed exploit [Lupus]
+//============================================================ 

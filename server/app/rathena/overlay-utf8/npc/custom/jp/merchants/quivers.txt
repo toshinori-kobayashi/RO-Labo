@@ -1,0 +1,175 @@
+//===== rAthena Script =======================================
+//= Arrow Quiver Event
+//===== By: ==================================================
+//= Muad_Dib (Prometheus Project); L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Turns arrows into Arrow Quivers.
+//= Breakdown of Subroutine "S_BuyQuiver"
+//= arg(0): Type of Arrow to be packaged (item ID).
+//= arg(1): How many of each 'getarg(0)' arrow per quiver.
+//= arg(2): The cost of making a 'getarg(0)' quiver.
+//= arg(3): The quiver given by the NPC (item ID).
+//===== Additional Comments: =================================
+//= 07/06/05 : Added 1st Version. [Muad_Dib]
+//= Converted to rAthena format by Dr.Evil
+//= added prize to quest - 500 Zeny
+//= Fixed a few spelling errors. [Nexon]
+//= 1.1 Added Holy Arrow Quivers [Playtester]
+//= 1.2 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//=     Removed "Holy Arrows" from the list.
+//============================================================
+
+payon_in01,5,134,5	script	発明家ジャックス::Inventor Jaax	89,{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 2000) {
+		mes "[発明家ジャックス]";
+		mes "おっと、そんなに";
+		mes "荷物を抱えてちゃダメだ。カプラ倉庫に預けておいでよ。話はそれからだ。";
+		close;
+	}
+	mes "[発明家ジャックス]";
+	mes "俺の名前はジャックス。";
+	mes "自惚れじゃなく";
+	mes "言わせてもらうが、俺はきっと";
+	mes "^663300この時代最高の発明家^000000だ。";
+	next;
+	mes "[発明家ジャックス]";
+	mes "今回、俺は";
+	mes "とんでもない";
+	mes "ものを作り上げた。その名も…^663300マジック矢筒^000000！！これは矢の";
+	mes "革命として歴史に刻まれるだろうな！";
+	emotion ET_BEST;
+	next;
+	mes "[発明家ジャックス]";
+	mes "何年も魔法と矢筒を研究して、昼も夜も没頭してついに魔法で矢を圧縮する方法を見つけたんだ！マジック矢筒なら、矢はたくさん持てるのに、重さは軽くなるぞ！";
+	next;
+	mes "[発明家ジャックス]";
+	mes "俺の矢筒を試してみないか？お前ならきっと、俺の天才ぶりを分かってくれるはずさ！";
+	next;
+	switch(select("矢の矢筒:鉄矢の矢筒:鋼鉄矢の矢筒:オリデオコン矢の矢筒:火矢の矢筒:銀矢の矢筒:風矢の矢筒:石矢の矢筒:クリスタル矢の矢筒:影矢の矢筒:無形矢の矢筒:錆びた矢の矢筒")) {
+	case 1: callsub S_BuyQuiver,1750,500,500,12004;
+	case 2: callsub S_BuyQuiver,1770,500,500,12005;
+	case 3: callsub S_BuyQuiver,1753,500,500,12006;
+	case 4: callsub S_BuyQuiver,1765,500,500,12007;
+	case 5: callsub S_BuyQuiver,1752,500,500,12008;
+	case 6: callsub S_BuyQuiver,1751,500,500,12009;
+	case 7: callsub S_BuyQuiver,1755,500,500,12010;
+	case 8: callsub S_BuyQuiver,1756,500,500,12011;
+	case 9: callsub S_BuyQuiver,1754,500,500,12012;
+	case 10: callsub S_BuyQuiver,1767,500,500,12013;
+	case 11: callsub S_BuyQuiver,1757,500,500,12014;
+	case 12: callsub S_BuyQuiver,1762,500,500,12015;
+	}
+	//This doesn't seem to be accessable...
+	//mes "[Inventor Jaax]";
+	//mes "Is there";
+	//mes "anything you want?";
+	//close;
+
+S_BuyQuiver:
+	.@item_id = getarg(0);
+	.@amount = getarg(1);
+	.@zeny_req = getarg(2);
+
+	if (countitem(.@item_id) >= .@amount) {
+		mes "[発明家ジャックス]";
+		mes "上出来だ！";
+		mes "矢を持っているかい？だったら、"+ .@amount +"本の"+ getitemname(.@item_id) +"を収める矢筒を、^FF3131"+ .@zeny_req +"Zeny^000000だけでご用意しますよ。";
+		next;
+		switch(select("矢筒に入るだけ矢を収める:矢筒を1個購入する:やめる")) {
+		case 1:
+			.@arrows = countitem(.@item_id);
+			set .@quiver,.@arrows / .@amount;
+			set .@arrows_used,.@quiver * .@amount;
+			.@arrow_zeny01 = .@quiver * .@zeny_req;
+			mes "所持している";
+			mes "矢の数：^3131FF"+.@arrows+"本^000000";
+			mes "作れる矢筒の";
+			mes "最大数は";
+			mes "^3131FF"+.@quiver+"個^000000";
+			mes "必要Zeny：^3131FF"+.@arrow_zeny01+"Zeny^000000";
+			next;
+			mes "[発明家ジャックス]";
+			mes "今持っている矢で";
+			mes "作れるだけ";
+			mes "矢筒を";
+			mes "買うかい？";
+			next;
+			if (select("はい:やめる") == 1) {
+				if (.@arrow_zeny01 < Zeny) {
+					mes "[発明家ジャックス]";
+					mes "はい、どうぞ！";
+					mes "ただし、^FF0000重量が最大重量の90%を超えると矢筒は使えなくなるから気をつけて^000000。";
+					set Zeny, Zeny-.@arrow_zeny01;
+					delitem .@item_id,.@arrows_used;// Arrow
+					getitem getarg(3),.@quiver; //Quiver
+					next;
+					mes "[発明家ジャックス]";
+					mes "だから…";
+					mes "時々";
+					mes "自分の荷物の";
+					mes "重さを";
+					mes "確認していれば";
+					mes "大丈夫さ。";
+					close;
+				}
+				else {
+					mes "[発明家ジャックス]";
+					mes "悪いが、Zenyが足りないな。何年もかけて開発したこの革新的な技術を";
+					mes "タダでくれてやるわけにはいかないんだ！";
+					close;
+				}
+			}
+			mes "[発明家ジャックス]";
+			mes "気が変わったのか？";
+			mes "せっかく矢筒を";
+			mes "手にする栄光が目前だったのに？";
+			close;
+		case 2:
+			if (Zeny > .@zeny_req) {
+				mes "[発明家ジャックス]";
+				mes "はい、どうぞ！";
+				mes "ただし、^FF0000重量が最大重量の90%を超えると矢筒は使えなくなるから気をつけて^000000。";
+				Zeny = Zeny -.@zeny_req;
+				delitem .@item_id,.@amount;// Arrow
+				getitem getarg(3),1; //Quiver
+				next;
+				mes "[発明家ジャックス]";
+				mes "だから…";
+				mes "時々";
+				mes "自分の荷物の";
+				mes "重さを";
+				mes "確認していれば";
+				mes "大丈夫さ。";
+				close;
+			}
+			else {
+				mes "[発明家ジャックス]";
+				mes "まさか";
+				mes ""+ .@zeny_req +"Zenyも持っていないのか？";
+				mes "それはすまなかった。";
+				mes "まさかそこまで…";
+				mes "^333333貧乏^000000だったとはな。";
+				close;
+			}
+		case 3:
+			mes "[発明家ジャックス]";
+			mes "何だって…？";
+			mes "この発明が矢の運び方を永遠に変えるとは思わないのか？！未来はもう始まっているんだぞ！";
+			close;
+		}
+	}
+	else {
+		mes "[発明家ジャックス]";
+		mes "この矢筒には最大"+ .@amount +"本まで矢を収められる。俺の秘密の方法で作ってあるから、";
+		mes "矢と矢筒を合わせた重さは、矢だけを持つより軽くなるんだ。";
+		next;
+		mes "[発明家ジャックス]";
+		mes "これぞ科学の奇跡さ！矢筒1個につき最低"+ .@amount +"本の矢と"+ .@zeny_req +"Zenyを持ってくれば、お前も自分でそれを体験できるぞ。";
+		close;
+	}
+}

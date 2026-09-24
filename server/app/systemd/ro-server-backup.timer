@@ -1,0 +1,13 @@
+[Unit]
+Description=Daily rAthena MariaDB dump (04:00 JST)
+
+[Timer]
+# AL2023 の systemd は OnCalendar のタイムゾーン指定に対応している
+OnCalendar=*-*-* 04:00:00 Asia/Tokyo
+# 停止中に時刻を跨いだ場合は起動後に 1 回だけ実行する
+Persistent=true
+AccuracySec=1min
+Unit=ro-server-backup.service
+
+[Install]
+WantedBy=timers.target

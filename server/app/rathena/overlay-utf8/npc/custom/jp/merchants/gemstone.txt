@@ -1,0 +1,119 @@
+//===== rAthena Script ======================================= 
+//= Gemstone Trader
+//===== By: ================================================== 
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Trade various colors of gemstones for other color gemstones.
+//===== Additional Comments: ================================= 
+//= 1.0 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//=     Any notes pertaining to the prior trader may be found
+//=     in the cities/payon.txt
+//= 1.1 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 1.2 Updated input with min/max values. [L0ne_W0lf]
+//=     Added a checkweight. 
+//= 1.3 Fixed checks. [Euphy]
+//============================================================ 
+
+payon,173,238,5	script	ジェイド#pay::Jade#pay	754,{
+	if (checkweight(1201,1) == 0) {
+		mes "^3355FFちょっと待ってください！今、荷物を多く持ちすぎているようです。カプラ倉庫に何か預けてから、また来てください。^000000";
+		close;
+	}
+	mes "[宝石商ジェイド]";
+	mes "同じ色の";
+	mes "ジェムストーンを";
+	mes "2個持ってきてくれれば、";
+	mes "別の色の";
+	mes "ジェムストーンに交換してあげるよ。";
+	next;
+	switch(select("青いジェムストーンを赤に！:赤いジェムストーンを黄色に！:黄色いジェムストーンを青に！")) {
+	case 1: callsub S_TradeGems,717,716;
+	case 2: callsub S_TradeGems,716,715;
+	case 3: callsub S_TradeGems,715,717;
+	}
+
+S_TradeGems:
+	.@item_req = getarg(0);
+	.@item_id = getarg(1);
+
+	if (countitem(.@item_req) < 2) {
+		mes "[宝石商ジェイド]";
+		mes "はっ…！";
+		mes "冗談だろう？";
+		mes "せめて";
+		mes "きちんと";
+		mes "持ってきてくれないと、このサービスは受けられないよ。";
+		mes ""+ getitemname(.@item_req) +"を2個、だよ！";
+		close;
+	}
+	else {
+		.@gems = countitem(.@item_req) /2;
+		mes "[宝石商ジェイド]";
+		mes "できそうだね。";
+		mes "合計"+ .@gems +"個の"+ getitemname(.@item_id) +"を";
+		mes "今持っている"+ getitemname(.@item_req) +"を使って";
+		mes "作れると思うよ。";
+		mes "どうする？";
+		next;
+		switch(select("できるだけ多く交換して。:個数を指定したい。:やめておく。")) {
+		case 1:
+			delitem .@item_req,.@gems * 2;
+			getitem .@item_id,.@gems;
+			break;
+		case 2:
+			mes "[宝石商ジェイド]";
+			mes "それで、";
+			mes "いくつ欲しいんだい？";
+			mes "入力できる最大数は";
+			mes "100個だよ。";
+			next;
+			while(1) {
+				input .@input,0,101;
+				if (.@input == 0) {
+					mes "[宝石商ジェイド]";
+					mes "全然いらないのかい？";
+					mes "気が変わった";
+					mes "みたいだね…";
+					close;
+				}
+				else if (.@input > 100) {
+					mes "[宝石商ジェイド]";
+					mes "ええと…";
+					mes "100を超えない数を";
+					mes "入力してって";
+					mes "頼んだはずだけど…？";
+					next;
+				}
+				else if (.@gems < .@input) {
+					// Custom dialogue
+					mes "[宝石商ジェイド]";
+					mes "ええと…";
+					mes "交換できるほどの";
+					mes "ジェムストーンを持ってないよ…";
+					next;
+				}
+				else break;
+			}
+			delitem .@item_req,.@input * 2;
+			getitem .@item_id,.@input;
+			break;
+		case 3:
+			mes "[宝石商ジェイド]";
+			mes "ああ、構わないよ。";
+			mes "またいつでも来てくれ。";
+			close;
+		}
+		mes "[宝石商ジェイド]";
+		mes "はい、どうぞ。";
+		mes "またいつでも";
+		mes "気軽に来てくれよ。";
+		mes "ん、なんだいその顔は？";
+		mes "俺の顔に何かついてる？";
+		close;
+	}
+}

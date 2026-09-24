@@ -1,0 +1,76 @@
+#!/bin/bash
+# SSM Association (AWS-RunShellScript) から root 権限で実行される。
+# バンドル md5 (${md5}) をこのスクリプト本文に含めているため、app の内容が
+# 変わると association の内容も変わり、自動的に再実行される。
+set -euo pipefail
+
+BUCKET="${bucket}"
+OBJECT_KEY="${key}"
+BUNDLE_MD5="${md5}"
+APP_DIR="${app_dir}"
+
+BOOTSTRAP_MARKER="/var/lib/ro-server/bootstrap.done"
+DEPLOY_LOG="/var/log/ro-server-deploy.log"
+DEPLOYED_MD5_FILE="/var/lib/ro-server/deployed.md5"
+
+# ---------------------------------------------------------------------------
+# 1. user-data（ブートストラップ）の完了を最大 20 分待つ
+# ---------------------------------------------------------------------------
+for _ in $(seq 1 120); do
+  if [ -f "$${BOOTSTRAP_MARKER}" ]; then
+    break
+  fi
+  sleep 10
+done
+
+if [ ! -f "$${BOOTSTRAP_MARKER}" ]; then
+  echo "bootstrap did not finish within 20 minutes ($${BOOTSTRAP_MARKER} not found)" >&2
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# 1b. 同じバンドルが配布済みでサービスが稼働中なら何もしない（冪等ガード）
+#     State Manager の周期的な再適用やインスタンス再登録で再起動させないため。
+#     強制的に再デプロイしたい場合は app/ 配下を変更するか、サーバ上で
+#     $${DEPLOYED_MD5_FILE} を削除してから association を再適用する。
+# ---------------------------------------------------------------------------
+if [ -f "$${DEPLOYED_MD5_FILE}" ] \
+  && [ "$(cat "$${DEPLOYED_MD5_FILE}")" = "$${BUNDLE_MD5}" ] \
+  && systemctl is-active --quiet ro-server; then
+  echo "bundle $${BUNDLE_MD5} is already deployed and ro-server is active; nothing to do"
+  exit 0
+fi
+
+# aws CLI は AL2023 に同梱されているが、念のため保険をかける
+if ! command -v aws >/dev/null 2>&1; then
+  dnf -y install awscli-2
+fi
+
+# ---------------------------------------------------------------------------
+# 2. バンドル取得と md5 検証
+# ---------------------------------------------------------------------------
+BUNDLE="/tmp/app.zip"
+rm -f "$${BUNDLE}"
+aws s3 cp "s3://$${BUCKET}/$${OBJECT_KEY}" "$${BUNDLE}"
+echo "$${BUNDLE_MD5}  $${BUNDLE}" | md5sum -c -
+
+# ---------------------------------------------------------------------------
+# 3. 展開して APP_DIR へ同期（.env はサーバ上で生成するので上書きしない）
+# ---------------------------------------------------------------------------
+tmp="$(mktemp -d)"
+trap 'rm -rf "$${tmp}"' EXIT
+unzip -q -o "$${BUNDLE}" -d "$${tmp}"
+
+install -d -m 0755 -o ec2-user -g ec2-user "$${APP_DIR}"
+rsync -a --delete --exclude .env "$${tmp}/" "$${APP_DIR}/"
+chown -R ec2-user:ec2-user "$${APP_DIR}"
+
+# ---------------------------------------------------------------------------
+# 4. アプリ側のデプロイスクリプトを実行
+#    （init-env / systemd 配置 / docker compose build / 起動は deploy.sh が担当）
+# ---------------------------------------------------------------------------
+bash "$${APP_DIR}/scripts/deploy.sh" 2>&1 | tee -a "$${DEPLOY_LOG}"
+
+# 成功したバンドルの md5 を記録（次回以降の冪等ガード用）
+echo "$${BUNDLE_MD5}" > "$${DEPLOYED_MD5_FILE}"
+echo "deploy finished: bundle $${BUNDLE_MD5}"

@@ -1,0 +1,349 @@
+//===== rAthena Script =======================================
+//= Juice Maker Quest
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 2.1
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Learn where to turn apples, bananas, carrots, and grapes
+//= into juice.
+//= Condition if done: (MISC_QUEST & 1)
+//===== Additional Comments: =================================
+//= 1.9 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//=     Added tracking variables in, which are unset when complete.
+//= 2.0 Added missing checkweight. [L0ne_W0lf]
+//= 2.1 Fixed dialog for if your missing the needed items (He always said the dialog for grape juice). [Kisuka]
+//============================================================
+
+prt_in,49,172,3	script	主婦マリアンヌ#juice::Marianne#juice	53,{
+	if ((MISC_QUEST&1) || morison_meat == 15) {
+		mes "[主婦マリアンヌ]";
+		mes "ふぅ…！";
+		mes "それでもあの子ったら、お肉じゃないと何も食べようとしないのよ。でも、食べやすく切ってあげれば果物も食べるかもしれないわ。そう、ジュースにしてしまえば…";
+		next;
+		set mother_marienu,0;
+		set morison_meat,0;
+		set MISC_QUEST,MISC_QUEST | 1;
+		mes "[主婦マリアンヌ]";
+		mes "あら！そういえば、どこかでフルーツジュースを作っているって聞いたことがあるわ。どこだったかしら…フェイヨン村？それともモロク？";
+		close;
+	}
+	if (mother_marienu == 1) {
+		mes "[主婦マリアンヌ]";
+		mes "モリソン！！果物を食べなさい！！だらしない太った豚みたいに育ちたくないでしょう？";
+		next;
+		if (select("話す:やめる") == 1) {
+			mes "[主婦マリアンヌ]";
+			mes "あら？…あなた！";
+			mes "うちのモリソンにお肉をあげたのはあなたね？！私が気づかないとでも思ったの？！";
+			next;
+			mes "[主婦マリアンヌ]";
+			mes "出ていって、今すぐ家から出ていきなさい！！";
+			close;
+		}
+		mes "[主婦マリアンヌ]";
+		mes "モリソン！！そんなことを続けたら、本当に怒るわよ！";
+		close;
+	}
+	if (morison_meat > 0) {
+		set mother_marienu,1;
+		mes "[主婦マリアンヌ]";
+		mes "あら！！…これは…";
+		mes "一体何なの…？";
+		mes "うちの子に、よくもこんなことを！？";
+		next;
+		mes "[主婦マリアンヌ]";
+		mes "もう！今すぐ家から出ていって！";
+		close;
+	}
+	mes "[主婦マリアンヌ]";
+	mes "モリソン！！お願いだから果物を食べて！！お願いよ～！";
+	next;
+	mes "[主婦マリアンヌ]";
+	mes "はぁ～！！本当に父親そっくりなんだから…";
+	next;
+	switch(select("話す:やめる")) {
+		mes "[主婦マリアンヌ]";
+		mes "*はぁ*…この子がモリソン…";
+		mes "私のたった一人の息子なの。";
+		next;
+		mes "[主婦マリアンヌ]";
+		mes "でも最近、果物を全然食べてくれなくて。ちゃんと食べないから顔色も悪いし。お肉ばかり欲しがるの。何とかして果物か野菜を食べさせる方法を見つけないと…";
+		close;
+	}
+	mes "[主婦マリアンヌ]";
+	mes "モリソン！！そんな調子だと、大変なことになるわよ！";
+	close;
+}
+
+prt_in,47,173,3	script	少年モリソン#juice::Morrison#juice	97,{
+	if ((MISC_QUEST&1) || morison_meat == 15) {
+		mes "[少年モリソン]";
+		mes "うぇ…もういいよ。";
+		mes "果物ばっかり食べて、干からびて死んじゃうよ。僕のことは放っておいて。";
+		close;
+	}
+	if (morison_meat > 9) {
+		mes "[少年モリソン]";
+		mes "あぁ…お腹いっぱい～";
+		mes "これでもう生きていけそうだよ。";
+		mes "もうお肉はくれなくていいよ。これ以上食べたら破裂しちゃいそう。";
+		if (morison_meat == 10) {
+			next;
+			set morison_meat,morison_meat+1;
+			mes "[少年モリソン]";
+			mes "あ…それと…えっと。";
+			mes "これあげる。";
+			next;
+			mes "[少年モリソン]";
+			mes "後で食べようと思って取っておいたものなんだけど、お肉をくれたから、このお菓子は譲ってあげる。";
+			close;
+			getitem 529,3; //Candy
+			getitem 530,1; //Candy_Striper
+		}
+		close;
+	}
+	mes "[少年モリソン]";
+	mes "うわぁ…嫌だー！！！";
+	mes "だめ、食べさせないで！果物の味なんて耐えられないよ！";
+	next;
+	if (countitem(517) > 0) {
+		switch(select("話す:お肉を見せる:やめる")) {
+		case 1:
+			mes "[少年モリソン]";
+			mes "うわーん！！1回や2回でもう十分だよ！！もう果物なんて食べたくない！皮をむかなきゃいけないし、汁がべたべたして気持ち悪いんだもん…";
+			next;
+			mes "[少年モリソン]";
+			mes "それにヌルヌルしてて酸っぱいし…食べてもお腹が空いたままなんだ。あーん！お肉をちょうだい！";
+			close;
+		case 2:
+			mes "[少年モリソン]";
+			mes "おお！お、お肉ぇ～";
+			mes "あぁ…お、お腹すいた…";
+			mes "お肉の匂いが…";
+			mes "あの…";
+			mes "ひ、一つもらってもいい？";
+			next;
+			if (select("お肉をあげる:あげない") == 1) {
+				delitem 517,1; //Meat
+				set morison_meat,morison_meat+1;
+				mes "[少年モリソン]";
+				mes "わぁ～！！お肉だ！！";
+				mes "美味しそう！";
+				mes "ありがとう、";
+				mes "これで";
+				mes "生きていけそうだよ。";
+				mes "*もぐもぐ*";
+				close;
+			}
+			set morison_meat,15;
+			mes "[少年モリソン]";
+			mes "うわぁ…！";
+			mes "もういいよ、分かったから。";
+			mes "大人なんてみんな同じだ！";
+			close;
+		case 3:
+			mes "[少年モリソン]";
+			mes "うわああ！！！何と言われても、果物や野菜なんて食べないからね！";
+			close;
+		}
+	}
+	if (select("話す:やめる") == 1) {
+		mes "[少年モリソン]";
+		mes "うわぁ！！もう果物なんて食べられないよ！";
+		next;
+		mes "[少年モリソン]";
+		mes "もう果物は食べたくない！皮をむかなきゃいけないし、汁がべたべたして気持ち悪いんだもん…";
+		next;
+		mes "[少年モリソン]";
+		mes "それにヌルヌルしてて酸っぱいし…食べてもお腹が空いたままなんだ。";
+		mes "あーん！";
+		mes "お肉をちょうだい！";
+		close;
+	}
+	mes "[少年モリソン]";
+	mes "うわああ！！！何と言われても、果物や野菜なんて食べないからね！";
+	close;
+}
+
+payon_in03,188,146,5	script	商人マークス・ハンセン#juice::Marx Hansen#juice	86,{
+	if (checkweight(1201,1) == 0) {
+		mes "- ちょっと待って！ -";
+		mes "- 今のあなたは -";
+		mes "- 荷物を持ちすぎています。 -";
+		mes "- また今度 -";
+		mes "- 倉庫に預けてから来てください。 -";
+		close;
+	}
+	if (MISC_QUEST&1) {
+		mes "[商人マークス・ハンセン]";
+		mes "いらっしゃい。";
+		mes "君も果物を";
+		mes "加工しに来たのかい？";
+		next;
+		switch(select("ジュースを作る。:果物の加工について話を聞く。:やめる。")) {
+		case 1:
+			mes "[商人マークス・ハンセン]";
+			mes "どんなフルーツジュースを作りたいんだい？";
+			next;
+			switch(select("リンゴジュース:バナナジュース:ニンジンジュース:グレープジュース:キャンセル")) {
+			case 1:
+				set .@fruit,512;
+				set .@juice,531;
+				break;
+			case 2:
+				set .@fruit,513;
+				set .@juice,532;
+				break;
+			case 3:
+				set .@fruit,515;
+				set .@juice,534;
+				break;
+			case 4:
+				set .@fruit,514;
+				set .@juice,533;
+				break;
+			case 5:
+				mes "[商人マークス・ハンセン]";
+				mes "それじゃあ…";
+				mes "また今度な。";
+				close;
+			}
+			if (countitem(.@fruit) == 0 || countitem(713) == 0 || Zeny < 3) {
+				mes "[商人マークス・ハンセン]";
+				mes "おっと…";
+				mes "材料が足りないみたいだね。"+getitemname(.@juice)+"を作るには、"+getitemname(.@fruit)+"を1個と、空き瓶を1個用意してほしい。手数料として3Zenyも必要だ。";
+				next;
+				mes "[商人マークス・ハンセン]";
+				mes "全部揃ったら、果物をブレンドして美味しいジュースを作ってあげるよ。";
+				close;
+			}
+
+			mes "[商人マークス・ハンセン]";
+			mes "いくつ欲しい？";
+			next;
+			switch(select("作れるだけ作る。:数を指定する。:やめる。")) {
+			case 1:
+				set .@make,countitem(.@fruit);
+				if (countitem(713) < .@make) set .@make, countitem(713);
+				if (Zeny/3 < .@make) set .@make, Zeny/3;
+				break;
+			case 2:
+				mes "[商人マークス・ハンセン]";
+				mes "100本より少ない数を選んでくれ。作らないなら「0」と入力してくれ。最大で" + countitem(.@fruit) + "本まで作れるよ。";
+				next;
+				while(1) {
+					input .@input;
+					if (.@input == 0) {
+						mes "[商人マークス・ハンセン]";
+						mes "それじゃあ…";
+						mes "また来てくれ。";
+						close;
+					}
+					else if (.@input > 100) {
+						mes "[商人マークス・ハンセン]";
+						mes "100本を超える数は作れない。別の数を選んでくれ。";
+						next;
+					}
+					else {
+						break;
+					}
+				}
+				set .@make,.@input;
+				break;
+			case 3:
+				mes "[商人マークス・ハンセン]";
+				mes "それじゃあ…";
+				mes "また来てくれ。";
+				close;
+			}
+
+			set .@total_zeny,3 * .@make;
+
+			if (countitem(.@fruit) < .@make || countitem(713) < .@make || Zeny < .@total_zeny) {
+				mes "[商人マークス・ハンセン]";
+				mes "おっと…";
+				mes "材料が足りないみたいだ。これじゃあどうしようもない。必要な物を集めてきてくれ。";
+				close;
+			}
+			delitem .@fruit,.@make;
+			delitem 713,.@make;
+			set Zeny, Zeny-.@total_zeny;
+			getitem .@juice,.@make;
+
+			mes "[商人マークス・ハンセン]";
+			mes "はい、どうぞ！約束通り、新鮮で美味しいジュースだよ。とてもさっぱりしていて飲みやすいはずだ。";
+			next;
+			mes "[商人マークス・ハンセン]";
+			mes "それじゃあ…";
+			mes "また来てくれ。";
+			close;
+		case 2:
+			mes "[商人マークス・ハンセン]";
+			mes "人間がこれほど大きな社会を築く前は、木から果物を集めて生き延びていたんだ。果物は、我々がこの世に存在できるようにしてくれた、自然からの恵みだったのかもしれないね。";
+			next;
+			mes "[商人マークス・ハンセン]";
+			mes "暮らしが豊かになった今、若い世代は果物を食べなくなったように思う。だから、もっと食べやすくする方法を考え始めたんだ。";
+			next;
+			mes "[商人マークス・ハンセン]";
+			mes "フルーツジュースにすれば、食べやすくなるし、味もずっと良くなると気づいてね。";
+			next;
+			mes "# フルーツジュース案内 #";
+			mes "^CC4E5C- リンゴジュース -^000000";
+			mes "リンゴ1個、空き瓶1個、3Zeny。";
+			mes "^E3CF57- バナナジュース -^000000";
+			mes "バナナ1個、空き瓶1個、3Zeny。";
+			mes "^ED9121- ニンジンジュース -^000000";
+			mes "ニンジン1個、空き瓶1個、3Zeny。";
+			mes "^CC00FF- グレープジュース -^000000";
+			mes "ブドウ1個、空き瓶1個、3Zeny。";
+			close;
+		case 3:
+			mes "[商人マークス・ハンセン]";
+			mes "おい！";
+			mes "人を訪ねたなら";
+			mes "ちゃんと話をしなさい！";
+			close;
+		}
+	}
+	else {
+		mes "[商人マークス・ハンセン]";
+		mes "いらっしゃい。";
+		mes "何か用かい？";
+		next;
+		if (select("話す:やめる") == 1) {
+			mes "[商人マークス・ハンセン]";
+			mes "人間がこれほど大きな社会を築く前は、木から果物を集めて生き延びていたんだ。果物は、我々がこの世に存在できるようにしてくれた、自然からの恵みだったのかもしれないね。";
+			next;
+			mes "[商人マークス・ハンセン]";
+			mes "暮らしが豊かになった今、若い世代は果物を食べなくなったように思う。だから、もっと食べやすくする方法を考え始めたんだ。";
+			next;
+			mes "[商人マークス・ハンセン]";
+			mes "フルーツジュースにすれば、食べやすくなるし、味もずっと良くなると気づいてね。";
+			close;
+		}
+		mes "[商人マークス・ハンセン]";
+		mes "おい！";
+		mes "人を訪ねたなら";
+		mes "ちゃんと話をしなさい！";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.1 fixed input number check [Lupus]
+//= 1.2 fixed misplaced Grape<->Carrot juices [Lupus]
+//= 1.3 added a loopless menu 'as many as possible' [Lupus]
+//= 1.3a Turned the juice making part of the Juicer npc into a
+//=     subfunc.  Changed fruit amount needed to 1.[kobra_k88]
+//=     Fixed exploits [Lupus]
+//= 1.6 fixed typo (where did @ipnut came from?) [Lance]
+//= 1.8 got rid of vars: 'MEAT',"MARIANNE","MORRISON"
+//=     From now, all common quests start using bits of the
+//=     same variable MISC_QUEST [Lupus]
+//============================================================ 

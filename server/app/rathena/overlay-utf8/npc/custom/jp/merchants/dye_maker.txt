@@ -1,0 +1,202 @@
+//===== rAthena Script ======================================= 
+//= Dye Maker
+//===== By: ================================================== 
+//= rAthena Dev Team
+//===== Current Version: ===================================== 
+//= 1.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests to create the eight colored Dyestuffs.
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working [kobra_k88]
+//= 1.1 Spell Checked [Nexon] 
+//= 1.2 Rescripted to Aegis 10.3 standard. [L0ne_W0lf]
+//= 1.2b Fixed typos in variable names [ultramage]
+//= 1.3 Made the checks more dynamic [ultramage]
+//= 1.3b Fixed incorrect checking loop structure [ultramage]
+//= 1.4 Added a checkweight. [L0ne_W0lf]
+//============================================================ 
+
+morocc_in,146,99,3	script	ジャバ・ドゥリハン::Java Dullihan	58,{
+	if ((MaxWeight-Weight) < 200 || checkweight(1201,1) == 0) {
+		mes "- ちょっと待ってください！ -";
+		mes "- 今、荷物をたくさん -";
+		mes "- 持ちすぎているようです。 -";
+		mes "- カプラ倉庫に -";
+		mes "- いくつか預けてから、また来てください。 -";
+		close;
+	}
+	mes "[染料職人ジャバ・ドゥリハン]";
+	mes "おお…";
+	mes "なんていい天気なんだ。こういう日は染料作りにぴったりだな。";
+	next;
+	switch(select("話す:染料を作る:キャンセル")) {
+	case 1:
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "うーん、特に話すこともないんだが。まあ、俺の人生について話せと言うなら話してもいいぞ。ちょっと長くて退屈な話だが、聞くかい？";
+		next;
+		if (select("聞く:聞かない") == 1) {
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "物心ついた頃から、親父はずっと染料を作っていた。数えきれないほどの時間をかけて、いろんな色の染料を作っていたんだ。お袋が亡くなった時でさえ、手を止めなかった。";
+			next;
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "ある時期、俺は反抗的になって家出したこともある。家業に縛られたくなくて、他のことに挑戦したかったんだ。";
+			next;
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "とにかく…";
+			mes "結局は家業を継ぐために戻ってきて、もう15年も染料を作っている。血は争えないってことなんだろうな。";
+			next;
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "最近になって気づいたことがある。親父の気持ちが今ならわかるんだ。なぜ親父がすべてを染料作りに捧げたのか…";
+			next;
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "あの退屈で骨の折れる作業の中で、親父はきっと、その色が多くの人の夢を運んでいく魔法を感じていたんだろう。";
+			next;
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "きっとその夢のために、お客さんのためにあんなに一生懸命染料を作っていたんだろうな…";
+			next;
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "ふっ…なぜそんなことがわかるかって？今の俺自身がそう感じているからさ。数年前から、色が語りかけてくる声が聞こえるようになったんだ…";
+			next;
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "見ていてくれ。いつか必ず、親父が作りたくて作れなかった色を、俺が完成させてみせる。";
+			close;
+		}
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "あはははは…";
+		mes "まあ、しがない染料職人の話なんて誰も聞きたくないよな。ハハハ…";
+		close;
+
+	case 2:
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "よし！望むなら作ってやろう。欲しい色を必ず作ると約束する。それで、どの色の染料を作りたいんだ？色によって料金が違うぞ。";
+		next;
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "なぜかって？簡単に作れる色もあれば、もっと手間と労力がかかる色もあるってことさ。高いなんて思わないでくれよ。";
+		next;
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "この染料の色は特別で、俺の魂を込めて作り上げたものなんだ。";
+		next;
+		switch(select("スカーレット染料:レモン染料:コバルトブルー染料:ダークグリーン染料:オレンジ染料:バイオレット染料:ホワイト染料:ブラック染料:キャンセル")) {
+		case 1: callsub S_MakeDye,1,1; break;
+		case 2: callsub S_MakeDye,2,1; break;
+		case 3: callsub S_MakeDye,3,2; break;
+		case 4: callsub S_MakeDye,4,3; break;
+		case 5: callsub S_MakeDye,5,4; break;
+		case 6: callsub S_MakeDye,6,4; break;
+		case 7: callsub S_MakeDye,7,4; break;
+		case 8: callsub S_MakeDye,8,4; break;
+		case 9:
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "ええぇぇぇ！？なんだよそれ、今更気が変わったのか！？がっかりだな…";
+			close;
+		}
+
+	case 3:
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "自慢じゃないが、染料を作る腕には自信がある。染料が必要になったら、いつでも俺のところに来てくれ。手頃な値段で作ってやるよ。";
+		close;
+	}
+
+S_MakeDye:
+	mes "[染料職人ジャバ・ドゥリハン]";
+	switch(getarg(0)) {
+	case 1:
+		mes "うーん…赤の染料を作るには、赤ハーブ30個、中和剤1個、空き瓶1個が必要だ。料金はたったの3000Zenyで作れるぞ。";
+		setarray .@item[0], 507, 973, 713;
+		setarray .@count[0], 30,   1,   1;
+		set .@cost,3000;
+		set .@dyestuff,975;
+		break;
+	case 2:
+		mes "うーん…レモン染料を作るには、黄ハーブ30個、中和剤1個、空き瓶1個が必要だ。料金はたったの3000Zenyで作れるぞ。";
+		setarray .@item[0], 508, 973, 713;
+		setarray .@count[0], 30,   1,   1;
+		set .@cost,3000;
+		set .@dyestuff,976;
+		break;
+	case 3:
+		mes "うーん…コバルトブルー染料を作るには、青ハーブ20個、中和剤1個、空き瓶1個が必要だ。青ハーブは扱いが難しいから、料金は3500Zenyになる。";
+		setarray .@item[0], 510, 973, 713;
+		setarray .@count[0], 20,   1,   1;
+		set .@cost,3500;
+		set .@dyestuff,978;
+		break;
+	case 4:
+		mes "うーん…ダークグリーン染料を作るには、青ハーブ5個、緑ハーブ20個、黄ハーブ20個、中和剤1個、混合剤1個、空き瓶1個が必要だ。材料を間違えないようにな。料金はたったの5000Zenyだ。";
+		setarray .@item[0], 510, 511, 508, 974, 973, 713;
+		setarray .@count[0],  5,  20,  20,   1,   1,   1;
+		set .@cost,5000;
+		set .@dyestuff,979;
+		break;
+	case 5:
+		mes "うーん…オレンジ染料を作るには、赤ハーブ20個、黄ハーブ20個、中和剤1個、混合剤1個、空き瓶1個が必要だ。料金は5000Zenyになる。";
+		setarray .@item[0], 507, 508, 974, 973, 713;
+		setarray .@count[0], 20,  20,   1,   1,   1;
+		set .@cost,5000;
+		set .@dyestuff,980;
+		break;
+	case 6:
+		mes "うーん…バイオレット染料を作るには、青ハーブ10個、赤ハーブ30個、中和剤1個、混合剤1個、空き瓶1個が必要だ。料金は5000Zenyだ。";
+		setarray .@item[0], 510, 507, 974, 973, 713;
+		setarray .@count[0], 10,  30,   1,   1,   1;
+		set .@cost,5000;
+		set .@dyestuff,981;
+		break;
+	case 7:
+		mes "うーん…ホワイト染料を作るには、白ハーブ30個、中和剤1個、空き瓶1個が必要だ。料金は3000Zenyだ。";
+		setarray .@item[0], 509, 973, 713;
+		setarray .@count[0], 30,   1,   1; 
+		set .@cost,3000;
+		set .@dyestuff,982;
+		break;
+	case 8:
+		mes "うーん…赤・黄・緑の各ハーブを30個ずつ、青ハーブ5個、中和剤1個、混合剤1個、空き瓶1個が必要だ。他よりも工程が長くて手間がかかるから、7000Zenyになる。";
+		setarray .@item[0], 507, 508, 511, 510, 974, 973, 713;
+		setarray .@count[0], 30,  30,  30,   5,   1,   1,   1;
+		set .@cost,7000;
+		set .@dyestuff,983;
+		break;
+	}
+	next;
+	mes "[染料職人ジャバ・ドゥリハン]";
+	switch(getarg(1)) {
+	case 1: mes "ああ！材料は揃っていると思うが。作業を始めてもいいかい？"; break;
+	case 2: mes "よし！材料は揃っているはずだ。作業を始めてもいいかい？"; break;
+	case 3: mes "よし！材料は揃っているはずだ。作業を始めようか？"; break;
+	case 4: mes "よし！準備は整っているはずだ。作業を始めてもいいかい？"; break;
+	}
+	next;
+	if (select("染料を作る:キャンセル") == 1) {
+		set .@size, getarraysize(.@item);
+		// check requirements
+		for( set .@i,0 ; .@i < .@size ; set .@i,.@i+1 )
+			if( countitem(.@item[.@i]) < .@count[.@i] )
+				break;
+		if( .@i < .@size || Zeny < .@cost ) {
+			mes "[染料職人ジャバ・ドゥリハン]";
+			mes "うーん。足りないな…";
+			mes "その材料じゃ、望みの色を作ることはできそうにない。もう少し材料を集めてきてくれないか…？";
+			close;
+		}
+		// delete items
+		for (set .@i, 0; .@i < .@size ; set .@i, .@i+1)
+			delitem .@item[.@i], .@count[.@i];
+		set Zeny, Zeny-.@cost;
+		// get dyestuff
+		getitem .@dyestuff,1;
+		
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "うむ…なかなかいい出来だ。とても豊かな色合いだな。もちろん、もっと魅力的な色を作れるよう精進するとしよう…";
+		next;
+		mes "[染料職人ジャバ・ドゥリハン]";
+		mes "それじゃあな。染料が必要になったら、いつでも寄ってくれ。";
+		close;
+	}
+	mes "[染料職人ジャバ・ドゥリハン]";
+	mes "ええぇぇぇ！？なんだよそれ？";
+	mes "今更気が変わったのか！？がっかりだな…";
+	return;
+}

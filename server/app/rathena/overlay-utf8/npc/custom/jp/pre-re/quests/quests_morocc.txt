@@ -1,0 +1,3570 @@
+//===== rAthena Script =======================================
+//= Morocc Quest NPCs
+//===== Description: =========================================
+//= [Official Conversion]
+//= Quest NPCs related to Morocc.
+//===== Changelogs: ==========================================
+//= 1.0 Succession of the Prince removed in ep16.1 [Capuche]
+//= 1.1 Moved renewal specific npcs [zackdreaver]
+//============================================================
+
+// Stop Post Quest
+// ============================================================
+moc_ruins,113,181,4	duplicate(William)	ウィリアム#moc::William#moc	89
+
+// Binoculars Quest
+// ============================================================
+moc_ruins,118,176,4	duplicate(Alchemist)	錬金術師#moc::Alchemist#moc	64
+
+// Resurrection of Satan Morocc
+// ============================================================
+
+morocc,176,103,3	duplicate(Continental Official)	大陸の役人#mor::Continental Official#mor	754
+
+// Succession of the Prince
+// ============================================================
+prontera,153,353,4	script	使者#prince1::Messenger#prince1	105,{
+	if (nk_prince == 0) {
+		if (rebirth_moc_edq > 1) {
+			mes "[使者]";
+			mes "私は王宮からの使者です。信頼できる冒険者を探しております。これは、この国にとって非常に重要な問題に関わることなのです。";
+			next;
+			if (aru_monas > 23) {
+				mes "[使者]";
+				mes "国に混乱が生じかねない状況ですが、人々は悪魔の復活を警戒しています。今こそ、余計な騒ぎを起こさずにこの問題を処理する好機です。";
+				next;
+				mes "[使者]";
+				mes "ああ、あまり動揺してほしくはないのですが……うーん、つまり申し上げたいのは、ルーンミッドガッツを治める国王、トリスタム3世のことなのです……";
+				next;
+				switch(select("崩御なさったのですか？:また祝賀のためですか？")) {
+				case 1:
+					emotion ET_SURPRISE;
+					mes "[使者]";
+					mes "もうご存知でしたか……";
+					mes "でしたら、これ以上";
+					mes "詳しい説明は不要ですね。";
+					next;
+					mes "[使者]";
+					mes "王の座を";
+					mes "長く空けておくわけにはいきません。";
+					mes "今、次の王を選ぶための議論が活発に進められています。ルーンミッドガッツの明日のために、どうか力をお貸しください。";
+					set nk_prince,1;
+					setquest 10000;
+					close;
+				case 2:
+					mes "[使者]";
+					mes "……";
+					next;
+					mes "[使者]";
+					mes "何を考えているのですか？";
+					mes "今この国にとって、祝賀行事などが重大事だと本当に思っているのですか？";
+					next;
+					mes "[使者]";
+					mes "ええ……";
+					mes "あなたが何も予期していなくても無理はありません。どうお伝えすればよいのか、私にもまだわからないのです。どうか、あまり戸惑わないでください。";
+					next;
+					mes "[使者]";
+					mes "ルーンミッドガッツを治める国王、トリスタム3世は……";
+					next;
+					mes "[使者]";
+					mes "……";
+					mes "崩御されました。";
+					next;
+					mes "[使者]";
+					mes "民の動揺を防ぐため、まだ公にはされていません。宮廷は今、次の王の選定に専念しており、その検討に追われています。";
+					next;
+					mes "[使者]";
+					mes "詳しいことは宮廷でお聞きください。私の任務は、信頼できる勇敢な冒険者にこの知らせを届けることだけなのです。";
+					next;
+					mes "[使者]";
+					mes "どうか……どうか……";
+					mes "ルーンミッドガッツ王国の";
+					mes "未来のために、力をお貸しください。";
+					set nk_prince,1;
+					setquest 10000;
+					close;
+				}
+			}
+			else {
+				mes "[使者]";
+				mes "国に混乱が生じかねない状況ですが、人々は悪魔の復活を警戒しています。今こそ、余計な騒ぎを起こさずにこの問題を処理する好機です。";
+				next;
+				mes "[使者]";
+				mes "国王陛下は";
+				mes "しばらく人前に姿を見せておられません。";
+				mes "多くの者がその事情を気にかけています。";
+				next;
+				mes "[使者]";
+				mes "この悲しい事実を";
+				mes "皆様にお伝えするのは、辛い務めです。";
+				mes "私の言葉から、もうお察しかもしれませんが……";
+				next;
+				mes "[使者]";
+				mes "国王トリスタム陛下は……";
+				next;
+				mes "[使者]";
+				mes "国王トリスタム陛下は……";
+				mes "……崩御されました……";
+				mes "……長い間、重い病に苦しまれた末のことです。";
+				next;
+				mes "[使者]";
+				mes "宮廷は今、次の王の選定を進めています。私の任務は、献身的な冒険者を見つけ、宮廷へ送り届けることです。";
+				next;
+				mes "[使者]";
+				mes "何をすべきかは";
+				mes "宮廷にてお伝えします。";
+				mes "ルーンミッドガッツに";
+				mes "平和をもたらす助けとなってください。";
+				set nk_prince,1;
+				setquest 10000;
+				close;
+			}
+		}
+		else {
+			mes "[使者]";
+			mes "私はルーンミッドガッツの使者です。";
+			mes "この国で何か";
+			mes "特別なことはありましたか？";
+			next;
+			mes "[使者]";
+			mes "何か不思議なものを見たり、噂を耳にしたりしませんでしたか？";
+			close;
+		}
+	}
+	else if (nk_prince == 1) {
+		mes "[使者]";
+		mes "次の王の選定に力を貸すため、プロンテラ王宮へ向かっていただきたいのです。";
+		next;
+		mes "[使者]";
+		mes "私はここに残り、他の冒険者を探します。あなたの心が、ルーンミッドガッツに大いなる栄光をもたらしますように！";
+		close;
+	}
+	else {
+		mes "[使者]";
+		mes "私は今、任務の最中です。お探しの場所は別にあるのかもしれません。他の方にお尋ねください。";
+		close;
+	}
+}
+
+prt_castle,117,163,5	script	査察官#prince::Inspector#prince	755,{
+	if (checkquest(10004) == 0 || checkquest(10004) == 1) {
+		mes "[査察官]";
+		mes "鑑定士殿！";
+		mes "その後いかがですか？　七人の候補者に会って評価するのは、簡単なことではないでしょう。";
+		next;
+		mes "[査察官]";
+		mes "ほう、もう終わったのですか？";
+		mes "仕事が早いですね、たいしたものです！";
+		next;
+		mes "[査察官]";
+		mes "候補者たちについて、話を聞かせてください～";
+		next;
+		mes "-候補の王子たちについて";
+		mes "感じたことを、";
+		mes "その場で査察官に伝えた。";
+		mes "きっと、はっきりとした";
+		mes "簡潔な事実だけを話したはずだ。-";
+		next;
+		mes "[査察官]";
+		mes "うむ……そうですか。あなたの話は大いに役立ちました。ご苦労さまでした。";
+		next;
+		mes "[査察官]";
+		mes "ところで、たまたま";
+		mes "耳にした噂があるのですが";
+		mes "ウォルター家のアイゲン・アルム王子についてです。もう一度、候補者全員を評価していただけますか？　急ぎで必要なのです。";
+		next;
+		mes "[査察官]";
+		mes "状況が一変するかもしれません……他の方々もおそらく同じでしょう。ですが、どんな噂も見過ごせませんので、アイゲン・アルムのことが気がかりなのです。";
+		next;
+		mes "[査察官]";
+		mes "それでは……もう一度、あちらへ向かってください。";
+		completequest 10004;
+		setquest 10018;
+		setquest 10019;
+		setquest 10020;
+		setquest 10021;
+		setquest 10022;
+		close;
+	}
+	if (nk_prince < 2) {
+		mes "[査察官]";
+		mes "どうしたのですか？";
+		mes "ここは自由に立ち入れる場所ではありません！";
+		next;
+		switch(select("わかりました、わかりました。:使者にここへ行くよう言われたのです。")) {
+		case 1:
+			mes "[査察官]";
+			mes "わかっているなら、なぜここにいるのですか？　出て行きなさい！";
+			close2;
+			warp "prontera",155,353;
+			end;
+		case 2:
+			if (nk_prince == 0) {
+				mes "[査察官]";
+				mes "あなたが経験豊かな";
+				mes "鑑定士だとは思えませんね……";
+				close;
+			}
+			mes "[査察官]";
+			mes "……";
+			next;
+			if (BaseLevel > 89) {
+				mes "[査察官]";
+				mes "使者はあなたの体力適性だけを確認し、ただの戦士を宮廷へ送り込んだにすぎません。それが彼の務めのすべてです。";
+				next;
+				mes "[査察官]";
+				mes "あなたの資質を確かめるのは、私の役目です。";
+				next;
+				mes "[査察官]";
+				mes "うーむ……";
+				next;
+				mes "[査察官]";
+				mes "あなたは経験豊かな旅人であり、力も十分に備えています。ですが……宮廷は、優れた力や戦闘経験だけで人を選ぶわけではないのです。";
+				next;
+				mes "[査察官]";
+				mes "人の資質を確かめるには";
+				mes "十分な";
+				mes "人格が備わっていなければなりません。";
+				next;
+				mes "[査察官]";
+				mes "そこで、簡単な試験を行いたいと思います。";
+				mes "あなたを試させてください。";
+				next;
+				mes "[査察官]";
+				mes "難しいものではありません。示される状況ごとに、率直に、すぐお答えいただくだけです。";
+				next;
+				mes "[査察官]";
+				mes "それでは始めましょう。心構えをして、よく聞いてお答えください。";
+				next;
+				mes "[査察官]";
+				mes "狩りのパーティを率いる者として";
+				mes "最も大切だと思うことは";
+				mes "何ですか？";
+				next;
+				switch(select("モンスターの強さと特徴。:狩りの効率。:狩りで得られるもの。")) {
+				case 1:
+					set .@int,.@int+10;
+					break;
+				case 2:
+					set .@solid,.@solid+10;
+					break;
+				case 3:
+					set .@brave,.@brave+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "戦闘中にパーティの仲間を";
+				mes "失ったらどうしますか？";
+				next;
+				switch(select("できるまで戦い続ける。:別の場所を探し、やり方を変える。:狩りをやめて態勢を立て直す。")) {
+				case 1:
+					set .@brave,.@brave+10;
+					break;
+				case 2:
+					set .@int,.@int+10;
+					break;
+				case 3:
+					set .@solid,.@solid+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "狩りの成果として得たものは……";
+				next;
+				switch(select("事前の取り決め通りに分配する。:分配のことなど気にしない。:必要としている仲間に譲る。")) {
+				case 1:
+					set .@int,.@int+10;
+					break;
+				case 2:
+					set .@solid,.@solid+10;
+					break;
+				case 3:
+					set .@brave,.@brave+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "敵がまだ生きている間に";
+				mes "治療すべきなのは、どの職業の仲間ですか？";
+				next;
+				switch(select("プリースト、回復役。:ハンター、火力役。:ロードナイト、盾役。")) {
+				case 1:
+					set .@int,.@int+10;
+					break;
+				case 2:
+					set .@brave,.@brave+10;
+					break;
+				case 3:
+					set .@solid,.@solid+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "誰と最も親しくなりたいですか？";
+				next;
+				switch(select("強い人。:経験豊かな人。:優しい人。")) {
+				case 1:
+					set .@brave,.@brave+10;
+					break;
+				case 2:
+					set .@int,.@int+10;
+					break;
+				case 3:
+					set .@solid,.@solid+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "修行の中で、あなたを";
+				mes "最も助けた能力は何ですか？";
+				next;
+				switch(select("人との関わり。:豊富な情報収集。:見極める力と実行力。")) {
+				case 1:
+					set .@solid,.@solid+10;
+					break;
+				case 2:
+					set .@int,.@int+10;
+					break;
+				case 3:
+					set .@brave,.@brave+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "普段、他人をどのように励ましますか？";
+				next;
+				switch(select("過去の失敗を引き合いに出す。:迷うことが一番よくない。:あなたは一人じゃない。")) {
+				case 1:
+					set .@int,.@int+10;
+					break;
+				case 2:
+					set .@brave,.@brave+10;
+					break;
+				case 3:
+					set .@solid,.@solid+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "あなたの人生における";
+				mes "究極の美徳とは何ですか？";
+				next;
+				switch(select("自己の成長。:世界の平和。:真実の追求。")) {
+				case 1:
+					set .@brave,.@brave+10;
+					break;
+				case 2:
+					set .@solid,.@solid+10;
+					break;
+				case 3:
+					set .@int,.@int+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "無人島に取り残されたら";
+				mes "最も欲しいものは";
+				mes "何ですか？";
+				next;
+				switch(select("地図:火打ち石:武器")) {
+				case 1:
+					set .@int,.@int+10;
+					break;
+				case 2:
+					set .@solid,.@solid+10;
+					break;
+				case 3:
+					set .@brave,.@brave+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "どんな物語が一番好きですか？";
+				next;
+				switch(select("恋物語。:英雄叙事詩。:宗教説話。")) {
+				case 1:
+					set .@solid,.@solid+10;
+					break;
+				case 2:
+					set .@brave,.@brave+10;
+					break;
+				case 3:
+					set .@int,.@int+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "新しい地域で";
+				mes "見知らぬモンスターと遭遇しました。";
+				mes "どうしますか？";
+				next;
+				switch(select("先に攻撃する。:遠くから様子を見る。:逃げる。")) {
+				case 1:
+					set .@brave,.@brave+10;
+					break;
+				case 2:
+					set .@int,.@int+10;
+					break;
+				case 3:
+					set .@solid,.@solid+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "ルーンミッドガッツ王国を治めるとき";
+				mes "まず何をすべきですか？";
+				next;
+				switch(select("軍備を強化し他国を支配する。:経済と技術を発展させる。:治安をしっかり守る。")) {
+				case 1:
+					set .@brave,.@brave+10;
+					break;
+				case 2:
+					set .@int,.@int+10;
+					break;
+				case 3:
+					set .@solid,.@solid+10;
+					break;
+				}
+				mes "[査察官]";
+				mes "人柄を見る試験は、これで終わりです。";
+				mes "あなたはこれまで……";
+				next;
+				if (.@brave > 50) {
+					if (.@int > 30) {
+						mes "[査察官]";
+						mes "強い信念を持ち、";
+						mes "そして道理をわきまえた判断力とともに";
+						mes "生きてこられたようですね。";
+						next;
+					}
+					else if (.@solid > 30) {
+						mes "[査察官]";
+						mes "強い勇気を持ち、";
+						mes "同時に";
+						mes "節度ある人生を送ってこられたようです。";
+						next;
+					}
+					else {
+						mes "[査察官]";
+						mes "決断力を持って生きてこられたのですね。";
+						mes "その力で、困難を乗り越えてきたのでしょう。";
+						next;
+					}
+				}
+				else if (.@int > 50) {
+					if (.@brave > 30) {
+						mes "[査察官]";
+						mes "芯の強さを持ち、";
+						mes "そして道理をわきまえた判断力とともに";
+						mes "生きてこられたようですね。";
+						next;
+					}
+					else if (.@solid > 30) {
+						mes "[査察官]";
+						mes "道理をわきまえた判断力と";
+						mes "調和のとれた感性とともに";
+						mes "生きてこられたようですね。";
+						next;
+					}
+					else {
+						mes "[査察官]";
+						mes "冷静で思慮深い判断とともに、";
+						mes "きっと、多くの良い経験も積んでこられたのでしょう。";
+						next;
+					}
+				}
+				else if (.@solid > 50) {
+					if (.@brave > 30) {
+						mes "[査察官]";
+						mes "強い勇気を持ち、";
+						mes "同時に";
+						mes "節度ある人生を送ってこられたようです。";
+						next;
+					}
+					else if (.@int > 30) {
+						mes "[査察官]";
+						mes "道理をわきまえた判断力と";
+						mes "穏やかな感性とともに";
+						mes "生きてこられたようですね。";
+						next;
+					}
+					else {
+						mes "[査察官]";
+						mes "……いえ、実のところ……";
+						mes "あなたはどちらにも偏らず……";
+						mes "安定と調和こそが";
+						mes "あなたの人生における大切な美徳だったのですね。";
+						next;
+					}
+				}
+				mes "[査察官]";
+				mes "あなたには";
+				mes "他者を評価するのに十分な資質があるようです。先ほどの無礼な態度をお詫びします。";
+				next;
+				mes "[査察官]";
+				mes "そこで、お願いがあります。あなたは正式な冒険者鑑定士に任命されました。";
+				next;
+				mes "[査察官]";
+				mes "ああ、長い時間お付き合いいただき、お疲れでしょう。仕事を始める前に準備が必要でしたら、一度離れて、また後で戻ってきてください。ここでお待ちしています。";
+				next;
+				set nk_prince,4;
+				changequest 10000,10003;
+				close;
+			}
+			else {
+				mes "[査察官]";
+				mes "あなたが";
+				mes "経験豊かな冒険者だとは思えません……";
+				mes "これは国にとって重要な問題です。あなたのような方に、この役目を任せるわけにはいきません。";
+				next;
+				mes "[査察官]";
+				mes "ですが、自らが強き冒険者であると証明できれば、最初の資格試験を通過させてあげましょう。";
+				next;
+				mes "[査察官]";
+				mes "グラストヘイムをご存知ですか？　あの地には、アビスナイトと呼ばれるモンスターがいます。";
+				next;
+				mes "[査察官]";
+				mes "アビスナイトを倒し、";
+				mes "^ff0000手綱^000000を2つ持ってきてください。";
+				mes "この任務を果たせたなら、";
+				mes "あなたの力を認めましょう。";
+				set nk_prince,2;
+				changequest 10000,10001;
+				next;
+				mes "[査察官]";
+				mes "続きの話は";
+				mes "手綱を2つ手に入れてからにしましょう。";
+				mes "それでは……";
+				close;
+			}
+		}
+	}
+	else if (nk_prince == 2) {
+		mes "[査察官]";
+		mes "ああ、また会いに来てくれましたか。もうグラストヘイムへ行ってきたようですね。";
+		next;
+		mes "[査察官]";
+		mes "お話しした手綱を2つ、お持ちですか？";
+		next;
+		if (countitem(1064) > 1) {
+			mes "[査察官]";
+			mes "おお！";
+			mes "正直、持ってきてくれるとは思っていませんでした。たいしたものです。";
+			next;
+			mes "[査察官]";
+			mes "よろしい。自らの力を証明しましたね。これで一つの試験には合格です。残るはあと一つ。";
+			delitem 1064,2; //Reins
+			set nk_prince,3;
+			changequest 10001,10002;
+			next;
+			mes "[査察官]";
+			mes "王子たちを評価する鑑定士には、人格も備わっていなければなりません。力だけではすべてを補うことはできず、人柄も伴っている必要があります";
+			next;
+			mes "[査察官]";
+			mes "ある意味、次の試験はあなたの人柄を試すものです。ただの簡単な質問の連続ですが、まずは落ち着いて、心の準備をしてから、また話しかけてください。";
+			close;
+		}
+		else {
+			mes "[査察官]";
+			mes "そんな危険な任務を果たしたこともないでしょうに！　よくもこの場所へ来ようと思いましたね。王子たちを評価する仕事は、あなたには任せられません。";
+			next;
+			mes "[査察官]";
+			mes "また出直してきてください。";
+			close;
+		}
+	}
+	else if (nk_prince == 3) {
+		mes "[査察官]";
+		mes "さて、準備はよろしいですか？";
+		mes "そう難しい試験ではありませんが……";
+		next;
+		mes "[査察官]";
+		mes "これは、状況に応じたあなたの姿勢や振る舞いを知るためのものです。質問をよく聞き、旅の経験を思い浮かべながら、率直にお答えください。";
+		next;
+		mes "[査察官]";
+		mes "それでは、始めましょう。";
+		next;
+		mes "[査察官]";
+		mes "狩りのパーティを率いる者として";
+		mes "最も大切だと思うことは";
+		mes "何ですか？";
+		next;
+		switch(select("モンスターの強さと特徴。:狩りの効率。:狩りで得られるもの。")) {
+		case 1:
+			set .@int,.@int+10;
+			break;
+		case 2:
+			set .@solid,.@solid+10;
+			break;
+		case 3:
+			set .@brave,.@brave+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "戦闘中にパーティの仲間を";
+		mes "失ったらどうしますか？";
+		next;
+		switch(select("できるまで戦い続ける。:別の場所を探し、やり方を変える。:狩りをやめて態勢を立て直す。")) {
+		case 1:
+			set .@brave,.@brave+10;
+			break;
+		case 2:
+			set .@int,.@int+10;
+			break;
+		case 3:
+			set .@solid,.@solid+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "狩りの成果として得たものは……";
+		next;
+		switch(select("事前の取り決め通りに分配する。:分配のことなど気にしない。:必要としている仲間に譲る。")) {
+		case 1:
+			set .@int,.@int+10;
+			break;
+		case 2:
+			set .@solid,.@solid+10;
+			break;
+		case 3:
+			set .@brave,.@brave+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "敵がまだ生きている間に";
+		mes "治療すべきなのは、どの職業の仲間ですか？";
+		next;
+		switch(select("プリースト、回復役。:ハンター、火力役。:ロードナイト、盾役。")) {
+		case 1:
+			set .@int,.@int+10;
+			break;
+		case 2:
+			set .@brave,.@brave+10;
+			break;
+		case 3:
+			set .@solid,.@solid+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "誰と最も親しくなりたいですか？";
+		next;
+		switch(select("強い人。:経験豊かな人。:優しい人。")) {
+		case 1:
+			set .@brave,.@brave+10;
+			break;
+		case 2:
+			set .@int,.@int+10;
+			break;
+		case 3:
+			set .@solid,.@solid+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "修行の中で、あなたを";
+		mes "最も助けた能力は何ですか？";
+		next;
+		switch(select("人との関わり。:豊富な情報収集。:見極める力と実行力。")) {
+		case 1:
+			set .@solid,.@solid+10;
+			break;
+		case 2:
+			set .@int,.@int+10;
+			break;
+		case 3:
+			set .@brave,.@brave+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "普段、他人をどのように励ましますか？";
+		next;
+		switch(select("過去の失敗を引き合いに出す。:迷うことが一番よくない。:あなたは一人じゃない。")) {
+		case 1:
+			set .@int,.@int+10;
+			break;
+		case 2:
+			set .@brave,.@brave+10;
+			break;
+		case 3:
+			set .@solid,.@solid+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "あなたの人生における";
+		mes "究極の美徳とは何ですか？";
+		next;
+		switch(select("自己の成長。:世界の平和。:真実の追求。")) {
+		case 1:
+			set .@brave,.@brave+10;
+			break;
+		case 2:
+			set .@solid,.@solid+10;
+			break;
+		case 3:
+			set .@int,.@int+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "無人島に取り残されたら";
+		mes "最も欲しいものは";
+		mes "何ですか？";
+		next;
+		switch(select("地図:火打ち石:武器")) {
+		case 1:
+			set .@int,.@int+10;
+			break;
+		case 2:
+			set .@solid,.@solid+10;
+			break;
+		case 3:
+			set .@brave,.@brave+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "どんな物語が一番好きですか？";
+		next;
+		switch(select("恋物語。:英雄叙事詩。:宗教説話。")) {
+		case 1:
+			set .@solid,.@solid+10;
+			break;
+		case 2:
+			set .@brave,.@brave+10;
+			break;
+		case 3:
+			set .@int,.@int+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "新しい地域で";
+		mes "見知らぬモンスターと遭遇しました。";
+		mes "どうしますか？";
+		next;
+		switch(select("先に攻撃する。:遠くから様子を見る。:逃げる。")) {
+		case 1:
+			set .@brave,.@brave+10;
+			break;
+		case 2:
+			set .@int,.@int+10;
+			break;
+		case 3:
+			set .@solid,.@solid+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "ルーンミッドガッツ王国を治めるとき";
+		mes "まず何をすべきですか？";
+		next;
+		switch(select("軍備を強化し他国を支配する。:経済と技術を発展させる。:治安をしっかり守る。")) {
+		case 1:
+			set .@brave,.@brave+10;
+			break;
+		case 2:
+			set .@int,.@int+10;
+			break;
+		case 3:
+			set .@solid,.@solid+10;
+			break;
+		}
+		mes "[査察官]";
+		mes "人柄を見る試験は、これで終わりです。";
+		mes "あなたはこれまで……";
+		next;
+		if (.@brave > 50) {
+			if (.@int > 30) {
+				mes "[査察官]";
+				mes "強い信念を持ち、";
+				mes "そして道理をわきまえた判断力とともに";
+				mes "生きてこられたようですね。";
+				next;
+			}
+			else if (.@solid > 30) {
+				mes "[査察官]";
+				mes "強い勇気を持ち、";
+				mes "同時に";
+				mes "節度ある人生を送ってこられたようです。";
+				next;
+			}
+			else {
+				mes "[査察官]";
+				mes "決断力を持って生きてこられたのですね。";
+				mes "その力で、困難を乗り越えてきたのでしょう。";
+				next;
+			}
+		}
+		else if (.@int > 50) {
+			if (.@brave > 30) {
+				mes "[査察官]";
+				mes "芯の強さを持ち、";
+				mes "そして道理をわきまえた判断力とともに";
+				mes "生きてこられたようですね。";
+				next;
+			}
+			else if (.@solid > 30) {
+				mes "[査察官]";
+				mes "道理をわきまえた判断力と";
+				mes "調和のとれた感性とともに";
+				mes "生きてこられたようですね。";
+				next;
+			}
+			else {
+				mes "[査察官]";
+				mes "冷静で思慮深い判断とともに、";
+				mes "きっと、多くの良い経験も積んでこられたのでしょう。";
+				next;
+			}
+		}
+		else if (.@solid > 50) {
+			if (.@brave > 30) {
+				mes "[査察官]";
+				mes "強い勇気を持ち、";
+				mes "同時に";
+				mes "節度ある人生を送ってこられたようです。";
+				next;
+			}
+			else if (.@int > 30) {
+				mes "[査察官]";
+				mes "道理をわきまえた判断力と";
+				mes "穏やかな感性とともに";
+				mes "生きてこられたようですね。";
+				next;
+			}
+			else {
+				mes "[査察官]";
+				mes "……いえ、実のところ……";
+				mes "あなたはどちらにも偏らず……";
+				mes "安定と調和こそが";
+				mes "あなたの人生における大切な美徳だったのですね。";
+				next;
+			}
+		}
+		mes "[査察官]";
+		mes "あなたには";
+		mes "他者を評価するのに十分な資質があるようです。先ほどの無礼な態度をお詫びします。";
+		next;
+		mes "[査察官]";
+		mes "そこで、お願いがあります。あなたは正式な冒険者鑑定士に任命されました。";
+		next;
+		mes "[査察官]";
+		mes "ああ、長い時間お付き合いいただき、お疲れでしょう。仕事を始める前に準備が必要でしたら、一度離れて、また後で戻ってきてください。ここでお待ちしています。";
+		next;
+		set nk_prince,4;
+		changequest 10002,10003;
+		close;
+	}
+	else if (nk_prince == 4) {
+		mes "[査察官]";
+		mes "ようこそ……";
+		mes "これから、いくつか";
+		mes "心得をお伝えします。";
+		mes "王子たちと接する際に気をつけるべきことについてです。よく聞いてください。";
+		next;
+		mes "[査察官]";
+		mes "まずはあなたの質問にお答えしましょう。";
+		next;
+		while(1) {
+			switch(select("具体的に何をすればいいのですか？:国王は病で亡くなったのですか？:この任務は秘密なのですか？:もう質問はありません。")) {
+			case 1:
+				mes "[査察官]";
+				mes "七つの家柄から、七人の候補者がいます。各家から一人ずつです。候補者たちは皆同じ場所にいますので、そこであなたに紹介します。";
+				next;
+				mes "[査察官]";
+				mes "候補者たちに一人ずつ会い、資質について質問したり、行動を観察したりしてください。そのうえで私のところへ戻り、見聞きしたことを詳しく説明してください。";
+				next;
+				mes "[査察官]";
+				mes "本来であれば、王子たちの資質は王族が長い時間をかけて見極め、内々の定めによって選ばれるべきものです。";
+				next;
+				mes "[査察官]";
+				mes "しかし、悪魔サタン・モロクの復活により、人々は通常の発表に従うには不安が大きく、国の情勢も安定していません。";
+				next;
+				mes "[査察官]";
+				mes "どの国も、サタン・モロクの介入を防ぐことに追われています。";
+				next;
+				mes "[査察官]";
+				mes "そこで今回、宮廷はやり方を変え、あなたのような高名で献身的な冒険者に候補者の評価を任せることにしたのです。それが、あなたがここにいる理由です。";
+				next;
+				set .@prince,1;
+				break;
+			case 2:
+				mes "[査察官]";
+				mes "何をばかなことを聞くのですか！！　国王トリスタムは病で崩御されたと、はっきりお伝えしたはずですが？";
+				next;
+				mes "[査察官]";
+				mes "他に気になることはないのですか？";
+				next;
+				break;
+			case 3:
+				mes "[査察官]";
+				mes "そうですね……";
+				mes "国王の崩御を公表するのは当然のことです。ですが、国の情勢がまだそれを許さないのです。今はこれが唯一の手段なのです。";
+				next;
+				mes "[査察官]";
+				mes "王子たちは自らの意志で外に出ることはできず、また人々も王子たちのいる場所へ立ち入ることはできません。";
+				next;
+				break;
+			case 4:
+				if (.@prince == 1) {
+					mes "[査察官]";
+					mes "これで、この件についての";
+					mes "説明は十分でしょう。";
+					mes "それでは、王子たちに会える場所を";
+					mes "お伝えします。";
+					next;
+					mes "[査察官]";
+					mes "医務官の部屋にたどり着くと、奇妙な場所に一人の兵士が立っています。そこには扉がないことに気づくでしょう。";
+					next;
+					mes "[査察官]";
+					mes "その兵士の背後に、隠し扉があります。兵士に話しかければ、中へ入れてもらえます。";
+					next;
+					mes "[査察官]";
+					mes "申し上げた通り、これはルーンミッドガッツ王国にとって非常に重要な問題です。何度も念を押していますが、いくら強調してもし足りないほどです。";
+					next;
+					mes "[査察官]";
+					mes "どうか、それにふさわしく振る舞ってください。";
+					mes "ご尽力に感謝します。";
+					set nk_prince,5;
+					completequest 10003;
+					setquest 10005;
+					setquest 10006;
+					setquest 10007;
+					setquest 10008;
+					setquest 10009;
+					setquest 10010;
+					setquest 10011;
+					close;
+				}
+				else {
+					mes "[査察官]";
+					mes "何をすべきか、指示はもう受けたはずです。これは軽く扱っていいような、つまらない話ではありません！　よく注意してください！";
+					next;
+					mes "[査察官]";
+					mes "やる気がないのなら、他の冒険者を探します。用があるなら、そちらへ戻ってもかまいません。";
+					next;
+				}
+				break;
+			}
+		}
+	}
+	else if (nk_prince == 7) {
+		mes "[査察官]";
+		mes "調子はどうですか？";
+		mes "人を評価するのは、生易しいことではありません。本当に骨の折れる仕事です。あなたはこの国のために、力を尽くしてくれていますね。";
+		next;
+		if ((nkprince_eisen == 15) && (checkquest(10025) == 0 || checkquest(10025) == 1)) {
+			mes "-アルムとエルンストの一件について、彼に伝えた。-";
+			next;
+			mes "[査察官]";
+			mes "何ですって！？　信じられません！";
+			mes "そ、そんな……";
+			next;
+			mes "[査察官]";
+			mes "エルンストの手で……ですか？";
+			mes "本当に……？";
+			next;
+			mes "[査察官]";
+			mes "あなたは冒険者鑑定士としての";
+			mes "役目を、立派に果たしてくれました。";
+			mes "これまでの助力に、心から感謝します。あなたのおかげで、この国の未来は大きな恩を受けました。";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "（それほど驚いていないようだ……何か理由があるのだろうか？　今、疑念が湧いてきた……）";
+			next;
+			mes "[査察官]";
+			mes "いいですか、ここで経験したことは、誰にも明かしてはなりません。この件が完全に機密であることは、わかっていますね。";
+			next;
+			mes "[査察官]";
+			mes "これからも、しっかり務めを果たしてください。";
+			mes "ルーンミッドガッツ王国のために！";
+			if (checkre(3)) {
+				if ((BaseLevel > 80) && (BaseLevel < 86)) getexp 40000,0;
+				else if ((BaseLevel > 85) && (BaseLevel < 91)) getexp 45000,0;
+				else if ((BaseLevel > 90) && (BaseLevel < 96)) getexp 50000,0;
+				else if ((BaseLevel > 95) && (BaseLevel < 99)) getexp 55000,0;
+				else if (BaseLevel > 99) getexp 110000,0;
+				else getexp 30000,0;
+			} else {
+				if ((BaseLevel > 80) && (BaseLevel < 86)) getexp 400000,0;
+				else if ((BaseLevel > 85) && (BaseLevel < 91)) getexp 450000,0;
+				else if ((BaseLevel > 90) && (BaseLevel < 96)) getexp 500000,0;
+				else if ((BaseLevel > 95) && (BaseLevel < 99)) getexp 550000,0;
+				else if (BaseLevel >= 99) getexp 1100000,0;
+				else getexp 300000,0;
+			}
+			set nk_prince,8;
+			completequest 10025;
+			close;
+		}
+		else {
+			mes "[査察官]";
+			mes "それでは、私はこれで失礼します……";
+			close;
+		}
+	}
+	else if ((nk_prince == 8) || (nk_prince == 9)) {
+		mes "[査察官]";
+		mes "すべては";
+		mes "ルーンミッドガッツの栄光のために！";
+		close;
+	}
+	else {
+		mes "[査察官]";
+		mes "こんにちは、鑑定士殿。";
+		mes "任務を立派に果たしてくれることを願っています。伝えた通り、王子たち全員にはもう会いましたか？";
+		if (nkprince_eisen != 10)
+			close;
+		next;
+		switch(select("はい。:いいえ。")) {
+		case 1:
+			set .@prin1,checkquest(10005);
+			set .@prin2,checkquest(10006);
+			set .@prin3,checkquest(10007);
+			set .@prin4,checkquest(10008);
+			set .@prin5,checkquest(10009);
+			set .@prin6,checkquest(10010);
+			set .@prin7,checkquest(10011);
+			if (.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7 == 14) {
+				mes "[査察官]";
+				mes "よろしい。";
+				mes "王子たちの話を聞くのは楽しみです。";
+				completequest 10004;
+				setquest 10004;
+			} else {
+				mes "[査察官]";
+				mes "本当ですか？";
+				mes "王子たち全員を確認してきてください。";
+			}
+			close;
+		case 2:
+			set .@prin1,checkquest(10005);
+			set .@prin2,checkquest(10006);
+			set .@prin3,checkquest(10007);
+			set .@prin4,checkquest(10008);
+			set .@prin5,checkquest(10009);
+			set .@prin6,checkquest(10010);
+			set .@prin7,checkquest(10011);
+			if (.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7 == 14) {
+				mes "[査察官]";
+				mes "そう照れなくても。きっともう済ませているのでしょう。";
+				completequest 10004;
+				setquest 10004;
+			} else {
+				mes "[査察官]";
+				mes "王子たち全員についての調査は、すでに終えています。";
+			}
+			close;
+		}
+	}
+}
+
+prt_castle,272,375,4	script	王子::Prince	881,{
+	if (nk_prince > 6) {
+		mes "-鍵と錠前作りに";
+		mes "夢中になっている。-";
+		close;
+	}
+	if (checkquest(10020) == 2) {
+		mes "[エーリッヒ]";
+		mes "……なんて運が悪いんだ！";
+		mes "だが彼は、結果がわかっていながら、私に堕落しろと言い張るんだ……";
+		close;
+	}
+	else if (checkquest(10020) == 0 || checkquest(10020) == 1) {
+		mes "[エーリッヒ]";
+		mes "最近、運が悪くてね……嫌がらせばかり受けている気がするよ……";
+		close;
+	}
+	if (nk_prince < 5) {
+		mes "[王子]";
+		mes "お前は誰だ？";
+		mes "お前にここへ";
+		mes "入る資格があるとは思えないが？";
+		next;
+		mes "[王子]";
+		mes "私の前から";
+		mes "消えるよう命じる。";
+		close;
+	}
+	else if (nk_prince == 5) {
+		mes "[王子]";
+		mes "お前は誰だ？";
+		mes "誰かに、隠し入口のことを教えられたのだろう。まさか……お前が冒険者鑑定士か？";
+		next;
+		select("はい、そうです。");
+		mes "[王子]";
+		mes "そうか……ならば頼みがある。私はネリウス家の嫡男だ。名はエーリッヒ。エーリッヒ王子と呼んでくれてかまわない。";
+		next;
+		mes "[エーリッヒ]";
+		mes "正式な名は……";
+		next;
+		mes "[エーリッヒ]";
+		mes "もう十分だろう。";
+		mes "私についての詳しいことは、従者に聞いてくれ。私は少し休ませてもらう。";
+		set nk_prince,6;
+		completequest 10011;
+		set .@prin1,checkquest(10005);
+		set .@prin2,checkquest(10006);
+		set .@prin3,checkquest(10007);
+		set .@prin4,checkquest(10008);
+		set .@prin5,checkquest(10009);
+		set .@prin6,checkquest(10010);
+		set .@prin7,checkquest(10011);
+		if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+			setquest 10012;
+		}
+		close;
+	}
+	else {
+		mes "[エーリッヒ]";
+		mes "……私の良心が！";
+		mes "うまく働いてくれない……";
+		next;
+		mes "-他のことなど、どうでもいいほど夢中になっているようだ。-";
+		close;
+	}
+}
+
+prt_castle,274,372,4	script	従者#hans::Servant#hans	48,{
+	if (checkquest(10020) == 2) {
+		mes "[ハンス]";
+		mes "ああ……その……私は……";
+		mes "本当に、申し訳ありません！";
+		mes "鑑定士殿に、大きな失礼をしてしまったと思います！";
+		next;
+		mes "[ハンス]";
+		mes "私の主は何も悪いことはしていませんが、とにかく、すべてお詫びいたします！";
+		close;
+	}
+	else if (checkquest(10020) == 0 || checkquest(10020) == 1) {
+		mes "絶えず……-";
+		mes "-彼は私の反応のたびにおびえている。その様子が哀れに思える。-";
+		close;
+	}
+	if (nk_prince == 6) {
+		mes "[ハンス]";
+		mes "ご機嫌いかがですか？";
+		mes "私はハンス、エーリッヒ王子の従者です。";
+		next;
+		mes "[ハンス]";
+		mes "何かご用でしょうか？";
+		next;
+		switch(select("エーリッヒ王子に、あなたに会うよう言われました。:特に用はありません。")) {
+		case 1:
+			mes "[ハンス]";
+			mes "エーリッヒ王子が……ですか？";
+			next;
+			select("彼についての話を聞きたいです。");
+			mes "[ハンス]";
+			mes "ああ、なるほど。";
+			mes "正直なところ、エーリッヒ王子は政治にそれほど興味がありません。";
+			next;
+			mes "[ハンス]";
+			mes "毎日日記をつけているのですが、結婚式の日でさえ『特に何もなかった』とだけ書いていました。世の中の出来事にも、人付き合いにも、あまり関心がないのです。";
+			next;
+			mes "[ハンス]";
+			mes "お好きなのは、錠前作りです。";
+			mes "少し変わった方でしょう？";
+			mes "ある種の道化者と言いますか。";
+			next;
+			mes "[ハンス]";
+			mes "上品な衣装もお好きではなく、正装すら持ってきていません。ここへ来るなり、鍵と錠前作りに夢中になってしまう有様です。";
+			next;
+			mes "[ハンス]";
+			mes "うまく言い表せる言葉が見つかりません……彼について、特別お伝えすることもないのです。見た通りに評価していただければと思います……";
+			next;
+			mes "[ハンス]";
+			mes "私に言えるのは、これくらいです。";
+			mes "はぁ……～";
+			next;
+			emotion ET_SURPRISE;
+			mes "[ハンス]";
+			mes "ああ、王子！";
+			mes "指を切ってしまいますよ！";
+			next;
+			mes "[エーリッヒ]";
+			mes "………";
+			next;
+			mes "[ハンス]";
+			mes "……ふむ、聞こえてすらいないようだ……";
+			mes "ああああ……";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			close;
+		case 2:
+			mes "[ハンス]";
+			mes "他の王子たちにはお会いになりましたか？";
+			next;
+			mes "[ハンス]";
+			mes "何か尋ねても、今の彼から特別な話は聞けないでしょう。";
+			close;
+		}
+	}
+	else {
+		mes "[ハンス]";
+		mes "もしもし？";
+		mes "あなたが新しい冒険者鑑定士ですか？？";
+		close;
+	}
+}
+
+prt_castle,339,202,3	script	王子#urgen::Prince#urgen	989,{
+	if (nk_prince > 6) {
+		mes "[ウルゲン]";
+		mes "……美しくない。";
+		mes "不快な気分になる……";
+		close;
+	}
+	if (checkquest(10021) == 2) {
+		mes "[ウルゲン]";
+		mes "とても不愉快な気分だ。おい、何を見ている？　出て行け！";
+		next;
+		mes "[ウルゲン]";
+		mes "私の美しい身体は、今日は万全の状態ではない。誰にも見せたくないのだ、今日ばかりは。";
+		close;
+	}
+	else if (checkquest(10021) == 0 || checkquest(10021) == 1) {
+		mes "[ウルゲン]";
+		mes "……何？　お前は何を……";
+		mes "私に言ったのだ？……はぁ？";
+		close;
+	}
+	if (nk_prince < 5) {
+		mes "[王子]";
+		mes "はぁぁぁぁ";
+		mes "その立場は、お前にはふさわしくない。";
+		next;
+		mes "[王子]";
+		mes "できるだけ早く、私から離れろ。";
+		close;
+	}
+	else if (nk_prince > 4) {
+		mes "[王子]";
+		mes "ラ～　ららららら～　ららら～";
+		mes "私を見極め、資質を評価するというのは、お前のことか？";
+		next;
+		mes "[王子]";
+		mes "お前が見とれているその水仙は、ウルゲンという。ヴィグナー家に咲いた花だ。";
+		next;
+		mes "[ウルゲン]";
+		mes "普段は誰にもこの美しい声を聞かせはしないが、今回だけは特別に聞かせてやろう。";
+		next;
+		mes "[ウルゲン]";
+		mes "よく聞くがいい……";
+		mes "私の、忘れがたく";
+		mes "澄んだ美声で答えてやろう。";
+		next;
+		while(1) {
+			switch(select("あなたの生い立ちを知りたいです。:あなたの国家観を聞かせてください。:趣味や好みは何ですか？:失礼します。")) {
+			case 1:
+				mes "[ウルゲン]";
+				mes "幼い頃から、この";
+				mes "端整な顔立ちが男たちの羨望と嫉妬を招き、女たちからは求婚が絶えなかった。うんざりして、人から距離を置くようになったのだ。";
+				next;
+				mes "[ウルゲン]";
+				mes "この美しい私が";
+				mes "時にはそうしたものに耐えねばならぬとは、な。";
+				next;
+				mes "[ウルゲン]";
+				mes "次第に、臆病になっていった。性別を問わず、男からも女からも畏敬の念を向けられる気がするのだ。";
+				set .@p_a,1;
+				next;
+				break;
+			case 2:
+				mes "[ウルゲン]";
+				mes "人はそれぞれ、なすべきことをなせばいい。それが国の原動力となる。私にとっては、この存在そのものが国への貢献となるだろう。";
+				next;
+				mes "[ウルゲン]";
+				mes "私のような華麗な王の存在こそが、民の光となり、生きる希望と意義となるのだ。";
+				set .@p_b,1;
+				next;
+				break;
+			case 3:
+				mes "[ウルゲン]";
+				mes "もちろん、身体を磨くことだ。人は美を追い求めるべきだろう。至極当然のことではないか？";
+				next;
+				mes "[ウルゲン]";
+				mes "どんな物事にも例外はある、この宮廷にいるお前のようにな。もう少し離れてくれないか？　お前の匂いで息が苦しい。";
+				set .@p_c,1;
+				next;
+				break;
+			case 4:
+				mes "[ウルゲン]";
+				mes "お前の精神力は相当なものだな。私の美しさをこれほど長く見つめていながら、まだ正気を保っているとは。";
+				if (.@p_a + .@p_b + .@p_c == 3) {
+					completequest 10009;
+				}
+				completequest 10011;
+				set .@prin1,checkquest(10005);
+				set .@prin2,checkquest(10006);
+				set .@prin3,checkquest(10007);
+				set .@prin4,checkquest(10008);
+				set .@prin5,checkquest(10009);
+				set .@prin6,checkquest(10010);
+				set .@prin7,checkquest(10011);
+				if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+					setquest 10012;
+				}
+				close;
+			}
+		}
+	}
+}
+
+prt_castle,289,201,3	script	王子#helmut::Prince#helmut	991,{
+	if (nk_prince > 6) {
+		mes "[ヘルムート]";
+		mes "とんだ愚か者だ。もっと早く始末しておくべきだった。今は肩の荷が下りた気分だよ。";
+		close;
+	}
+	if (checkquest(10022) == 2) {
+		mes "[ヘルムート]";
+		mes "くそ……くそったれ！";
+		mes "ウォルター家の青二才が！！";
+		mes "このいらだちをどう発散すればいい？　くそっ！　地獄に落ちろ！";
+		close;
+	}
+	else if (checkquest(10022) == 0 || checkquest(10022) == 1) {
+		mes "-すっかり顔を赤くして、";
+		mes "それが誰の目にも明らかだ。-";
+		close;
+	}
+	if (nk_prince < 5) {
+		mes "[ヘルムート]";
+		mes "お前がここにいていいはずがない！";
+		mes "俺から離れられないのか！";
+		close;
+	}
+	else if (nk_prince > 4) {
+		mes "[ヘルムート]";
+		mes "お前が新しい鑑定士か？　訪ねてくる奴が多くてうんざりしてるんだ！　さっさと本題に入るぞ！";
+		next;
+		mes "-どの話題から始めようか。-";
+		next;
+		switch(select("あなたの生い立ち……:あなたの野望……:あなたの国家観……:先に他の方に会いたいです。")) {
+		case 1:
+			mes "[ヘルムート]";
+			mes "他の奴らがどう答えるか知らんが、俺はその質問には気が張る。いけないとは思うが、別の答えなど持ち合わせていないんだ！";
+			next;
+			mes "[ヘルムート]";
+			mes "俺は王子だ、文句を言えば王子になれる！　こういう質問にはうんざりだ。";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……………";
+			mes "ええ、わかりました。どうぞ続けてください……";
+			next;
+			mes "[ヘルムート]";
+			mes "俺はロエヴェンブルクのヘルムートだ。";
+			mes "好きなのは戦場で血の匂いを嗅ぐこと、それに祭りも楽しむ。";
+			next;
+			mes "[ヘルムート]";
+			mes "嫌いなのは堅苦しい形式にこだわることと、長話だ。野望について？　王になったら何をするか……ってやつか？？　その質問は何度もされてきたな。";
+			next;
+			mes "[ヘルムート]";
+			mes "俺が王になったら、軍を強化し、大陸を統一したのちに征服する。民を害するモンスターは、すべて根絶やしにしてやる！";
+			next;
+			mes "[ヘルムート]";
+			mes "～ゴホッゴホッ～！　喉が痛い！　久しく声を張ってなかったからな。～ゴホッゴホッ～！";
+			next;
+			mes "[ヘルムート]";
+			mes "おい、カルベルン！";
+			mes "ビールを持ってこい！　ビールだ！";
+			next;
+			mes "[ヘルムート]";
+			mes "まだそこに突っ立っているのか？　もう話すことはない！　下がれ！";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			completequest 10010;
+			set .@prin1,checkquest(10005);
+			set .@prin2,checkquest(10006);
+			set .@prin3,checkquest(10007);
+			set .@prin4,checkquest(10008);
+			set .@prin5,checkquest(10009);
+			set .@prin6,checkquest(10010);
+			set .@prin7,checkquest(10011);
+			if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+				setquest 10012;
+			}
+			close;
+		case 2:
+			mes "[ヘルムート]";
+			mes "他の奴らがどう答えるか知らんが、俺はその質問には気が張る。いけないとは思うが、別の答えなど持ち合わせていないんだ！";
+			next;
+			mes "[ヘルムート]";
+			mes "俺は王子だ、文句を言えば王子になれる！　こういう質問にはうんざりだ。";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……………";
+			mes "ええ、わかりました。どうぞ続けてください……";
+			next;
+			mes "[ヘルムート]";
+			mes "俺はロエヴェンブルクのヘルムートだ。";
+			mes "好きなのは戦場で血の匂いを嗅ぐこと、それに祭りも楽しむ。";
+			next;
+			mes "[ヘルムート]";
+			mes "嫌いなのは堅苦しい形式にこだわることと、長話だ。野望について？　王になったら何をするか……ってやつか？？　その質問は何度もされてきたな。";
+			next;
+			mes "[ヘルムート]";
+			mes "俺が王になったら、軍を強化し、大陸を統一したのちに征服する。民を害するモンスターは、すべて根絶やしにしてやる！";
+			next;
+			mes "[ヘルムート]";
+			mes "～ゴホッゴホッ～！　喉が痛い！　久しく声を張ってなかったからな。～ゴホッゴホッ～！";
+			next;
+			mes "[ヘルムート]";
+			mes "おい、カルベルン！";
+			mes "ビールを持ってこい！　ビールだ！";
+			next;
+			mes "[ヘルムート]";
+			mes "まだそこに突っ立っているのか？　もう話すことはない！　下がれ！";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			completequest 10010;
+			set .@prin1,checkquest(10005);
+			set .@prin2,checkquest(10006);
+			set .@prin3,checkquest(10007);
+			set .@prin4,checkquest(10008);
+			set .@prin5,checkquest(10009);
+			set .@prin6,checkquest(10010);
+			set .@prin7,checkquest(10011);
+			if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+				setquest 10012;
+			}
+			close;
+		case 3:
+			mes "[ヘルムート]";
+			mes "他の奴らがどう答えるか知らんが、俺はその質問には気が張る。いけないとは思うが、別の答えなど持ち合わせていないんだ！";
+			next;
+			mes "[ヘルムート]";
+			mes "俺は王子だ、文句を言えば王子になれる！　こういう質問にはうんざりだ。";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……………";
+			mes "ええ、わかりました。どうぞ続けてください……";
+			next;
+			mes "[ヘルムート]";
+			mes "俺はロエヴェンブルクのヘルムートだ。";
+			mes "好きなのは戦場で血の匂いを嗅ぐこと、それに祭りも楽しむ。";
+			next;
+			mes "[ヘルムート]";
+			mes "嫌いなのは堅苦しい形式にこだわることと、長話だ。野望について？　王になったら何をするか……ってやつか？？　その質問は何度もされてきたな。";
+			next;
+			mes "[ヘルムート]";
+			mes "俺が王になったら、軍を強化し、大陸を統一したのちに征服する。民を害するモンスターは、すべて根絶やしにしてやる！";
+			next;
+			mes "[ヘルムート]";
+			mes "～ゴホッゴホッ～！　喉が痛い！　久しく声を張ってなかったからな。～ゴホッゴホッ～！";
+			next;
+			mes "[ヘルムート]";
+			mes "おい、カルベルン！";
+			mes "ビールを持ってこい！　ビールだ！";
+			next;
+			mes "[ヘルムート]";
+			mes "まだそこに突っ立っているのか？　もう話すことはない！　下がれ！";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			completequest 10010;
+			set .@prin1,checkquest(10005);
+			set .@prin2,checkquest(10006);
+			set .@prin3,checkquest(10007);
+			set .@prin4,checkquest(10008);
+			set .@prin5,checkquest(10009);
+			set .@prin6,checkquest(10010);
+			set .@prin7,checkquest(10011);
+			if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+				setquest 10012;
+			}
+			close;
+		case 4:
+			mes "[" + strcharinfo(0) + "]";
+			mes "いえ、王子、";
+			mes "また後で参ります。";
+			next;
+			mes "[ヘルムート]";
+			mes "そうか、好きにしろ。";
+			mes "おい！　おいカルベルン！";
+			mes "さっさとビールを持ってこい！";
+			mes "殴られたいのか？";
+			close;
+		}
+	}
+}
+
+prt_castle,288,208,4	script	カルベルン::Calbern	962,{
+	mes "[カルベルン]";
+	mes "ご機嫌いかがですか？";
+	mes "私はヘルムート王子の従者、";
+	mes "カルベルンと申します。";
+	next;
+	mes "[ヘルムート]";
+	mes "おい、カルベルン！";
+	mes "ビールを持ってこい！　ビールだ！";
+	next;
+	mes "[カルベルン]";
+	mes "おっと、失礼いたしました。";
+	mes "用事がありますので……";
+	close;
+}
+
+prt_castle,391,205,3	script	王子#poe::Prince#poe	993,{
+	if (nk_prince > 6) {
+		mes "[ポー]";
+		mes "どんな事情があろうと、あいつは人生という勝負の敗者にすぎん。";
+		close;
+	}
+	if (checkquest(10018) == 2) {
+		mes "[ポー]";
+		mes "挑みもせずに諦めるとはな。男のすることではない。俺ほどの器ではなかったということだ。だが、まあいい。失望したよ、アイゲン・アルム。";
+		close;
+	}
+	else if (checkquest(10018) == 0 || checkquest(10018) == 1) {
+		mes "[ポー]";
+		mes "……";
+		close;
+	}
+	if (nk_prince < 5) {
+		mes "[王子]";
+		mes "やあ、調子はどうだ？";
+		mes "お前に";
+		mes "ここにいる資格はない。";
+		mes "まずは自分の家系をきちんと整理してから出直してきたらどうだ？";
+		close;
+	}
+	else if (nk_prince > 4) {
+		mes "[王子]";
+		mes "こっちへ来い。";
+		mes "お前が冒険者か！";
+		mes "俺も過酷な旅というやつには目がなくてな。年寄りたちの冒険譚……俺を冒険から引き離すことなんてできやしない……";
+		next;
+		mes "[王子]";
+		mes "俺の名はポー。";
+		mes "リチャード家の王子だ。覚えておいて、俺の支持者になってくれ……";
+		next;
+		mes "[ポー]";
+		mes "何よりもまず、";
+		mes "お前の冒険者としての力量を試したい。大した試験じゃない。お前の直感がどれほど当たるか、知りたいだけだ……それだけさ。";
+		next;
+		mes "[ポー]";
+		mes "直感の鈍い奴とは";
+		mes "話す気になれないからな。";
+		mes "手短に説明して、";
+		mes "お前の直感を試してやろう。";
+		next;
+		mes "[ポー]";
+		mes "俺のカードには1から13までの数字がある。俺が引いたカードの数字が、より大きいか小さいか、お前に答えてもらう。";
+		next;
+		mes "[ポー]";
+		mes "ああ、もちろん7は中間の数字だ。7なら成功でも失敗でもない。このゲームの目的は、2回連続で正解することだ。始めるぞ！";
+		next;
+		while(.@wincount < 2) {
+			set .@card,rand(1,13);
+			mes "[ポー]";
+			mes "よし、では";
+			mes "高いか低いか、選べ。";
+			mes "一つだけだ。";
+			next;
+			switch(select("高い:低い")) {
+			case 1:
+				mes "[ポー]";
+				mes "ふむ……高い方か？……";
+				mes "では、カードを引くぞ！";
+				next;
+				mes "[ポー]";
+				mes "それは……" + .@card + "！！";
+				next;
+				if (.@card > 7) {
+					set .@wincount,.@wincount+1;
+					mes "[ポー]";
+					mes "おおっ、正解だ！";
+					if (.@wincount == 2) {
+						mes "これで2回連続の正解だな？……";
+						next;
+						break;
+					}
+					else {
+						mes "だが、まだ1回しか正解していないな。";
+						next;
+					}
+				}
+				else if (.@card == 7) {
+					mes "[ポー]";
+					mes "このゲームは引き分けだ。";
+					mes "次はもっとうまくやれ。";
+					next;
+				}
+				else {
+					mes "[ポー]";
+					mes "はずれだ……";
+					mes "ホルグレヘンのところへ行って、運を磨いてもらってこい。";
+					close;
+				}
+				break;
+			case 2:
+				mes "[ポー]";
+				mes "お、低い方か？……";
+				mes "俺のカードを見ろ！";
+				next;
+				mes "[ポー]";
+				mes "それは……" + .@card + "！！";
+				next;
+				if (.@card < 7) {
+					set .@wincount,.@wincount+1;
+					mes "[ポー]";
+					mes "おおっ、正解だ！";
+					if (.@wincount == 2) {
+						mes "これで2回連続の正解だな？……";
+						next;
+						break;
+					}
+					else {
+						mes "だが、まだ1回しか正解していないな。";
+						next;
+					}
+				}
+				else if (.@card == 7) {
+					mes "[ポー]";
+					mes "このゲームは引き分けだ。";
+					mes "次はもっとうまくやれ。";
+					next;
+				}
+				else {
+					mes "[ポー]";
+					mes "はずれだ……";
+					mes "ホルグレヘンのところへ行って、運を磨いてもらってこい。";
+					close;
+				}
+				break;
+			}
+		}
+		mes "[ポー]";
+		mes "よし、これほど鋭い直感の持ち主になら、俺の胸の内を明かすのも自然というものだ。";
+		next;
+		mes "[ポー]";
+		mes "表のカードでお前のことはよくわかった。今度は俺の伏せカードを見せてやろう！　知りたいことは何でも聞け。";
+		next;
+		mes "[ポー]";
+		mes "さあ……何が知りたい？！";
+		next;
+		while(1) {
+			switch(select("あなたの生い立ちについて……:あなたの国家観について……:趣味や興味について……:また後で来ます。")) {
+			case 1:
+				mes "[ポー]";
+				mes "俺の生い立ち……";
+				mes "昔の話か。";
+				mes "大して重要視してないから、あまり覚えちゃいないな……";
+				next;
+				mes "[ポー]";
+				mes "数え切れない勝負と戦いを生き抜いてきた男、とだけ言っておこうか。それが俺には似合いだ。ハハハハハ！";
+				next;
+				mes "[ポー]";
+				mes "数々の事故や難題を乗り越えてきた……そうして生き延びながら、新しいものを追い求めてきた。人生とはつまり……";
+				next;
+				mes "[ポー]";
+				mes "配られたカードに落胆せず、勝負手を狙い続けることだ！";
+				next;
+				mes "[ポー]";
+				mes "……";
+				next;
+				mes "[ポー]";
+				mes "な、かっこいいだろう？";
+				mes "俺たち、気が合いそうだな？";
+				set .@p_a,1;
+				next;
+				break;
+			case 2:
+				mes "[ポー]";
+				mes "俺の考えでは、国は民それぞれの自由を保障するため、最低限の守りだけ提供すればいい……";
+				next;
+				mes "[ポー]";
+				mes "人は情熱を注げるものに挑むべきだ。だから、民の自由な行動を国が妨げてはならない。";
+				next;
+				mes "[ポー]";
+				mes "俺が王だったら、あらゆる制約を取り払い、害の及ばない範囲で誰もが自由に生きられるようにするだろうな。";
+				next;
+				mes "[ポー]";
+				mes "うちの家のことを思うと、みんな保守的で融通が利かなくてな。";
+				next;
+				mes "[ポー]";
+				mes "あれはするな、これはするな、それは危険だ、これは当然だ……そんな小言を、俺はずっと聞かされ続けてきたよ……";
+				next;
+				mes "[ポー]";
+				mes "ああ、今の話は";
+				mes "ここだけにしておいてくれ。";
+				mes "家のことでとやかく言われたくないんでな。";
+				set .@p_b,1;
+				next;
+				break;
+			case 3:
+				mes "[ポー]";
+				mes "何でも新しいものを経験すること！";
+				mes "それが何かなんて、どうでもいい！";
+				next;
+				mes "[ポー]";
+				mes "今が大航海時代なら、俺は探検隊の船長になっていたかもな！　未踏、開拓、調査……そういうのは俺の得意分野だ。お前はどうだ？？";
+				next;
+				mes "[ポー]";
+				mes "だが、賭け事中毒だとよく言われるがな。俺はただ挑戦心が旺盛で、金をかき集めるのが好きなだけだ！　ただの自由な、普通の男さ。";
+				set .@p_c,1;
+				next;
+				break;
+			case 4:
+				mes "[ポー]";
+				mes "よし、";
+				mes "次はもっと刺激的で危険な場所で会おう。";
+				if (.@p_a + .@p_b + .@p_c == 3) {
+					completequest 10007;
+				}
+				set .@prin1,checkquest(10005);
+				set .@prin2,checkquest(10006);
+				set .@prin3,checkquest(10007);
+				set .@prin4,checkquest(10008);
+				set .@prin5,checkquest(10009);
+				set .@prin6,checkquest(10010);
+				set .@prin7,checkquest(10011);
+				if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+					setquest 10012;
+				}
+				close;
+			}
+		}
+	}
+}
+
+prt_castle,364,375,4	script	王子#peter::Prince#peter	987,{
+	if (nk_prince > 6) {
+		mes "[ピーター]";
+		mes "鑑定士殿。";
+		mes "アルデバランの少女には、もう会いましたか？";
+		next;
+		switch(select("はい、代わりに会ってきました。:いいえ、気が進みません。")) {
+		case 1:
+			if (checkquest(10014) == 0 || checkquest(10014) == 1) {
+				mes "[ピーター]";
+				mes "あの子が喜んでくれたなら、嬉しいです。心が癒えたら、私も会いに行きたいと思っていました。";
+				next;
+				mes "[ピーター]";
+				mes "ともあれ、よくやってくれました。つまらないことでお手を煩わせて、申し訳ない気持ちです。これは私からの感謝のしるしです。どうか気負わず、受け取ってください。";
+				completequest 10014;
+				getitem 644,1; //Gift_Box
+				close;
+			}
+			mes "[ピーター]";
+			mes "あの子のことを思うと、心が落ち着きます。まだ信じられません。先頃亡くなったアルム王子のことが……～";
+			close;
+		case 2:
+			if (checkquest(10014) == 0 || checkquest(10014) == 1) {
+				mes "[ピーター]";
+				mes "おっしゃる通りです。";
+				mes "彼女の命は花のようだと聞き、それを失いかけたのだと知りました。";
+				mes "私が自分で会いに行きましょう。";
+				next;
+				mes "[ピーター]";
+				mes "つまらないことでお手を煩わせて、申し訳ない気持ちです。どうぞこれを受け取ってください。";
+				completequest 10014;
+				getitem 644,1; //Gift_Box
+				close;
+			}
+			mes "[ピーター]";
+			mes "お気になさらず。";
+			mes "まだ信じられません。先頃亡くなったアルム王子のことが……～～";
+			close;
+		}
+	}
+	if (checkquest(10019) == 2) {
+		mes "[ピーター]";
+		mes "あの子に……いったい何があったのですか？……";
+		close;
+	}
+	else if (checkquest(10019) == 0 || checkquest(10019) == 1) {
+		mes "[ピーター]";
+		mes "……";
+		close;
+	}
+	if (checkquest(10008) == 2) {
+		set .@quest, checkquest(10014);
+		if (.@quest == 2) {
+			mes "[ピーター]";
+			mes "本当に感謝しています。";
+			mes "あなたはとても親切な方だ。";
+			close;
+		}
+		else if (.@quest == 0 || .@quest == 1) {
+			mes "[ピーター]";
+			mes "あの子が喜んでくれたなら、嬉しいです。心が癒えたら、私も会いに行きたいと思っていました。";
+			next;
+			mes "[ピーター]";
+			mes "ともあれ、よくやってくれました。つまらないことでお手を煩わせて、申し訳ない気持ちです。これは私からの感謝のしるしです。どうか気負わず、受け取ってください。";
+			completequest 10014;
+			getitem 644,1; //Gift_Box
+			close;
+		}
+		else {
+			mes "[ピーター]";
+			mes "鑑定士殿、他に";
+			mes "何か御用でしょうか？";
+			close;
+		}
+	}
+	else {
+		if (nk_prince < 4) {
+			mes "[王子]";
+			mes "お前には";
+			mes "ここにいる資格はない。";
+			close;
+		}
+		else if (nk_prince > 4) {
+			mes "[王子]";
+			mes "こんにちは、";
+			mes "私はピーター、ハイネ家の者です。お会いできて嬉しく思います。";
+			next;
+			mes "[ピーター]";
+			mes "さて、どこから始めましょうか？";
+			next;
+			while(1) {
+				switch(select("あなたの生い立ちについて……:あなたの国家観について……:趣味や興味について……:また後で来ます。")) {
+				case 1:
+					mes "[ピーター]";
+					mes "私の家柄はそれほど力のあるものではなく、子供の頃も裕福ではありませんでした。アルバイトを探して、自分で稼がねばならなかったのです。";
+					next;
+					mes "[ピーター]";
+					mes "ですが、それが人々の暮らしを、細部まで知る助けになりました。それが私の長所だと思っています。";
+					next;
+					mes "[ピーター]";
+					mes "ご質問への答えとしては、これで十分でしょうか？";
+					next;
+					break;
+				case 2:
+					mes "[ピーター]";
+					mes "大切なのは、人々がそれぞれの持ち場で自己を全うすることであり、国はそれを補う支援だけを行えばよいのだと思います。";
+					mes "つまり申し上げたいのは、国が支配するのではなく、人々自身が互いに平和を保つ必要がある、ということです。";
+					next;
+					mes "[ピーター]";
+					mes "それゆえ、私は階級差から生じる利益を取り除くつもりです。これは平等の問題ではなく、国力の向上のためです。";
+					next;
+					break;
+				case 3:
+					mes "[ピーター]";
+					mes "趣味と言えば読書くらいです。人は前へ進むべきであり、努力する姿勢が必要だと思います。";
+					next;
+					break;
+				case 4:
+					mes "[ピーター]";
+					mes "ああ、それだけですか？";
+					next;
+					mes "[ピーター]";
+					mes "でしたら、一つお願いがあります……私の話を聞いていただけますか？";
+					next;
+					mes "[ピーター]";
+					mes "もともと、ひげを伸ばすのは好きではありませんでした……ですが、変わるきっかけが一つありまして……最近、誰かにその機会を与えられたのだと思うようになったのです。";
+					next;
+					mes "[ピーター]";
+					mes "見知らぬ少女からの手紙がきっかけでした……";
+					next;
+					mes "[ピーター]";
+					mes "手紙には、私の印象は鋭すぎるので、ひげを伸ばせば輪郭が隠れて、ずっと良く見えるはずだと書かれていました。";
+					next;
+					mes "[ピーター]";
+					mes "彼女に恩返しがしたいのです。";
+					mes "彼女の言葉に、大いに助けられましたから。大したものではありませんが、小さな花束くらいは贈りたいと思います。";
+					next;
+					mes "[ピーター]";
+					mes "この花を持って、アルデバランのどこかにいるその少女に、お礼を伝えてもらえませんか？";
+					completequest 10008;
+					next;
+					switch(select("わかりました、お任せください。:どなたか他の方にお願いします。")) {
+					case 1:
+						mes "[ピーター]";
+						mes "ああ、本当にありがとう。";
+						mes "道中、お気をつけて。";
+						getitem 744,1; //Bunch_Of_Flowers
+						setquest 10013;
+						set .@prin1,checkquest(10005);
+						set .@prin2,checkquest(10006);
+						set .@prin3,checkquest(10007);
+						set .@prin4,checkquest(10008);
+						set .@prin5,checkquest(10009);
+						set .@prin6,checkquest(10010);
+						set .@prin7,checkquest(10011);
+						if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+							setquest 10012;
+						}
+						close;
+					case 2:
+						mes "[ピーター]";
+						mes "わかりました……";
+						mes "あなたにも";
+						mes "ご事情があるのでしょう。";
+						setquest 10013;
+						set .@prin1,checkquest(10005);
+						set .@prin2,checkquest(10006);
+						set .@prin3,checkquest(10007);
+						set .@prin4,checkquest(10008);
+						set .@prin5,checkquest(10009);
+						set .@prin6,checkquest(10010);
+						set .@prin7,checkquest(10011);
+						if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+							setquest 10012;
+						}
+						close;
+					}
+				}
+			}
+		}
+	}
+}
+
+aldebaran,132,184,3	script	少女#prince::Girl#prince	96,{
+	if (checkquest(10013) == 0 || checkquest(10013) == 1) {
+		if (countitem(744) > 0) {
+			mes "[少女]";
+			mes "わあ、ピーターおじさんが";
+			mes "この花を私に？";
+			mes "うーん～　いい香り。";
+			next;
+			mes "[少女]";
+			mes "えへへ～　あなたはピーターおじさんのお友達ね。";
+			mes "今度おじさんに会うことが";
+			mes "あったら、よろしく伝えてくださいね。";
+			mes "お花、すごく気に入ったって伝えてほしいの……";
+			mes "それじゃあ、またね。";
+			next;
+			mes "[少女]";
+			mes "早く家に帰って、";
+			mes "この花を花瓶に生けなくちゃ。";
+			mes "らんらん～";
+			delitem 744,1; //Bunch_Of_Flowers
+			changequest 10013,10014;
+			close;
+		}
+		else {
+			mes "[少女]";
+			mes "ねえ、『あしながおじさん』のお話、知ってる？……";
+			close;
+		}
+	}
+	else {
+		mes "[少女]";
+		mes "ねえ、『あしながおじさん』のお話、知ってる？……";
+		close;
+	}
+}
+
+prt_castle,314,373,4	script	王子#eisen::Prince#eisen	983,{
+	if (nkprince_eisen > 2) {
+		if (nkprince_eisen == 3) {
+			mes "[アルム]";
+			mes "エルンストは元気にしているか……？";
+			mes "あいつは何事にも真面目でな。問題を起こすことも、癇癪を起こすこともない……ある意味、変わり者と言えるかもな。";
+			next;
+			mes "[アルム]";
+			mes "俺たちは仲の良い友人だった。俺と違って優しく思いやりがあり、公務に徹した男だ。厳しくすべき時には、誰にでも等しく厳しくする。";
+			set nkprince_eisen,4;
+			close;
+		}
+		else if (nkprince_eisen == 4) {
+			mes "[アルム]";
+			mes "俺はアイゲン・アルム、";
+			mes "ルーンミッドガッツの光となる者だ。";
+			close;
+		}
+		else if (nkprince_eisen == 5) {
+			mes "[アルム]";
+			mes "誰が王になろうと、互いに助け合って、ルーンミッドガッツを……世界一の国にしよう。";
+			next;
+			mes "[エルンスト]";
+			mes "俺たちならできる。";
+			mes "いや、必ずやり遂げよう。兄さんと俺、二人で力を合わせれば、必ずできる。";
+			next;
+			mes "[アルム]";
+			mes "だが……もし俺が王として、あるいはお前を支える立場として、堕落したら……お前の手で、俺を殺せ。";
+			next;
+			mes "[アルム]";
+			mes "逆の場合も同じだ、俺がお前を殺す。わかるか？　だから、決して道を踏み外すな。その覚悟を忘れるなよ。";
+			next;
+			mes "[エルンスト]";
+			mes "兄さん、地獄みたいなことを考えるんだな。そんなことは起こらない、だから……そんな話はやめてくれ。";
+			next;
+			mes "[アルム]";
+			mes "たとえばの話だ。";
+			mes "そう深刻に受け止めるな。";
+			next;
+			mes "[エルンスト]";
+			mes "わかった、わかったよ。";
+			mes "悪く取らないでくれ。";
+			mes "俺はずっと、兄さんとこの王国のために動いてきた。これからも、それは変わらない。";
+			next;
+			emotion ET_SURPRISE;
+			mes "[アルム]";
+			mes "ああ、鑑定士殿が来たか。";
+			mes "急に現れるとは驚いたな。エルンと話の最中だったんだ。";
+			next;
+			mes "[エルンスト]";
+			mes "どうしたんだ、兄さん？　何も悪い話をしていたわけじゃない。ただ、互いの覚悟を確かめ合っていただけだ。";
+			next;
+			mes "[アルム]";
+			mes "ちょうどいいところに来た。俺たちは今、決めたところなんだ……もしどちらかが堕落したら、互いに殺し合おうと。";
+			next;
+			mes "[エルンスト]";
+			mes "兄さん！？";
+			next;
+			mes "[アルム]";
+			mes "ぜひ、この約束の証人になってくれ。断るなよ。ある意味、お前の仕事にとっても好都合な話だろう？";
+			next;
+			mes "[エルンスト]";
+			mes "に、兄さん。あまりに強引すぎる。鑑定士殿にも、ご自分の立場や考えがあるはずだ。";
+			next;
+			mes "[アルム]";
+			mes "相変わらず気が弱いな。そう難しいことを頼んでるわけじゃない！　構うものか、沈黙は肯定と受け取るぞ！　これで俺の勝ちだ！　約束は成立した！";
+			next;
+			mes "[エルンスト]";
+			mes "はぁ……はは……鑑定士殿、失礼な真似をして本当に申し訳ない。すまないが、この約束が果たされることなど、まずあり得ません。だから、あまり深く受け止めないでください……そう、豚が空を飛ぶ日でも来ない限りは……～";
+			next;
+			mes "[エルンスト]";
+			mes "さて、俺はそろそろ部屋に戻る。鑑定士殿、これからも励んでくれ。";
+			donpcevent "Prince#another_ern::OnDisable";
+			set nkprince_eisen,6;
+			close;
+		}
+		else if (nkprince_eisen == 6) {
+			mes "[アルム]";
+			mes "俺の家から今日、";
+			mes "誰か来ると聞いたんだが、まだ見つけられていない。";
+			next;
+			mes "[アルム]";
+			mes "お前の言葉が気にかかる……";
+			mes "今度は何を言いたいんだ……？";
+			mes "鑑定士殿、その者を見ませんでしたか？";
+			set nkprince_eisen,7;
+			changequest 10012,10016;
+			close;
+		}
+		else if (nkprince_eisen == 7) {
+			mes "[アルム]";
+			mes "ああ……退屈だ、退屈だな。";
+			mes "今は本当に修行中の身なんだ！";
+			close;
+		}
+		else if (nkprince_eisen == 8) {
+			mes "[アルム]";
+			mes "ずいぶん頻繁にここへ来るな。";
+			mes "お前が誠実で、王国にとって重要な任務に携わっているのはわかるが、それにしても、必要以上に足しげく通ってくるな……";
+			next;
+			switch(select("話したいことがあります……:そうですか。では、また今度。")) {
+			case 1:
+				mes "[" + strcharinfo(0) + "]";
+				mes "ウォルター家の者を見かけました。";
+				next;
+				mes "[アルム]";
+				mes "おお！　本当か？";
+				mes "なぜ俺のところに来なかったんだ？";
+				next;
+				mes "[" + strcharinfo(0) + "]";
+				mes "-アルムにその話を伝えた。-";
+				next;
+				mes "[アルム]";
+				mes "……";
+				next;
+				mes "[アルム]";
+				mes "何だと！　その話は間違いないのか？　ああああ……";
+				next;
+				mes "[アルム]";
+				mes "……";
+				next;
+				mes "[アルム]";
+				mes "すまないが、一人にしてくれ。今すぐ、放っておいてくれ！";
+				set nkprince_eisen,9;
+				close2;
+				warp "prt_castle",318,273;
+				end;
+			case 2:
+				mes "[アルム]";
+				mes "ああ、せいせいしたよ。";
+				close;
+			}
+		}
+		else if ((nkprince_eisen == 9) || (nkprince_eisen == 10) || (nkprince_eisen == 11) || (nkprince_eisen == 12)) {
+			mes "[アルム]";
+			mes "すまないが、一人にしてくれ。今すぐ、放っておいてくれ！";
+			close2;
+			warp "prt_castle",318,273;
+			end;
+		}
+		else if (nkprince_eisen == 13) {
+			mes "[アルム]";
+			mes "王になどなりたくないと言ったはずだ、その考えを変えるつもりは一切ない！";
+			next;
+			mes "[エルンスト]";
+			mes "兄さん！　なぜそこまで苦しんでいるのかわからない！　あなたはそんなに弱い人間だったのか！？";
+			next;
+			mes "[アルム]";
+			mes "苦しんでいる？　この俺が？……ああああ……そう見えるか……？　ああ……そうだ、そうとも。ストレスでな……フフフ……ハハハ！！";
+			next;
+			mes "[エルンスト]";
+			mes "兄さん、アルム……？";
+			next;
+			mes "[アルム]";
+			mes "……俺だけが逃げるとでも？……とにかく、俺は失格者だ……フフフ。だが、決めたことがある。";
+			next;
+			mes "[アルム]";
+			mes "エルンスト。";
+			next;
+			mes "[エルンスト]";
+			mes "え？……何……？";
+			next;
+			mes "[アルム]";
+			mes "これを受け取れ。";
+			next;
+			mes "- シュッ。-";
+			next;
+			mes "- アルムは何気なく、バゼラルドをエルンストに投げ渡した。-";
+			next;
+			mes "[エルンスト]";
+			mes "え？……これは何だ……？　ウォルター家のバゼラルド？……なぜ？";
+			next;
+			mes "[アルム]";
+			mes "ちょうどいい、証人までここにいるじゃないか！　エルン、俺たちの約束、しっかり覚えているな？";
+			next;
+			mes "[エルンスト]";
+			mes "何？　約束？　証人？……ああ……ほ、本当に……";
+			next;
+			mes "[アルム]";
+			mes "ああ、本当だ。今がその時だ。";
+			next;
+			mes "[エルンスト]";
+			mes "ばかな！　俺にあなたへそんなことができると思うのか！？";
+			next;
+			mes "[アルム]";
+			mes "愚か者め！　王たる者、決断力が伴わなければならない。俺に王になる資格などない。堕落したまま生きるくらいなら、お前に殺される方がましだ……";
+			next;
+			mes "[エルンスト]";
+			mes "で、でも、今のままでも生きられる！　何もなかったことにすればいい。元の兄さんに戻ればいいだけだ。兄さん、俺に手伝わせてくれ。隠していることを、全部話してくれ……";
+			next;
+			mes "[アルム]";
+			mes "何とばかげたことを！　それでお前は王の器と言えるのか！？　今この俺に同情でもするつもりか？　分別のある男でいろ！　でなければ、王の候補としての資格すらない！";
+			next;
+			mes "[エルンスト]";
+			mes "で、でも！";
+			next;
+			mes "[アルム]";
+			mes "堂々巡りの問答に意味はない！　もうどうしようもないんだ。分別を持とうとせず、意地を張り続けるようなら、そんな者は王になるべきではない。";
+			next;
+			mes "[アルム]";
+			mes "ぐっ！？　兄さん！？";
+			next;
+			mes "（ナイフが突き刺さる音）";
+			specialeffect EF_HIT2;
+			set nkprince_eisen,14;
+			donpcevent "Prince#another_ern::OnDisable";
+			donpcevent "Prince#another_ern1::OnEnable";
+			close;
+		}
+		else if (nkprince_eisen == 14) {
+			mes "[エルンスト]";
+			mes "あ、兄さん……？　あなたは……俺に";
+			mes "俺を殺すと言った……あなたは、ただ俺に";
+			mes "殺されたかっただけなのか……？　あ、兄さん……？";
+			next;
+			mes "[アルム]";
+			mes "フフ……違う。俺はただ、お前を殺したかっただけだ……それだけだ……よくやった、エルン……これは正当防衛だ、悪党を斬ったにすぎない……そうだろう？";
+			next;
+			mes "[エルンスト]";
+			mes "あ、兄さん……今からでも遅くない！　医者に診てもらえば、きっと治る！";
+			next;
+			mes "[アルム]";
+			mes "もう遅い……急所を刺されたんだ……生き延びる術も、生き返る術もあるまい……いや、生きる必要などない。";
+			next;
+			mes "[エルンスト]";
+			mes "あ、兄さん……どうして……どうしてこんなことを！？";
+			next;
+			mes "[アルム]";
+			mes "さらばだ、弟よ……王となって、この国を変えろ。お前なら……お前ならできる……ぐっ……";
+			next;
+			mes "[エルンスト]";
+			mes "……兄さん……兄さん……なぜ……なぜそんなに満足そうな顔をしていられるんだ……どうして……？　兄さん……";
+			next;
+			mes "[アルム]";
+			mes "フフ……お前が知る必要はない。ところで、お前は約束を守った……王になれ……だが、もし道を踏み外し、迷うようなことがあれば……地獄からいつでもお前を殺しに来るぞ！！";
+			next;
+			mes "[エルンスト]";
+			mes "わ、わからない！　何が起きているのか、俺にはわからない！";
+			next;
+			mes "[アルム]";
+			mes "知る必要はない……お前が知るべきは、俺が犠牲になったということだけだ。俺の死を意味あるものにするために、お前は良き王になれ。それが俺の信念だ……それだけだ……ぐっ……！　俺の言葉を、忘れるな……ぐふっ。";
+			next;
+			mes "[エルンスト]";
+			mes "ばかだ……愚か者だ……";
+			next;
+			mes "[アルム]";
+			mes "ああ……鑑定士殿、何をすべきかわかりますね？　言葉には気をつけて。見たこと、聞いたこと……そのすべてを、査察官に話してはなりません。";
+			next;
+			mes "[アルム]";
+			mes "エルンは、ここで悪事を働いていた悪党を討った……俺に勝ち目はなかった……彼は決断力を示したのだ、それこそが王たる資格に値する……";
+			next;
+			mes "[アルム]";
+			mes "この件を誤って伝えれば、俺の死は無駄になる……ぐっ……わかりますね？";
+			next;
+			switch(select("……わかりました、お二人の意志に従います……:……………")) {
+			case 1:
+				mes "[" + strcharinfo(0) + "]";
+				mes "……わかりました、お二人の意志に従います。ご心配なく……";
+				next;
+				break;
+			case 2:
+				mes "[" + strcharinfo(0) + "]";
+				mes "……";
+				next;
+				mes "[アルム]";
+				mes "無知は……肯定……それはつまり……俺の勝ちだ……";
+				next;
+				break;
+			}
+			mes "[アルム]";
+			mes "これで……安らかに……死ねる……本当に……ありがとう……二人とも。";
+			next;
+			mes "[エルンスト]";
+			mes "兄さん……";
+			next;
+			mes "[アルム]";
+			mes "それでは……永遠に……さらばだ……すまないな……もう、釣りには行けそうにない。";
+			next;
+			mes "[エルンスト]";
+			mes "あ……兄さん？";
+			next;
+			mes "[アルム]";
+			mes "……";
+			next;
+			mes "[エルンスト]";
+			mes "あ……兄さん、兄さん！";
+			next;
+			mes "[アルム]";
+			mes "……";
+			next;
+			mes "[エルンスト]";
+			mes "兄さぁぁぁぁん！！！";
+			next;
+			set nkprince_eisen,15;
+			set nk_prince,7;
+			donpcevent "Prince#another_ern1::OnDisable";
+			changequest 10024,10025;
+			close2;
+			warp "prt_castle",318,273;
+			end;
+		}
+	}
+	if (nk_prince < 5) {
+		mes "[王子]";
+		mes "あなたがここにいることは許されていません。";
+		mes "うーむ……";
+		next;
+		mes "[王子]";
+		mes "私の前から立ち去りなさい。";
+		mes "あなたと相対するつもりはありません。";
+		close;
+	}
+	else if (nk_prince > 4) {
+		mes "[王子]";
+		mes "あなたが新しい冒険者鑑定士ですか？　私はウォルター家のアイゲン・アルム。手短にアルム王子とお呼びいただいてかまいません。";
+		next;
+		mes "[アルム]";
+		mes "手短で簡潔な質問をお願いしたい。長い質問だからといって、特別で良い答えが返せるとは限りませんので。";
+		next;
+		while(1) {
+			mes "-何を尋ねようか……-";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "お伺いしたいのですが……";
+			next;
+			switch(select("あなたの生い立ちについて……:あなたの国家観について……:あなたの趣味や興味について……:いえ、また後で来ます。")) {
+			case 1:
+				mes "[アルム]";
+				mes "単に王家への好奇心を満たしたいだけではないのですよね？";
+				next;
+				mes "[アルム]";
+				mes "子供の頃から、多くのことを経験し学ぶのが好きでした。その結果、家からの干渉を受けることにもなりました。彼らにとって、私はまともな貴族の一員ではなかったのでしょう。";
+				next;
+				mes "[アルム]";
+				mes "ですが、私はそれを気にしませんし、良き王とはそうした些事を気に留めないものだと思っています。";
+				next;
+				mes "[アルム]";
+				mes "私の振る舞いを恥ずかしいと言う者もいますが、結果さえ良ければ、皆最後には満足するものです。私は間違っていますか？";
+				next;
+				mes "[アルム]";
+				mes "人生の学びをいくつか飛ばしてきましたが、抜けた分など簡単に取り戻せます。誰に王として忠誠を誓われようと構いません！　これが私という人間です。";
+				next;
+				mes "[アルム]";
+				mes "エルンにはよく";
+				mes "小言を言われますが、私は気にも留めません。まったく、うるさい奴です。";
+				next;
+				mes "[アルム]";
+				mes "言った通り、あいつの小言を聞きながら育ってきました。何かを成し遂げても口をつぐむだけの者たちより、よほど手厳しく感じたものです。";
+				next;
+				mes "[アルム]";
+				mes "あいつはいつも、結果がすべてではないと言います。";
+				next;
+				mes "[アルム]";
+				mes "何よりもまず、名高きウォルター家に生まれたこと自体が、私にとっての幸運であり栄誉です。";
+				next;
+				mes "[アルム]";
+				mes "もちろん、私の能力は";
+				mes "生まれのせいで過小評価されがちです。それについては、いささか残念にも思います。";
+				next;
+				mes "[アルム]";
+				mes "来るべき時代には、人々は私を『ウォルターのアイゲン・アルム』ではなく、『ウォルター家のアイゲン・アルム』として語るでしょう。";
+				next;
+				mes "[アルム]";
+				mes "ウォルター家自体、すでに高い名声を誇りますが、私はその名をさらに輝かせ、皆に誇りに思わせてみせます。";
+				next;
+				break;
+			case 2:
+				mes "[アルム]";
+				mes "私が治める国は";
+				mes "おとぎ話のような";
+				mes "淡い色合いの";
+				mes "調和など望みません。";
+				next;
+				mes "[アルム]";
+				mes "確かに、敗者や落ちぶれた者には、人生への挑戦が足りなかったという、彼ら自身の落ち度もあるでしょう。";
+				next;
+				mes "[アルム]";
+				mes "私は無制限の競争がもたらす恩恵を信じています。正直、貴族の家柄で王を選ぶこの制度は好みません。";
+				next;
+				mes "[アルム]";
+				mes "こうした";
+				mes "身分制度が消え去ったとしても、";
+				mes "私は自らの能力と資質だけで王になってみせる！　ハハハ。";
+				emotion ET_SMILE;
+				next;
+				mes "[アルム]";
+				mes "他の王位候補たちのことは、";
+				mes "個人的によく存じ上げています。";
+				mes "ですが、この国をうまく導ける卓越した人物は、見当たりません。";
+				next;
+				mes "[アルム]";
+				mes "優れていないと言っているわけではありませんが、今のルーンミッドガッツの情勢を考えると、彼らが目を見張るような指導者には見えないのです。";
+				next;
+				mes "[アルム]";
+				mes "それゆえ断言しますが、彼らの中に王位にふさわしい者はいません。強いて、私に匹敵しうる者を一人挙げるなら、エルンストでしょう。";
+				next;
+				mes "[アルム]";
+				mes "気性は柔らかく、物事を考えすぎる面もありますが、多くの美点も認めています。かなり高水準の候補と言えるでしょう。";
+				next;
+				mes "[アルム]";
+				mes "………";
+				next;
+				mes "[アルム]";
+				mes "うむ、少し喋りすぎましたね。";
+				mes "くどい話をお詫びします、ハハハ。";
+				next;
+				break;
+			case 3:
+				mes "[アルム]";
+				mes "私は体を動かすことを好みます。";
+				mes "受け身な遊びは";
+				mes "性に合いません、カードゲームやボードゲームのような";
+				mes "そういったものは";
+				mes "学者気質の者に向いていると思います。";
+				next;
+				mes "[アルム]";
+				mes "弟のエルンは、本や勉強のように、一つのことに長く向き合える性分です。";
+				next;
+				mes "[アルム]";
+				mes "私が王になった暁には、";
+				mes "一日中座って";
+				mes "書類仕事をするつもりはありません。";
+				next;
+				mes "[アルム]";
+				mes "それは私には、とても耐えられないことです。";
+				next;
+				break;
+			case 4:
+				mes "[アルム]";
+				mes "わかりました……";
+				mes "お望みのままに。";
+				if (nkprince_eisen == 2) {
+					set nkprince_eisen,3;
+				}
+				else {
+					set nkprince_eisen,1;
+				}
+				completequest 10005;
+				set .@prin1,checkquest(10005);
+				set .@prin2,checkquest(10006);
+				set .@prin3,checkquest(10007);
+				set .@prin4,checkquest(10008);
+				set .@prin5,checkquest(10009);
+				set .@prin6,checkquest(10010);
+				set .@prin7,checkquest(10011);
+				if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+					setquest 10012;
+				}
+				close;
+			}
+		}
+	}
+}
+
+prt_castle,368,312,4	script	王子#ern::Prince#ern	985,{
+	if (checkquest(10024) == 2) {
+		mes "[エルンスト]";
+		mes "……兄さんがそう望むなら……";
+		mes "……ああ、ここから立ち去ってくれ。";
+		mes "誰とも会いたくないんだ。";
+		close;
+	}
+	else if (checkquest(10024) == 0 || checkquest(10024) == 1) {
+		mes "[エルンスト]";
+		mes "……アルム兄さん……";
+		close;
+	}
+	if (nkprince_eisen > 2) {
+		if (nkprince_eisen == 3) {
+			mes "[エルンスト]";
+			mes "兄のアルムには会いましたか？　本当に、立派な人物です。";
+			next;
+			mes "物事に強引に向き合いすぎて、時に問題を起こすこともあります。ですが、そんな時でも私の言葉には耳を傾けてくれるので、深刻な事態に陥ることはめったにありません。";
+			next;
+			mes "[エルンスト]";
+			mes "それも、私たち二人がずっと仲良く過ごしてきたからこそでしょう。";
+			next;
+			mes "[エルンスト]";
+			mes "アルム兄さんは、そのことで私を必要以上に長く責め続けますが、それでも私の助言には耳を傾け、その通りに動いてくれます。";
+			next;
+			mes "[エルンスト]";
+			mes "立派な人物だと思いませんか？";
+			mes "信頼できて、学ぶところの多い人です。";
+			close;
+		}
+		else if (nkprince_eisen == 5) {
+			mes "[エルンスト]";
+			mes "ああ、今からアルム兄さんと相談があるんだ";
+			mes "大事な用件がないなら、これで失礼するよ。";
+			close;
+		}
+		else if (nkprince_eisen == 6) {
+			mes "[エルンスト]";
+			mes "ああ、ウォルター家の者がここへ来たと聞いたんだが。見かけなかったか？";
+			next;
+			mes "[エルンスト]";
+			mes "アルム兄さんもまだ会っていないようだ。うーん……";
+			set nkprince_eisen,7;
+			changequest 10012,10016;
+			close;
+		}
+		else if (nkprince_eisen == 9) {
+			mes "[エルンスト]";
+			mes "ようこそ、判定官殿。";
+			mes "ずいぶん頻繁に会うね";
+			mes "少し仕事のペースを落としてはどうだ？";
+			next;
+			mes "[エルンスト]";
+			mes "うーん……もう他に話すこともないな。それより、最近アルム兄さんの様子がおかしい気がするんだ。心配でね。大事でなければいいんだが。";
+			set nkprince_eisen,10;
+			changequest 10017,10004;
+			close;
+		}
+		else if ((nkprince_eisen == 10) || (nkprince_eisen == 11) || (nkprince_eisen == 12)) {
+			mes "[エルンスト]";
+			mes "アルム兄さんの様子が、おかしくなってきている。";
+			mes "これはただの変化ではなく、本当の堕落だ。不安でたまらない。";
+			next;
+			mes "[エルンスト]";
+			mes "こんなことがあっていいはずがない。";
+			mes "アルム兄さんはきっと元に戻ると信じている。だが……どうにも嫌な予感がするんだ。";
+			close;
+		}
+		else if (nkprince_eisen == 15) {
+			mes "[エルンスト]";
+			mes "ああ……";
+			mes "アルム兄さん……";
+			mes "アイゲン・アルム……そうですか。";
+			next;
+			mes "[エルンスト]";
+			mes "……";
+			next;
+			mes "[エルンスト]";
+			mes "ここから立ち去ってくれ。誰とも会いたくないんだ。";
+			close;
+		}
+		else {
+			mes "[エルンスト]";
+			mes "ようこそ、鑑定士殿。";
+			mes "いつもご苦労さまです。人を評価するのは大変でしょう？";
+			close;
+		}
+	}
+	if (nk_prince < 5) {
+		mes "[王子]";
+		mes "あなたは冒険者の判定官では";
+		mes "ないはずだ。ここにいるべきではないと思う。";
+		close;
+	}
+	else if (nk_prince > 4) {
+		mes "[王子]";
+		mes "やあ、";
+		mes "あなたが判定官ですか。";
+		mes "私はエルンスト、ゲーボルグ家の王子です。";
+		next;
+		mes "[エルンスト]";
+		mes "人の資質を見極めるのは大変な仕事だと思います。できる限りお手伝いさせてください。";
+		next;
+		mes "[エルンスト]";
+		mes "それでは、よろしくお願いします。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "（王位候補としては、礼儀正しい人柄のようだ）";
+		next;
+		while(1) {
+			mes "-さて、どんな質問をしようか。-";
+			next;
+			switch(select("まず生い立ちについて。:あなたの国家観を知りたいです。:あなたの習慣や好みについて。:また来ます。")) {
+			case 1:
+				mes "[エルンスト]";
+				mes "幼い頃から、王族としての教育を受けて育ちました。誰かと本気で言い争ったことはありませんが、さほど礼儀正しくもなかったと思います。";
+				next;
+				mes "[エルンスト]";
+				mes "臆病だと思われがちでしたが、それは人に疎まれたくなかったからです。";
+				next;
+				mes "[エルンスト]";
+				mes "もちろん、例外もいます……アイゲンです。";
+				next;
+				mes "[エルンスト]";
+				mes "アイゲン・アルムは例外と言えるでしょう。礼儀正しくはありませんが、物事をきちんと確かめたうえで、筋を通す人です。";
+				next;
+				mes "[エルンスト]";
+				mes "それは素晴らしい能力だと思いますし、見習うべき点です。ですが、結果だけがすべてではなく、礼儀の問題もあります。守るべきことは、守るべきです。";
+				next;
+				mes "[エルンスト]";
+				mes "私にとっては、結果より過程の方が大切でした。今では、両方を等しく大切な美徳だと考えています。以前は結果をまるで重んじていなかった私に、アルムがそれを教えてくれたのです。";
+				break;
+			case 2:
+				mes "[エルンスト]";
+				mes "私が王になった時の、国家観についてですか？";
+				next;
+				mes "[エルンスト]";
+				mes "王の力は無限だと思われるかもしれませんが、一人の人間である以上、限界はあります。";
+				next;
+				mes "[エルンスト]";
+				mes "一般の民も、名だたる人々も、それぞれが社会を支えています。皆の知恵を集める方が、一人で行うより容易いものです。";
+				next;
+				mes "[エルンスト]";
+				mes "アルムは、私の足りない部分を補ってくれるでしょう。アルムだけでなく、大臣や閣僚たち、そして民衆もまた、私にとっての師です。";
+				next;
+				mes "[エルンスト]";
+				mes "アルムの他にも多くの師を得られたことは、私にとって幸運です。それは、この国にとっても良いことでしょう。";
+				next;
+				break;
+			case 3:
+				mes "[エルンスト]";
+				mes "特別な習慣はありません。ただ、学ぶことと読書を好むくらいです。";
+				next;
+				mes "[エルンスト]";
+				mes "それに、アルムと話すのも好きです。アルムは賢く、私がついていけるような新しい考えを次々に生み出します。";
+				next;
+				mes "[エルンスト]";
+				mes "まあ、正直に言えば、アルムと釣りに行く方が好きですね。もっとも、国の問題で忙しく、なかなか釣りには行けませんが。";
+				next;
+				mes "[エルンスト]";
+				mes "王座に就いたら、一緒に釣りに行く約束をしているのです……そうですね……";
+				next;
+				mes "[エルンスト]";
+				mes "うーん……これで十分でしょうか？";
+				next;
+				break;
+			case 4:
+				mes "[エルンスト]";
+				mes "それでは、また今度お会いしましょう。";
+				if (nkprince_eisen == 1) {
+					set nkprince_eisen,3;
+				}
+				else {
+					set nkprince_eisen,2;
+				}
+				completequest 10006;
+				set .@prin1,checkquest(10005);
+				set .@prin2,checkquest(10006);
+				set .@prin3,checkquest(10007);
+				set .@prin4,checkquest(10008);
+				set .@prin5,checkquest(10009);
+				set .@prin6,checkquest(10010);
+				set .@prin7,checkquest(10011);
+				if ((.@prin1 + .@prin2 + .@prin3 + .@prin4 + .@prin5 + .@prin6 + .@prin7) == 14) {
+					setquest 10012;
+				}
+				close;
+			}
+		}
+	}
+}
+
+prt_castle,163,319,0	script	#twonoble	-1,3,3,{
+OnTouch:
+	if (nkprince_eisen == 7) {
+		donpcevent "Young Noble#valter::OnEnable";
+		donpcevent "Aged Noble#rihart::OnEnable";
+		mes "[リチャード家の男]";
+		mes "心配はいらない。";
+		mes "私のアイゲン・アルムが王に選ばれれば、リチャード家は次席の実力者となるでしょう。";
+		next;
+		mes "[リチャード家の男]";
+		mes "ふふ、アルムはすでに最有力の候補です。これを成し遂げれば、あなたは実に見事なものですよ。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "アルムは有力な候補ですが、ゲーボルグの王子もその美徳で高い評判を得ています。念には念を入れておく方がよいでしょう。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "それで、エルンスト王子の毒殺計画は進めているのですか？";
+		next;
+		mes "[リチャード家の男]";
+		mes "もちろんです。検死をしても見つかりはしません。……ご心配なく。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "エルンスト王子が始末されれば、アルムが選ばれるでしょう。そうなれば……";
+		next;
+		mes "[リチャード家の男]";
+		mes "両家でこの国を導くことになる、ふふふ。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "ウォルターとゲーボルグがかつて何をしたか、ご存知でしょう。両家はこの国の頂点に君臨し続けてきました。";
+		next;
+		mes "[リチャード家の男]";
+		mes "七家の中で最も弱小だったゲーボルグ家は、シュミット家とウォルター家と手を組むことで権力を手にしたのです。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "ええ、だからこそウォルターとゲーボルグの結びつきは完璧なのです。しかも、アルムとエルンスト……まさにシュミットとハインリッヒの再来ではありませんか。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "だからこそ、ウォルター家とゲーボルグ家は共には存在できないのです。両家の共存は、かつてそうであったように、破滅をもたらすでしょう。";
+		next;
+		mes "[リチャード家の男]";
+		mes "そのおかげで、話はうまく進みます。過去を知る者は皆、アルムやエルンストとの結託を否定するでしょうから。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "ともあれ、まだ少し時間があります。誰にも漏らさぬよう、秘密は徹底して守ってください。";
+		next;
+		mes "[リチャード家の男]";
+		mes "ええ。ルーンミッドガッツの栄光のために。";
+		next;
+		mes "[ウォルター家の男]";
+		mes "すべてはルーンミッドガッツの栄光のために……";
+		mes "ん？";
+		next;
+		emotion ET_SURPRISE;
+		mes "[ウォルター家の男]";
+		mes "静かに……誰か来る。";
+		mes "では……お気をつけて。";
+		next;
+		mes "[リチャード家の男]";
+		mes "何でもありません……";
+		donpcevent "Young Noble#valter::OnDisable";
+		donpcevent "Aged Noble#rihart::OnDisable";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "（ウォルターとは、アルムの家名。";
+		mes "リチャードとは、ポーの家名だ。）";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "（これは、二つの家による陰謀だというのか？　いったい……）";
+		changequest 10016,10017;
+		set nkprince_eisen,8;
+		close;
+	}
+}
+
+prt_castle,156,325,4	script	ウォルター家の若様#valter::Young Noble#valter	86,{
+	mes "[ウォルター家の若様]";
+	mes "そこを退け。";
+	mes "よくも彼に話しかけられたものだ。";
+	close;
+
+OnInit:
+	disablenpc "Young Noble#valter";
+	end;
+
+OnEnable:
+	enablenpc "Young Noble#valter";
+	end;
+
+OnDisable:
+	disablenpc "Young Noble#valter";
+	end;
+}
+
+prt_castle,157,323,3	script	リチャード家の老貴族#rihart::Aged Noble#rihart	880,{
+	mes "[リチャード家の老貴族]";
+	mes "ふん、ふん。";
+	mes "なんと無作法な者か！";
+	close;
+
+OnInit:
+	disablenpc "Aged Noble#rihart";
+	end;
+
+OnEnable:
+	enablenpc "Aged Noble#rihart";
+	end;
+
+OnDisable:
+	disablenpc "Aged Noble#rihart";
+	end;
+}
+
+prt_castle,314,371,0	script	王子#another_ern::Prince#another_ern	985,{
+	if (nkprince_eisen == 13) {
+		mes "[アルム]";
+		mes "王になどなりたくないと言ったはずだ、その考えを変えるつもりは一切ない！";
+		next;
+		mes "[エルンスト]";
+		mes "兄さん！　なぜそこまで苦しんでいるのかわからない！　あなたはそんなに弱い人間だったのか！？";
+		next;
+		mes "[アルム]";
+		mes "苦しんでいる？　この俺が？……ああああ……そう見えるか……？　ああ……そうだ、そうとも。ストレスでな……フフフ……ハハハ！！";
+		next;
+		mes "[エルンスト]";
+		mes "兄さん、アルム……？";
+		next;
+		mes "[アルム]";
+		mes "……俺だけが逃げるとでも？……とにかく、俺は失格者だ……フフフ。だが、決めたことがある。";
+		next;
+		mes "[アルム]";
+		mes "エルンスト。";
+		next;
+		mes "[エルンスト]";
+		mes "え？……何……？";
+		next;
+		mes "[アルム]";
+		mes "これを受け取れ。";
+		next;
+		mes "- シュッ。-";
+		next;
+		mes "- アルムは何気なく、バゼラルドをエルンストに投げ渡した。-";
+		next;
+		mes "[エルンスト]";
+		mes "え？……これは何だ……？　ウォルター家のバゼラルド？……なぜ？";
+		next;
+		mes "[アルム]";
+		mes "ちょうどいい、証人までここにいるじゃないか！　エルン、俺たちの約束、しっかり覚えているな？";
+		next;
+		mes "[エルンスト]";
+		mes "何？　約束？　証人？……ああ……ほ、本当に……";
+		next;
+		mes "[アルム]";
+		mes "ああ、本当だ。今がその時だ。";
+		next;
+		mes "[エルンスト]";
+		mes "ばかな！　俺にあなたへそんなことができると思うのか！？";
+		next;
+		mes "[アルム]";
+		mes "愚か者め！　王たる者、決断力が伴わなければならない。俺に王になる資格などない。堕落したまま生きるくらいなら、お前に殺される方がましだ……";
+		next;
+		mes "[エルンスト]";
+		mes "で、でも、今のままでも生きられる！　何もなかったことにすればいい。元の兄さんに戻ればいいだけだ。兄さん、俺に手伝わせてくれ。隠していることを、全部話してくれ……";
+		next;
+		mes "[アルム]";
+		mes "何とばかげたことを！　それでお前は王の器と言えるのか！？　今この俺に同情でもするつもりか？　分別のある男でいろ！　でなければ、王の候補としての資格すらない！";
+		next;
+		mes "[エルンスト]";
+		mes "で、でも！";
+		next;
+		mes "[アルム]";
+		mes "堂々巡りの問答に意味はない！　もうどうしようもないんだ。分別を持とうとせず、意地を張り続けるようなら、そんな者は王になるべきではない。";
+		next;
+		mes "[アルム]";
+		mes "ぐっ！？　兄さん！？";
+		next;
+		mes "（ナイフが突き刺さる音）";
+		specialeffect EF_HIT2;
+		set nkprince_eisen,14;
+		donpcevent "Prince#another_ern::OnDisable";
+		donpcevent "Prince#another_ern1::OnEnable";
+		close;
+	}
+	if (nkprince_eisen == 5) {
+		mes "[アルム]";
+		mes "誰が王になろうと、";
+		mes "ルーンミッドガッツを……";
+		mes "互いに助け合って、世界一の国にしよう。";
+		next;
+		mes "[エルンスト]";
+		mes "俺たちならできる。";
+		mes "いや、必ずやり遂げよう。兄さんと俺、二人で力を合わせれば、必ずできる。";
+		next;
+		mes "[アルム]";
+		mes "だが……もし俺が王として、あるいはお前を支える立場として、堕落したら……お前の手で、俺を殺せ。";
+		next;
+		mes "[アルム]";
+		mes "逆の場合も同じだ、俺がお前を殺す。わかるか？　だから、決して道を踏み外すな。その覚悟を忘れるなよ。";
+		next;
+		mes "[エルンスト]";
+		mes "兄さん、地獄みたいなことを考えるんだな。";
+		mes "そんなことは起こらない、だから……";
+		mes "そんな話はやめてくれ。";
+		next;
+		mes "[アルム]";
+		mes "たとえばの話だ。";
+		mes "そう深刻に受け止めるな。";
+		next;
+		mes "[エルンスト]";
+		mes "わかった、わかったよ。";
+		mes "悪く取らないでくれ。";
+		mes "俺はずっと、兄さんとこの王国のために動いてきた。これからも、それは変わらない。";
+		next;
+		emotion ET_SURPRISE;
+		mes "[アルム]";
+		mes "ああ、鑑定士殿が来たか。";
+		mes "急に現れるとは驚いたな。エルンと話の最中だったんだ。";
+		next;
+		mes "[エルンスト]";
+		mes "どうしたんだ、兄さん？　何も悪い話をしていたわけじゃない。ただ、互いの覚悟を確かめ合っていただけだ。";
+		next;
+		mes "[アルム]";
+		mes "ちょうどいいところに来た。";
+		mes "俺たちは今、決めたところなんだ……";
+		mes "もしどちらかが堕落したら、";
+		mes "互いに殺し合おうと。";
+		next;
+		mes "[エルンスト]";
+		mes "兄さん！？";
+		next;
+		mes "[アルム]";
+		mes "ぜひ、この約束の証人になってくれ。断るなよ。ある意味、お前の仕事にとっても好都合な話だろう？";
+		next;
+		mes "[エルンスト]";
+		mes "に、兄さん。あまりに強引すぎる。鑑定士殿にも、ご自分の立場や考えがあるはずだ。";
+		next;
+		mes "[アルム]";
+		mes "相変わらず気が弱いな。そう難しいことを頼んでるわけじゃない！　構うものか、沈黙は肯定と受け取るぞ！　これで俺の勝ちだ！　約束は成立した！";
+		next;
+		mes "[エルンスト]";
+		mes "はぁ……はは……鑑定士殿、失礼な真似をして本当に申し訳ない。すまないが、この約束が果たされることなど、まずあり得ません。だから、あまり深く受け止めないでください……そう、豚が空を飛ぶ日でも来ない限りは……～";
+		next;
+		mes "[エルンスト]";
+		mes "さて、俺はそろそろ部屋に戻る。鑑定士殿、これからも励んでくれ。";
+		donpcevent "Prince#another_ern::OnDisable";
+		set nkprince_eisen,6;
+		close;
+	}
+
+OnInit:
+	disablenpc "Prince#another_ern";
+	end;
+
+OnEnable:
+	enablenpc "Prince#another_ern";
+	end;
+
+OnDisable:
+	disablenpc "Prince#another_ern";
+	end;
+}
+
+prt_castle,314,372,0	script	王子#another_ern1::Prince#another_ern1	985,{
+	if (nkprince_eisen == 14) {
+		mes "[エルンスト]";
+		mes "あ、兄さん……？　あなたは……俺に俺を殺すと言った……あなたは、ただ俺に殺されたかっただけなのか……？　あ、兄さん……？";
+		next;
+		mes "[アルム]";
+		mes "フフ……違う。俺はただ、お前を殺したかっただけだ……それだけだ……よくやった、エルン……これは正当防衛だ、悪党を斬ったにすぎない……そうだろう？";
+		next;
+		mes "[エルンスト]";
+		mes "あ、兄さん……今からでも遅くない！　医者に診てもらえば、きっと治る！";
+		next;
+		mes "[アルム]";
+		mes "もう遅い……急所を刺されたんだ……生き延びる術も、生き返る術もあるまい……いや、生きる必要などない。";
+		next;
+		mes "[エルンスト]";
+		mes "あ、兄さん……どうして……どうしてこんなことを！？";
+		next;
+		mes "[アルム]";
+		mes "さらばだ、弟よ……王となって、この国を変えろ。お前なら……お前ならできる……ぐっ……";
+		next;
+		mes "[エルンスト]";
+		mes "……兄さん……兄さん……なぜ……なぜそんなに満足そうな顔をしていられるんだ……どうして……？　兄さん……";
+		next;
+		mes "[アルム]";
+		mes "フフ……お前が知る必要はない。ところで、お前は約束を守った……王になれ……だが、もし道を踏み外し、迷うようなことがあれば……地獄からいつでもお前を殺しに来るぞ！！";
+		next;
+		mes "[エルンスト]";
+		mes "わ、わからない！　何が起きているのか、俺にはわからない！";
+		next;
+		mes "[アルム]";
+		mes "知る必要はない……お前が知るべきは、俺が犠牲になったということだけだ。俺の死を意味あるものにするために、お前は良き王になれ。それが俺の信念だ……それだけだ……ぐっ……！　俺の言葉を、忘れるな……ぐふっ。";
+		next;
+		mes "[エルンスト]";
+		mes "ばかだ……愚か者だ……";
+		next;
+		mes "[アルム]";
+		mes "ああ……鑑定士殿、何をすべきかわかりますね？　言葉には気をつけて。見たこと、聞いたこと……そのすべてを、査察官に話してはなりません。";
+		next;
+		mes "[アルム]";
+		mes "エルンは、ここで悪事を働いていた悪党を討った……俺に勝ち目はなかった……彼は決断力を示したのだ、それこそが王たる資格に値する……";
+		next;
+		mes "[アルム]";
+		mes "この件を誤って伝えれば、俺の死は無駄になる……ぐっ……わかりますね？";
+		next;
+		switch(select("……わかりました、お二人の意志に従います……:……………")) {
+		case 1:
+			mes "[" + strcharinfo(0) + "]";
+			mes "……わかりました、お二人の意志に従います。ご心配なく……";
+			next;
+			break;
+		case 2:
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			next;
+			mes "[アルム]";
+			mes "無知は……肯定……それはつまり……俺の勝ちだ……";
+			next;
+			break;
+		}
+		mes "[アルム]";
+		mes "これで……安らかに……死ねる……本当に……ありがとう……二人とも。";
+		next;
+		mes "[エルンスト]";
+		mes "兄さん……";
+		next;
+		mes "[アルム]";
+		mes "それでは……永遠に……さらばだ……すまないな……もう、釣りには行けそうにない。";
+		next;
+		mes "[エルンスト]";
+		mes "あ……兄さん？";
+		next;
+		mes "[アルム]";
+		mes "……";
+		next;
+		mes "[エルンスト]";
+		mes "あ……兄さん、兄さん！";
+		next;
+		mes "[アルム]";
+		mes "……";
+		next;
+		mes "[エルンスト]";
+		mes "兄さぁぁぁぁん！！！";
+		next;
+		set nkprince_eisen,15;
+		set nk_prince,7;
+		donpcevent "Prince#another_ern1::OnDisable";
+		changequest 10024,10025;
+		close2;
+		warp "prt_castle",318,273;
+		end;
+	}
+
+OnInit:
+	disablenpc "Prince#another_ern1";
+	end;
+
+OnEnable:
+	enablenpc "Prince#another_ern1";
+	end;
+
+OnDisable:
+	disablenpc "Prince#another_ern1";
+	end;
+}
+
+prt_castle,272,372,1	script	王子#eisen1::Prince#eisen1	983,{
+	mes "[アルム]";
+	mes "愚か者め。お前は一生、王になどなれん。ずっとそうだ……わからないのか？　このガラクタ中毒が！！";
+	next;
+	mes "[エーリッヒ]";
+	mes "……なろうとしているわけではないが、罵り言葉は気分の良いものじゃないな。急にどうしたんだ？";
+	next;
+	mes "[アルム]";
+	mes "お前にはうんざりなんだよ。お前のようなろくでなしが王位候補だと？　この王位継承とやら、反吐が出るね。";
+	next;
+	mes "[エーリッヒ]";
+	mes "ああ、間違ってはいないさ。だが私はネリウス家の代表だ。お前の侮辱には黙っていられない。";
+	next;
+	mes "[エーリッヒ]";
+	mes "お前の家族は、この狂った振る舞いを知っているのか？　自分の名も、家の名も汚しているんだぞ。";
+	next;
+	mes "[アルム]";
+	mes "……！　ああ……知ったことか。いや……この俺の存在もな！　クククッ……ハハハハハ！";
+	next;
+	mes "[アルム]";
+	mes "そうだ、お前も俺も、二人とも失格者だ！　ハハハハ！！　このイカレた中毒者が真実を暴いたぞ！　そうだ、ハハハハハハ！！";
+	next;
+	mes "[エーリッヒ]";
+	mes "……イカレたろくでなしめ。失せろ。もうお前とは話したくない。";
+	next;
+	mes "[アルム]";
+	mes "ああ、もう行くとも。家の恥だと？！　ハハハハ……家など何だ！！　ククク！！　実に愉快だな！";
+	next;
+	mes "-アルムは正気を失ったかのように、扉へと歩いていく-";
+	next;
+	mes "[エーリッヒ]";
+	mes "……イカれてる。";
+	completequest 10020;
+	set .@er1,checkquest(10018);
+	set .@er2,checkquest(10019);
+	set .@er3,checkquest(10020);
+	set .@er4,checkquest(10021);
+	set .@er5,checkquest(10022);
+	if ((.@er1 + .@er2 + .@er3 + .@er4 + .@er5) == 10) {
+		setquest 10023;
+		set nkprince_eisen,11;
+	}
+	donpcevent "Prince#eisen1::OnDisable";
+	close;
+
+OnInit:
+	disablenpc "Prince#eisen1";
+	end;
+
+OnEnable:
+	enablenpc "Prince#eisen1";
+	end;
+
+OnDisable:
+	disablenpc "Prince#eisen1";
+	end;
+}
+
+prt_castle,336,202,7	script	王子#eisen2::Prince#eisen2	983,{
+	mes "[ウルゲン]";
+	mes "何と言った？　アルム？";
+	mes "おい！　今、私に何と言ったのだ？　アルム！？";
+	next;
+	mes "[アルム]";
+	mes "何万回でも言ってやる！　ウルゲン、お前はまったく美しくない！　これっぽっちもな！　むしろその見た目は、実に醜くて下品だ！";
+	next;
+	mes "[ウルゲン]";
+	mes "実に無礼だぞ！　お前のような汚らわしい黴菌が、よくも私にそんな口を利けるものだ！";
+	mes "黴菌のようなお前が、よくも私に";
+	mes "そんな口を利けるものだ！";
+	next;
+	mes "[アルム]";
+	mes "汚らわしい？　ああ、そうだ。俺は汚い。だがそれは俺の問題じゃない。何もかもが汚いんだ！　もう我慢できない！";
+	next;
+	mes "[ウルゲン]";
+	mes "ふん！　世界が下品だという言葉には同意しよう、だが私をその水準まで引きずり下ろせるとは思うな！　お前の言葉は許さん！　断じて、許さんぞ！";
+	next;
+	mes "[アルム]";
+	mes "許さなかったら、何だってんだ？　どうするつもりだ？　いいだろう。俺を殺すか？　殺すのか？　殺せよ？　ハハ？　美しいと呼ばれるのは、自分でそう名乗った時だけだろうが！";
+	next;
+	mes "[ウルゲン]";
+	mes "うぐっ！　もう耐えられん！　そのような下劣な振る舞いと言葉……お前は王子などではない。もう顔も見たくない！　出て行け！";
+	next;
+	mes "[アルム]";
+	mes "お前には器が足りん。悪を断つ意志もない。その意志のなさこそがゴミだ。俺もゴミと一緒になどいたくない！　その世界に永遠に引きこもって、二度と出てくるな！";
+	next;
+	mes "-アルムはぶつぶつと呟きながら、大股で部屋を出ていく……-";
+	next;
+	mes "[ウルゲン]";
+	mes "……なんと低俗な。お前を見誤っていたようだ。芸術を解する数少ない者ではなかったのだな。完全に見当違いをしていたらしい。";
+	completequest 10021;
+	set .@er1,checkquest(10018);
+	set .@er2,checkquest(10019);
+	set .@er3,checkquest(10020);
+	set .@er4,checkquest(10021);
+	set .@er5,checkquest(10022);
+	if ((.@er1 + .@er2 + .@er3 + .@er4 + .@er5) == 10) {
+		setquest 10023;
+		set nkprince_eisen,11;
+	}
+	donpcevent "Prince#eisen2::OnDisable";
+	close;
+
+OnInit:
+	disablenpc "Prince#eisen2";
+	end;
+
+OnEnable:
+	enablenpc "Prince#eisen2";
+	end;
+
+OnDisable:
+	disablenpc "Prince#eisen2";
+	end;
+}
+
+prt_castle,286,201,7	script	王子#eisen3::Prince#eisen3	983,{
+	mes "[アルム]";
+	mes "軍事馬鹿が！　愚か者め！　力ですべてが解決すると思っているのか？　どんな状況でも、民が平和に暮らせるとでも思っているのか！？";
+	next;
+	mes "[ヘルムート]";
+	mes "今のお前は、まるで暴力そのものだな。";
+	mes "お前の理屈で言えば、お前だって王の資質などないだろうが！";
+	next;
+	mes "[アルム]";
+	mes "ああ、よく言うものだ。ふん！";
+	mes "俺に資質などない！！";
+	mes "だが、お前は俺以下だ！　王位候補だと？？　ただの戦争屋じゃないか！";
+	next;
+	mes "[ヘルムート]";
+	mes "俺を侮辱しに来たのか？　このヘルムートに勝てるとでも思っているのか、アイゲン・アルム！？";
+	next;
+	mes "[アルム]";
+	mes "戦えだと？　くだらん。興味もない。俺はただ言いたいことを言いに来ただけだ。お前と戦う気などさらさらない。帰るぞ！";
+	next;
+	mes "[ヘルムート]";
+	mes "待て、この臆病者が！　今さら逃げるのか！？　とんだ腰抜けだな！　決着をつけようじゃないか！";
+	next;
+	mes "[アルム]";
+	mes "臆病者……いい響きじゃないか。ああ、その通りだ。帰らせてもらう。じゃあな！　お前は臆病者以下だ……俺と同類さ！　さらばだ、戦争屋！";
+	next;
+	mes "-アルムは苛立つヘルムートに、どこか空虚な笑みを向けながら、部屋を出ていく。-";
+	next;
+	mes "[ヘルムート]";
+	mes "あいつは……とんだ悪党だ！！！";
+	completequest 10022;
+	set .@er1,checkquest(10018);
+	set .@er2,checkquest(10019);
+	set .@er3,checkquest(10020);
+	set .@er4,checkquest(10021);
+	set .@er5,checkquest(10022);
+	if ((.@er1 + .@er2 + .@er3 + .@er4 + .@er5) == 10) {
+		setquest 10023;
+		set nkprince_eisen,11;
+	}
+	donpcevent "Prince#eisen3::OnDisable";
+	close;
+
+OnInit:
+	disablenpc "Prince#eisen3";
+	end;
+
+OnEnable:
+	enablenpc "Prince#eisen3";
+	end;
+
+OnDisable:
+	disablenpc "Prince#eisen3";
+	end;
+}
+
+prt_castle,388,205,6	script	王子#eisen4::Prince#eisen4	983,{
+	mes "[アルム]";
+	mes "いつも賭け事ばかり気にしているようだが、まずは自分の周りを気にしたらどうだ？　リチャード家の若様よ？";
+	next;
+	mes "[ポー]";
+	mes "何をからかっているんだ、今さら？　少なくとも、俺の方がお前より大きな目を持っているサイコロだと思うがな……そう思わないか？";
+	next;
+	mes "[アルム]";
+	mes "ふん！　サイコロの話ばかりだな。聞け。俺のサイコロの目がお前より低いと感じるだろうよ……だが、お前はサイコロを振る前から、もう負けているんだ！　わかるか！？";
+	next;
+	mes "[ポー]";
+	mes "何の話だ？　わからないな。誰に負けたって言うんだ？　なんでそんな言い方をするのか、さっぱりだ。";
+	next;
+	mes "[アルム]";
+	mes "わからないさ！　だから何だ！？　わかったところで、お前に何ができる？　お前は何でもかんでもプライドが高すぎるんだ。芯まで腐った木を、健全な木に育てられるとでも思っているのか！？";
+	next;
+	mes "[ポー]";
+	mes "何か言いたいなら、はっきり言え。敗北を認めているのか？　俺の運が、そんなにひどいものだと言うのか、アイゲン・アルム？";
+	next;
+	mes "[アルム]";
+	mes "ああ、俺は負けを認める。だがそれはお前相手にじゃない。お前も俺と同じ敗者だ。大事なことに取りかかる前に、お前は環境という要素に潰されているんだ。";
+	next;
+	mes "[ポー]";
+	mes "……いったい何の話だ？　環境？　まるでわからんな。はっきりしないじゃないか。";
+	next;
+	mes "[アルム]";
+	mes "わからない方がいい。知れば、心身を病むだけだ。気にするな……これから先、ずっとな！！";
+	next;
+	mes "[ポー]";
+	mes "ま、待て！　見ろ、アルム！";
+	mes "待てって！　アイゲン・アルム！　おい！";
+	next;
+	mes "-アルムはその声をまるで無視して、";
+	mes "寂しげな面持ちで部屋を出ていく。-";
+	next;
+	mes "[ポー]";
+	mes "何だよ……何だよ。つまらないな。";
+	mes "あいつのことが、さっぱりわからなかった。";
+	completequest 10018;
+	set .@er1,checkquest(10018);
+	set .@er2,checkquest(10019);
+	set .@er3,checkquest(10020);
+	set .@er4,checkquest(10021);
+	set .@er5,checkquest(10022);
+	if ((.@er1 + .@er2 + .@er3 + .@er4 + .@er5) == 10) {
+		setquest 10023;
+		set nkprince_eisen,11;
+	}
+	donpcevent "Prince#eisen4::OnDisable";
+	close;
+
+OnInit:
+	disablenpc "Prince#eisen4";
+	end;
+
+OnEnable:
+	enablenpc "Prince#eisen4";
+	end;
+
+OnDisable:
+	disablenpc "Prince#eisen4";
+	end;
+}
+
+prt_castle,364,372,1	script	王子#eisen5::Prince#eisen5	983,{
+	mes "[アルム]";
+	mes "ピーター、もし自分のしてきたことに何の意味もなかったとしたら、お前はどうする？";
+	next;
+	mes "[ピーター]";
+	mes "……何の話かわからないが、意味のないことなど存在しない。君は、それをわかっていないのではないかな。";
+	next;
+	mes "[アルム]";
+	mes "ブブー、はずれだ。それ自体に意味のないものというのは存在する。はっきり言えば、意味を知らないまま行う行為は、意味を失うということだ……";
+	next;
+	mes "[ピーター]";
+	mes "はっきり説明しようとしているのか？　むしろややこしくなっているぞ。いったい何が言いたいんだ？　率直に聞かせてくれ。";
+	next;
+	mes "[アルム]";
+	mes "……俺が何をしようとしまいと、俺はただ何かに操られているだけなんだ。さらに悪いことに、その何かの中にいるだけで、他人を傷つけてしまう。";
+	next;
+	mes "[ピーター]";
+	mes "……";
+	next;
+	mes "[アルム]";
+	mes "最悪なのは、その何かを知り、理解すること自体で、俺がただ臆病になっていくように感じることだ……";
+	next;
+	mes "[アルム]";
+	mes "だが、お前も同じだろう。本当にあの少女に感謝を伝えたいなら、自分で会いに行くべきだった。それができなかったんだろう？";
+	next;
+	mes "[ピーター]";
+	mes "……アルム、どうしたんだ？　俺の知っているアルムじゃない。何がお前をこうさせたんだ？";
+	next;
+	mes "[アルム]";
+	mes "フン……その何か、か。何でもない。意味などない。現実、それだけだ。話せて良かったよ。さらばだ、これまで通りに、ずっと生きていけばいい。";
+	next;
+	mes "[ピーター]";
+	mes "……アイゲン・アルム。お前は……";
+	next;
+	mes "-アルムは陰鬱な表情を浮かべ、部屋を出ていく。-";
+	next;
+	mes "[ピーター]";
+	mes "……";
+	completequest 10019;
+	set .@er1,checkquest(10018);
+	set .@er2,checkquest(10019);
+	set .@er3,checkquest(10020);
+	set .@er4,checkquest(10021);
+	set .@er5,checkquest(10022);
+	if ((.@er1 + .@er2 + .@er3 + .@er4 + .@er5) == 10) {
+		setquest 10023;
+		set nkprince_eisen,11;
+	}
+	donpcevent "Prince#eisen5::OnDisable";
+	close;
+
+OnInit:
+	disablenpc "Prince#eisen5";
+	end;
+
+OnEnable:
+	enablenpc "Prince#eisen5";
+	end;
+
+OnDisable:
+	disablenpc "Prince#eisen5";
+	end;
+}
+
+prt_castle,368,310,1	script	王子#eisen6::Prince#eisen6	983,{
+	mes "[エルンスト]";
+	mes "兄さん、もう一度言ってくれ。今、何か言ったか？";
+	next;
+	mes "[アルム]";
+	mes "ああ、言ってやろう。このルーンミッドガッツはゴミだ。お前も俺も、ゴミの山でもがいているだけ。リサイクルすらできない、そのゴミと同じなんだよ。";
+	next;
+	mes "[エルンスト]";
+	mes "兄さん、どうしたんだ？　正気を失ったのか？";
+	next;
+	mes "[アルム]";
+	mes "正気を失った？　俺は完全に正気だ……くく……ただ、この胸糞悪い現実にうんざりしているだけさ、愛しい弟よ。";
+	next;
+	mes "[エルンスト]";
+	mes "現実？　何の現実だ？　何を感じ取ったって言うんだ？　兄さんらしくない。俺には、もうどうしていいかわからないよ！";
+	next;
+	mes "[アルム]";
+	mes "俺はいつも通りの俺だ、エルンスト。ただ、現実は汚くて、自分がその汚物に囚われていると気づいただけだ。ここから抜け出せない。";
+	next;
+	mes "[エルンスト]";
+	mes "嘘つきだ！　いつも、自分の書物には可能性があると言っていたじゃないか！　いつだって堂々と振る舞っていたのに！";
+	next;
+	mes "[アルム]";
+	mes "黙れ。";
+	next;
+	mes "[エルンスト]";
+	mes "汚くて良くないなら、正すべきなんだ。この状況はもうわかっているはずなのに、なぜそんな態度を取るんだ！！";
+	next;
+	mes "[アルム]";
+	mes "……うるさくするなと言ったはずだ！";
+	next;
+	mes "[エルンスト]";
+	mes "いや。堕落は互いに了承したことだろう、俺をここへ連れてきたのはお前だ、お前がいるからこそ、俺は頼ることができるんだ！";
+	next;
+	mes "[アルム]";
+	mes "黙れ黙れ黙れ！！！！！！！！！！！！";
+	next;
+	mes "[エルンスト]";
+	mes "……！";
+	next;
+	mes "[アルム]";
+	mes "意味のない行いなど、望みはしない！　汚物に操られるなど胸糞が悪い。俺は無知だった、自分の意志で動いていると思っていたが、今は操られていたのだとわかる！";
+	next;
+	mes "[アルム]";
+	mes "王だと！？　それが何になる！？　何の意味もない！　新しい世界を作ったところで、何も変わりはしない！！　俺たちはまるで芝居の中だ。絵とは、誰かの意図に……ただ描かれたものにすぎない！！　そうだろう！？";
+	next;
+	mes "[エルンスト]";
+	mes "何を言っているんだ？　まるで理解できない！　現状に納得していないとでも言うのか？　そうなのか？　いったい何の話をしているんだ！";
+	next;
+	mes "[アルム]";
+	mes "黙れ！　何も知らなければ、いつ殺されるかもわからないままでいられる。お前はまだ俺をわかっていない……ああ……！　これは、知らない方がいいことなんだ！";
+	next;
+	mes "[エルンスト]";
+	mes "あ、兄さん、それでも言い張るつもりか？　俺たちの絆は、その程度のものだったのか？";
+	next;
+	mes "[アルム]";
+	mes "黙れ！　納得できないなら、約束通り俺を殺せばいい！　お前が……俺を……俺を……！！　もうこの話はしたくない、部屋に戻る！";
+	next;
+	mes "[エルンスト]";
+	mes "ああ、待ってくれ兄さん！　アルム！";
+	next;
+	mes "[アルム]";
+	mes "俺には……わからない！　王だと……お前が！";
+	next;
+	mes "-アルムは顔を紅潮させ、";
+	mes "部屋を出ていった。すっかり疲れ果てているようだった。-";
+	next;
+	mes "[エルンスト]";
+	mes "アルム……アルム……";
+	changequest 10023,10024;
+	set nkprince_eisen,13;
+	donpcevent "Prince#eisen6::OnDisable";
+	close;
+
+OnInit:
+	disablenpc "Prince#eisen6";
+	end;
+
+OnEnable:
+	enablenpc "Prince#eisen6";
+	end;
+
+OnDisable:
+	disablenpc "Prince#eisen6";
+	end;
+}
+
+prt_castle,318,276,0	script	#eisen	45,1,1,{
+OnTouch_:
+	if ((nkprince_eisen == 4) || (nkprince_eisen == 5)) {
+		donpcevent "Prince#another_ern::OnEnable";
+		set nkprince_eisen,5;
+		warp "prt_castle",318,368;
+	}
+	else if ((nkprince_eisen == 9) || (nkprince_eisen == 10) || (nkprince_eisen == 11) || (nkprince_eisen == 12)) {
+		set .@armkoe,rand(1,4);
+		if (.@armkoe == 1) {
+			mes "-アルムの声が、";
+			mes "部屋に入る前から";
+			mes "中から聞こえてくる。-";
+			next;
+			mes "[アルム]";
+			mes "俺にその資質などあるはずがない。こんな汚い場所で育ったんだ。何も知らない愚か者だった！";
+			next;
+			mes "[アルム]";
+			mes "王の器とは何だ？　清廉な政治とは何なんだ……？　あああああああ！！";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			close2;
+		}
+		else if (.@armkoe == 2) {
+			mes "-アルムの声が、";
+			mes "部屋に入る前から";
+			mes "中から聞こえてくる。-";
+			next;
+			mes "[アルム]";
+			mes "誇り高き家名……？　名声……";
+			mes "血筋？……王家？……それが何だと言うんだ？";
+			next;
+			mes "[アルム]";
+			mes "エルンストにとって、俺の家は罪そのものだ。そして俺自身も、その罪の一部だ。家の一員として。家の罪は、俺の罪と同じなんだ。";
+			next;
+			mes "[アルム]";
+			mes "もう……隠しきれない……エルン……お前だけには……";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			close2;
+		}
+		else if (.@armkoe == 3) {
+			mes "-アルムの声が、";
+			mes "部屋に入る前から";
+			mes "中から聞こえてくる。-";
+			next;
+			mes "[アルム]";
+			mes "結局、俺はただ利用されているだけなんだ……精一杯もがいて、主役を演じさせられている。それも全部、筋書きの一部なんだ……";
+			next;
+			mes "[アルム]";
+			mes "くそっ！　くそ……！！";
+			mes "受け入れられない。断じて。断じてだ！";
+			next;
+			mes "[アルム]";
+			mes "俺の祖先、^FF0000シュミット^000000よ……あんたはこの状況をどうするつもりだったんだ？　いや……あんたも俺と同じように、誰かに利用されていただけなのか？";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			close2;
+		}
+		else if (.@armkoe == 4) {
+			mes "- アルムの声が、";
+			mes "部屋に入る前から";
+			mes "中から聞こえてきた。-";
+			next;
+			mes "[アルム]";
+			mes "いや、だめだ……だめなんだ……この段階では、俺が王になる。俺は王になるべきじゃない……エルン……お前は、本当の王の意味を忘れるな。";
+			next;
+			mes "[アルム]";
+			mes "真の王が現れるために……俺は今夜……お前のために闇へと堕ちる。……ああああああ！！！";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "……";
+			close2;
+		}
+		warp "prt_castle",318,368;
+	}
+	else if (nkprince_eisen == 13) {
+		donpcevent "Prince#another_ern::OnEnable";
+		warp "prt_castle",318,368;
+	}
+	else if (nkprince_eisen == 15) {
+		warp "prt_castle",318,309;
+	}
+	else {
+		warp "prt_castle",318,368;
+	}
+	end;
+}
+
+prt_castle,336,276,0	script	#ern	45,1,1,{
+OnTouch_:
+	if (checkquest(10023) == 0 || checkquest(10023) == 1) {
+		donpcevent "Prince#eisen6::OnEnable";
+	}
+	warp "prt_castle",368,308;
+	end;
+}
+
+prt_castle,300,276,0	script	#erich	45,1,1,{
+OnTouch_:
+	if (checkquest(10020) == 0 || checkquest(10020) == 1) {
+		donpcevent "Prince#eisen1::OnEnable";
+	}
+	warp "prt_castle",274,368;
+	end;
+}
+
+prt_castle,330,271,0	script	#helmut	45,1,1,{
+OnTouch_:
+	if (checkquest(10022) == 0 || checkquest(10022) == 1) {
+		donpcevent "Prince#eisen3::OnEnable";
+	}
+	warp "prt_castle",290,208;
+	end;
+}
+
+prt_castle,348,271,0	script	#poe	45,1,1,{
+OnTouch_:
+	if (checkquest(10018) == 0 || checkquest(10018) == 1) {
+		donpcevent "Prince#eisen4::OnEnable";
+	}
+	warp "prt_castle",390,208;
+	end;
+}
+
+prt_castle,354,276,0	script	#peter	45,1,1,{
+OnTouch_:
+	if (checkquest(10019) == 0 || checkquest(10019) == 1) {
+		donpcevent "Prince#eisen5::OnEnable";
+	}
+	warp "prt_castle",366,368;
+	end;
+}
+
+prt_castle,310,271,0	script	#urgen	45,1,1,{
+OnTouch_:
+	if (checkquest(10021) == 0 || checkquest(10021) == 1) {
+		donpcevent "Prince#eisen2::OnEnable";
+	}
+	warp "prt_castle",340,208;
+	end;
+}
+
+prt_castle,317,364,0	warp	#eisen2	1,1,prt_castle,318,273
+prt_castle,317,304,0	warp	eisen22	1,1,prt_castle,318,273
+prt_castle,367,304,0	warp	#ern2	1,1,prt_castle,336,273
+prt_castle,273,364,0	warp	#erich2	1,1,prt_castle,300,273
+prt_castle,289,213,0	warp	#helmut2	1,1,prt_castle,330,274
+prt_castle,389,213,0	warp	#poe2	1,1,prt_castle,348,274
+prt_castle,365,364,0	warp	#peter2	1,1,prt_castle,354,273
+prt_castle,340,213,0	warp	#urgen2	1,1,prt_castle,310,274
+prt_castle,163,312,0	warp	#class2	1,1,prt_castle,221,343
+prt_castle,221,347,0	warp	#class	1,1,prt_castle,163,316
+prt_castle,225,338,0	warp	#room11	1,1,prt_castle,275,283
+prt_castle,273,284,0	warp	#room21	1,1,prt_castle,221,338
+prt_castle,225,318,0	warp	#room12	1,1,prt_castle,276,263
+prt_castle,273,264,0	warp	#room22	1,1,prt_castle,221,318
+prt_castle,221,308,0	warp	#princeout	1,1,prt_castle,176,167
+
+prt_castle,176,170,5	script	衛兵#princein::Guard#princein	105,{
+	if (nk_prince > 4) {
+		mes "[見知らぬ場所の衛兵]";
+		mes "隠し扉を通れば、王子たちが集う部屋へ行けます。警備上の理由から、厳重に守られ、隠されているのです。";
+		next;
+		mes "[見知らぬ場所の衛兵]";
+		mes "扉を開けましょう。";
+		close2;
+		warp "prt_castle",220,312;
+		end;
+	}
+	else {
+		mes "[見知らぬ場所の衛兵]";
+		mes "ここへは休憩しに来ただけです。場所についての情報は、他の方にお尋ねください。";
+		close;
+	}
+}
+
+prt_castle,121,168,0	script	#arm	111,4,4,{
+OnTouch:
+	if (nk_prince == 8) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "……………………";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "覆水盆に返らず、か。";
+		mes "もう忘れることにしよう。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "彼に代わって、誰が王座に就くのだろうか？";
+		next;
+		set nk_prince,9;
+		mes "[" + strcharinfo(0) + "]";
+		mes "ああ……";
+		close;
+	}
+}
+
+prt_castle,316,313,0	script	#arm1	111,3,3,{
+OnTouch:
+	if (nkprince_eisen > 14) {
+		mes "[" + strcharinfo(0) + "]";
+		mes "……………………";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "彼はどんな思いを抱き、この部屋で王になる決意をしたのだろうか？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "どんな状況が……";
+		mes "彼を、取り返しのつかない場所へと引き戻したのだろうか？";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "もう彼に尋ねることはできない。手がかりも残されていない。ただ残されているのは……";
+		next;
+		mes "[アルム]";
+		mes "～～この件を誤って伝えれば、俺の死は無駄になる……ぐっ……わかりますね？～～";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "……………………";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "……彼のために、沈黙を守ること。";
+		mes "彼が遺したこの重荷を……これから先、ずっと背負っていくこと。";
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "……安らかに眠れ。";
+		close;
+	}
+	end;
+}

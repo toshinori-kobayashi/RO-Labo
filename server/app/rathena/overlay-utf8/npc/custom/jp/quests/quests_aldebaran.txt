@@ -1,0 +1,111 @@
+//===== rAthena Script ======================================= 
+//= Quest NPCs related to Aldebaran 
+//===== By: ================================================== 
+//= rAthena Dev Team
+//===== Current Version: ===================================== 
+//= 1.3
+//===== Compatible With: ===================================== 
+//= rAthena Project; 7.15 +
+//===== Description: ========================================= 
+//= 'Doctor Band', 'Feather Bonnet', 'Opera Masque', 'Sakkat Hat' Quests.
+//===== Additional Comments: ================================= 
+//= Fully working
+//= 1.1 Fixed Doctor Band items [Lupus]
+//= 1.2 Removed Duplicates [Silent]
+//= 1.3 Updated headgear NPC. [L0ne_W0lf]
+//============================================================ 
+
+// 'Doctor Band', 'Feather Bonnet', 'Opera Masque', 'Sakkat Hat' Quest
+//============================================================
+aldeba_in,152,166,4	script	商人#01::Trader#01	86,{
+	mes "[トレーダー]";
+	mes "この謎めいた男は何者か？";
+	mes "私、謎めいて洒落者の『トレーダー』とでも？";
+	next;
+	mes "[トレーダー]";
+	mes "ミッドガッツ大陸を渡り歩き、素晴らしい帽子の数々を携えている…？誰も知らない…";
+	next;
+	mes "[トレーダー]";
+	mes "何のために世界中からこれらの帽子を集め、取引しているのか？帽子を選べば、その謎に一歩近づけるかもしれない…";
+	next;
+	mes " (1) ^3355FFドクターバンド^000000：";
+	mes "赤いバンダナ1個 + 鉄50個 + ひび割れたダイヤモンド1個 + 3500 Zeny";
+	mes " (2)^3355FFフェザーボンネット^000000：";
+	mes "ロマンチックジェント1個 + 鳥の羽300枚 + 500 Zeny";
+	mes " (3) ^3355FFファントム・オブ・オペラ^000000：";
+	mes "鉄20個 + 歌う植物1個 + 5000 Zeny ";
+	mes " (4) ^3355FFサッカト^000000：";
+	mes "木の幹120個 + 10000 Zeny ";
+	next;
+	switch(select(" ドクターバンド : フェザーボンネット : ファントム・オブ・オペラ : サッカト ")) {
+	case 1:
+		if ((countitem(2275) > 0) && (countitem(998) > 49) && (countitem(733) > 0) && (Zeny > 3499)) {
+			delitem 2275,1; //Red_Bandana
+			delitem 998,50; //Iron
+			delitem 733,1; //Crystal_Jewel___
+			set Zeny, Zeny-3500;
+			mes "[トレーダー]";
+			mes "ふむ！医師免許は持っていないんだろう？まあいい、無免許のはぐれ医者が医学の奇跡を起こしたなんて話も聞いたことがある！まあ…漫画の話だったかもしれんが。";
+			next;
+			mes "[トレーダー]";
+			mes "まあいいさ。捕まらないようにな。";
+			getitem 2273,1; //Doctor_Cap
+			close;
+		}
+		else {
+			mes "[トレーダー]";
+			mes "おいおい～";
+			mes "必要な物をもう一度確認しろ。";
+			mes "馬鹿には見えないんだがな。しっかりしろよ。";
+			close;
+		}
+	case 2:
+		if ((countitem(2247) > 0) && (countitem(916) > 299) && (Zeny > 499)) {
+			delitem 2247,1; //Oldman's_Romance
+			delitem 916,300; //Feather_Of_Birds
+			set Zeny, Zeny-500;
+			mes "[トレーダー]";
+			mes "おお～！なかなかセンスがいいな。集めるのは大変だったろうが、この帽子はそれだけの価値がある。受け取れ。あとは毛皮のコートとステッキがあれば完璧だ！";
+			getitem 5018,1; //Feather_Bonnet
+			close;
+		}
+		else {
+			mes "[トレーダー]";
+			mes "おいおい～";
+			mes "必要な物をもう一度確認してこい。馬鹿には見えないんだがな。しっかりしろよ。";
+			close;
+		}
+	case 3:
+		if ((countitem(998) > 19) && (countitem(707) > 0) && (Zeny > 4999)){ //Iron Singing_Plant 
+			delitem 998,20; //Iron
+			delitem 707,1; //Singing_Plant
+			set Zeny, Zeny-5000;
+			mes "[トレーダー]";
+			mes "これか？ちょっと不気味だが、どこかロマンチックな味わいもある。どうだ？気に入ったか？よし、受け取れ、お前のものだ！";
+			getitem 2281,1; //Phantom_Of_Opera
+			close;
+		}
+		else {
+			mes "[トレーダー]";
+			mes "阿呆め。必要な物をもう一度確認してこい。^3355FFファントム・オブ・オペラ^000000は簡単には手に入らないんだぞ。しっかりしろよ。";
+			close;
+		}
+	case 4:
+		if ((countitem(1019) > 119) && (Zeny > 9999)){ //Wooden_Block 
+			delitem 1019,120; //Wooden_Block
+			set Zeny, Zeny-10000;
+			mes "[トレーダー]";
+			mes "機会があれば、高地の村フェイヨンを訪ねて、サッカト職人に会ってみるといい。";
+			next;
+			mes "[トレーダー]";
+			mes "あの職人は、品質を見極められる私以外のトレーダーにはサッカトを売ったことがない。その希少さゆえ、サッカトは実に特別で例外的な逸品になっているんだ。よし！受け取れ、お前のものだ！";
+			getitem 2280,1; //Sahkkat
+			close;
+		}
+		else {
+			mes "[トレーダー]";
+			mes "馬鹿者め～必要な物をもう一度確認しろ。馬鹿には見えないんだから、しっかりしろよ～";
+			close;
+		}
+	}
+}

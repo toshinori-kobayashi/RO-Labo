@@ -1,0 +1,1285 @@
+//===== rAthena Script ======================================= 
+//= Bard Skill Quest
+//===== By: ================================================== 
+//= Lupus, Reddozen; L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Official quest for the Bard skill "Pang Voice"
+//= Prerequisite: Geffen Bard Quest
+//===== Additional Comments: ================================= 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//=     Somehow eA engine doesn't let you keep learn't skill
+//= 1.2 Added to correct locations, correct NPC's, fixed [Reddozen]
+//=     some of the items required and made them into real
+//=     quests.
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a Tixed an item ID typo. Thanks, 2Spiritual Kid
+//= 1.3b Split into different files [DracoRPG]
+//= 1.4 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 1.4a Checks the proper variable now. (bard_q -> gef_bard_q) [L0ne_W0lf]
+//= 1.5 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 1.6 Added missing checkweights. [L0ne_W0lf]
+//= 1.6 Replaced effect numerics with constants. [L0ne_W0lf]
+//============================================================
+
+prontera,174,328,3	script	青年#bard_q1::Young Man#bard_q1	89,3,3,{
+	if (BaseJob == Job_Bard) {
+		emotion ET_HUK;
+		mes "[臆病な青年]";
+		mes "え？う、うわああっ！";
+		mes "あ、あなたは……そ、それは……";
+		if (Upper != 1)
+			mes "ば、バードじゃないか！";
+		else
+			mes "み、ミンストレルじゃないか！";
+		mes "ち、近づかないでくれ！";
+		mes "お、俺はお前たちが苦手なんだ！";
+		next;
+		if (select("な、なんでだよ？:おいおい、落ち着けって。") == 1) {
+			mes "[臆病な青年]";
+			mes "い、いやだ！俺を見るな！";
+			mes "お前が何をしようとしているか";
+			mes "分かってるんだ！頼む、俺は";
+			mes "お前に何もしていないだろう！";
+			mes "た、頼むから離れてくれ！";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "ええと……";
+			mes "俺は別に、何かを";
+			mes "しようとしてるわけじゃないよ。";
+			mes "まあ落ち着いて、それで――";
+			next;
+			mes "[臆病な青年]";
+			mes "落ち着けだと？！誰も信じてくれないんだ";
+			mes "お前たちがどれだけ危険か";
+			mes "俺が話しても。面白い冗談と";
+			mes "美しい歌でごまかしてるつもりだろうが";
+			mes "俺は知ってるんだ、";
+			mes "お前たちがどんな力を持っているかを！";
+			close;
+		}
+		else {
+			mes "[臆病な青年]";
+			mes "い、いやだ！俺を見るな！";
+			mes "お前が何をしようとしているか";
+			mes "分かってるんだ！頼む、俺は";
+			mes "お前に何もしていないだろう！";
+			mes "た、頼むから離れてくれ！";
+			next;
+			if (select("飲み物を勧める。:安全だと安心させる。") == 1) {
+				mes "[" + strcharinfo(0) + "]";
+				mes "なあ、お前が俺に対して";
+				mes "何を思ってるのか知らないけど、";
+				mes "とにかく落ち着いたほうがいい。";
+				mes "ほら、これを一杯おごるよ。";
+				next;
+				if (countitem(12112) > 0) {
+					mes "[臆病な青年]";
+					mes "おお～！それって";
+					mes "トロピカル・ソグラトじゃないか？";
+					mes "世界で一番好きな";
+					mes "飲み物なんだ！";
+					if (qskill_bard == 9) {
+						mes "ありがとう――って、待てよ。";
+						next;
+						mes "[臆病な青年]";
+						mes "これは何か";
+						mes "妙な罠なんじゃないか？";
+						mes "危うく";
+						mes "だ、騙されるところだった！た、頼むから";
+						mes "ほ、放っておいてくれ！";
+						close;
+					}
+					else if (qskill_bard > 0) {
+						next;
+						mes "[臆病な青年]";
+						mes "待てよ、お前を前にも見たことがある。";
+						mes "その時もこんな飲み物を";
+						mes "持ってきたんだ。まさか……";
+						mes "お前、あ、あの";
+						mes "み、妙なスキルを覚えたんじゃ、な、ないよな？";
+						mes "いや、まさか……そんなはずない……";
+						next;
+						mes "[" + strcharinfo(0) + "]";
+						mes "ちょっと、勘弁してよ～";
+						mes "君って";
+						mes "ちょっと";
+						mes "心配しすぎなんじゃないかな。";
+						close;
+					}
+					else {
+						next;
+						mes "[臆病な青年]";
+						mes "^333333*ゴクゴク*^000000";
+						mes "ああああ～！お前には";
+						mes "どれだけ長く";
+						mes "これを飲みたかったか分からないだろうな！";
+						mes "本当に美味しくて、";
+						mes "すごくリラックスできる……";
+						next;
+						switch(select("ほらな、俺は全然危険なんかじゃないだろ～:じゃあ、俺の何がそんなに怖いって言うんだ？")) {
+						case 1:
+							mes "[臆病な青年]";
+							mes "うーん……そうかもな。";
+							mes "バードやミンストレルの皆が";
+							mes "みんな悪いやつってわけじゃ";
+							mes "ないのかもしれない。でも、";
+							mes "あのバードが俺にしたことだけは、絶対に忘れられないんだ……";
+							next;
+							mes "[臆病な青年]";
+							mes "すべての始まりは、";
+							mes "俺がウンバラを旅していた時のことだ。";
+							mes "村のウータンのシャーマン";
+							mes "プチュチャルタンに";
+							mes "師事する、見知らぬバードに";
+							mes "出会ったんだ。";
+							next;
+							mes "[臆病な青年]";
+							mes "そのバードとはそれなりに仲良くやっていたのに、";
+							mes "彼はウンバラのバンジージャンプへ俺を連れて行き、「本場のウンバラ体験」には最低一回は飛べと言い張るんだ。";
+							mes "バンジー紐なんて使わないのに、俺は断ったよ。";
+							next;
+							mes "[臆病な青年]";
+							mes "そのバードは気分を害したようで、";
+							mes "安全そのものだ、";
+							mes "飛び降りて死んだ人はほんの数人だけだと言い張った。";
+							mes "それから彼は……";
+							mes "ただじっと、強烈な目つきで俺を見つめてきたんだ。";
+							next;
+							mes "[臆病な青年]";
+							mes "その目には";
+							mes "怒りが満ちていた。";
+							mes "何かをぶつぶつ呟いていたのを覚えてる。";
+							mes "そして突然、";
+							mes "体が言うことを聞かなくなって、";
+							mes "腕も脚も勝手に動き出したんだ！";
+							next;
+							mes "[臆病な青年]";
+							mes "気がつけば、";
+							mes "バンジージャンプの台から";
+							mes "飛び降りまいと必死にもがいていた。";
+							mes "けれど抵抗すればするほど、";
+							mes "体は激しく縁の方へと";
+							mes "振り回されるんだ。恐ろしい体験だったよ！";
+							next;
+							mes "[臆病な青年]";
+							mes "あれは人生で";
+							mes "一番恐ろしい経験だった！";
+							mes "命の危険にさらされるだけでも大変なのに、";
+							mes "自分の体を";
+							mes "まったく制御できないという感覚は、";
+							mes "本当に圧倒されるものなんだ！";
+							next;
+							mes "[" + strcharinfo(0) + "]";
+							mes "待ってください、";
+							mes "それをやったのはバードだと言うんですか？";
+							mes "そんな効果を持つ歌やスキルなんて、";
+							mes "聞いたこともありません。妙な話ですね……";
+							next;
+							mes "[臆病な青年]";
+							mes "ああ、";
+							mes "俺も自分の身で体験するまでは、";
+							mes "そんな力があるなんて";
+							mes "聞いたこともなかった。";
+							mes "今でも夢の中で、";
+							mes "あの邪悪な笑みが見えるんだ……";
+							next;
+							mes "[臆病な青年]";
+							mes "とにかく、";
+							mes "あの飲み物をありがとう、";
+							mes "おかげで少し落ち着いた。でも、";
+							mes "あの奇妙なバードを";
+							mes "探そうとするのはやめてくれ。きっと悪魔か何かに違いない……";
+							next;
+							if (JobLevel > 39) {
+								mes "[臆病な青年]";
+								mes "けれど……";
+								mes "もしお前が本当に";
+								mes "その力を手に入れたいと言うなら、";
+								mes "俺には止められない。";
+								mes "幸い、彼がどこにいるかなんて誰も知らないけどな～";
+								delitem 12112,1; //Tropical_Sograt
+								set qskill_bard,1;
+							}
+							else {
+								mes "[臆病な青年]";
+								mes "たとえあのバードを見つけて、";
+								mes "俺にしたことを";
+								mes "教えてもらえたとしても、";
+								mes "その力を扱うには少なくとも";
+								mes "^660000ジョブレベル40^000000は";
+								mes "必要だと言っていた気がする……";
+								delitem 12112,1; //Tropical_Sograt
+							}
+							close;
+						case 2:
+							mes "[臆病な青年]";
+							mes "^333333*ため息*^000000そうだな、バードやミンストレルが";
+							mes "みんな恐ろしいわけじゃないのかもしれない。でも、バードを見るたびに";
+							mes "旅の途中で出会った";
+							mes "あのバードのことを思い出すんだ。";
+							mes "あの時のことを考えるだけで、鳥肌が立つよ。";
+							next;
+							mes "[臆病な青年]";
+							mes "すべての始まりは、";
+							mes "俺がウンバラを旅していた時のことだ。";
+							mes "村のウータンのシャーマン";
+							mes "プチュチャルタンに";
+							mes "師事する、見知らぬバードに";
+							mes "出会ったんだ。";
+							next;
+							mes "[臆病な青年]";
+							mes "そのバードとはそれなりに仲良くやっていたのに、";
+							mes "彼はウンバラのバンジージャンプへ俺を連れて行き、「本場のウンバラ体験」には最低一回は飛べと言い張るんだ。";
+							mes "バンジー紐なんて使わないのに、俺は断ったよ。";
+							next;
+							mes "[臆病な青年]";
+							mes "そのバードは気分を害したようで、";
+							mes "安全そのものだ、";
+							mes "飛び降りて死んだ人はほんの数人だけだと言い張った。";
+							mes "それから彼は……";
+							mes "ただじっと、強烈な目つきで俺を見つめてきたんだ。";
+							next;
+							mes "[臆病な青年]";
+							mes "その目には";
+							mes "怒りが満ちていた。";
+							mes "何かをぶつぶつ呟いていたのを覚えてる。";
+							mes "そして突然、";
+							mes "体が言うことを聞かなくなって、";
+							mes "腕も脚も勝手に動き出したんだ！";
+							next;
+							mes "[臆病な青年]";
+							mes "気がつけば、";
+							mes "バンジージャンプの台から";
+							mes "飛び降りまいと必死にもがいていた。";
+							mes "けれど抵抗すればするほど、";
+							mes "体は激しく縁の方へと";
+							mes "振り回されるんだ。恐ろしい体験だったよ！";
+							next;
+							mes "[臆病な青年]";
+							mes "あれは人生で";
+							mes "一番恐ろしい経験だった！";
+							mes "命の危険にさらされるだけでも大変なのに、";
+							mes "自分の体を";
+							mes "まったく制御できないという感覚は、";
+							mes "本当に圧倒されるものなんだ！";
+							next;
+							mes "[" + strcharinfo(0) + "]";
+							mes "待ってください、";
+							mes "それをやったのはバードだと言うんですか？";
+							mes "そんな効果を持つ歌やスキルなんて、";
+							mes "聞いたこともありません。妙な話ですね……";
+							next;
+							mes "[臆病な青年]";
+							mes "ああ、";
+							mes "俺も自分の身で体験するまでは、";
+							mes "そんな力があるなんて";
+							mes "聞いたこともなかった。";
+							mes "今でも夢の中で、";
+							mes "あの邪悪な笑みが見えるんだ……";
+							next;
+							mes "[臆病な青年]";
+							mes "とにかく、";
+							mes "あの飲み物をありがとう、";
+							mes "おかげで少し落ち着いた。でも、";
+							mes "あの奇妙なバードを";
+							mes "探そうとするのはやめてくれ。きっと悪魔か何かに違いない……";
+							next;
+							if (JobLevel > 39) {
+								mes "[臆病な青年]";
+								mes "けれど……";
+								mes "もしお前が本当に";
+								mes "その力を手に入れたいと言うなら、";
+								mes "俺には止められない。";
+								mes "幸い、彼がどこにいるかなんて誰も知らないけどな～";
+								delitem 12112,1; //Tropical_Sograt
+								set qskill_bard,1;
+							}
+							else {
+								mes "[臆病な青年]";
+								mes "たとえあのバードを見つけて、";
+								mes "俺にしたことを";
+								mes "教えてもらえたとしても、";
+								mes "その力を扱うには少なくとも";
+								mes "^660000ジョブレベル40^000000は";
+								mes "必要だと言っていた気がする……";
+								delitem 12112,1; //Tropical_Sograt
+							}
+							close;
+						}
+					}
+				}
+				else {
+					mes "[臆病な青年]";
+					mes "え……？あの、それは";
+					mes "あ、ありがたいんだけど、";
+					mes "お、俺は飲み物には";
+					mes "う、うるさいんだ。";
+					mes "そ、それに、お前のことを";
+					mes "し、信用できるかも分からないし。";
+					next;
+					mes "[臆病な青年]";
+					mes "俺の気持ちを";
+					mes "変えられるものなんて";
+					mes "そうそう無いと思うけどな！";
+					mes "まあ……もし俺の好きな";
+					mes "トロピカル・ソグラトを";
+					mes "持ってきてくれたら、考え直すかもしれないな……";
+					close;
+				}
+			}
+			mes "[" + strcharinfo(0) + "]";
+			mes "心配しないで、";
+			mes "君を傷つけたりしないよ。";
+			next;
+			mes "[臆病な青年]";
+			mes "そ、そうやって";
+			mes "みんな言うんだ、こっちの";
+			mes "心に入り込んで";
+			mes "思いっきり捻じ曲げる前にな！";
+			if (qskill_bard == 9) {
+				mes "さ、触るな！";
+				mes "……うわっ！あっち行け！";
+			}
+			else {
+				mes "そ、その力を";
+				mes "も、持ってなくても、放っておいてくれ！";
+			}
+			close;
+		}
+	}
+	else {
+		mes "[臆病な青年]";
+		mes "ああ……なんてことだ。";
+		mes "今そこにいたのは";
+		mes "バードか？ああ、俺は";
+		mes "あいつらが怖いんだ！";
+		mes "しかもミンストレルは";
+		mes "もっとひどいときてる！";
+		next;
+		mes "[臆病な青年]";
+		mes "誤解しないでくれ、俺は";
+		mes "歌や芸事が好きなんだ。";
+		mes "でも分かってほしい！";
+		mes "奴らの中には、";
+		mes "信じられないような力を持つやつもいる！";
+		mes "お、俺はこの目で見たんだ！";
+		close;
+	}
+
+OnTouch:
+	if (BaseJob == Job_Bard) {
+		emotion ET_HUK;
+	}
+	end;
+}
+
+morocc_in,169,72,7	script	意地悪そうなバード#bs::Spiteful-Looking Bard#bs	741,3,3,{
+	if (BaseJob == Job_Bard) {
+		if (Class == Job_Clown && qskill_bard == 9) {
+			if (getskilllv("BA_PANGVOICE") != 0) {
+				mes "[リオット]";
+				mes "ゲヘヘヘ～";
+				mes "俺が教えたものを";
+				mes "うまく使っているか？ただ、";
+				mes "無闇に使わないよう気をつけろよ。さもないと";
+				mes "俺みたいにみんなに嫌われるぞ。";
+				next;
+				mes "[リオット]";
+				mes "敵や、たまに出くわす";
+				mes "酔っ払いは、";
+				mes "それとはまったく";
+				mes "話が別だがな！ブワーハハハ！";
+				close;
+			}
+			else {
+				mes "[リオット]";
+				mes "そんなバカな！俺が教えたことを";
+				mes "全部忘れちまったのか？";
+				mes "どういうことだ？まあいい、";
+				mes "また教えてやるくらい";
+				mes "俺には造作もないことさ。";
+				next;
+				if (select("いや、結構です。:ありがとう、お願いします。") == 1) {
+					mes "[リオット]";
+					mes "なんだと……？";
+					mes "本当に";
+					mes "覚えたくないのか？";
+					mes "変な条件なんて";
+					mes "何も付けやしないぞ。";
+					mes "気が変わったらいつでも来い……";
+					close;
+				}
+				mes "[リオット]";
+				mes "まず、獲物の目を";
+				mes "鋭く睨みつけて、";
+				mes "支配する意志に";
+				mes "意識を集中させろ。これが";
+				mes "催眠術の基本だ。それじゃあこの呪文を聞くがいい……";
+				next;
+				mes "[リオット]";
+				mes "Uuuummm Baaalaaaa";
+				mes "Uuuummmm Baaalaaa~";
+				mes "Kkkkuuurrirrreeee";
+				mes "Kkkkuuurrirrreeee";
+				mes "Oooumm guandlejdl";
+				mes "Woooo Ei ei ei ei......";
+				specialeffect EF_TALK_FROSTJOKE;
+				next;
+				mes "[リオット]";
+				mes "パンヴォイスは";
+				mes "相手を混乱させ、";
+				mes "体の自由を奪う技だ。命にかかわる技ではないが、";
+				mes "敵の心を大いに乱すには効果的だ。くれぐれも賢く使うんだぞ。";
+				skill "BA_PANGVOICE",1,SKILL_PERM;
+				close;
+			}
+		}
+		else if (qskill_bard > 8) {
+			mes "[リオット]";
+			mes "ゲヘヘヘ～";
+			mes "俺が教えたものを";
+			mes "うまく使っているか？ただ、";
+			mes "無闇に使わないよう気をつけろよ。さもないと";
+			mes "俺みたいにみんなに嫌われるぞ。";
+			next;
+			mes "[リオット]";
+			mes "敵や、たまに出くわす";
+			mes "酔っ払いは、";
+			mes "それとはまったく";
+			mes "話が別だがな！ブワーハハハ！";
+			close;
+		}
+		else if (qskill_bard == 8) {
+			if (countitem(7277) > 0) {
+				mes "[リオット]";
+				mes "おお、持ってきたか";
+				mes "ヤオ・ジュン作の";
+				mes "ムナク人形だな。言った通り";
+				mes "持ってきてくれたか。ああ、これは彼女の";
+				mes "手仕事、相変わらず";
+				mes "完璧だな。よくやった～";
+				next;
+				mes "[リオット]";
+				mes "この取引の俺の分を";
+				mes "果たすとしよう。今から";
+				mes "俺の特技を教えてやる。";
+				mes "これはウンバラの";
+				mes "ウータンシャーマンの呪文を";
+				mes "聞いて編み出したものだ。";
+				next;
+				mes "[リオット]";
+				mes "まず、獲物の目を";
+				mes "鋭く睨みつけて、";
+				mes "支配する意志に";
+				mes "意識を集中させろ。これが";
+				mes "催眠術の基本だ。それじゃあこの呪文を聞くがいい……";
+				next;
+				mes "[リオット]";
+				mes "『ヒキガエルの足、ヴェリットの心臓、";
+				mes "回る星々、こぼれるZeny、";
+				mes "縛られた手足。これは";
+				mes "お前の声か、これは";
+				mes "俺の声か。頭が回る、頭が";
+				mes "回る、頭が回る……！』";
+				specialeffect2 EF_TALK_FROSTJOKE;
+				delitem 7277,1; //Munak_Doll
+				skill "BA_PANGVOICE",1,SKILL_PERM;
+				set qskill_bard,9;
+				next;
+				mes "[リオット]";
+				mes "覚えておけ、大事なのは";
+				mes "何を言うかじゃない、";
+				mes "どう言うかだ。禁断的なまでに";
+				mes "扇情的なリズムで";
+				mes "獲物を催眠にかければ、";
+				mes "その掌握から逃れられなくなるぞ！";
+				next;
+				mes "[リオット]";
+				mes "ああ、それと手先の早業で";
+				mes "獲物の気を逸らし、";
+				mes "本当の狙いを悟らせるな！";
+				mes "アンバーリングオクターブと";
+				mes "組み合わせて使うのが一番効く。この技の名は『パンヴォイス』だ！";
+				next;
+				mes "[リオット]";
+				mes "『パンヴォイス』は精神的に";
+				mes "獲物に衝撃を与え、";
+				mes "しばらくの間";
+				mes "自分の体を制御できなくする。";
+				mes "お前が相手を操るわけじゃないが、大抵の奴はそう思い込むものさ……";
+				next;
+				mes "[リオット]";
+				mes "この技を使うときは";
+				mes "分別を持つ必要がある！";
+				mes "無闇に使えば、";
+				mes "俺と同じように";
+				mes "みんなに嫌われるぞ。だが『パンヴォイス』が喜ばれる場面もある。";
+				next;
+				mes "[リオット]";
+				mes "敵にどれだけ";
+				mes "パンヴォイスを浴びせても、";
+				mes "誰にも文句は言われない。";
+				mes "それに、嫌なやつや酔っ払いに時々使うくらいなら";
+				mes "見逃してもらえるだろうな……";
+				close;
+			}
+			mes "[リオット]";
+			mes "フン。まだ";
+			mes "ムナク人形を";
+			mes "見つけられていないのか？まあ、心配するな、俺は";
+			mes "気が長い方だ。できるだけ早く";
+			mes "持ってきてくれればいい。";
+			close;
+		}
+		else if (qskill_bard == 7) {
+			if (countitem(574) > 4) {
+				mes "[リオット]";
+				mes "おお、持ってきたか";
+				mes "イエルが産んだ";
+				mes "新鮮な卵を、頼んだ通りに。";
+				mes "ニブルヘイムまで行くのは";
+				mes "危なかっただろうが、この卵の味はそれだけの価値があるな。";
+				next;
+				next;
+				mes "[リオット]";
+				mes "この取引の俺の分を";
+				mes "果たすとしよう。今から";
+				mes "俺の特技を教えてやる。";
+				mes "これはウンバラの";
+				mes "ウータンシャーマンの呪文を";
+				mes "聞いて編み出したものだ。";
+				next;
+				mes "[リオット]";
+				mes "まず、獲物の目を";
+				mes "鋭く睨みつけて、";
+				mes "支配する意志に";
+				mes "意識を集中させろ。これが";
+				mes "催眠術の基本だ。それじゃあこの呪文を聞くがいい……";
+				next;
+				mes "[リオット]";
+				mes "『ヒキガエルの足、ヴェリットの心臓、";
+				mes "回る星々、こぼれるZeny、";
+				mes "縛られた手足。これは";
+				mes "お前の声か、これは";
+				mes "俺の声か。頭が回る、頭が";
+				mes "回る、頭が回る……！』";
+				specialeffect2 EF_TALK_FROSTJOKE;
+				delitem 574,5; //Egg
+				skill "BA_PANGVOICE",1,SKILL_PERM;
+				set qskill_bard,9;
+				next;
+				mes "[リオット]";
+				mes "覚えておけ、大事なのは";
+				mes "何を言うかじゃない、";
+				mes "どう言うかだ。禁断的なまでに";
+				mes "扇情的なリズムで";
+				mes "獲物を催眠にかければ、";
+				mes "その掌握から逃れられなくなるぞ！";
+				next;
+				mes "[リオット]";
+				mes "ああ、それと手先の早業で";
+				mes "獲物の気を逸らし、";
+				mes "本当の狙いを悟らせるな！";
+				mes "アンバーリングオクターブと";
+				mes "組み合わせて使うのが一番効く。この技の名は『パンヴォイス』だ！";
+				next;
+				mes "[リオット]";
+				mes "『パンヴォイス』は精神的に";
+				mes "獲物に衝撃を与え、";
+				mes "しばらくの間";
+				mes "自分の体を制御できなくする。";
+				mes "お前が相手を操るわけじゃないが、大抵の奴はそう思い込むものさ……";
+				next;
+				mes "[リオット]";
+				mes "この技を使うときは";
+				mes "分別を持つ必要がある！";
+				mes "無闇に使えば、";
+				mes "俺と同じように";
+				mes "みんなに嫌われるぞ。だが『パンヴォイス』が喜ばれる場面もある。";
+				next;
+				mes "[リオット]";
+				mes "敵にどれだけ";
+				mes "パンヴォイスを浴びせても、";
+				mes "誰にも文句は言われない。";
+				mes "それに、嫌なやつや酔っ払いに時々使うくらいなら";
+				mes "見逃してもらえるだろうな……";
+				close;
+			}
+			else {
+				mes "[リオット]";
+				mes "ふむ……卵を";
+				mes "十分に持ってこなかったな……";
+				mes "これじゃ足りない。";
+				mes "イエルがまた卵を産むまで";
+				mes "しばらくかかりそうだ。";
+				mes "ああ、これじゃ足りないな……";
+				next;
+				mes "[リオット]";
+				mes "まあ、足りない卵の";
+				mes "埋め合わせに、";
+				mes "^4D4DFF1 ムナク人形^000000を持ってきてくれ。";
+				mes "ヤオ・ジュンのムナク人形は";
+				mes "傑作揃いでな、俺は";
+				mes "彼女の作品の熱心な収集家なんだ。";
+				next;
+				mes "[リオット]";
+				if (countitem(574) > 0) {
+					mes "その間、";
+					mes "お前が持っている";
+					mes "その少しの卵を楽しませてもらうぞ！";
+					mes "ブヒャヒャヒャヒャヒャッ！";
+					delitem 574,countitem(574); //Egg
+				}
+				set qskill_bard,8;
+				close;
+			}
+		}
+		else if (qskill_bard > 1 && qskill_bard < 7) {
+			mes "[リオット]";
+			mes "イエルから卵を集めるのに";
+			mes "苦労しているのか？";
+			mes "あいつはかなり";
+			mes "足の速い鶏だからな。";
+			mes "だが、あの場所で";
+			mes "生き延びるにはそのくらい必要なのさ。";
+			close;
+		}
+		else {
+			mes "[リオット]";
+			mes "フンッ！";
+			mes "エヘヘヘヘッ！";
+			emotion ET_KIK;
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "ええと……";
+			mes "何がそんなに面白いんですか？";
+			next;
+			if (gef_bard_q == 30 || gef_bard_q == 31) {
+				mes "[リオット]";
+				mes "ん？ああ！それは";
+				if (gef_bard_q == 30) {
+					mes "キノ・キティしか渡せない";
+					mes "ブラックシールの一つだな。";
+					mes "そいつがそれをくれるほど";
+					mes "気に入ったなら、お前は";
+					mes "相当情の深い人間なんだろう。";
+				}
+				else {
+					mes "エレンデしか渡せない";
+					mes "シルバーシールの一つだな。";
+					mes "友達になってくれるくらいだから";
+					mes "お前は本当に";
+					mes "心優しい人間なんだろうよ。どうだ？";
+				}
+				next;
+				mes "[リオット]";
+				mes "ゲヘヘヘ～";
+				mes "おい、あそこにいる";
+				mes "あの二人の酔っ払いを";
+				mes "見てみろよ。";
+				next;
+				mes "[" + strcharinfo(0) + "]";
+				mes "ええ、見えてますけど。";
+				mes "でも、あの二人の";
+				mes "何が特別なんですか？";
+				next;
+				mes "[リオット]";
+				mes "いいから……";
+				mes "見てろって。";
+				next;
+				mes "^3355FFリオットは酔っ払いの一人を";
+				mes "じっと見つめ、";
+				mes "低くしゃがれた声で";
+				mes "何やら聞き取れない言葉を";
+				mes "荒々しく呟き始めた。";
+				mes "男の一人が小さく痙攣し始める。^000000";
+				next;
+				mes "[ほろ酔いの男]";
+				mes "お、おい……！^333333*ヒック！*^000000";
+				mes "何してんだよ！？";
+				mes "て、手を";
+				mes "出すな！俺が";
+				mes "女に見えるのか？";
+				next;
+				mes "[泥酔した男]";
+				mes "何言ってんだ、";
+				mes "お前？な、なんだ！？なんで";
+				mes "俺の腕がお前に";
+				mes "巻き付いてんだ？す、すまん、俺は";
+				mes "ただそっちに行こうとしただけで――";
+				mes "抱きつくつもりなんてなかったんだ！";
+				next;
+				mes "[ほろ酔いの男]";
+				mes "ぶつかってきたのは";
+				mes "まだ分かる。だけど思いっきり";
+				mes "抱きしめるとか、おいおい！";
+				mes "絶対わざとだろ！";
+				mes "な、なんだ？お、俺の手が……";
+				mes "勝手に動いてる！？";
+				next;
+				mes "[泥酔した男]";
+				mes "うわっ！な、なにを";
+				mes "してるんだ！や、やめろ";
+				mes "俺の尻を触るな！";
+				next;
+				mes "^3355FF二人は方向も定まらぬまま";
+				mes "身振り手振りをしながら";
+				mes "激しく動き続けた。";
+				next;
+				mes "[" + strcharinfo(0) + "]";
+				mes "あの二人……";
+				mes "たぶん、";
+				mes "飲みすぎただけですよね。";
+				next;
+				mes "[リオット]";
+				mes "いや、ちょっとの間";
+				mes "体の自由を失っただけさ。";
+				mes "俺のスキルが";
+				mes "連中の頭を";
+				mes "少しかき乱した結果だな。";
+				next;
+				if (qskill_bard == 1) {
+					mes "[" + strcharinfo(0) + "]";
+					mes "頭をかき乱す？";
+					mes "待って、あなたって";
+					mes "誰かを無理やり";
+					mes "ウンバラのバンジージャンプから";
+					mes "飛ばせたあのバードですか？";
+					next;
+					mes "[リオット]";
+					mes "あん？どこで";
+					mes "その話を聞いたんだ？";
+					mes "自慢できる話じゃないが";
+					mes "（まああの時は";
+					mes "笑えたけどな）";
+					mes "ああ、それは俺だよ。";
+					next;
+					if (select("その技を教えてください！:ああ、分かりました。確認しただけです。") == 1) {
+						mes "[リオット]";
+						mes "ん？さっき俺がやったみたいに";
+						mes "頭をかき乱すやり方を";
+						mes "覚えたいのか？まあ、";
+						mes "俺が編み出した技だが、";
+						mes "ウータンシャーマンには";
+						mes "だいぶ世話になったな。そうだな……";
+						next;
+						mes "[リオット]";
+						mes "よし。俺に";
+						mes "教わりたいなら、";
+						mes "イエルという名の鶏から";
+						mes "卵を5個持ってこい。イエルは";
+						mes "最高級の卵を産む。美味くて、";
+						mes "バードの喉にもいいんだ～";
+						next;
+						mes "[リオット]";
+						mes "だが、あの鶏は";
+						mes "妙で危険な場所に棲んでいてな。";
+						mes "そこへ行くには、ウンバラにある巨大で不思議な木を探索する必要がある。";
+						mes "前に俺が行った時は、";
+						mes "ほとんど死にかけたよ。";
+						next;
+						mes "[リオット]";
+						mes "よし……";
+						mes "忘れずに";
+						mes "ここへ戻ってきて、";
+						mes "俺に";
+						mes "^4D4DFF5 イエルの卵^000000を持ってこいよ、いいな？";
+						set qskill_bard,2;
+						close;
+					}
+					mes "[リオット]";
+					mes "おいおい、好奇心旺盛なやつだな。";
+					mes "だがそれを知ってて";
+					mes "俺と出くわしたってことは、";
+					mes "かなりあちこち";
+					mes "旅してるんだろう。お前みたいな";
+					mes "経験豊富な冒険者には敬意を払うよ。";
+					close;
+				}
+				mes "[" + strcharinfo(0) + "]";
+				mes "な……？";
+				mes "信じられません。";
+				mes "頭をかき乱す？";
+				mes "そんなの、意味が分かりません！";
+				mes "ただ酔っ払ってるだけじゃ……";
+				next;
+				mes "[リオット]";
+				mes "よくも俺の力を";
+				mes "疑ったな？まあいい、";
+				mes "そう怒ることもできんな。";
+				mes "俺を信じる連中は大抵";
+				mes "今頃俺のことを";
+				mes "悪の権化とでも呼んでるだろうよ……";
+				close;
+			}
+			mes "[リオット]";
+			mes "いや、大したことじゃない。そういえば、";
+			mes "お前、バードシールを";
+			mes "一つも持ってないな？それは";
+			mes "バード仲間とあまり";
+			mes "繋がってない証拠だ。";
+			mes "それは残念だな……";
+			next;
+			mes "[リオット]";
+			mes "*ため息*よし、もっと";
+			mes "バードに会う方法を教えてやろう。";
+			mes "エレンデと友達になってみたらどうだ？ゲフェンで";
+			mes "緑の服を着たバードを探せば、";
+			mes "見つけられるはずだ。";
+			close;
+		}
+	}
+	else {
+		mes "[リオット]";
+		mes "フンッ！";
+		mes "エヘヘヘヘッ！";
+		emotion ET_KIK;
+		next;
+		mes "[" + strcharinfo(0) + "]";
+		mes "ええと……";
+		mes "何がそんなに面白いんですか？";
+		next;
+		if (gef_bard_q == 30 || gef_bard_q == 31) {
+			mes "[リオット]";
+			mes "ん？ああ！それは";
+			if (gef_bard_q == 30) {
+				mes "キノ・キティしか渡せない";
+				mes "ブラックシールの一つだな。";
+				mes "そいつがそれをくれるほど";
+				mes "気に入ったなら、お前は";
+				mes "相当情の深い人間なんだろう。";
+			}
+			else {
+				mes "エレンデしか渡せない";
+				mes "シルバーシールの一つだな。";
+				mes "友達になってくれるくらいだから";
+				mes "お前は本当に";
+				mes "心優しい人間なんだろうよ。どうだ？";
+			}
+			next;
+			mes "[リオット]";
+			mes "ゲヘヘヘ～";
+			mes "おい、あそこにいる";
+			mes "あの二人の酔っ払いを";
+			mes "見てみろよ。";
+			next;
+			mes "[" + strcharinfo(0) + "]";
+			mes "ええ、まとめて";
+			mes "見えてますけど。";
+			mes "それが何か？";
+			next;
+			mes "[リオット]";
+			mes "いいから……";
+			mes "見てろって。";
+			close;
+		}
+		mes "[リオット]";
+		mes "いや、大したことじゃない。そういえば、";
+		mes "お前、バードシールを";
+		mes "一つも持ってないな。それは";
+		mes "バードとあまり";
+		mes "会ってない証拠だ。";
+		mes "そろそろ変えたほうがいいぞ。";
+		next;
+		mes "[リオット]";
+		mes "バードやミンストレルは";
+		mes "友達になれば";
+		mes "なかなか頼りになるものだ。";
+		mes "ほら、ゲフェンで";
+		mes "エレンデを探してみたらどうだ？";
+		mes "あいつは結構な人気者だからな……";
+		close;
+	}
+
+OnTouch:
+	emotion ET_KIK;
+	end;
+}
+
+// Yhelle the Chicken
+//============================================================ 
+niflheim,239,70,1	script	めんどりのイエル#bard_chick1::Yhelle#bard_chick1	800,3,3,{
+	emotion ET_HUK, playerattached();
+	emotion ET_HUK;
+	mes "[めんどりのイエル]";
+	mes "コケーッ？";
+	mes "コッコッコッ！";
+	next;
+	disablenpc "Yhelle#bard_chick1";
+	donpcevent "Yhelle#bard_chick2::OnEnable";
+	mes "^3355FFあなたの気配を感じ取ると、";
+	mes "めんどりは";
+	mes "素早く逃げていった。^000000";
+	close;
+
+OnInit:
+	disablenpc "Yhelle#bard_chick5";
+	disablenpc "Yhelle#bard_chick4";
+	disablenpc "Yhelle#bard_chick3";
+	disablenpc "Yhelle#bard_chick2";
+	end;
+
+OnEnable:
+	enablenpc "Yhelle#bard_chick1";
+	end;
+
+OnDisable:
+	disablenpc "Yhelle#bard_chick1";
+	end;
+
+OnTouch:
+	callfunc "F_BardSkillYhelle",1,2; close;
+}
+
+niflheim,185,205,3	script	めんどりのイエル#bard_chick2::Yhelle#bard_chick2	800,3,3,{
+	emotion ET_HUK, playerattached();
+	emotion ET_HUK;
+	mes "[めんどりのイエル]";
+	mes "コケーッ？";
+	mes "コッコッコッ！";
+	next;
+	disablenpc "Yhelle#bard_chick2";
+	donpcevent "Yhelle#bard_chick3::OnEnable";
+	mes "^3355FFあなたの気配を感じ取ると、";
+	mes "めんどりは";
+	mes "素早く逃げていった。^000000";
+	close;
+
+OnEnable:
+	enablenpc "Yhelle#bard_chick2";
+	end;
+
+OnDisable:
+	disablenpc "Yhelle#bard_chick2";
+	end;
+
+OnTouch:
+	callfunc "F_BardSkillYhelle",2,3; close;
+}
+
+niflheim,85,203,5	script	めんどりのイエル#bard_chick3::Yhelle#bard_chick3	800,3,3,{
+	emotion ET_HUK, playerattached();
+	emotion ET_HUK;
+	mes "[めんどりのイエル]";
+	mes "コケーッ？";
+	mes "コッコッコッ！";
+	next;
+	disablenpc "Yhelle#bard_chick3";
+	donpcevent "Yhelle#bard_chick4::OnEnable";
+	mes "^3355FFあなたの気配を感じ取ると、";
+	mes "めんどりは";
+	mes "素早く逃げていった。^000000";
+	close;
+
+OnEnable:
+	enablenpc "Yhelle#bard_chick3";
+	end;
+
+OnDisable:
+	disablenpc "Yhelle#bard_chick3";
+	end;
+
+OnTouch:
+	callfunc "F_BardSkillYhelle",3,4; close;
+}
+
+niflheim,149,81,7	script	めんどりのイエル#bard_chick4::Yhelle#bard_chick4	800,3,3,{
+	emotion ET_HUK, playerattached();
+	emotion ET_HUK;
+	mes "[めんどりのイエル]";
+	mes "コケーッ？";
+	mes "コッコッコッ！";
+	next;
+	disablenpc "Yhelle#bard_chick4";
+	donpcevent "Yhelle#bard_chick5::OnEnable";
+	mes "^3355FFあなたの気配を感じ取ると、";
+	mes "めんどりは";
+	mes "素早く逃げていった。^000000";
+	close;
+
+OnEnable:
+	enablenpc "Yhelle#bard_chick4";
+	end;
+
+OnDisable:
+	disablenpc "Yhelle#bard_chick4";
+	end;
+
+OnTouch:
+	callfunc "F_BardSkillYhelle",4,5; close;
+}
+
+niflheim,209,144,3	script	めんどりのイエル#bard_chick5::Yhelle#bard_chick5	800,3,3,{
+	emotion ET_HUK, playerattached();
+	emotion ET_HUK;
+	mes "[めんどりのイエル]";
+	mes "コケーッ？";
+	mes "コッコッコッ！";
+	next;
+	disablenpc "Yhelle#bard_chick5";
+	donpcevent "Yhelle#bard_chick1::OnEnable";
+	mes "^3355FFあなたの気配を感じ取ると、";
+	mes "めんどりは";
+	mes "素早く逃げていった。^000000";
+	close;
+
+OnEnable:
+	enablenpc "Yhelle#bard_chick5";
+	end;
+
+OnDisable:
+	disablenpc "Yhelle#bard_chick5";
+	end;
+
+OnTouch:
+	callfunc "F_BardSkillYhelle",5,1; close;
+}
+
+// Drunken Men
+//============================================================ 
+morocc_in,178,73,3	script	ほろ酔いの男#bard_skill01::Customer#bard_skill01	54,{
+	mes "[ほろ酔いの男]";
+	mes "この世で一番";
+	mes "うまい酒って";
+	mes "何だと思う？確か";
+	mes "トリ……トリスタン？何て";
+	mes "名前だったっけ？";
+	next;
+	mes "[泥酔した男]";
+	mes "ああ！13年物トリスタンか？";
+	mes "確かにいい酒だが、";
+	mes "特別な時じゃないと";
+	mes "手が出せないくらい";
+	mes "高すぎるよな。^333333*ヒック*^000000俺は個人的には";
+	mes "ヴェ……ヴェが好きなんだが……";
+	next;
+	mes "[ほろ酔いの男]";
+	mes "ヴァーミリオン・オン・ザ・ビーチか？";
+	mes "ああ、あれはマジでうまい、";
+	mes "一杯飲んだだけで";
+	mes "ぶっ倒れるくらいにな！ああ……";
+	mes "トロ……トロピカル！あれもうまいって";
+	mes "聞くよな。って、あれ？";
+	next;
+	mes "[ほろ酔いの男]";
+	mes "お、おい……！^333333*ヒック！*^000000";
+	mes "何してんだよ！？";
+	mes "て、手を";
+	mes "出すな！俺が";
+	mes "女に見えるのか？";
+	next;
+	mes "[泥酔した男]";
+	mes "何言ってんだ、";
+	mes "お前？な、なんだ！？なんで";
+	mes "俺の腕がお前に";
+	mes "巻き付いてんだ？す、すまん、俺は";
+	mes "ただそっちに行こうとしただけで――";
+	mes "抱きつくつもりなんてなかったんだ！";
+	next;
+	mes "[ほろ酔いの男]";
+	mes "ぶつかってきたのは";
+	mes "まだ分かる。だけど思いっきり";
+	mes "抱きしめるとか、おいおい！";
+	mes "絶対わざとだろ！";
+	mes "な、なんだ？お、俺の手が……";
+	mes "勝手に動いてる！？";
+	next;
+	mes "[泥酔した男]";
+	mes "うわっ！な、なにを";
+	mes "してるんだ！や、やめろ";
+	mes "俺の尻を触るな！";
+	next;
+	mes "^3355FF部屋にいたバードが";
+	mes "二人の酔っ払いを";
+	mes "じっと見つめ、その醜態に";
+	mes "くすくす笑っている。覚えておけ、";
+	mes "飲みすぎはよくないぞ！^000000";
+	close;
+}
+
+morocc_in,175,70,7	script	ほろ酔いの男#bard_skill02::Customer#bard_skill02	50,{
+	mes "[ほろ酔いの男]";
+	mes "この世で一番";
+	mes "うまい酒って";
+	mes "何だと思う？確か";
+	mes "トリ……トリスタン？何て";
+	mes "名前だったっけ？";
+	next;
+	mes "[泥酔した男]";
+	mes "ああ！13年物トリスタンか？";
+	mes "確かにいい酒だが、";
+	mes "特別な時じゃないと";
+	mes "手が出せないくらい";
+	mes "高すぎるよな。^333333*ヒック*^000000俺は個人的には";
+	mes "ヴェ……ヴェが好きなんだが……";
+	next;
+	mes "[ほろ酔いの男]";
+	mes "ヴァーミリオン・オン・ザ・ビーチか？";
+	mes "ああ、あれはマジでうまい、";
+	mes "一杯飲んだだけで";
+	mes "ぶっ倒れるくらいにな！ああ……";
+	mes "トロ……トロピカル！あれもうまいって";
+	mes "聞くよな。って、あれ？";
+	next;
+	mes "[ほろ酔いの男]";
+	mes "お、おい……！^333333*ヒック！*^000000";
+	mes "何してんだよ！？";
+	mes "て、手を";
+	mes "出すな！俺が";
+	mes "女に見えるのか？";
+	next;
+	mes "[泥酔した男]";
+	mes "何言ってんだ、";
+	mes "お前？な、なんだ！？なんで";
+	mes "俺の腕がお前に";
+	mes "巻き付いてんだ？す、すまん、俺は";
+	mes "ただそっちに行こうとしただけで――";
+	mes "抱きつくつもりなんてなかったんだ！";
+	next;
+	mes "[ほろ酔いの男]";
+	mes "ぶつかってきたのは";
+	mes "まだ分かる。だけど思いっきり";
+	mes "抱きしめるとか、おいおい！";
+	mes "絶対わざとだろ！";
+	mes "な、なんだ？お、俺の手が……";
+	mes "勝手に動いてる！？";
+	next;
+	mes "[泥酔した男]";
+	mes "うわっ！な、なにを";
+	mes "してるんだ！や、やめろ";
+	mes "俺の尻を触るな！";
+	next;
+	mes "^3355FF部屋にいたバードが";
+	mes "二人の酔っ払いを";
+	mes "じっと見つめ、その醜態に";
+	mes "くすくす笑っている。覚えておけ、";
+	mes "飲みすぎはよくないぞ！^000000";
+	close;
+}
+
+// Bartender
+//============================================================ 
+morocc_in,166,76,7	script	バーテンダー#bard_qskill::Bartender#bard_qskill	46,{
+	if (checkweight(1201,1) == 0) {
+		mes "^3355FFちょっと待った！";
+		mes "荷物が多すぎて、報酬を受け取るだけの空きがありません。所持品の空きを増やしてから、またこの挑戦をしに来てください。";
+		close;
+	}
+	mes "[バーテンダー]";
+	mes "それで、";
+	mes "何を注文しますか？";
+	next;
+	switch(select("トロピカル・ソグラト:ヴァーミリオン・オン・ザ・ビーチ:結構です、いりません。")) {
+	case 1:
+		if (MaxWeight - Weight < 2000) {
+			mes "[バーテンダー]";
+			mes "本当にまだ";
+			mes "荷物を持てるんですか？";
+			mes "どう見ても";
+			mes "無理そうですけど。少し荷を下ろして、";
+			mes "カプラ倉庫にでも";
+			mes "預けてきたらどうです？";
+			close;
+		}
+		if (Zeny < 1000) {
+			mes "[バーテンダー]";
+			mes "本当に払えるんですか？";
+			mes "この酒は";
+			mes "1,000 Zenyしますよ、";
+			mes "手持ちのお金を";
+			mes "確かめてから。まあ、お金ができたら";
+			mes "また来てください。";
+			close;
+		}
+		mes "[バーテンダー]";
+		mes "どうぞ、";
+		mes "トロピカル・ソグラト1杯です。";
+		mes "甘くて";
+		mes "まろやかな味ですが、";
+		mes "油断するとあっという間に";
+		mes "酔い潰れますよ。ほどほどにどうぞ。";
+		set Zeny, Zeny-1000;
+		getitem 12112,1; //Tropical_Sograt
+		close;
+
+	case 2:
+		if (MaxWeight - Weight < 2000) {
+			mes "[バーテンダー]";
+			mes "本当にまだ";
+			mes "荷物を持てるんですか？";
+			mes "どう見ても";
+			mes "無理そうですけど。少し荷を下ろして、";
+			mes "カプラ倉庫にでも";
+			mes "預けてきたらどうです？";
+			close;
+		}
+		if (Zeny < 1000) {
+			mes "[バーテンダー]";
+			mes "本当に払えるんですか？";
+			mes "この酒は";
+			mes "1,000 Zenyしますよ、";
+			mes "手持ちのお金を";
+			mes "確かめてから。まあ、お金ができたら";
+			mes "また来てください。";
+			close;
+		}
+		mes "[バーテンダー]";
+		mes "どうぞ。";
+		mes "楽しんで飲んでも、";
+		mes "羽目を外しすぎないように";
+		mes "気をつけてくださいね。";
+		set Zeny, Zeny-1000;
+		getitem 12113,1; //Vermilion_The_Beach
+		close;
+
+	case 3:
+		mes "[バーテンダー]";
+		mes "分かりました。";
+		mes "また今度どうぞ。";
+		close;
+	}
+}
+
+// Function
+//============================================================ 
+function	script	F_BardSkillYhelle	{
+	if (checkweight(1201,1) == 0 || MaxWeight - Weight < 2000) {
+		mes "^3355FFちょっと待った！";
+		mes "荷物が多すぎて、報酬を受け取るだけの空きがありません。所持品の空きを増やしてから、またこの挑戦をしに来てください。";
+		close;
+	}
+	emotion ET_HUK, playerattached();
+	emotion ET_HUK;
+	mes "[めんどりのイエル]";
+	mes "コケーッ？";
+	mes "コッコッコッ！";
+	next;
+	if (rand(1,3) == 2) {
+		disablenpc "Yhelle#bard_chick"+getarg(0);
+		donpcevent "Yhelle#bard_chick"+getarg(1)+"::OnEnable";
+		mes "^3355FFあなたの気配を感じ取ると、";
+		mes "めんどりは";
+		mes "素早く逃げていった。^000000";
+		if (qskill_bard > 1 && qskill_bard < 7) {
+			mes "^3355FFイエルの巣があった場所で^333333卵1個^3355FFを";
+			mes "見つけました";
+			mes "。^000000";
+			set qskill_bard,qskill_bard+1;
+			getitem 574,1; //Egg
+		}
+	}
+	else {
+		disablenpc "Yhelle#bard_chick"+getarg(0);
+		donpcevent "Yhelle#bard_chick"+getarg(1)+"::OnEnable";
+		mes "^3355FFあなたの気配を感じ取ると、";
+		mes "めんどりは";
+		mes "素早く逃げていった。^000000";
+	}
+	return;
+}

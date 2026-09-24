@@ -1,0 +1,1370 @@
+//===== rAthena Script ======================================= 
+//= Rogue Skills Quests
+//===== By: ================================================== 
+//= Lupus, Reddozen
+//===== Current Version: ===================================== 
+//= 1.8
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests for skills: CLose Confine
+//===== Additional Comments: ================================= 
+//= 1.4 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.5 Fixed bad NPC header data to comply with rev. 11603. [L0ne_W0lf]
+//= 1.6 Bug fixes as pointed out by Brainstorm in bugreport:351 [L0ne_W0lf]
+//= 1.6a Fixed(?) antoher problem (NPCs not disabling) hopefully. [L0ne_W0lf]
+//= 1.6b Corrected a Typo error with "rouge". (bugreport:909) [Samuray22]
+//= 1.7 Replaced effect numerics with constants. [L0ne_W0lf]
+//= 1.8 Some cleaning. [Euphy]
+//============================================================
+
+in_rogue,359,177,0	script	#killershow01	-1,{
+OnInit:
+	disablenpc "#killershow01";
+	end;
+
+OnEnable:
+	enablenpc "#killershow01";
+	initnpctimer;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	disablenpc "#killershow01";
+	end;
+
+OnTimer1000:
+	enablenpc "Killer#Rogueguild";
+	end;
+
+OnTimer120000:
+	disablenpc "Killer#Rogueguild";
+	end;
+
+OnTimer150000:
+	disablenpc "Killer#Rogueguild";
+	disablenpc "#killershow01";
+	end;
+}
+
+in_rogue,357,174,2	script	キラー#Rogueguild::Killer#Rogueguild	705,1,1,{
+OnInit:
+	disablenpc "Killer#Rogueguild";
+	end;
+
+OnTouch_:
+	if (ROG_SK == 10) {
+		specialeffect2 EF_CHANGECOLD;
+		specialeffect EF_CHANGEWIND;
+		specialeffect2 EF_LIGHTSPHERE;
+		set ROG_SK,11;
+		mes "[キラー]";
+		mes "な、何を";
+		mes "俺にしやがった！？";
+		mes "く、動けねえ…！";
+		next;
+		mes "[ハイジャラ・グレッグ]";
+		mes "おや？まさかこんなに早く";
+		mes "クローズコンファインを";
+		mes "使えるようになるとはな！";
+		mes "驚いた、実に驚いたよ！";
+		mes "さあ、これはこの技を";
+		mes "会得する良い機会だ…";
+		next;
+		mes "[ハイジャラ・グレッグ]";
+		mes "よく見ておきなさい。";
+		mes "このキラーを相手に";
+		mes "相手の動きの意図を";
+		mes "読み取る練習をしてほしい。";
+		mes "オーラの色を見れば、どちらに動こうとしているか分かるはずだ。";
+		next;
+		mes "[ハイジャラ・グレッグ]";
+		mes "左へ動くつもりなら";
+		mes "オーラは白。右へ";
+		mes "動くつもりなら";
+		mes "黄色になる。後ろへ";
+		mes "下がるつもりなら薄い赤だ。";
+		next;
+		setarray .@Effects[1],EF_CHANGECOLD,EF_CHANGEWIND,EF_CHANGEEARTH;
+		for(set .@lim_1,0; .@lim_1<10; set .@lim_1,.@lim_1+1) {
+			set .@move_1,rand(1,3);
+			specialeffect .@Effects[.@move_1];
+			if (select("左を塞ぐ:右を塞ぐ:退路を塞ぐ") == .@move_1) {
+				mes "^3355FFキラーは";
+				mes "身動きが取れず、";
+				mes "すっかり困惑している";
+				mes "様子だ！今まさに、";
+				mes "クローズコンファインを完璧に決めている！^000000";
+				specialeffect EF_POTION1;
+				specialeffect2 EF_POTION7;
+			}
+			else {
+				mes "^3355FF待て――！";
+				mes "なぜか";
+				mes "今この瞬間、";
+				mes "キラーはそちらへ";
+				mes "動こうとしていない気がする。";
+				mes "自然と体が反応を修正する。^000000";
+			}
+			next;
+		}
+		mes "^3355FFついに";
+		mes "伝説のチェ・タクベが";
+		mes "記した貴重な技術書を";
+		mes "取り戻すことに成功した。^000000";
+		close2;
+		disablenpc "Killer#Rogueguild";
+		donpcevent "#killershow01::OnDisable";
+		end;
+	}
+	else if (ROG_SK == 11) {
+		mes "[キラー]";
+		mes "ぐぐぐ…";
+		mes "ま、まだ…";
+		mes "く、動けねえ…！";
+		close2;
+		disablenpc "Killer#Rogueguild";
+		donpcevent "#killershow01::OnDisable";
+		end;
+	}
+	end;
+}
+
+in_rogue,355,179,0	script	ハイジャラ・グレッグ#rogueguild::Haijara Greg#rogueguild	46,{
+	if (BaseJob == Job_Rogue) {
+		if (ROG_SK == 12 && Upper == 1) {
+			mes "[ハイジャラ・グレッグ]";
+			mes "ん？ああ、転生した";
+			mes "せいで記憶が";
+			mes "曖昧になっているのか。";
+			mes "それならもう一度クローズコンファインを教えよう。";
+			specialeffect2 EF_LIGHTSPHERE;
+			skill "RG_CLOSECONFINE",1,SKILL_PERM;
+			set ROG_SK,13;
+			close;
+		}
+		else if (ROG_SK == 13 && Upper == 1) {
+			mes "[ハイジャラ・グレッグ]";
+			mes "チェイサーになったか。";
+			mes "その力は必ず";
+			mes "狙われて然るべき";
+			mes "悪しき者たちにこそ";
+			mes "使うのだぞ。冒険者よ、";
+			mes "幸運を祈っている。";
+			close;
+		}
+		else {
+			if (ROG_SK < 1) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "ど、どうやってこの場所を";
+				mes "見つけたのだ？この隠し部屋は";
+				mes "ローグですら";
+				mes "見つけられないはずだったのに！";
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "まずいことになった！";
+				mes "これでは";
+				mes "奴らに見つかるのも時間の問題だ…";
+				close;
+			}
+			else if (ROG_SK == 1) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "な、何者だ、";
+				mes "お前は。どうやって";
+				mes "ここへ入って来た？名を名乗れ！";
+				next;
+				if (select("危害を加えるつもりはない！:欲しいものを渡せ！") == 1) {
+					mes "[ハイジャラ・グレッグ]";
+					mes "違うのか…？";
+					mes "それなら…";
+					mes "何のために来たのだ？";
+					mes "私を見つけたのは";
+					mes "偶然ではあるまい。";
+					next;
+					if (select("あなたを助けに来た。:いや、実は探していたわけじゃない。") == 1) {
+						mes "[ハイジャラ・グレッグ]";
+						mes "うむ…ならば";
+						if (Upper == 1)
+							mes "同じチェイサーであるお前になら";
+						else
+							mes "同じローグであるお前になら";
+						mes "この窮状を話しても";
+						mes "良いだろう。盗賊の仁義というやつだ。";
+						mes "ときに、チェ・タクベの";
+						mes "伝説を聞いたことはあるか？";
+						next;
+						if (select("いいえ:はい") == 1) {
+							mes "[ハイジャラ・グレッグ]";
+							mes "100年前、チェ・タクベは";
+							mes "誰よりも早く自らの限界を";
+							mes "超えた男だった。そして";
+							mes "それまでの職の系統とは";
+							mes "違う道を選んだ、初めての人物でもあった。";
+							next;
+							mes "[ハイジャラ・グレッグ]";
+							mes "彼は元々モンクだったが、";
+							mes "転生した後、";
+							mes "なぜかチェイサーになった。";
+							mes "モンクの「ルート」という";
+							mes "技の知識を残したまま、それをローグ向けに応用したのだ。";
+							next;
+							mes "[ハイジャラ・グレッグ]";
+							mes "チェ・タクベはこの新しい";
+							mes "ローグの技の基礎を";
+							mes "一冊の本に記した。";
+							mes "幸運にも私はそれを";
+							mes "手に入れたのだが、";
+							mes "手に入れた途端、脅迫が始まった…";
+							next;
+							mes "[ハイジャラ・グレッグ]";
+							mes "手段を選ばず";
+							mes "この本を奪おうとする";
+							mes "悪党どもがいるのだ。";
+							mes "気持ちは分かる、私も息子たちも";
+							mes "タクベの書から新しい技を";
+							mes "学んだのだからな。";
+							next;
+							mes "[ハイジャラ・グレッグ]";
+							mes "だが、もう";
+							mes "時間がない。奴らは";
+							mes "遅かれ早かれ私を見つけるだろう。";
+							mes "私と息子たちを救うのを";
+							mes "手伝ってくれないか？";
+							next;
+							if (select("もちろん！:悪いが、今は手が離せない。") == 1) {
+								mes "[ハイジャラ・グレッグ]";
+								mes "おお、本当にありがとう！";
+								mes "いいか、私は見つかる";
+								mes "危険を冒せない。この手紙を";
+								mes "末の息子、";
+								mes "^FF0000ルイス・グレッグ^000000に届けてくれ。急げ、";
+								mes "あまり時間がないのだ！";
+								set ROG_SK,2;
+								close;
+							}
+							mes "[ハイジャラ・グレッグ]";
+							mes "そ…そうか。";
+							mes "だが分かってくれ、";
+							mes "お前でなければ";
+							mes "一体誰を信じればいいのだ？";
+							close;
+						}
+						mes "[ハイジャラ・グレッグ]";
+						mes "それなら、彼が記した";
+						mes "技術書の価値も";
+						mes "分かるだろう、今は私が持っている。";
+						mes "だが、それを奪おうと";
+						mes "手段を選ばぬ男たちに追われているのだ。";
+						mes "手を貸してはくれないか？";
+						next;
+						if (select("もちろん！:悪いが、今は手が離せない。") == 1) {
+							mes "[ハイジャラ・グレッグ]";
+							mes "おお、本当にありがとう！";
+							mes "いいか、私は見つかる";
+							mes "危険を冒せない。この手紙を";
+							mes "末の息子、";
+							mes "^FF0000ルイス・グレッグ^000000に届けてくれ。急げ、";
+							mes "あまり時間がないのだ！";
+							set ROG_SK,2;
+							close;
+						}
+						mes "[ハイジャラ・グレッグ]";
+						mes "そ…そうか。";
+						mes "だが分かってくれ、";
+						mes "お前でなければ";
+						mes "一体誰を信じればいいのだ？";
+						close;
+					}
+					mes "[ハイジャラ・グレッグ]";
+					mes "ふむ…？";
+					mes "信じ難い話だが、";
+					mes "疑わしきは罰せずと";
+					mes "いうやつにしておこう。";
+					mes "それでは、無事に";
+					mes "ここから出られることを祈る。";
+					close;
+				}
+				mes "[ハイジャラ・グレッグ]";
+				mes "そうか。ならば仕方ない。";
+				mes "お前がそれほど欲しがる";
+				mes "その技、見せてやろう…";
+				mes "^FF0000クローズコンファイン^000000！";
+				specialeffect EF_CHANGECOLD;
+				specialeffect2 EF_CHANGEWIND;
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "ふん。これでお前は";
+				mes "無力だ、これで";
+				mes "こうできるわけだ…^FF0000バックスタブ^000000！";
+				specialeffect2 EF_COMBOATTACK5;
+				percentheal -95,0;
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "さあ、ここから出ていけ。";
+				mes "二度とその";
+				mes "強欲な面を私の前に見せるな。";
+				mes "殺さなかっただけ";
+				mes "感謝することだな！";
+				set ROG_SK,1;
+				close;
+			}
+			else if (ROG_SK == 2) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "もう時間が";
+				mes "残っていない…この手紙を";
+				mes "末の息子、";
+				mes "^FF0000ルイス^000000にできるだけ早く届けてくれ！";
+				mes "ローグギルドの";
+				mes "^FF0000ホルグレヘン・ジュニア^000000の近くにいるはずだ。";
+				close;
+			}
+			else if (ROG_SK == 3) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "ルイスがお前を";
+				mes "^FF0000トール^000000のところへ？ローグギルドの";
+				mes "^FF0000ハーマンソーン・ジュニア^000000の近くに";
+				mes "いるはずだ。息子たちの元を";
+				mes "一人ずつ回らせてしまって";
+				mes "すまない…効率が悪いのは分かっている。";
+				close;
+			}
+			else if (ROG_SK == 4) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "ああ、^FF0000ジェイ^000000を探しているのか？";
+				mes "ローグギルドの";
+				mes "^FF0000アントニオ・ジュニア^000000の近くにいる。";
+				mes "たいていはそこにいるはずだ。";
+				close;
+			}
+			else if (ROG_SK == 5) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "おお、戻って来たか！";
+				mes "ジェイからの";
+				mes "手紙を持って来てくれたのだな。";
+				mes "よしよし、";
+				mes "何と書いてあるか読んでみよう…";
+				set ROG_SK,6;
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "おお、良い知らせだ！";
+				mes "彼はローグギルドに";
+				mes "連絡を取り、警戒を強めるよう";
+				mes "頼んでくれたそうだ。これで";
+				mes "少しは気が楽になる。ローグに手を出す者などいないからな。";
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "手伝ってくれて";
+				mes "本当にありがとう。お前が";
+				mes "いなければ、私は";
+				mes "永遠に隠れ続けていただろう。お礼に";
+				mes "チェ・タクベの秘技を";
+				mes "学ぶ機会をやろう。";
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "^FF0000トール^000000に話して、";
+				mes "私が息子たち全員に";
+				mes "教えたその技を";
+				mes "お前にも学ばせることを";
+				mes "許したと伝えてくれ。";
+				mes "きっと応じてくれるはずだ。";
+				close;
+			}
+			else if (ROG_SK == 6) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "トールに頼んで、";
+				mes "チェ・タクベの秘密の";
+				mes "ローグの技を教わってくれ。";
+				mes "こんな粗末な";
+				mes "隠し部屋の設備では";
+				mes "私はその技を教えられないのだ。";
+				close;
+			}
+			else if (ROG_SK == 7) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "ん…？お前は";
+				mes "その技を学ぶための";
+				mes "訓練の最中だったのでは？";
+				mes "トールに話して";
+				mes "訓練を終えてきなさい。";
+				close;
+			}
+			else if (ROG_SK == 8) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "訓練を";
+				mes "終えたのか？それは";
+				mes "実に見事だ。だが、";
+				mes "まずトールに話してからだ…";
+				close;
+			}
+			else if (ROG_SK == 9) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "おお、戻って来たか！";
+				mes "訓練を終えて、";
+				mes "クローズコンファインの";
+				mes "応用について聞く準備が";
+				mes "できたと聞いているぞ。";
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "うわっ！何だ――！？";
+				mes "待て！ど、どうか";
+				mes "あの男を止めてくれ！";
+				mes "あの本を盗ませるわけにはいかない！";
+				specialeffect EF_COMBOATTACK5;
+				donpcevent "Killer#Rogueguild::OnEnable";
+				set ROG_SK,10;
+				close;
+			}
+			else if (ROG_SK == 10) {
+				mes "[ハイジャラ・グレッグ]";
+				mes "あの男が";
+				mes "クローズコンファインの技術書を盗んだのだ！";
+				mes "頼む！逃がさないでくれ！";
+				mes "あの本はかけがえのないものなのだ！";
+				donpcevent "#killershow01::OnEnable";
+				close;
+			}
+			else if (ROG_SK == 11) {
+				donpcevent "Killer#Rogueguild::OnDisable";
+				donpcevent "#killershow01::OnDisable";
+				mes "^3355FFチェ・タクベが";
+				mes "記した技術書を";
+				mes "ハイジャラに返した。^000000";
+				next;
+				mes "[ハイジャラ・グレッグ]";
+				mes "力を貸してくれて";
+				mes "本当にありがとう。さて、";
+				mes "クローズコンファインについて";
+				mes "詳しく知りたいのなら、";
+				mes "もっと教えて";
+				mes "やってもいいぞ。";
+				next;
+				if (select("ぜひ教えてほしい。:いや、結構だ。") == 1) {
+					mes "[ハイジャラ・グレッグ]";
+					mes "もう知っているだろうが、";
+					mes "クローズコンファインは";
+					mes "すぐ近くの敵を";
+					mes "動けなくする技だ。だが、";
+					mes "プレイヤーとモンスターに";
+					mes "使う場合で少し違いがある。";
+					next;
+					mes "[ハイジャラ・グレッグ]";
+					mes "クローズコンファインは";
+					mes "モンクの「ルート」という技に";
+					mes "似ているが、";
+					mes "動きを封じるだけで、";
+					mes "攻撃までは封じない。";
+					next;
+					mes "[ハイジャラ・グレッグ]";
+					mes "クローズコンファイン中に";
+					mes "一度しか使えない";
+					mes "バックスタブを除けば、";
+					mes "クローズコンファインの";
+					mes "効果中でもどんな技でも";
+					mes "使うことができる。";
+					next;
+					mes "[ハイジャラ・グレッグ]";
+					mes "クローズコンファインを";
+					mes "受けた敵は、ハエの羽や";
+					mes "蝶の羽、テレポートや";
+					mes "ハイディングの技を使えば";
+					mes "逃れられる。ただし";
+					mes "WoE中はハイディングしか使えない。";
+					next;
+					mes "[ハイジャラ・グレッグ]";
+					mes "だからこそ、クローズコンファインは";
+					mes "攻城戦(WoE)で";
+					mes "とても役立つ技になる。";
+					mes "相手がハイディングで";
+					mes "逃げない限りはな。";
+					next;
+					mes "[ハイジャラ・グレッグ]";
+					mes "ボスモンスターを除けば、";
+					mes "クローズコンファインは";
+					mes "モンスターを10秒間";
+					mes "動けなくする。これは";
+					mes "パーティ狩りにおいて";
+					mes "ローグに新たな可能性をもたらすだろう。";
+					next;
+					mes "[ハイジャラ・グレッグ]";
+					mes "さて、クローズコンファインに";
+					mes "ついて教えられるのはこれで全部だ。";
+					mes "実践を通じてこの技を";
+					mes "さらに極め、";
+					mes "いつかチェ・タクベに並ぶ伝説となってくれることを願っている。";
+					set ROG_SK,12;
+					skill "RG_CLOSECONFINE",1,SKILL_PERM;
+					specialeffect2 EF_LIGHTSPHERE;
+					close;
+				}
+				mes "[ハイジャラ・グレッグ]";
+				mes "分かった、それなら…";
+				mes "たゆまぬ実践を通じて";
+				mes "クローズコンファインについて";
+				mes "もっと学んでくれることを";
+				mes "願っている。幸運を祈るよ、";
+				mes "そして改めて、力を貸してくれてありがとう。";
+				set ROG_SK,12;
+				skill "RG_CLOSECONFINE",1,SKILL_PERM;
+				specialeffect2 EF_LIGHTSPHERE;
+				close;
+			}
+			mes "[ハイジャラ・グレッグ]";
+			mes "このかけがえのない";
+			mes "技術書を守る手助けを";
+			mes "してくれてありがとう。今度";
+			mes "会う時には、戦場で";
+			mes "肩を並べる仲間になっていることを願うよ…";
+			close;
+		}
+	}
+	else {
+		mes "[ハイジャラ・グレッグ]";
+		mes "ど、どうやってこの場所を";
+		mes "見つけたのだ？この隠し部屋は";
+		mes "ローグですら";
+		mes "見つけられないはずだったのに！";
+		next;
+		mes "[ハイジャラ・グレッグ]";
+		mes "まずいことになった！";
+		mes "これでは";
+		mes "奴らに見つかるのも時間の問題だ…";
+		next;
+		mes "[ハイジャラ・グレッグ]";
+		mes "頼む…";
+		mes "私が信頼できる";
+		mes "チェイサーかローグを";
+		mes "見つけて、私を助けに";
+		mes "寄越してくれ！あまり";
+		mes "時間が残っていないのだ…";
+		close;
+	}
+}
+
+in_rogue,152,29,0	script	ルイス・グレッグ#rogueguild::Louis Greg#rogueguild	84,{
+	if (BaseJob == Job_Rogue || Class == Job_Thief_High) {
+		if (ROG_SK < 1) {
+			mes "[ルイス・グレッグ]";
+			mes "父さんが急に…";
+			mes "いなくなっちゃったんだ！";
+			mes "僕たち兄弟に";
+			mes "新しい技を教えてくれてたのに、";
+			mes "最近なんだか";
+			mes "様子がおかしかったんだよね…";
+			next;
+			mes "[ルイス・グレッグ]";
+			mes "どこかに隠れたのかな？";
+			mes "ローグギルドに";
+			mes "隠し部屋があるのは知ってるけど、";
+			mes "僕でもどこにあるか";
+			mes "分からないんだ。無事だといいけど…";
+			set ROG_SK,1;
+			close;
+		}
+		else if (ROG_SK == 1) {
+			mes "[ルイス・グレッグ]";
+			mes "父さん、新しく習ってる技のことが";
+			mes "知られたら";
+			mes "誰かに狙われるかもって";
+			mes "前から警告してたんだ。";
+			mes "きっとローグギルドの";
+			mes "隠し部屋に隠れてるんだと思う…";
+			close;
+		}
+		else if (ROG_SK == 2) {
+			mes "[ルイス・グレッグ]";
+			mes "これ何…？";
+			mes "父さんからの";
+			mes "手紙？やった、無事";
+			mes "だったんだ！急いで";
+			mes "読んでみるね！";
+			set ROG_SK,3;
+			next;
+			mes "[ルイス・グレッグ]";
+			mes "ええっ、今は無事でも";
+			mes "父さんが危険な奴らに";
+			mes "追われてるって？これは";
+			mes "トール兄さんにも";
+			mes "知らせなきゃ。急いで";
+			mes "手紙を書くよ…";
+			next;
+			mes "[ルイス・グレッグ]";
+			mes "こんなお願いできる";
+			mes "立場じゃないと分かってるけど、";
+			mes "父さんが信頼してるなら";
+			mes "君も信頼できるはずだよね。";
+			mes "この手紙を、兄さんの";
+			mes "トールに届けてくれないかな？";
+			next;
+			mes "[ルイス・グレッグ]";
+			mes "トールなら";
+			mes "ローグギルドの";
+			mes "ハーマンソーン・ジュニアの隣にいるよ。";
+			mes "僕の家族を助けてくれたら";
+			mes "本当に嬉しいな。";
+			close;
+		}
+		else if (ROG_SK == 3) {
+			mes "[ルイス・グレッグ]";
+			mes "兄さんの^FF0000トール^000000に";
+			mes "すぐ知らせなきゃ！";
+			mes "この手紙を届けてくれる？";
+			mes "ローグギルドの";
+			mes "^FF0000ハーマンソーン・ジュニア^000000の";
+			mes "ハーマンソーン・ジュニアの隣にいるよ。";
+			close;
+		}
+		else if (ROG_SK == 4) {
+			mes "[ルイス・グレッグ]";
+			mes "兄さんのジェイを";
+			mes "探してるの？いつもローグギルドで";
+			mes "アントニオ・ジュニアと";
+			mes "一緒にいるよ。";
+			close;
+		}
+		else if (ROG_SK == 5) {
+			mes "[ルイス・グレッグ]";
+			mes "父さんと話したいなら、";
+			mes "きっとまだローグギルドの";
+			mes "隠し部屋にいると思う。";
+			mes "僕はまだ";
+			mes "その場所が";
+			mes "どこか分からないままだけど…";
+			close;
+		}
+		else if (ROG_SK == 6) {
+			mes "[ルイス・グレッグ]";
+			mes "ローグの秘密の技を";
+			mes "覚えたいの？それなら";
+			mes "^FF0000トール^000000兄さんに";
+			mes "聞いたほうがいいよ。僕、";
+			mes "人に物を説明するの";
+			mes "すごく苦手なんだ。本当に。";
+			close;
+		}
+		else if (ROG_SK == 7) {
+			mes "[ルイス・グレッグ]";
+			mes "あれ？ローグの秘密の技を";
+			mes "習ってる";
+			mes "最中だよね？それなら";
+			mes "まだここに来ちゃ";
+			mes "だめだよ。^FF0000トール^000000兄さんの";
+			mes "ところに戻ってね？";
+			close;
+		}
+		else if (ROG_SK == 8) {
+			mes "[ルイス・グレッグ]";
+			mes "あ、あっ！";
+			mes "訓練終わったんだね？";
+			mes "それなら";
+			mes "またトール兄さんに";
+			mes "話してきて！";
+			close;
+		}
+		else if (ROG_SK == 9) {
+			mes "[ルイス・グレッグ]";
+			mes "クローズコンファインについて";
+			mes "もっと知りたいの？";
+			mes "それなら父さんに";
+			mes "聞いたほうがいいよ。僕も";
+			mes "その技、習ったばかりなんだ。";
+			close;
+		}
+		else if (ROG_SK == 11) {
+			mes "[ルイス・グレッグ]";
+			mes "兄さんたちから聞いたんだけど、";
+			mes "チェ・タクベは";
+			mes "クローズコンファインを、敵を";
+			mes "逃がさずに容赦なく";
+			mes "叩きのめすために";
+			mes "編み出したんだって。本当かな？";
+			close;
+		}
+		mes "[ルイス・グレッグ]";
+		mes "うわぁ、君って";
+		mes "本当にすごいね！";
+		mes "僕も君くらい強くなりたいな。";
+		mes "子供でいるのって嫌になるよ！";
+		close;
+	}
+	mes "[ルイス・グレッグ]";
+	mes "何でローグになったかって？";
+	mes "こそこそするのが";
+	mes "好きなだけだよ。それに、";
+	mes "真面目に法律を守って";
+	mes "生きるのって大変すぎるしね？";
+	close;
+}
+
+in_rogue,268,125,2	script	トール・グレッグ#rogueguild::Thor Greg#rogueguild	86,{
+	if (BaseJob == Job_Rogue || Class == Job_Thief_High) {
+		if (ROG_SK < 1) {
+			mes "[トール・グレッグ]";
+			mes "父さんどこ行ったんだ？";
+			mes "あの怪しい奴らに";
+			mes "捕まってなきゃいいけどな。";
+			mes "運が良ければ";
+			mes "隠し部屋にいるはずだが、それでも…";
+			set ROG_SK,1;
+			close;
+		}
+		else if (ROG_SK == 1) {
+			mes "[トール・グレッグ]";
+			mes "うーん…父さんは";
+			mes "隠し部屋に";
+			mes "隠れてるのかもな。俺は";
+			mes "見つけたことないが、マーキーの話じゃ";
+			mes "入口は奴のすぐ左に";
+			mes "巧妙に隠されてるらしい。うーん…";
+			close;
+		}
+		else if (ROG_SK == 2) {
+			mes "[トール・グレッグ]";
+			mes "弟の^FF0000ルイス^000000を";
+			mes "探してるのか？";
+			mes "あいつはいつも";
+			mes "ローグギルドの^FF0000ホルグレヘン・ジュニア^000000の";
+			mes "近くにいるぞ。";
+			mes "何の用だ？";
+			close;
+		}
+		else if (ROG_SK == 3) {
+			mes "[トール・グレッグ]";
+			mes "それ何だ、";
+			mes "渡してるのは？ルイスからの";
+			mes "手紙か？見せてみろ…";
+			set ROG_SK,4;
+			next;
+			mes "[トール・グレッグ]";
+			mes "なんてこった、父さんが";
+			mes "大変なことに！すぐに";
+			mes "兄さんのジェイに";
+			mes "知らせなきゃ！急いでギルドの";
+			mes "^FF0000アントニオ・ジュニア^000000の近くにいる";
+			mes "^FF0000ジェイ^000000を探してくれ！た、頼む、急いでくれ！";
+			close;
+		}
+		else if (ROG_SK == 4) {
+			mes "[トール・グレッグ]";
+			mes "ジェイなら";
+			mes "ローグギルドの";
+			mes "アントニオ・ジュニアと一緒にいるはずだ。";
+			mes "俺が書いたこの手紙を";
+			mes "できるだけ早く届けてくれ！";
+			close;
+		}
+		else if (ROG_SK == 5) {
+			mes "[トール・グレッグ]";
+			mes "父さんが";
+			mes "ローグギルドの隠し部屋から";
+			mes "出ていってなきゃいいが。";
+			mes "そこだけが";
+			mes "父さんの安全な場所かもしれないからな…";
+			close;
+		}
+		else if (ROG_SK == 6) {
+			mes "[トール・グレッグ]";
+			mes "何だって？父さんが";
+			mes "お前にローグの秘密の技を";
+			mes "教えてやってくれって？";
+			mes "分かった、父さんと";
+			mes "同じやり方で鍛えてやる。";
+			mes "まず説明を聞くか？";
+			next;
+			mes "[トール・グレッグ]";
+			mes "説明が";
+			mes "要らないなら、";
+			mes "すぐに訓練場へ";
+			mes "送って^FF0000クローズコンファイン^000000を";
+			mes "覚えてもらうぞ。";
+			next;
+			if (select("説明を聞く:訓練場へ行く") == 1) {
+				mes "[トール・グレッグ]";
+				mes "よし、^FF0000クローズコンファイン^000000を";
+				mes "習得するための";
+				mes "最初の一歩は、敵の動きを";
+				mes "封じる技を極めることだ。";
+				mes "特別な訓練場に送るから";
+				mes "そこで練習してくるといい。";
+				next;
+				mes "[トール・グレッグ]";
+				mes "そこで訓練相手に";
+				mes "出会うはずだ。近づいて、";
+				mes "相手が左右どちらに動くか、";
+				mes "あるいは後退するかを";
+				mes "予測して封じるんだ。準備はいいか、今すぐ送るぞ…";
+				close2;
+				warp "in_rogue",89,114;
+				end;
+			}
+			warp "in_rogue",89,114;
+			end;
+		}
+		else if (ROG_SK == 7) {
+			mes "[トール・グレッグ]";
+			mes "よし、ここでちょっと";
+			mes "第四の壁を破るが、";
+			mes "お前は回線が切れて";
+			mes "戻ってきたんだろう。もう一度";
+			mes "訓練場に戻って";
+			mes "^FF0000クローズコンファイン^000000を習うか？";
+			next;
+			if (select("はい、お願いします。:いいえ、結構です。") == 1) {
+				mes "[トール・グレッグ]";
+				mes "よし、^FF0000クローズコンファイン^000000を";
+				mes "習得するための";
+				mes "最初の一歩は、敵の動きを";
+				mes "封じる技を極めることだ。";
+				mes "特別な訓練場に送るから";
+				mes "そこで練習してくるといい。";
+				next;
+				mes "[トール・グレッグ]";
+				mes "そこで訓練相手に";
+				mes "出会うはずだ。近づいて、";
+				mes "相手が左右どちらに動くか、";
+				mes "あるいは後退するかを";
+				mes "予測して封じるんだ。準備はいいか、今すぐ送るぞ…";
+				set ROG_SK,6;
+				close2;
+				warp "in_rogue",89,114;
+				end;
+			}
+			mes "[トール・グレッグ]";
+			mes "分かった、分かった。";
+			mes "訓練を再開する";
+			mes "気になったら、";
+			mes "声をかけてくれ。";
+			close;
+
+		}
+		else if (ROG_SK == 8) {
+			mes "[トール・グレッグ]";
+			mes "ああ、キエナから";
+			mes "訓練を終えたと";
+			mes "聞いたぞ。おめでとう！";
+			mes "それじゃあ父さんに話して";
+			mes "クローズコンファインについて詳しく説明してもらってくれ。";
+			set ROG_SK,9;
+			close;
+		}
+		else if (ROG_SK == 9) {
+			mes "[トール・グレッグ]";
+			mes "父さんに話して";
+			mes "クローズコンファインの";
+			mes "細かい使い方を";
+			mes "説明してもらってくれ。まだローグギルドの隠し部屋にいるはずだ。";
+			close;
+		}
+		else if (ROG_SK == 11) {
+			mes "[トール・グレッグ]";
+			mes "チェ・タクベは";
+			mes "敵に「俺はチェ・タクベだ。";
+			mes "お前は…？」と";
+			mes "言っておいて、相手が";
+			mes "答える前に";
+			mes "ボコボコにしてたらしいぜ。";
+			next;
+			mes "[トール・グレッグ]";
+			mes "本当に";
+			mes "ローグの間じゃ";
+			mes "伝説の英雄だよな…！";
+			close;
+		}
+		mes "[トール・グレッグ]";
+		mes "ふむ…？";
+		mes "お前、";
+		mes "俺よりずっと";
+		mes "強いみたいだな。";
+		mes "お前に手を出そうなんて";
+		mes "奴もそういないだろうよ…";
+		close;
+	}
+	mes "[トール・グレッグ]";
+	mes "はぁ、あれもこれも";
+	mes "掠め取って…はぁ。一番";
+	mes "情けないのは、盗んだ";
+	mes "そばから";
+	mes "Zenyを使っちまうことなんだよな。無責任にも程がある…";
+	close;
+}
+
+in_rogue,181,114,3	script	ジェイ・グレッグ#rogueguild::Jay Greg#rogueguild	85,{
+	if (BaseJob == Job_Rogue || Class == Job_Thief_High) {
+		if (ROG_SK < 1) {
+			mes "[ジェイ・グレッグ]";
+			mes "父さんはきっと";
+			mes "ローグギルドの隠し部屋に";
+			mes "隠れてるはずだ。不思議と";
+			mes "俺も兄弟たちも見つけられなくて、";
+			mes "無事かどうかも分からないんだ…";
+			set ROG_SK,1;
+			next;
+			mes "[ジェイ・グレッグ]";
+			mes "最近、怪しい奴らに";
+			mes "追われててな、";
+			mes "家族が脅されてるんだ。";
+			mes "まあ、父さんは";
+			mes "新しい技を教えてくれたばかりだから、";
+			mes "それで自分の身を守れるだろうけど…";
+			close;
+		}
+		else if (ROG_SK == 1) {
+			mes "[ジェイ・グレッグ]";
+			mes "父さんはたぶん";
+			mes "ローグギルドの隠し部屋に";
+			mes "隠れてるんだと思う。俺たちは";
+			mes "見つけられないんだが、";
+			mes "入口はマーキーの";
+			mes "近くのどこかに隠されてるらしい。";
+			close;
+		}
+		else if (ROG_SK == 2) {
+			mes "[ジェイ・グレッグ]";
+			mes "弟の";
+			mes "ルイスを探してるのか？";
+			mes "あいつはこのローグギルドにいるから、";
+			mes "見つけるのは";
+			mes "難しくないはずだ。たぶん";
+			mes "ホルグレヘン・ジュニアの近くに立ってるよ。";
+			close;
+		}
+		else if (ROG_SK == 3) {
+			mes "[ジェイ・グレッグ]";
+			mes "トールか？";
+			mes "ローグギルドの";
+			mes "どこかにいるはずだ。";
+			mes "ハーマンソーン・ジュニアの辺りは探してみたか？";
+			close;
+		}
+		else if (ROG_SK == 4) {
+			mes "[ジェイ・グレッグ]";
+			mes "俺宛の手紙…？";
+			mes "ああ、トールからか、";
+			mes "それならすぐに";
+			mes "読んでおくか。うーん…";
+			set ROG_SK,5;
+			next;
+			mes "[ジェイ・グレッグ]";
+			mes "なるほど…すぐに";
+			mes "ローグギルドに";
+			mes "報告して、父さんに";
+			mes "返事を送らなきゃな。よし、";
+			mes "今すぐ手紙を書くよ。";
+			mes "ちょっと待っててくれ…";
+			next;
+			mes "[ジェイ・グレッグ]";
+			mes "よし、書けたぞ。これを";
+			mes "できるだけ急いで";
+			mes "父さんに渡してくれ。";
+			mes "無理を言ってるのは分かってるが、";
+			mes "俺自身では隠し部屋への";
+			mes "行き方が分からないんだ…";
+			close;
+		}
+		else if (ROG_SK == 5) {
+			mes "[ジェイ・グレッグ]";
+			mes "俺の返事を";
+			mes "できるだけ早く";
+			mes "父さんに渡してくれ。まだ";
+			mes "ローグギルドの隠し部屋に";
+			mes "隠れてるはずだ。もっとも、";
+			mes "敵にまだ見つかってなければの話だけどな。";
+			close;
+		}
+		else if (ROG_SK == 6) {
+			mes "[ジェイ・グレッグ]";
+			mes "クローズコンファインの";
+			mes "訓練が必要なのか？";
+			mes "訓練場に入れるのは";
+			mes "トールだけだと思うから、";
+			mes "まず";
+			mes "あいつに話してみてくれ。";
+			close;
+		}
+		else if (ROG_SK == 7) {
+			mes "[ジェイ・グレッグ]";
+			mes "クローズコンファインの";
+			mes "訓練が必要なのか？";
+			mes "訓練場に入れるのは";
+			mes "トールだけだと思うから、";
+			mes "まず";
+			mes "あいつに話してみてくれ。";
+			close;
+		}
+		else if (ROG_SK == 8) {
+			mes "[ジェイ・グレッグ]";
+			mes "ああ、クローズコンファインの";
+			mes "訓練を終えたのか？";
+			mes "それなら兄さんの";
+			mes "トールに知らせに行ってくれ。";
+			close;
+		}
+		else if (ROG_SK == 9) {
+			mes "[ジェイ・グレッグ]";
+			mes "ふむ。父さんに話して";
+			mes "クローズコンファインについて";
+			mes "もっと詳しく";
+			mes "教えてもらったほうがいいな。";
+			mes "ローグギルドの隠し部屋で";
+			mes "見かけたか？";
+			close;
+		}
+		else if (ROG_SK == 12) {
+			mes "[ジェイ・グレッグ]";
+			mes "チェ・タクベって";
+			mes "頑固でガラの悪い";
+			mes "奴だったみたいだな。でも";
+			mes "自分で技を編み出すくらいだから";
+			mes "頭は相当良かったんだろうな。";
+			close;
+		}
+		mes "[ジェイ・グレッグ]";
+		mes "お前、いずれ";
+		mes "最高のローグの";
+		mes "一人になりそうだな。";
+		mes "もうそうなってるのかもしれないが。";
+		close;
+	}
+	mes "[ジェイ・グレッグ]";
+	mes "イントミデイトを";
+	mes "覚えてからというもの、";
+	mes "殴り合いが好きになってな、";
+	mes "ちょっとマゾっ気があるのかもな。";
+	mes "だって、技で殴られたら";
+	mes "同じ技で殴り返せるんだぜ！";
+	close;
+}
+
+prt_are01,150,150,0	script	#1strecog	-1,10,10,{
+OnTouch_:
+	donpcevent "#1st5min::OnEnable";
+	donpcevent "#1stmove::OnEnable";
+	disablenpc "#1strecog";
+	end;
+}
+
+prt_are01,135,135,0	script	#1st5min	-1,{
+OnInit:
+	disablenpc "#1st5min";
+	end;
+
+OnEnable:
+	enablenpc "#1st5min";
+	initnpctimer;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	disablenpc "#1st5min";
+	end;
+
+OnTimer1000:
+	mapannounce "prt_are01","クローズコンファイン訓練場へようこそ。5分後に自動的に外へ転送されます。",bc_map,"0x00ff00";
+	end;
+
+OnTimer290000:
+	mapannounce "prt_are01","20秒後に外へ転送されます。",bc_map,"0x00ff00";
+	end;
+
+OnTimer310000:
+	mapannounce "prt_are01","5秒後に外へ転送されます。",bc_map,"0x00ff00";
+	end;
+
+OnTimer315000:
+	mapannounce "prt_are01","ただいま外へ転送します。",bc_map,"0x00ff00";
+	disablenpc "Kienna#1st";
+	disablenpc "Kienna#2nd";
+	disablenpc "Kienna#3rd";
+	disablenpc "Kienna#4th";
+	disablenpc "Kienna#5th";
+	disablenpc "Kienna#6th";
+	disablenpc "Kienna#7th";
+	disablenpc "Kienna#8th";
+	donpcevent "#1stmove::OnDisable";
+	enablenpc "#1strecog";
+	donpcevent "Waiting Room#rogue10::OnEnable";
+	stopnpctimer;
+	mapwarp "prt_are01","in_rogue",264,124;
+	end;
+}
+
+prt_are01,135,135,0	script	#1stmove	-1,{
+OnInit:
+	disablenpc "#1stmove";
+	end;
+
+OnEnable:
+	enablenpc "#1stmove";
+	initnpctimer;
+	end;
+
+OnTimer3000:
+	mapannounce "prt_are01","1秒後にキエナが現れます。できるだけ近づいてください。",bc_map,"0x00ff00";
+	end;
+
+OnTimer5000:
+	switch(rand(1,8)) {
+	case 1:
+		enablenpc "Kienna#1st";
+		break;
+	case  2:
+		enablenpc "Kienna#2nd";
+		break;
+	case  3:
+		enablenpc "Kienna#3rd";
+		break;
+	case  4:
+		enablenpc "Kienna#4th";
+		break;
+	case  5:
+		enablenpc "Kienna#5th";
+		break;
+	case  6:
+		enablenpc "Kienna#6th";
+		break;
+	case  7:
+		enablenpc "Kienna#7th";
+		break;
+	case 8:
+		enablenpc "Kienna#8th";
+	}
+	end;
+
+OnTimer8000:
+	disablenpc "Kienna#1st";
+	disablenpc "Kienna#2nd";
+	disablenpc "Kienna#3rd";
+	disablenpc "Kienna#4th";
+	disablenpc "Kienna#5th";
+	disablenpc "Kienna#6th";
+	disablenpc "Kienna#7th";
+	disablenpc "Kienna#8th";
+	end;
+
+OnTimer9000:
+	stopnpctimer;
+	donpcevent "#1stmove::OnEnable";
+	mapwarp "prt_are01","prt_are01",150,150;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	disablenpc "#1stmove";
+	end;
+}
+
+prt_are01,149,162,0	script	キエナ#1st::Kienna#1st	700,1,1,{
+	end;
+OnTouch_:
+	callfunc "F_Kienna",strnpcinfo(2);
+	end;
+}
+prt_are01,136,150,0	duplicate(Kienna#1st)	キエナ#2nd::Kienna#2nd	700,1,1
+prt_are01,150,138,0	duplicate(Kienna#1st)	キエナ#3rd::Kienna#3rd	700,1,1
+prt_are01,163,147,0	duplicate(Kienna#1st)	キエナ#4th::Kienna#4th	700,1,1
+prt_are01,134,140,0	duplicate(Kienna#1st)	キエナ#5th::Kienna#5th	700,1,1
+prt_are01,161,140,0	duplicate(Kienna#1st)	キエナ#6th::Kienna#6th	700,1,1
+prt_are01,161,160,0	duplicate(Kienna#1st)	キエナ#7th::Kienna#7th	700,1,1
+prt_are01,138,159,0	duplicate(Kienna#1st)	キエナ#8th::Kienna#8th	700,1,1
+
+function	script	F_Kienna	{
+	if (ROG_SK == 6) {
+		donpcevent "#1stmove::OnDisable";
+		mes "[キエナ]";
+		mes "それでは、この訓練では";
+		mes "私がどちらへ動くかを";
+		mes "予測して、私の動きを";
+		mes "塞いでもらいます。つまり";
+		mes "私を身動き取れなくするんです。";
+		mes "準備はいいですか～";
+		set ROG_SK,7;
+		next;
+		for(set .@lim_1,0; .@lim_1<10; set .@lim_1,.@lim_1+1) {
+			set .@move_1,rand(1,3);
+			if (select("左を塞ぐ:右を塞ぐ:退路を塞ぐ") == .@move_1) {
+				mes "[キエナ]";
+				mes "あら…？";
+				mes "塞がれちゃいました！";
+				mes "とても上手です～";
+				specialeffect EF_POTION1;
+				specialeffect2 EF_POTION7;
+				set .@suc_1,.@suc_1 + 1;
+			}
+			else {
+				mes "[キエナ]";
+				mes "残念ですが、";
+				mes "その方向には動いていませんでした。";
+				mes "塞ぐのは失敗です…";
+			}
+			next;
+		}
+		mes "[キエナ]";
+		mes "はい、これで";
+		mes "終わりです。あなたの成績は";
+		switch(.@suc_1) { 
+		case 10:
+			mes "「^0000FFS^000000」でした。";
+			mes "満点です！";
+			break;
+		case 9:
+			mes "「^0000FFA^000000」でした。";
+			mes "本当に上手ですね！";
+			break;
+		case 8:
+			mes "「^0000FFB +^000000」でした。";
+			mes "とても立派です！";
+			break;
+		case 7:
+			mes "「^0000FFB^000000」でした。";
+			mes "とても良い出来です～";
+			break;
+		case 6:
+			mes "「^0000FFC +^000000」でした。";
+			mes "悪くないですが、";
+			mes "ギリギリの合格ですね！";
+			break;
+		case 5:
+			mes "「^FF0000C^000000」でした。";
+			break;
+		case 4:
+			mes "「^FF0000D+^000000」でした。";
+			break;
+		case 3:
+			mes "「^FF0000D^000000」でした。";
+			break;
+		case 2:
+			mes "「^FF0000F^000000」でした。";
+			break;
+		case 1:
+			mes "「^FF0000F -^000000」でした。";
+			break;
+		case 0:
+			mes "成績は…";
+			mes "実は計算できません。";
+			mes "一体";
+			mes "何が起きたんでしょう！？";
+		}
+		next;
+		if (.@suc_1 > 5) {
+			mes "[キエナ]";
+			mes "嬉しいことに、";
+			mes "訓練は";
+			mes "終了です！それでは";
+			mes "トール・グレッグのもとへ";
+			mes "戻して差し上げます、";
+			mes "^FF0000クローズコンファイン^000000を最後まで習得してくださいね。";
+			set ROG_SK,8;
+			disablenpc "Kienna#"+getarg(0);
+			donpcevent "#1st5min::OnDisable";
+			enablenpc "#1strecog";
+			close2;
+			donpcevent "Waiting Room#rogue10::OnEnable";
+			warp "in_rogue",264,124;
+			end;
+		}
+		else {
+			mes "[キエナ]";
+			mes "うーん。この成績だと、";
+			mes "まだクローズコンファインの";
+			mes "習得を終えるには";
+			mes "早いと思います。";
+			mes "もう一度訓練を";
+			mes "やり直しますか？";
+			next;
+			if (select("はい！:いいえ、結構です。") == 1) {
+				disablenpc "Kienna#"+getarg(0);
+				donpcevent "#1stmove::OnEnable";
+				set ROG_SK,6;
+				warp "prt_are01",150,150;
+				end;
+			}
+			disablenpc "Kienna#"+getarg(0);
+			donpcevent "#1st5min::OnDisable";
+			enablenpc "#1strecog";
+			set ROG_SK,6;
+			donpcevent "Waiting Room#rogue10::OnEnable";
+			warp "in_rogue",264,124;
+			end;
+		}
+	}
+	else if (ROG_SK == 7) {
+		mes "[キエナ]";
+		mes "訓練の途中で";
+		mes "中断してしまったようですね。";
+		mes "申し訳ありませんが、";
+		mes "この訓練は";
+		mes "最初からやり直して";
+		mes "いただくことになります。";
+		set ROG_SK,6;
+		close2;
+		disablenpc "Kienna#"+getarg(0);
+		donpcevent "#1stmove::OnEnable";
+		warp "prt_are01",150,150;
+		end;
+	}
+	else if (ROG_SK == 8) {
+		mes "[キエナ]";
+		mes "クローズコンファインの";
+		mes "訓練は";
+		mes "もう終わっていますよ。";
+		mes "もう私の手助けは";
+		mes "必要ありません。";
+		close2;
+		donpcevent "Waiting Room#rogue10::OnEnable";
+		warp "in_rogue",264,124;
+		end;
+	}
+	else {
+		mes "[キエナ]";
+		mes "申し訳ありませんが、";
+		mes "ここに用はないようですね。";
+		mes "迷っているなら";
+		mes "ローグギルドへ送りましょう…";
+		close2;
+		donpcevent "Waiting Room#rogue10::OnEnable";
+		warp "in_rogue",264,124;
+		end;
+	}
+
+OnInit:
+	disablenpc "Kienna#1st";
+	disablenpc "Kienna#2nd";
+	disablenpc "Kienna#3rd";
+	disablenpc "Kienna#4th";
+	disablenpc "Kienna#5th";
+	disablenpc "Kienna#6th";
+	disablenpc "Kienna#7th";
+	disablenpc "Kienna#8th";
+	end;
+}
+
+in_rogue,88,119,3	script	待合室#rogue10::Waiting Room#rogue10	828,{
+OnEnable:
+	enablenpc "Waiting Room#rogue10";
+	enablewaitingroomevent "Waiting Room#rogue10";
+	end;
+
+OnInit:
+	waitingroom "訓練場",10,"Waiting Room#rogue10::OnStartArena",1;
+	enablewaitingroomevent "Waiting Room#rogue10";
+	end;
+
+OnStartArena:
+	warpwaitingpc "prt_are01",150,150;
+	disablewaitingroomevent "Waiting Room#rogue10";
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//= Somehow eA engine doesn't let you keep learn't skill V_V'
+//= 1.2 Added to correct locations, correct NPC's, fixed
+//= some of the items required and made them into real
+//= quests. [Reddozen] 
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a fixed an item ID typo, thx 2Spiritual Kid
+//= 1.3b Splitted into different files [DracoRPG]
+//============================================================

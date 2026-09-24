@@ -1,0 +1,403 @@
+//===== rAthena Script ======================================= 
+//= Valkyrie Realm
+//===== By: ==================================================
+//= Nana, fixes by Poki
+//= finished, optimized and tested by Lupus
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 3.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quest to become a Tranceded Class. (Advanced/Rebirthed)
+//===== Additional Comments: ================================= 
+//= 1.1 Made all into functions,additional checks,quest skills,now Valhallana can return you back. She also makes reborn process only when you got no Zeny/items (as in kRO) [Lupus]
+//= 1.2 now alternative classes can use their 1-1 job NPC to become Advanced 1st Class [Lupus]
+//= 1.4 added Baby Class support [Lupus]
+//= 1.5 Fixed loads of gramatical errors. [Mass Zero]
+//= 1.6 Added a func which prevent advanced classes passing 2nd Job Quests again. It also guides adv classes where to go. [Lupus]
+//= 1.7 On reborn reset some Job Quest Vars and Reset Girls Counter [Lupus]
+//= 1.8 Added Taekwondo classes check [Lupus]
+//= 1.9 Added support for Job NPC Fase pics, sorrected one dialogue stuff [Lupus]
+//= 2.0 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 2.1 Changed all numbers into constants. [Vicious]
+//= 2.2 Now ALL quests skills are saved/restored [Lupus]
+//= 2.3 Removed Duplicates [Silent]
+//= 2.4 Fixed typos, optimized [Lupus]
+//= 2.5 Fixed a stuck bug [Lupus]
+//= 2.6a Adding proper dialogues [Lupus]
+//= 2.7 Rescripted to Aegis 10.3 standards. [L0ne_W0;f]
+//=     Removed all functions as they are no longer required.
+//=     Correct job level requirements for 1-1 -> 2-x.
+//= 2.7a Added Function "F_BlockHigh" back in until rewriteing of the 2-x [L0ne_W0lf]
+//=     scripts are comepleted.
+//= 2.7b Removed function "F_BlockHigh" as it's no longer used. [L0ne_W0lf]
+//= 2.8 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.9 Corrected Valkyrie case spicifying where to warp after rebirthing. [L0ne_W0lf]
+//= 2.9b Fixed Verdandi typo, fixed resetting vars [Lupus]
+//= 3.0 Added quest log commands. [L0ne_W0lf]
+//= 3.1 Added Izlude Renewal coordinates.
+//============================================================ 
+
+valkyrie,48,86,4	script	バルキリー#::Valkyrie#	811,{
+	if (ADVJOB != 0 || Upper == 1) {
+		mes "[バルキリー]";
+		mes "ようこそ";
+		mes "栄誉の殿堂";
+		mes "ヴァルハラへ。";
+		next;
+		mes "[バルキリー]";
+		mes "どうぞ";
+		mes "くつろいで";
+		mes "お過ごしください。";
+		mes "戦士たちに栄光あれ！";
+		close;
+	}
+	else if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		mes "[バルキリー]";
+		mes "ようこそ";
+		mes "栄誉の殿堂";
+		mes "ヴァルハラへ。";
+		next;
+		mes "[バルキリー]";
+		mes "あなたは今、";
+		mes "現在の生を終え、";
+		mes "全く新しい人生を歩み始める。";
+		mes "戦士たちに栄光あれ！";
+		next;
+		if (Weight > 0 || Zeny > 0 || checkcart() != 0 || checkfalcon() != 0 || checkriding() != 0) {
+			mes "[バルキリー]";
+			mes "始める前に";
+			mes "いくつかしておくべきことがある。";
+			mes "まずは心身を空にしなさい。";
+			mes "あらゆる私欲を";
+			mes "捨てたとき、栄誉は訪れる……";
+			next;
+			mes "[バルキリー]";
+			mes "次の生に何も持っていくことはできない。所持品、Zeny、ペット、カートは全て置いていく必要がある。";
+			next;
+			mes "[バルキリー]";
+			mes "準備ができたら";
+			mes "私のもとへ";
+			mes "戻ってきなさい、勇敢な冒険者よ。";
+			close2;
+			warp "yuno_in02",93,205;
+			end;
+		}
+		else {
+			mes "[バルキリー]";
+			mes "あなたは既に";
+			mes "あらゆる俗世の執着から";
+			mes "解き放たれているようだ、";
+			mes ""+ strcharinfo(0) +"。";
+			next;
+			mes "[バルキリー]";
+			mes "あなたのような冒険者にとって、それは立派な心がけだ。人類のためにあらゆる私欲を捨てたとき、栄誉は訪れる。";
+			next;
+			if (SkillPoint) {
+				mes "[バルキリー]";
+				mes "ふむ……感じるぞ、";
+				mes "まだ現世に";
+				mes "未練や";
+				mes "やり残したことがあるようだな。それを片付け、";
+				mes "今の生に区切りをつけてきなさい。";
+				close2;
+				warp "yuno_in02",93,205;
+				end;
+			}
+			mes "[バルキリー]";
+			mes "それでは、";
+			mes "今の記憶を全て消し去ろう……";
+			mes "だが、";
+			mes "この生で最も誇り高き";
+			mes "瞬間だけは覚えていられるだろう。";
+			next;
+			mes "[バルキリー]";
+			mes "一つで、";
+			mes "女神ウルドに頼み";
+			mes "今のあなたの";
+			mes "記憶を全て";
+			mes "消し去ってもらおう。";
+			next;
+			mes "[バルキリー]";
+			mes "二つで、";
+			mes "女神ヴェルダンディに頼み";
+			mes "今のあなたの生で";
+			mes "最も誇り高き瞬間を留め、記録してもらおう。";
+			next;
+			mes "[バルキリー]";
+			mes "三つで、";
+			mes "女神スクルドに頼み";
+			mes "あなたを";
+			mes "次の生へ";
+			mes "導いてもらおう。";
+			next;
+			mes "[バルキリー]";
+			mes "一……";
+			callfunc "F_ClearJobVar";
+			next;
+			mes "[バルキリー]";
+			mes "一……";
+			mes "二…………";
+			next;
+			mes "[バルキリー]";
+			mes "一……";
+			mes "二…………";
+			mes "そして三。";
+			set ADVJOB, Class+Job_Novice_High; //memo the target 3rd Job ID
+			if(ADVJOB == Job_Lord_Knight2) set ADVJOB,Job_Lord_Knight;
+			if(ADVJOB == Job_Paladin2) set ADVJOB,Job_Paladin;
+			jobchange Job_Novice_High;
+			resetlvl(1);
+			set MISC_QUEST,MISC_QUEST & ~1024;//<-reset Skill Reset Event
+			skill "NV_FIRSTAID",1,SKILL_PERM;
+			skill "NV_TRICKDEAD",1,SKILL_PERM;
+			completequest 1000;
+			next;
+			mes "[バルキリー]";
+			mes "おめでとう。";
+			mes "あなたは今、";
+			mes "全く新しい人生に生まれ変わった。";
+			mes "新たな冒険への備えとして、";
+			mes "ささやかな贈り物を受け取ってほしい。";
+			getitem 1202,1; //Knife_
+			getitem 2302,1; //Cotton_Shirt_
+			next;
+			mes "[バルキリー]";
+			mes "女神ウルドが授けてくれた解放が、あなたにとって恵みとなりますように。ヴェルダンディが記録した記憶が、いつまでもあなたに誇りをもたらしますように。";
+			next;
+			mes "[バルキリー]";
+			mes "そして、女神スクルドが導く新たな生が、これまでの生よりもさらに誇り高きものとなりますように。";
+			close2;
+			switch (ADVJOB) {
+			case 4008:
+			case 4015:
+				if (checkre(0)) warp "izlude",129,97;
+				else warp "izlude",94,103;
+				break;
+			case 4009:
+			case 4016:
+				warp "prontera",273,354; break;
+			case 4010:
+			case 4017:
+				warp "geffen",120,60; break;
+			case 4011:
+			case 4019:
+				warp "alberta",116,57; break;
+			case 4012:
+			case 4020:
+			case 4021:
+				warp "payon",69,100; break;
+			case 4013:
+			case 4018:
+				warp "morocc",154,50; break;
+			default:
+				warp "yuno_in02",93,205; break;
+			}
+			end;
+		}
+	}
+	else {
+		mes "[バルキリー]";
+		mes "ようこそ";
+		mes "栄誉の殿堂";
+		mes "ヴァルハラへ。";
+		next;
+		mes "[バルキリー]";
+		mes "残念だが、あなたはまだここへ招かれていない。直ちに立ち去ってもらいたい。戦士たちに栄光あれ！";
+		close2;
+		warp "yuno_in02",93,205;
+		end;
+	}
+}
+
+yuno_in02,88,164,5	script	メテウス・シルフェ#Library::Metheus Sylphe#Library	742,{
+	if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		if (valkyrie_Q == 0) {
+			mes "[メテウス・シルフェ]";
+			mes "シュバイヒルビル魔法学院の図書館へようこそ。";
+			mes "おそらく";
+			mes "「イミルの書」を読みに来たのだろう。";
+			next;
+			mes "[メテウス・シルフェ]";
+			mes "残念ながら、原本は経年により傷んでしまってな。現在は写しのみを一般公開している。";
+			next;
+			mes "[メテウス・シルフェ]";
+			mes "また、「イミルの書」の原本を保存するため、用意した写しを読みたい者から寄付を募ることにしたのだ。";
+			next;
+			mes "[メテウス・シルフェ]";
+			mes "寄付の";
+			mes "目安額は";
+			mes "1,285,000Zenyだ。";
+			next;
+			if (select("寄付する:やめる") == 1) {
+				if (Zeny >= 1285000) {
+					set Zeny, Zeny-1285000;
+					set valkyrie_Q,1;
+					mes "[メテウス・シルフェ]";
+					mes "ありがとう、その寄付は有意義に使われる。";
+					mes "さあ、中に入って書を読むといい。";
+					close;
+				}
+				mes "[メテウス・シルフェ]";
+				mes "残念だが、今は十分なZenyを持っていないようだ。資金を確認して、また来てくれ。";
+				close;
+			}
+			mes "[メテウス・シルフェ]";
+			mes "ゆっくりと、";
+			mes "旅を楽しんでくれ。";
+			close;
+		}
+		mes "[メテウス・シルフェ]";
+		mes "重ねて、気前の良い寄付に感謝する。「イミルの書」の写しは好きなときに読んでくれて構わない。";
+		close;
+	}
+	mes "[メテウス・シルフェ]";
+	mes "シュバイヒルビル魔法学院の図書館へようこそ。";
+	mes "ここには数えきれないほどの書物がある。ゆっくり見て回ってくれ。";
+	close;
+}
+
+yuno_in02,93,207,1	script	Book of Ymir	111,{
+	if (ADVJOB != 0 || Upper == 1) {
+		mes "[イミルの書]";
+		mes "……栄誉の殿堂への入口は、次の生へと歩みを進めた者すべてに開かれている。それは英雄たちが望むものを決める手助けをし、この世界のどこへでも導くことができる。";
+		next;
+		mes "[イミルの書]";
+		mes "栄誉の殿堂には、英雄のためにあらゆるものが用意されている。この現実では叶えられぬ願いも、栄誉の殿堂でなら実現できるという噂だ。";
+		next;
+		if (select("読むのをやめる:読み続ける") == 1) {
+			mes "[イミルの書]";
+			mes "……";
+			close;
+		}
+		mes "[イミルの書]";
+		mes "天に最も近きこの場所、栄誉の殿堂へと続く忘れられた道がある。凡人がこの場所を見つけることは決してない……";
+		close2;
+		warp "valkyrie",48,8;
+		end;
+	}
+	else if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		if (valkyrie_Q != 0) {
+			mes "[イミルの書]";
+			mes "……それゆえ、古の英雄たちは";
+			mes "常に苦悩していた。";
+			mes "いずれは死すべき者として";
+			mes "この世を去ることを知っていたから……";
+			next;
+			mes "[イミルの書]";
+			mes "死後の生について記した";
+			mes "文書も、歌も、伝承も残ってはいなかった。だが最近、バルキリーに関する";
+			mes "古い巻物を発見した……";
+			next;
+			mes "[イミルの書]";
+			mes "バルキリー……";
+			mes "伝説の";
+			mes "守護天使。";
+			mes "ラグナロクの天使。";
+			next;
+			mes "[イミルの書]";
+			mes "偉大な力と";
+			mes "勇気を持つ冒険者は、";
+			mes "バルキリーによって栄誉の殿堂、";
+			mes "ヴァルハラへと導かれる。";
+			mes "そこで、新たな生を与えられるのだ。";
+			next;
+			mes "[イミルの書]";
+			mes "生まれ変わった者は、";
+			mes "さらに偉大な英雄として";
+			mes "再びこの世を照らす。";
+			mes "疲れ果てた体には";
+			mes "再び力が満ちるだろう……";
+			next;
+			mes "[イミルの書]";
+			mes "そしてその魂には、イミルの心臓による力が与えられる。しかし、ルーンミッドガッツの戦いの後、イミルの心臓は完全に砕け、世界中に散らばってしまった。";
+			next;
+			mes "[イミルの書]";
+			mes "私は長い長い年月をかけて、";
+			mes "わずかなイミルの心の欠片を";
+			mes "見つけ出した。だが";
+			mes "科学的な検証だけでは、";
+			mes "バルキリーとヴァルハラの物語が";
+			mes "真実かどうか確かめられない。";
+			next;
+			mes "[イミルの書]";
+			mes "だから私は、未来の誰かがバルキリーとヴァルハラの実在を";
+			mes "確かめてくれることを願い、この記録を残しておく……";
+			next;
+			set valkyrie_Q,2;
+			if(checkquest(1000) == -1) {
+				setquest 1000;
+			}
+			mes "[イミルの書]";
+			mes "英雄たちに新たな生を与え、";
+			mes "世界を危機から";
+			mes "守らせるのだ。そして……";
+			close;
+		}
+		mes "[イミルの書]";
+		mes "……";
+		close;
+	}
+	mes "[イミルの書]";
+	mes "……";
+	close;
+}
+
+yuno_in05,49,43,1	script	Heart of Ymir	111,{
+	if (BaseLevel > 98 && JobLevel > 49 && Class >= Job_Knight && Class <= Job_Crusader2) {
+		if (valkyrie_Q == 2) warp "valkyrie",48,8;
+	}
+	end;
+}
+
+valkyrie,44,33,5	script	テレポーター::Teleporter	124,{
+	if (Upper != 1) {
+		set .@karma_d,rand(1,10);
+		if (.@karma_d > 4) {
+			mes "[テレポーター]";
+			mes "おめでとう。";
+			mes "戦士たちに栄光あれ！";
+			close;
+		}
+		mes "[テレポーター]";
+		mes "展示品には";
+		mes "手を触れないよう";
+		mes "お願いします。";
+		mes "…………";
+		close;
+	}
+	else {
+		mes "[テレポーター]";
+		mes "名誉ある者よ、";
+		mes "どこへ行きたい？";
+		next;
+		switch(select("プロンテラ:モロク:フェイヨン:ゲフェン:アルベルタ:イズルード:アルデバラン:コモド:ジュノー")) {
+		case 1: callsub S_Warpchar,"prontera",116,72;
+		case 2: callsub S_Warpchar,"morocc",156,46;
+		case 3: callsub S_Warpchar,"payon",69,100;
+		case 4: callsub S_Warpchar,"geffen",120,39;
+		case 5: callsub S_Warpchar,"alberta",117,56;
+		case 6:
+			if (checkre(0)) callsub S_Warpchar,"izlude",129,97;
+			else callsub S_Warpchar,"izlude",94,103;
+		case 7: callsub S_Warpchar,"aldebaran",91,105;
+		case 8: callsub S_Warpchar,"comodo",209,143;
+		case 9: callsub S_Warpchar,"yuno",328,101;
+		}
+	}
+S_WarpChar:
+	mes "[テレポーター]";
+	mes "良い旅を。";
+	close2;
+	savepoint getarg(0),getarg(1),getarg(2),1,1;
+	warp getarg(0),getarg(1),getarg(2);
+	end;
+}
+
+// Warps
+//============================================================ 
+valkyrie,48,73,0	warp	valk01#1	1,1,valkyrie,48,64
+valkyrie,48,66,0	warp	valk01#2	1,1,valkyrie,48,75
+

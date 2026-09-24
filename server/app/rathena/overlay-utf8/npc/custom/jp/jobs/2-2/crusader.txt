@@ -1,0 +1,1458 @@
+//===== rAthena Script ======================================= 
+//= Crusader Job Quest
+//===== By: ================================================== 
+//= Made by: Black Dragon
+//= Converted by: Shin
+//===== Current Version: ===================================== 
+//= 3.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Crusader classes
+//===== Additional Comments: ================================= 
+//= 2.2 Updated All NPCs to the officials one [Samuray22]
+//=     -Based on the ASB 4.0 Package.
+//=-Maybe need be checked the monsters in the test 2 and 4.
+//= 2.3 Fixed some bugs that prevented from going further. [SinSloth]
+//= 2.4 Updated NPC dialogs using Aegis 10.3 files. [L0ne_W0lf]
+//=    - Fixed logic error with job change reward for job 50 swordies.
+//=    - Completely redid the 1st and third tests.
+//=    - Optimized first four NPC scripts slightly.
+//=    - Temporary character variables "@" are now ".@"
+//=    - Fixed some indentation.
+//= 2.5 Fixed some spelling and grammar in crusader quest. [L0ne_W0lf]
+//= 2.6 Fixed bug (about totally blocked baby class), optimized,
+//=     made some NPC more unique names: Monster Summon#cr1 [Lupus]
+//= 2.7 Fixed Some variables like ".@item", and changed to "@item". [Samuray22]
+//= 2.8 Fixed a little minor bug. [Samuray22]
+//= 2.9 Minor fixes, typos, an incorrect answer. Thanks to yyCC. [L0ne_W0lf]
+//= 2.9a Deleted unused variables. [Samuray22]
+//= 3.0 Updated waiting room. (Removes global var) [L0ne_W0lf]
+//= 3.1 Adding Hermemton's changes. [L0ne_W0lf]
+//= 3.2 Added Quest Log commands. [Kisuka]
+//= 3.3 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 4.0 Split for renewal ep16.1 [Capuche]
+//============================================================
+
+// Senior Crusader: 1st Collect Items Test
+//============================================================
+-	script	Senior Crusader_	-1,{
+	mes "[マイケル・ヘイリグ]";
+	if (Upper == 1) { //the baby classes were totally blocked... due to missing == 1
+		mes "来たるべき聖戦に備え、己を鍛錬してくるがよい。勝利は、それを受け入れる備えの最もできた者の手に渡るのだ。";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "ここはお前の来るべき場所ではない、友よ。";
+		mes "引き続き己を磨くことを勧める。";
+		close;
+	} 
+	else if(BaseJob != Job_Swordman) {
+		if(BaseJob == Job_Crusader) {
+			mes "来たるべき聖戦に備え、己を鍛錬してくるがよい。勝利は、それを受け入れる備えの最もできた者の手に渡るのだ。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "いつの日か混沌が、我らの掲げる平和・正義・秩序の理念に挑んでくるであろう。悪を根絶し、理想の世界を築くまで、鍛錬を止めてはならぬ。";
+			close;
+		}
+		else if(BaseJob == Job_Novice) {
+			mes "我らはクルセイダー、";
+			mes "来たるべき聖戦に";
+			mes "備える戦士たちだ。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "我らに加わりたいのなら、まず剣士としての鍛錬を積み、己を徹底的に鍛え上げねばならぬ…";
+			close;
+		}
+		mes "我らはクルセイダー、";
+		mes "来たるべき聖戦に";
+		mes "備える戦士たちだ。";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "千年前にそうであったように、いつか悪しき勢力が再び群れをなして押し寄せ、この世界を我がものにせんとするであろう。";
+		close;
+	} 
+	else if(CRUS_Q <= 3 && countitem(1004) && countitem(1009)) {
+		mes "ああ…";
+		mes "クルセイダーとしての召命を受けたようだな。お前の意志は確かなものと見受けるが、これよりお前の力量を試させてもらう。";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "プロンテラ城の地下ダンジョンで鍛錬しているムーレナク・ミヨルに会いに行け。まずは彼と話すのだ。";
+		next;
+		delitem 1004, 1;
+		delitem 1009, 1;
+		set CRUS_Q,4;
+		mes "[マイケル・ヘイリグ]";
+		mes "ムーレナクや他の者たちが、お前の力の限界を試し、進むべき道を見出す手助けをしてくれるだろう。彼らの試練を終えたら、わしのもとへ戻ってくるのだ…";
+		close;
+	}
+	else if(CRUS_Q == 0) {
+		mes "我らはクルセイダー、聖戦に備える戦士たちだ。";
+		mes "何用があって";
+		mes "ここへ参った？";
+		next;
+		if (select("聖戦への備えをしたいのです！:特に用はありません。") == 1) {
+			mes "[マイケル・ヘイリグ]";
+			mes "クルセイダーに";
+			mes "なりたいというのか…？";
+			mes "我らに加わることは";
+			mes "口で言うほど容易くはないぞ。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "わしはマイケル・ヘイリグ。聖戦に備える数多のクルセイダーの一人にすぎぬ。我らは真摯な信仰と尽きせぬ忠誠をもって、絶えず己を鍛え続けている。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "我らが迎え入れるのは、卓越した信仰を示す剣士、あるいは";
+			mes "オーディンの意志によって戦士として生まれた者たちだ。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "^3355FF騎士団の紋章^000000と^3355FF神の手^000000を持つことは、クルセイダーとなる召命を受けた証とされている。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "それらのアイテムを手に入れ、我らの試練に合格すれば、お前もクルセイダーになれるだろう。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "もっとも、今のお前がどのような人物かは分からぬ。だが";
+			mes "望むなら試練を与えよう。聖戦への備えとして、この試練に耐える覚悟はあるか？";
+			next;
+			if (select("はい、あります。:少し考えさせてください。") == 1) {
+				if(JobLevel < 40) {
+					mes "[マイケル・ヘイリグ]";
+					mes "待て…";
+					mes "まだ準備が整っておらぬ。";
+					mes "クルセイダーになるには";
+					mes "最低でもジョブレベル40が";
+					mes "必要だ。";
+					next;
+					mes "[マイケル・ヘイリグ]";
+					mes "剣士としてさらに鍛錬を積み、召命を待つがよい。お前の意志は分かるが、今のままでは我らに加わることはできぬ。";
+					close;
+				} 
+				if (SkillPoint) {
+					mes "[マイケル・ヘイリグ]";
+					mes "剣士として学ぶべきことをまだ全て修めておらぬ。残っているスキルポイントを全て使い切ってから、わしのもとへ戻ってくるがよい。";
+					close;
+				}
+				mes "[マイケル・ヘイリグ]";
+				mes "それでは…";
+				mes "お前がクルセイダーにふさわしいか、試させてもらう。";
+				next;
+				mes "[マイケル・ヘイリグ]";
+				mes "お前の名は";
+				mes "" + strcharinfo(0) + "…か？";
+				mes "確かめてみるとしよう…";
+				next;
+				if (countitem(1004) && countitem(1009)) {
+					mes "[マイケル・ヘイリグ]";
+					mes "ああ…";
+					mes "クルセイダーとしての召命を受けたようだな。お前の意志は確かなものと見受けるが、これよりお前の力量を試させてもらう。";
+					next;
+					mes "[マイケル・ヘイリグ]";
+					mes "プロンテラ城の地下ダンジョンで鍛錬しているムーレナク・ミヨルに会いに行け。まずは彼と話すのだ。";
+					next;
+					delitem 1004, 1;
+					delitem 1009, 1;
+					set CRUS_Q,4;
+					setquest 3009;
+					mes "[マイケル・ヘイリグ]";
+					mes "ムーレナクや他の者たちが、お前の力の限界を試し、進むべき道を見出す手助けをしてくれるだろう。彼らの試練を終えたら、わしのもとへ戻ってくるのだ…";
+					close;
+				}
+				mes "[マイケル・ヘイリグ]";
+				mes "うむ。お前にクルセイダーとしての心があるかどうかは、まだ判じかねる。だが意志を持ち、努力を尽くすなら、その資質はあるやもしれぬ。";
+				next;
+				mes "[マイケル・ヘイリグ]";
+				mes "さて…";
+				mes "これがお前への試練だ。以下の品を持ってきて、お前の覚悟を証明してみせよ。";
+				next;
+				mes "[マイケル・ヘイリグ]";
+				set .@cru_m1,rand(1,3);
+				if(.@cru_m1 == 1) {
+					set CRUS_Q, 1;
+					setquest 3006;
+					mes "10 ^3355FF"+getitemname(957)+"^000000";
+					mes "10 ^3355FF"+getitemname(959)+"^000000";
+					mes "10 ^3355FF"+getitemname(1099)+"^000000";
+					mes "10 ^3355FF"+getitemname(901)+"^000000";
+					next;
+				}
+				else if(.@cru_m1 == 2) {
+					set CRUS_Q, 2;
+					setquest 3007;
+					mes "10 ^3355FF"+getitemname(932)+"^000000";
+					mes "10 ^3355FF"+getitemname(1043)+"^000000";
+					mes "10 ^3355FF"+getitemname(1098)+"^000000";
+					mes "10 ^3355FF"+getitemname(1094)+"^000000";
+					next;
+				}
+				else {
+					set CRUS_Q, 3;
+					setquest 3008;
+					mes "10 ^3355FF"+getitemname(958)+"^000000";
+					mes "10 ^3355FF"+getitemname(930)+"^000000";
+					mes "10 ^3355FF"+getitemname(1041)+"^000000";
+					mes "10 ^3355FF"+getitemname(1062)+"^000000";
+					next;
+				}
+				mes "[マイケル・ヘイリグ]";
+				mes "これらの品を集め、お前の意志の強さを示してみせよ。成し遂げれば、次の試練へ進むことになる。オーディンの加護のあらんことを。";
+				close;
+			}
+			mes "[マイケル・ヘイリグ]";
+			mes "聖戦がいつ訪れるかは誰にも分からぬ。我らは前もって備え、";
+			mes "鍛錬を怠るわけにはいかぬのだ。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "聖戦への参加こそ己の召命だと感じるなら、すぐに戻ってきて、";
+			mes "クルセイダーとなる試練を受けるがよい。";
+			close;
+		}
+		mes "[マイケル・ヘイリグ]";
+		if (Sex == SEX_MALE) mes "お前もまた剣を持つ男であるなら、絶えず鍛錬を積み、備えるがよい。聖戦がいつ始まるかは誰にも分からぬのだからな。";
+		else mes "剣を持つ女であるならば、たゆまず絶えず鍛錬を積まねばならぬ。聖戦がいつ訪れるとも知れぬのだから、備えを怠るな。";
+		close;
+	}
+	else if(CRUS_Q >= 1 && CRUS_Q <= 3) {
+		mes "わしが与えた課題でお前の覚悟を証明したか、あるいは召命を受けた証となる品を持っておるか？";
+		next;
+		switch(CRUS_Q) {
+		case 1:
+			set .@item1, 957;
+			set .@item2, 959;
+			set .@item3, 1099;
+			set .@item4, 901;
+			break;
+		case 2:
+			set .@item1, 932;
+			set .@item2, 1043;
+			set .@item3, 1098;
+			set .@item4, 1094;
+			break;
+		case 3:
+			set .@item1, 958;
+			set .@item2, 930;
+			set .@item3, 1041;
+			set .@item4, 1062;
+			break;
+		}
+		if (countitem(.@item1) > 9 && countitem(.@item2) > 9 && countitem(.@item3) > 9 && countitem(.@item4) > 9) {
+			mes "[マイケル・ヘイリグ]";
+			mes "ああ、よくやった。";
+			mes "お前の努力と覚悟を認めよう。次の試練へ進むがよい。";
+			next;
+			mes "[マイケル・ヘイリグ]";
+			mes "プロンテラ城の地下ダンジョンで鍛錬しているムーレナク・ミヨルに会いに行け。まずは彼と話すのだ。";
+			next;
+			delitem .@item1, 10;
+			delitem .@item2, 10;
+			delitem .@item3, 10;
+			delitem .@item4, 10;
+			set CRUS_Q, 4;
+			if(checkquest(3006) != -1) {
+				changequest 3006,3009;
+			}
+			else if(checkquest(3007) != -1) {
+				changequest 3007,3009;
+			}
+			else {
+				changequest 3008,3009;
+			}
+			mes "[マイケル・ヘイリグ]";
+			mes "ムーレナクや他の者たちが、お前の力の限界を試し、進むべき道を見出す手助けをしてくれるだろう。彼らの試練を終えたら、わしのもとへ戻ってくるのだ…";
+			close;
+		}
+		mes "[マイケル・ヘイリグ]";
+		mes "ああ、まだわしが与えた課題を終えておらぬのだな。以下の品を持ってきて、クルセイダーになるという意志をわしに証明するのだ…";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "10 ^3355FF"+getitemname(.@item1)+"^000000";
+		mes "10 ^3355FF"+getitemname(.@item2)+"^000000";
+		mes "10 ^3355FF"+getitemname(.@item3)+"^000000";
+		mes "10 ^3355FF"+getitemname(.@item4)+"^000000";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "努力を尽くせば、この課題を成し遂げられるはずだ。旅路にオーディンの加護のあらんことを。";
+		close;
+	}
+	else if(CRUS_Q == 10) {
+		if(SkillPoint) {
+			mes "剣士として学ぶべきことをまだ全て修めておらぬ。残っているスキルポイントを全て使い切ってから、わしのもとへ戻ってくるがよい。";
+			close;
+		}
+		mes "全ての試練を終えたこと、祝福しよう。お前は真に、クルセイダーとして聖戦で我らと共に戦うにふさわしい者だ。";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "共に備え、悪と圧政に打ち勝とうではないか！";
+		next;
+		set .@Joblevel,JobLevel;
+		completequest 3015;
+		callfunc "Job_Change",Job_Crusader;
+		callfunc "F_ClearJobVar";		//clears all job variables for the current player
+		mes "[マイケル・ヘイリグ]";
+		mes "見るがいい…！";
+		mes "お前は今、クルセイダーとなったのだ！";
+		mes "聖戦が訪れし時、我らは共に悪の勢力と戦うであろう。";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "お前は今や";
+		mes "我らの一員だ！";
+		if (Sex == SEX_MALE) mes "…兄弟よ。";
+		else mes "…同志よ。";
+		next;
+		if(.@JobLevel != 50) getitem 504, 6;
+		else getitem 504, 12;
+		mes "[マイケル・ヘイリグ]";
+		mes "これを危急存亡の時に使うがよい。深手を負った時に力を与えてくれるだろう。";
+		next;
+		mes "[マイケル・ヘイリグ]";
+		mes "聖戦が近づいていることを決して忘れるな。この世界を襲うであろう悪の潮流に、我らは備えねばならぬ。さあ、自由と正義の理念のために戦いへ赴くのだ！";
+		close;
+	}
+	mes "まだ全ての試練を終えていないようだな。定められた試練を全て終えるまで、クルセイダーとなる備えは整わぬぞ。";
+	next;
+	mes "[マイケル・ヘイリグ]";
+	mes "全ての試練を終えたら、わしのもとへ戻ってくるがよい。ついに資格ありと認められた時、お前は誇り高きクルセイダーの列に加わることになる。";
+	close;
+}
+
+// Suffering Man: 2nd Endurance Test
+//============================================================
+-	script	Man in Anguish_	-1,{
+	mes "[ムーレナク・ミヨル]";
+	if(BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Crusader) {
+			mes "こんな場所で油を売っていないで、己の力を見出す道を切り拓くのだ。我らが手を取り合って戦う日は、すぐそこまで来ている。";
+			close;
+		}
+		else if(BaseJob == Job_Novice) {
+			mes "ノービスか…？";
+			mes "まだ青いが、";
+			mes "見込みはありそうだ。";
+			next;
+			mes "[ムーレナク・ミヨル]";
+			mes "はっきり言っておくが、わしは犯罪者ではない。ここにいるのはただ己を鍛えるためだ。お前も強くなれば、いずれ分かるだろう。";
+			close;
+		}
+		mes "ふむ。こんな場所にお前の用はないはずだ。立ち去り、わしの鍛錬を邪魔しないでくれ。";
+		close;
+	}
+	else if(CRUS_Q >= 0 && CRUS_Q <= 3) {
+		mes "何の用だ…？";
+		mes "ここに用がないのなら";
+		mes "立ち去ってくれ。心の静けさこそ、己を鍛える上で欠かせぬものなのだ…";
+		next;
+		mes "[ムーレナク・ミヨル]";
+		mes "来たるべき聖戦に備え、わしは心の静謐をさらに高めたいのだ。どうか邪魔をしないでくれ。";
+		close;
+	}
+	else if(CRUS_Q == 4) {
+		mes "何だ…？";
+		mes "わしに用でも";
+		if (Sex == SEX_MALE) mes "あるのか、剣を持つ男よ？";
+		else mes "あるのか、剣を持つ女よ？";
+		next;
+		if (select("クルセイダーの試練を受けたいのです。:何でもありません。") == 1) {
+			mes "[ムーレナク・ミヨル]";
+			mes "クルセイダーになりたいというのか…？ふむ、聖戦で戦うというのは、我らが共に抱くにふさわしい志だ。";
+			next;
+			mes "[ムーレナク・ミヨル]";
+			mes "お前の名は";
+			mes "" + strcharinfo(0) + "…か？";
+			mes "顔を";
+			mes "よく見せてもらおう。";
+			next;
+			if(getequipid(EQI_ACC_L) != 2608 && getequipid(EQI_ACC_R) != 2608) {
+				mes "[ムーレナク・ミヨル]";
+				mes "ふむ。クルセイダーになりたいと言いながら、ロザリオを身につけておらぬのか？我らの慣わしを守れぬのなら、お前に用はない。";
+				close;
+			}
+			mes "[ムーレナク・ミヨル]";
+			mes "うーむ…";
+			mes "まずまずといったところだが、若く野心的なようだな。忍耐が伴わぬ野心は、時にお前自身の仇となろう。";
+			next;
+			mes "[ムーレナク・ミヨル]";
+			mes "疑う理由を与えず、お前の忍耐を示してみせよ。クルセイダーになりたいのなら、忍耐をもってわしの試練に耐えねばならぬ。";
+			next;
+			mes "[ムーレナク・ミヨル]";
+			mes "すぐにでも試練を受けさせてやろう。実に単純なことだ。ただ回廊の突き当たりまで歩けばよい。";
+			next;
+			mes "[ムーレナク・ミヨル]";
+			mes "だが…";
+			mes "一つ心に留めておけ。いかなる場合も、モンスターを殺してはならぬ。";
+			next;
+			set CRUS_Q,5;
+			changequest 3009,3010;
+			mes "[ムーレナク・ミヨル]";
+			mes "それでは…";
+			mes "幸運を祈る。";
+			close2;
+			warp "job_cru",98,40;
+			end;
+		}
+		mes "[ムーレナク・ミヨル]";
+		mes "暇を持て余しているようだな。道端でジェロピーでも拾って、もう少し有意義なことをしたらどうだ？";
+		close;
+	}
+	else if(CRUS_Q == 5) {
+		mes "何だ…？";
+		mes "前に来た剣士だな。どうした、失敗したのか？";
+		next;
+		if (select("もう一度試練を受けさせてください。:一体何なんですかあの試練は！？") == 1) {
+			mes "[ムーレナク・ミヨル]";
+			mes "何度でも挑戦させてやろう。だが何度も失敗するようなら、それはお前自身の";
+			mes "心のあり方に問題があるということだ。";
+			next;
+			if(getequipid(EQI_ACC_L) != 2608 && getequipid(EQI_ACC_R) != 2608) {
+				mes "[ムーレナク・ミヨル]";
+				mes "待て…";
+				mes "ロザリオはどこへやった？そんなもの、そこら中に置き忘れていいわけがなかろう。我らは聖なる戦士であるはずだ。";
+				next;
+				mes "[ムーレナク・ミヨル]";
+				mes "うかつに物を失くすなど、しがない剣士のすることだ。本当に試練を受け直したいのなら、クルセイダーのしきたりを重んじるのだな。";
+				close;
+			}
+			mes "[ムーレナク・ミヨル]";
+			mes "お前の問題は、モンスターを見た途端に手を出してしまう癖だ。忍耐と持久力を身につけねばならぬ。";
+			next;
+			mes "[ムーレナク・ミヨル]";
+			mes "集中するのだ…";
+			mes "回廊の端から端まで歩くこと、それだけが目的だ。よく考えれば";
+			mes "単純なことだろう。";
+			next;
+			mes "[ムーレナク・ミヨル]";
+			mes "何があろうと、モンスターを殺してはならぬ。今度こそ、剣を抜く前によく考えるのだ。";
+			next;
+			set CRUS_Q,5;
+			mes "[ムーレナク・ミヨル]";
+			mes "それでは…";
+			mes "幸運を祈る。";
+			close2;
+			warp "job_cru",98,40;
+		}
+		mes "[ムーレナク・ミヨル]";
+		mes "わしの試練が気に入らないとは、何様のつもりだ？そんな心構えでは、クルセイダーには決してなれぬぞ。";
+		next;
+		mes "[ムーレナク・ミヨル]";
+		mes "苛立ちやすい気持ちも分からぬではないが、その苛立ちを克服せねば、この試練には合格できぬ。";
+		close;
+	}
+	else if(CRUS_Q == 6) {
+		mes "ふむ、よくやったようだな。さほど難しくはなかったはずだ。もはやお前に、";
+		mes "わしへの用はない。";
+		next;
+		mes "[ムーレナク・ミヨル]";
+		mes "次の試練は、プロンテラ聖堂にいるガブリエル・ヴァレンタインを訪ねるのだ。それでは、またな。";
+		close;
+	}
+	mes "うーむ…";
+	mes "クルセイダーになりたいのなら、まだ終えていない試練があるはずだな？";
+	close;
+}
+
+// Gabriel Valentine: 3rd Knowledge Test
+//============================================================
+prt_church,95,127,3	script	ガブリエル・ヴァレンタイン::Crusader	745,{
+	mes "[ガブリエル・ヴァレンタイン]";
+	if(BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Crusader) {
+			mes "ようこそ、クルセイダーの同志よ。";
+			mes "鍛錬の";
+			mes "調子はどうだ？";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "日々の鍛錬を怠るな、そして聖戦が我らに訪れる日に備えるのだ。";
+			close;
+		}
+		else if(BaseJob == Job_Novice) {
+			mes "ようこそ、わしはクルセイダーだ。";
+			mes "予言された聖戦、";
+			mes "来たるべきその日に";
+			mes "備えているのだ。";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "クルセイダーになることに興味があるのなら、まずは剣士として鍛錬を積まねばならぬ。剣士として十分に学んだと思えたら、また訪ねてくるがよい…";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "我らはプロンテラ王宮にいる。時があれば、立ち寄ってみるのも悪くないだろう。";
+			close;
+		}
+		mes "ようこそ、我らはクルセイダーだ。";
+		mes "予言された聖戦、";
+		mes "来たるべきその日に";
+		mes "備えているのだ。";
+		next;
+		mes "[ガブリエル・ヴァレンタイン]";
+		mes "お前もまた、未来に備えて鍛錬を積んでくれることを願っている。";
+		close;
+	}
+	else if(CRUS_Q == 0) {
+		mes "ようこそ。我らはクルセイダーだ。";
+		mes "予言された聖戦、";
+		mes "来たるべきその日に";
+		mes "備えているのだ。";
+		next;
+		mes "[ガブリエル・ヴァレンタイン]";
+		mes "クルセイダーになりたいのなら、プロンテラ王宮にいる我らの長と話すがよい。";
+		close;
+	}
+	else if((CRUS_Q == 6) || (CRUS_Q == 7)) {
+		if(CRUS_Q == 6) {
+			mes "ようこそ。";
+			mes "あの辛い試練を";
+			mes "うまく乗り越えたか？";
+			mes "次の試練はわしが担当する。";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "わしの名はガブリエル・ヴァレンタイン。わしもまた聖戦に備える身だ。今のところは、この教会の守衛を務めている。";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "クルセイダーになるために必要な知識を身につけているか、試させてもらう。";
+			mes "剣を振るうだけでは、聖戦に勝つことなどできぬのだからな。";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "10問の";
+			mes "問いを出そう。";
+			mes "正しく答えるのだ。";
+			next;
+		}
+		else if(CRUS_Q == 7) {
+			mes "また来たか～";
+			mes "今度は";
+			mes "しっかり準備してきたか？";
+			mes "もう一度";
+			mes "挑戦してみようか…？";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "改めて";
+			mes "10問の問いを出そう。";
+			mes "よく聞いて、";
+			mes "正しい答えを選ぶのだ。";
+			next;
+		}
+		set .@cru_m,rand(1,3);
+		if (.@cru_m == 1) {
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "1. アンデッドを攻撃するのに最も効果的な属性はどれだ？";
+			next;
+			if (select("無:地:アンデッド:聖") == 4)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "2. レベル2のアンデッドモンスターの場合、聖属性攻撃は火属性攻撃と比べてどれだけ多くダメージを与える？";
+			next;
+			if (select("25 %:50 %:75 %:100 %") == 1)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "3. イビルドルイドから手に入らないアイテムはどれだ？";
+			next;
+			if (select("モンクハット:ユグドラシルの葉:白ハーブ:アミュレット") == 1)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "4. 最もHPが高い";
+			mes "アンデッドモンスターはどれだ？";
+			next;
+			if (select("グール:スケルトンプリズナー:レイス:ゾンビプリズナー") == 4) 
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "5. 次のうち、他とサイズが異なるモンスターはどれだ？";
+			next;
+			if (select("レイス:カリッツバーグ:ドレイク:イビルドルイド") == 3)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "6. アンデッド属性の攻撃への耐性を与えるカードはどれだ？";
+			next;
+			if (select("オークスケルトンカード:オークゾンビカード:グールカード:スケルワーカーカード") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "7. ムナクとボングンは、亡くなる前どのような関係だった？";
+			next;
+			if (select("兄と妹:同じ村で育った幼馴染:異父・異母兄妹:赤の他人") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "8. 次のうち、アグレッシブでないモンスターはどれだ？";
+			next;
+			if (select("ソルジャースケルトン:オークスケルトン:スケルトン:スケルワーカー") == 3)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "9. ムナクカードを挿した盾の名は何だ？";
+			next;
+			if (select("アトミックシールド:アミュレットシールド:ヒュプノティックシールド:ホームロスシールド") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "10. 次のうち、メメントをドロップしないモンスターはどれだ？";
+			next;
+			if (select("ムナク:グール:マミー:ソルジャースケルトン") == 1)
+				set .@cru_t,.@cru_t+10;
+		}
+		else if (.@cru_m == 2) {
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "1. 次のうち、他と属性が異なるモンスターはどれだ？";
+			next;
+			if (select("キャラット:ウィンドゴースト:アイシス:ワンダラー") == 3)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "2. デーモンモンスターを攻撃するのに効果的な剣はどれだ？";
+			next;
+			if (select("デクサセイトツルギ:ホロウドツルギ:ダームドツルギ:ドロウジーツルギ") == 1)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "3. トッケビがドロップしないアイテムはどれだ？";
+			next;
+			if (select("原石エルニウム:黄金のハンマー:ソードメイス:マイティスタッフ") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "4. 最もHPが高いデーモンモンスターはどれだ？";
+			next;
+			if (select("ギアース:マグノリア:トッケビ:マリオネット") == 4)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "5. 次のうち、他とサイズが異なるデーモンモンスターはどれだ？";
+			next;
+			if (select("ゴーストリング:ウィスパー:デビルチ:バフォメットジュニア") == 1)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "6. デーモンモンスターから受けるダメージを軽減する盾はどれだ？";
+			next;
+			if (select("サタニックシールド:シールドフロムヘル:アミュレットシールド:エクセレントシールド") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "7. ウィンドゴーストに最も効果的な属性はどれだ？";
+			next;
+			if (select("水:地:火:風") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "8. 他のデーモンモンスターと異なる種族のモンスターはどれだ？";
+			next;
+			if (select("ソヒー:アイシス:トッケビ:ウィスパー") == 4)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "9. マリオネットカードの効果は何だ？";
+			next;
+			if (select("シャドウ攻撃への耐性を30%上げる:毒攻撃への耐性を30%上げる:ゴースト攻撃への耐性を30%上げる:無属性攻撃への耐性を30%上げる") == 3)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "10. デーモンモンスターに遭遇した時、効果的な対処法はどれだ？";
+			next;
+			if (select("『悪しき者よ、去れ！』と叫ぶ。:魂を差し出して取引する。:武器に聖水を塗って攻撃する。:デビルチの帽子をかぶる。") == 3)
+				set .@cru_t,.@cru_t+10;
+		}
+		else {
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "1. 『デーモンベイン』を習得するには『ディバインプロテクション』が何レベル必要だ？";
+			next;
+			if (select("レベル1:レベル2:レベル3:レベル4") == 3)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "2. 装備によるINT補正込みでINTが30、レベル55の時、レベル5の『ヒール』はHPをいくら回復する？";
+			next;
+			if (select("396:440:484:528") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "3. レベル7の『ディバインプロテクション』で、アンデッドに対する防御力はいくら上昇する？";
+			next;
+			if (select("21:22:23:24") == 1)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "4. ゴースト属性を持つナイトメアを攻撃できる槍はどれだ？";
+			next;
+			if (select("ランス:ビルガイサーム:クレセントシザー:ゼフィルス") == 4)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "5. 『キュアー』を習得するには『ヒール』が何レベル必要だ？";
+			next;
+			if (select("レベル1:レベル2:レベル3:レベル4") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "6. レベル3の『騎乗熟練』を習得した時の攻撃速度は？";
+			next;
+			if (select("通常速度の70%:通常速度の80%:通常速度の90%:通常速度の100%") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "7. 『デーモンベイン』スキルの説明として正しくないものはどれだ？";
+			next;
+			if (select("アンデッドへの攻撃力を上げる:アコライトのみが習得できる:極めると+30上昇する:パッシブスキルである") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "8. レベル7の『ヒール』はSPをいくら消費する？";
+			next;
+			if (select("30:31:33:35") == 2)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "9. 『キュアー』スキルで";
+			mes "治せない状態異常はどれだ？";
+			next;
+			if (select("呪い:沈黙:混乱:暗闇") == 1)
+				set .@cru_t,.@cru_t+10;
+
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "10. クルセイダーを最もよく表しているのはどれだ？";
+			next;
+			if (select("婚姻に備える者。:聖戦に備える者。:婚礼の夜に備える者。:ポーションの調合に備える者。") == 2)
+				set .@cru_t,.@cru_t+10;
+
+		}
+		mes "[ガブリエル・ヴァレンタイン]";
+		mes "お疲れ様～";
+		mes "まずは";
+		mes "結果を見てみるとしよう。";
+		next;
+		mes "[ガブリエル・ヴァレンタイン]";
+		mes " " + strcharinfo(0) + "の得点は";
+		mes "" + .@cru_t + "点だ…";
+		if(.@cru_t == 100) {
+			set CRUS_Q, 8;
+			changequest 3011,3013;
+			mes "見事だ！さあ、";
+			mes "次の試練を受ける時が来た。";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "プロンテラ城へ行き、";
+			mes "ブリアント・ピヨードに会うのだ。";
+			mes "彼には、次はお前を";
+			mes "試すよう伝えておこう。";
+			close;
+		}
+		else if(.@cru_t == 90) {
+			set CRUS_Q, 8;
+			changequest 3011,3013;
+			mes "よくやった～さあ、";
+			mes "次の試練を受ける時が来た。";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "プロンテラ城へ行き、";
+			mes "ブリアント・ピヨードに会うのだ。";
+			mes "彼には、次はお前を";
+			mes "試すよう伝えておこう。";
+			close;
+		}
+		else if (.@cru_t == 80 && CRUS_Q == 7) {
+			set CRUS_Q,8;
+			changequest 3011,3013;
+			mes "かなり準備してきたようだな、今回は合格とみなそう。";
+			mes "急いで次の試練を受けに行くのだ。";
+			next;
+			mes "[ガブリエル・ヴァレンタイン]";
+			mes "プロンテラ城へ行き、ブリアント・ピヨードに会うのだ。";
+			mes "彼には次の試練を準備するよう伝えておこう。";
+			close;
+		}
+		set CRUS_Q,7;
+		if(checkquest(3011) != -1) {
+			changequest 3011,3012;
+		}
+		mes "うーむ…実に残念だ。";
+		mes "もう少し学んでから";
+		mes "この試練にまた挑戦するのだ、いいな？";
+		next;
+		mes "[ガブリエル・ヴァレンタイン]";
+		mes "焦る必要はない、この試練に合格するには多くの知識が要る。とにかく、わしはここで待っているとしよう。準備ができたと思ったら、戻ってくるのだ、いいな？";
+		close;
+	} 
+	else if(CRUS_Q == 8 || CRUS_Q == 9) {
+		mes "前にも言ったが、プロンテラ城へ行きブリアント・ピヨードに会って次の試練を受けるのだ。幸運を祈る、早くクルセイダーになるといい、いいな？";
+		close;
+	}
+	else if(CRUS_Q == 10) {
+		mes "まだここで何をしている？もう全ての試練を終えたはずだ。我らの長と話すのだ、お前はもうほとんどクルセイダーになる備えができておるぞ。";
+		next;
+		mes "[ガブリエル・ヴァレンタイン]";
+		mes "お前もじきに、聖戦への備えで我らに加わることになる。クルセイダーとなった後も、信仰と共に生きるのだ。";
+		close;
+	}
+	mes "うむ…？";
+	mes "クルセイダーを";
+	mes "志す者のようだな…";
+	mes "だが、まだわしが";
+	mes "試す番ではないようだ。";
+	next;
+	mes "[ガブリエル・ヴァレンタイン]";
+	mes "他の試練を終えてから、";
+	mes "指示があり次第";
+	mes "わしのもとへ来るがよい。それまでは、";
+	mes "またな～";
+	close;
+}
+
+// Crusader: 4th Purification Test
+//============================================================
+-	script	Patron Knight_	-1,{
+	mes "[ブリアント・ピヨード]";
+	mes "ようこそ。";
+	if(BaseJob != Job_Swordman) {
+		if(BaseJob == Job_Crusader) {
+			mes "鍛錬の";
+			mes "調子はどうだ？";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "信仰を深めるのだ。信仰から力と規律が生まれる。日々鍛錬を積み、偉大なクルセイダーとなるがよい。";
+			close;
+		}
+		else if(BaseJob == Job_Novice) {
+			mes "我らはクルセイダー、";
+			mes "来たるべき大いなる聖戦に備える、聖なる戦士たちだ。";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "クルセイダーになることに";
+			mes "興味があるのか？";
+			mes "我らは常に、より優れた";
+			mes "男女が我らの列に";
+			mes "加わるのを待っている。";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "剣士として鍛錬を積み、準備ができたと思ったら我らのもとへ来るがよい。オーディンよりクルセイダーとなる召命を受けているのなら、なお良いだろう。";
+			close;
+		}
+		mes "我らはクルセイダー、";
+		mes "来たるべき大いなる聖戦に備える、聖なる戦士たちだ。";
+		next;
+		mes "[ブリアント・ピヨード]";
+		mes "比較的平穏なこの時代にあっても、我らの鍛錬は絶えることがない。闇の潮流が人類に押し寄せる日に備えねばならぬのだ…";
+		close;
+	}
+	else if(CRUS_Q == 0) {
+		mes "我らはクルセイダー、";
+		mes "来たるべき大いなる聖戦に備える、聖なる戦士たちだ。";
+		next;
+		mes "[ブリアント・ピヨード]";
+		mes "クルセイダーになることに";
+		mes "興味があるのか？";
+		mes "我らは常に、より優れた";
+		mes "男女が我らの列に";
+		mes "加わるのを待っている。";
+		next;
+		mes "[ブリアント・ピヨード]";
+		mes "クルセイダーになるには、ジョブレベル40まで鍛錬を積まねばならぬ。詳しくは中にいる我らの長と話すがよい。";
+		next;
+		mes "[ブリアント・ピヨード]";
+		mes "オーディンの";
+		mes "加護のあらんことを…";
+		close;
+	}
+	else if(CRUS_Q == 8 || CRUS_Q == 9) {
+		if (CRUS_Q == 8) {
+			mes "会えて";
+			mes "嬉しいぞ。";
+			mes "いよいよ";
+			mes "最後の試練の時が来た。";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "わしの名はブリアント・ピヨード、わしもまた聖戦に備える身だ。ここまで来るのは、さぞ骨が折れただろう。";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "この試練では、お前の戦闘における技量を測らせてもらう。優れた戦闘能力を持つ者だけが、クルセイダーになれるのだ。";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "戦闘試練を受けるには";
+			mes "^3355FF聖水^000000を1つ持ってくるのだ。試練の前に、お前を浄めるために使う。";
+			if(checkquest(3013) != -1) {
+				changequest 3013,3014;
+			}
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "それでは…";
+			mes "すぐに";
+			mes "始めるか？";
+			mes "それとも準備の";
+			mes "時間が要るか？";
+		}
+		else {
+			mes "試練の";
+			mes "準備はできたか？";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "今すぐ始めるか、それともまだ準備の時間が必要か？";
+		}
+		next;
+		if (select("始めたいです。:準備の時間をください。") == 1) {
+			if(getequipid(EQI_ACC_L) != 2608 && getequipid(EQI_ACC_R) != 2608) {
+				mes "[ブリアント・ピヨード]";
+				mes "待て、お前はロザリオを身につけておらぬな。クルセイダーたる者、常にロザリオを身につけていなければならぬ。";
+				next;
+				mes "[ブリアント・ピヨード]";
+				mes "ロザリオを";
+				mes "手に入れてから";
+				mes "試練を受けに戻ってくるのだ。";
+				close;
+			}
+			else if(countitem(523) < 1) {
+				mes "[ブリアント・ピヨード]";
+				mes "戦闘試練には^3355FF聖水^000000を1つ用意するのだ。";
+				mes "受験者を浄めるためだと言ったはずだ。";
+				next;
+				mes "[ブリアント・ピヨード]";
+				mes "準備してからここへ戻ってくるのだ。";
+				mes "待っているとしよう。";
+				close;
+			}
+			delitem 523, 1; //Holy Water
+			mes "[ブリアント・ピヨード]";
+			mes "それでは";
+			mes "試練を始めよう。お前は";
+			mes "用意した聖水で";
+			mes "浄められることになる。";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "……………";
+			next;
+			mes "[ブリアント・ピヨード]";
+			mes "始めるとしよう。";
+			mes "待機部屋へ";
+			mes "入るのだ。";
+			mes "現れるモンスターを";
+			mes "4つの段階すべてで";
+			mes "倒すのだ。";
+			close2;
+			warp "job_cru",24,169;
+			end;
+		}
+		mes "[ブリアント・ピヨード]";
+		mes "戦闘試練を受けるには^3355FF聖水^000000を1つ用意するのだ。言った通り、試練の前にお前を浄めるために使う。";
+		next;
+		mes "[ブリアント・ピヨード]";
+		mes "聖水を1つ";
+		mes "用意してから";
+		mes "試練を受けに";
+		mes "戻ってくるのだ。";
+		mes "待っている";
+		mes "としよう。";
+		close;
+	} 
+	else if(CRUS_Q == 10) {
+		mes "おめでとう。";
+		mes "クルセイダーになるための";
+		mes "全ての試練を";
+		mes "終えたのだな。";
+		next;
+		mes "[ブリアント・ピヨード]";
+		mes "中にいる我らの";
+		mes "長と話すのだ。";
+		mes "来たるべき聖戦に";
+		mes "備える者たちの列に、";
+		mes "お前を";
+		mes "迎え入れよう。";
+		close;
+	}
+	mes "お前はクルセイダーになろうとしている者の一人ではないのか？";
+	next;
+	mes "[ブリアント・ピヨード]";
+	mes "まだお前が";
+	mes "わしの試練を受ける番ではない。";
+	mes "他の試練を全て受けてから";
+	mes "戻ってくるのだ。";
+	next;
+	mes "[ブリアント・ピヨード]";
+	mes "またすぐに会おう。";
+	mes "オーディンの祝福が";
+	mes "お前と共にあらんことを。";
+	close;
+}
+
+
+
+// Actual tests
+//============================================================
+
+//----------------------------------------------------------------------------
+// Endurance Test
+//----------------------------------------------------------------------------
+job_cru,1,1,1	script	Summoner#cr1	-1,{
+OnTimer300000:
+	donpcevent "Summoner#cr1::OnReset";
+	end;
+
+OnTimer300500:
+	donpcevent "Summoner#cr1::OnEnd";
+	end;
+
+OnTimer301000:
+	donpcevent "Summoner#cr1::OnStart";
+	stopnpctimer;
+	end;
+
+OnInit:
+	enablenpc "Summoner#cr1";
+	monster "job_cru",94,45,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,55,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,65,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,75,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,85,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,95,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,45,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,55,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,65,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,75,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,85,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,95,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	initnpctimer;
+	end;
+
+OnStart:
+	enablenpc "Summoner#cr1";
+	monster "job_cru",94,45,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,55,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,65,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,75,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,85,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",94,95,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,45,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,55,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,65,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,75,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,85,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	monster "job_cru",101,95,"Mandragora",1020,1,"Summoner#cr1::OnDead";
+	initnpctimer;
+	end;
+
+OnReset:
+	killmonster "job_cru","Summoner#cr1::OnDead";
+	end;
+
+OnEnd:
+	disablenpc "Summoner#cr1";
+	end;
+
+OnDead:
+	warp "prt_fild05",353,251;
+	end;
+}
+
+job_cru,1,2,1	script	Summoner#cr2	-1,{
+OnTimer345000:
+	donpcevent "Summoner#cr2::OnReset";
+	end;
+
+OnTimer345500:
+	donpcevent "Summoner#cr2::OnEnd";
+	end;
+
+OnTimer346000:
+	donpcevent "Summoner#cr2::OnStart";
+	stopnpctimer;
+	end;
+
+OnInit:
+	enablenpc "Summoner#cr2";
+	monster "job_cru",98,50,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",92,60,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",104,60,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",98,70,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",92,80,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",104,90,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",98,90,"Flora",1118,1,"Summoner#cr2::OnDead";
+	initnpctimer;
+	end;
+
+OnStart:
+	enablenpc "Summoner#cr2";
+	monster "job_cru",98,50,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",92,60,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",104,60,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",98,70,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",92,80,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",104,90,"Flora",1118,1,"Summoner#cr2::OnDead";
+	monster "job_cru",98,90,"Flora",1118,1,"Summoner#cr2::OnDead";
+	initnpctimer;
+	end;
+
+OnReset:
+	killmonster "job_cru","Summoner#cr2::OnDead";
+	end;
+
+OnEnd:
+	disablenpc "Summoner#cr2";
+	end;
+
+OnDead:
+	warp "prt_fild05",353,251;
+	end;
+}
+
+job_cru,1,3,1	script	Summoner#cr3	-1,{
+OnTimer345000:
+	donpcevent "Summoner#cr3::OnReset";
+	end;
+
+OnTimer345500:
+	donpcevent "Summoner#cr3::OnEnd";
+	end;
+
+OnTimer346000:
+	donpcevent "Summoner#cr3::OnStart";
+	stopnpctimer;
+	end;
+
+OnInit:
+	enablenpc "Summoner#cr3";
+	monster "job_cru",92,50,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",104,50,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,50,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",92,70,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",104,70,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,80,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",92,90,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",104,90,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	Initnpctimer;
+	end;
+
+OnStart:
+	enablenpc "Summoner#cr3";
+	monster "job_cru",92,50,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",104,50,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,50,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",92,70,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",104,70,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,80,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",92,90,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	monster "job_cru",104,90,"Greatest General",1277,1,"Summoner#cr3::OnDead";
+	Initnpctimer;
+	end;
+
+OnReset:
+	killmonster "job_cru","Summoner#cr3::OnDead";
+	end;
+
+OnEnd:
+	disablenpc "Summoner#cr3";
+	end;
+
+OnDead:
+	warp "prt_fild05",353,251;
+	end;
+}
+
+job_cru,1,4,1	script	Summoner#cr4	-1,{
+OnTimer345000:
+	donpcevent "Summoner#cr4::OnReset";
+	end;
+
+OnTimer345500:
+	donpcevent "Summoner#cr4::OnEnd";
+	end;
+
+OnTimer346000:
+	donpcevent "Summoner#cr4::OnStart";
+	stopnpctimer;
+	end;
+
+OnInit:
+	enablenpc "Summoner#cr4";
+	monster "job_cru",98,50,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,55,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,60,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,65,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,70,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,75,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,80,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,85,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,90,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",90,34,"Mushroom",1182,1,"Summoner#cr3::OnDead";
+	monster "job_cru",105,34,"Mushroom",1182,1,"Summoner#cr3::OnDead";
+	initnpctimer;
+	end;
+
+OnStart:
+	enablenpc "Summoner#cr4";
+	monster "job_cru",98,50,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,55,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,60,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,65,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,70,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,75,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,80,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,85,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",98,90,"Familiar",1005,1,"Summoner#cr3::OnDead";
+	monster "job_cru",90,34,"Mushroom",1182,1,"Summoner#cr3::OnDead";
+	monster "job_cru",105,34,"Mushroom",1182,1,"Summoner#cr3::OnDead";
+	initnpctimer;
+	end;
+
+OnReset:
+	killmonster "job_cru","Summoner#cr4::OnDead";
+	end;
+
+OnEnd:
+	disablenpc "Summoner#cr4";
+	end;
+
+OnDead:
+	warp "prt_fild05",353,251;
+	end;
+}
+
+//----------------------------------------------------------------------------
+// Purification Test
+//----------------------------------------------------------------------------
+job_cru,24,187,4	script	ブリアント・ピヨード#2::Patron Knight#2	751,{
+	mes "[ブリアント・ピヨード]";
+	mes "ようこそ。";
+	mes "ここで";
+	mes "最後の試練を受けてもらう。";
+	mes "準備ができたら";
+	mes "待機部屋へ";
+	mes "入るのだ。";
+	next;
+	mes "[ブリアント・ピヨード]";
+	mes "試練を受けられるのは一度に一人だけだ。既に誰かが受験中なら、試練の場が空くまで待つのだ。";
+	next;
+	mes "[ブリアント・ピヨード]";
+	mes "一人につき、試練を終えるための制限時間は4分だ。試練の途中で退出したいのなら、ゲームから接続を切るのだ。";
+	close;
+}
+
+job_cru,24,187,2	script	待合室#cr1::Waiting Room#cr1	700,{
+	end;
+
+OnInit:
+	//disablenpc  "Waiting Room#cr1";
+	hideonnpc "Waiting Room#cr1";
+	waitingroom "待合室",20,"Waiting Room#cr1::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+
+OnStartArena:
+	warpwaitingpc "job_cru",168,21;
+	donpcevent "Monster Summon#cr0::OnStart";
+	disablewaitingroomevent;
+	end;
+
+OnStart:
+	enablewaitingroomevent;
+	end;
+}
+
+job_cru,168,17,0	script	Zombie Guide	-1,2,2,{
+OnTouch_:
+	mes "[ブリアント・ピヨード]";
+	mes "出撃し、現れる";
+	mes "モンスターを全て倒すのだ。";
+	mes "残っている者がいれば";
+	mes "合格とはならぬ。";
+	next;
+	mes "[ブリアント・ピヨード]";
+	mes "与えられる時間は";
+	mes "4分だ。出撃し、";
+	mes "全力を尽くすのだ…";
+	close;
+}
+
+job_cru,2,1,1	script	Monster Summon#cr0	-1,{
+OnInit:
+	disablenpc "Monster Summon#cr0";
+	end;
+
+OnStart:
+	set .MyMonsterCount,0;
+	enablenpc "Monster Summon#cr0";
+	donpcevent "Monster Summon#cr1::OnStart";
+	donpcevent "Monster Summon#cr2::OnStart";
+	donpcevent "Monster Summon#cr3::OnStart";
+	donpcevent "Monster Summon#cr4::OnStart";
+	donpcevent "Monster Summon#cr6::OnStart";
+	end;
+
+OnMonster1:
+	monster "job_cru",168,45,"Zombie",1015,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,45,"Zombie",1015,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,45,"Zombie",1015,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,45,"Zombie",1015,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,45,"Zombie",1015,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,45,"Zombie",1015,1,"Monster Summon#cr0::OnDead";
+	end;
+
+OnMonster2:
+	monster "job_cru",168,80,"Soldier Skeleton",1028,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,80,"Soldier Skeleton",1028,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,80,"Soldier Skeleton",1028,1,"Monster Summon#cr0::OnDead";
+	end;
+
+OnMonster3:
+	monster "job_cru",168,110,"Archer Skeleton",1016,1,"Monster Summon#cr0::OnDead";
+	monster "job_cru",168,115,"Mummy",1041,1,"Monster Summon#cr0::OnDead";
+	end;
+
+OnDead:
+	set .MyMonsterCount,.MyMonsterCount+1;
+	if (.MyMonsterCount >= 10) {
+		set CRUS_Q,10;
+		changequest 3014,3015;
+	}
+	end;
+
+OnEnd:
+	disablenpc "Monster Summon#cr0";
+	end;
+
+OnReset:
+	killmonster "job_cru","Monster Summon#cr0::OnDead";
+	end;
+}
+
+job_cru,168,45,0	script	Monster Summon#cr1	-1,15,1,{
+OnInit:
+	disablenpc "Monster Summon#cr1";
+	end;
+
+OnTouch_:
+	donpcevent "Monster Summon#cr0::OnMonster1";
+	donpcevent "Monster Summon#cr1::OnEnd";
+	end;
+
+OnStart:
+	enablenpc "Monster Summon#cr1";
+	end;
+
+OnEnd:
+	disablenpc "Monster Summon#cr1";
+	end;
+}
+
+job_cru,168,80,0	script	Monster Summon#cr2	-1,15,1,{
+OnInit:
+	disablenpc "Monster Summon#cr2";
+	end;
+
+OnTouch_:
+	donpcevent "Monster Summon#cr0::OnMonster2";
+	donpcevent "Monster Summon#cr2::OnEnd";
+	end;
+
+OnStart:
+	enablenpc "Monster Summon#cr2";
+	end;
+
+OnEnd:
+	disablenpc "Monster Summon#cr2";
+	end;
+}
+
+job_cru,165,115,0	script	Monster Summon#cr3	-1,15,1,{
+OnInit:
+	disablenpc "Monster Summon#cr3";
+	end;
+
+OnTouch_:
+	donpcevent "Monster Summon#cr0::OnMonster3";
+	donpcevent "Monster Summon#cr3::OnEnd";
+	end;
+
+OnStart:
+	enablenpc "Monster Summon#cr3";
+	end;
+
+OnEnd:
+	disablenpc "Monster Summon#cr3";
+	end;
+}
+
+job_cru,168,150,0	script	Monster Summon#cr4	-1,15,1,{
+OnInit:
+	disablenpc "Monster Summon#cr4";
+	end;
+
+OnTouch_:
+	monster "job_cru",168,150,strcharinfo(0),1036,1,"Monster Summon#cr4-a::OnDead";
+	donpcevent "Monster Summon#cr4::OnEnd";
+	end;
+
+OnDead:
+	donpcevent "Monster Summon#cr5::OnStart";
+	end;
+
+OnStart:
+	enablenpc "Monster Summon#cr4";
+	end;
+
+OnReset:
+	killmonster "job_cru","Monster Summon#cr4-a::OnDead";
+	end;
+
+OnEnd:
+	disablenpc "Monster Summon#cr4";
+	end;
+
+}
+
+job_cru,168,150,0	script	Monster Summon#cr4-a	-1,{
+OnDead:
+	donpcevent "Monster Summon#cr5::OnStart";
+	end;
+}
+
+job_cru,2,2,1	script	Monster Summon#cr6	-1,{
+OnTimer241000:
+	areawarp "job_cru",160,14,175,178,"job_cru",24,169;
+	donpcevent "Monster Summon#cr0::OnReset";
+	donpcevent "Monster Summon#cr4::OnReset";
+	donpcevent "Monster Summon#cr0::OnEnd";
+	donpcevent "Monster Summon#cr4::OnEnd";
+	donpcevent "Monster Summon#cr5::OnEnd";
+	donpcevent "Monster Summon#cr6::OnStop";
+	donpcevent "Monster Summon#cr6::OnEnd";
+	donpcevent "Waiting Room#cr1::OnStart";
+	end;
+
+OnInit:
+	disablenpc "Monster Summon#cr6";
+	end;
+
+OnStart:
+	enablenpc "Monster Summon#cr6";
+	initnpctimer;
+	end;
+
+OnEnd:
+	disablenpc "Monster Summon#cr6";
+	end;
+
+OnStop:
+	stopnpctimer;
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= Need optimalization and fixing
+//= thanks to Komurka, KiLLaLeN, Lupus (fixing error)
+//= just a temp Job Quest
+//= 1.2 minor fix of announcement by Freya people
+//= 1.3 Added Baby Class Support, fixed 40/50 lvl item reward
+//=     also fixed too common script names [Lupus]
+//= 1.3a fixed "dead lock" bugs [Lupus]
+//= 1.3b changed monsters ID in patience test [Komurka]
+//= 1.4 Fixed Job Level parameters mix-up. [massdriller] (Thanks to Komurka)
+//= 1.5 Fixed possible EXP abuse [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//=     2nd Job Quests again. It also guides adv classes where
+//=     to go. [Lupus]
+//= 1.7 Updated names and required items, Chivalry Emblem +
+//=     Hand of God allow to skip item gathering [DracoRPG]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.1 Fixed endless loop, wrong condition check [Lupus]
+//=     also changed all job numbers to constants, fixed logic
+//============================================================ 

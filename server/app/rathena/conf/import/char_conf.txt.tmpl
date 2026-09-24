@@ -1,0 +1,66 @@
+//--------------------------------------------------------------
+// char-server 設定の上書き（conf/char_athena.conf の最後に import される）
+// このファイルはテンプレート。entrypoint.sh が envsubst で
+// conf/import/char_conf.txt に描画する（描画後は 0600）。
+//--------------------------------------------------------------
+
+// inter-server 認証。login テーブルの account_id=1 と一致させる。
+// 既定の s1 / p1 は周知の値なので必ず置き換える。
+userid: ${INTERSERVER_USER}
+passwd: ${INTERSERVER_PASSWORD}
+
+// クライアントのサーバ一覧に出る名前
+server_name: ${SERVER_NAME}
+
+// char-server が login-server へ接続する先（compose のサービス名で解決）
+login_ip: login-server
+
+// クライアントが char-server へ接続する先（EC2 の Public IP / EIP）
+char_ip: ${PUBLIC_IP}
+
+// PIN コードを無効化（rAthena 既定は yes）。検証時の手間を減らすため。
+pincode_enabled: no
+
+//--------------------------------------------------------------
+// 日本語のキャラクター名を許可する
+// （conf/char_athena.conf:155-164 の char_name_option / char_name_letters を上書き）
+//--------------------------------------------------------------
+// char_name_option の意味（conf/char_athena.conf の記述どおり）:
+//   0: 制限なし
+//   1: char_name_letters に列挙した文字「だけ」を許可（rAthena 既定。値は英数字と半角空白のみ）
+//   2: char_name_letters に列挙した文字を「禁止」し、それ以外は許可
+// キャラクター名・パーティ名・ギルド名の 3 つに適用される。
+//
+// 判定は src/char/char.cpp:1362-1371 で 1 バイトずつ行われるため、
+// マルチバイト文字は「2 バイト目まで含めて」照合される。
+// CP932 の 2 バイト目は 0x40-0x7E と 0x80-0xFC を取りうるので、
+// 禁止リストには 0x20-0x3F の範囲の記号だけを並べて衝突を避ける。
+//
+// 許可方式（1）のままだと 2 バイト目が一覧に無くて必ず弾かれるため、禁止方式（2）にする。
+char_name_option: 2
+
+// 禁止する記号（すべて 0x21-0x3F）。
+//   - "-"（0x2D）、"."（0x2E）、数字（0x30-0x39）は使いたいので入れない。
+//   - 半角空白（0x20）は char.cpp が名前の前後をトリムする都合で実質禁止できないため入れない。
+//   - 制御文字（0x00-0x1F）は設定に関係なく常に拒否される。
+//   - 名前の最大長は NAME_LENGTH = 24（終端を除き 23 バイト）。全角 1 文字 = 2 バイト。
+char_name_letters: !"#$%&'()*+,/:;<=>?
+
+//--------------------------------------------------------------
+// キャラクター削除（conf/char_athena.conf:170-195 の char_del_* を上書き）
+//--------------------------------------------------------------
+// PACKETVER 20211103 のクライアントは 0x0827（削除予約）→ 0x0829（生年月日 YYMMDD で確定）
+// の 2 段階でしか削除しない。src/char/char_clif.cpp の chclif_parse_char_delete2_accept は
+// char_del_option の値に関係なく必ず login.birthdate と照合する（0x0068 / 0x01fb を送る
+// 旧クライアントだけが char_del_option の email 判定を使う）。
+// つまり「生年月日が登録されていないアカウント」はこのクライアントからは削除できない。
+// アカウント作成時に scripts/create-account.sh が生年月日を入れる（既定 2000-01-01 →
+// クライアントでは 20000101 と入力）。既存アカウントは scripts/set-birthdate.sh で設定する。
+char_del_option: 2
+
+// 削除予約から確定までの待ち時間（秒）。rAthena 既定は 86400（24 時間）。
+// 個人検証環境では待つ意味が無いので 0（予約直後に確定できる）。
+char_del_delay: 0
+
+// パーティ / ギルド所属中のキャラは削除不可（rAthena 既定 3 のまま。1: パーティのみ, 2: ギルドのみ, 0: 制限なし）
+char_del_restriction: 3

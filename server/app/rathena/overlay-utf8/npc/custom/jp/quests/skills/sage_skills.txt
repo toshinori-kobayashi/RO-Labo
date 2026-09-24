@@ -1,0 +1,498 @@
+//===== rAthena Script ======================================= 
+//= Sage Skills Quests
+//===== By: ================================================== 
+//= Lupus, Reddozen
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests for skills: Create Converter, Elemental Change
+//===== Additional Comments: ================================= 
+//= 1.4 Rescripted to Aegis 10.3 standards. [5511]
+//= 1.5 Optimized. [Euphy]
+//============================================================
+
+yuno_in03,176,24,3	script	ミシュナ::Mischna	755,{
+	if(BaseJob != Job_Sage) {
+		mes "[ミシュナ]";
+		mes "こんにちは、私はミシュナ、";
+		mes "ここシュバイヒルビル魔法学院の";
+		mes "講師の一人です。";
+		mes "もしかして、あなたはセージか";
+		mes "賢者様ですか？あら……違うのですね？";
+		next;
+		mes "[ミシュナ]";
+		mes "あら、それは残念です。";
+		mes "失礼しました。ですが、もし";
+		mes "お知り合いにいらしたり、";
+		mes "旅先で出会うことがあれば、";
+		mes "まだ私の講義をご存じないようなら、ぜひご紹介ください。";
+		next;
+		mes "[ミシュナ]";
+		mes "お引き止めして";
+		mes "申し訳ありません。";
+		mes "お時間をいただき";
+		mes "感謝します。冒険者様、良い一日を。";
+		close;
+	}
+	if(SAG_SK == 100) {
+		set .@Element, getskilllv("SA_ELEMENTFIRE") + getskilllv("SA_ELEMENTGROUND") + getskilllv("SA_ELEMENTWIND") + getskilllv("SA_ELEMENTWATER");
+		set .@Convert, getskilllv("SA_CREATECON");
+		if(.@Element && .@Convert) {
+			mes "[ミシュナ]";
+			mes "もしセージや賢者の";
+			mes "お友達で、まだ";
+			mes "バーモント卿の巻物から";
+			mes "スキルを学んでいない方が";
+			mes "いらしたら、ぜひ私のもとへ寄こしてください。";
+			next;
+			mes "[ミシュナ]";
+			mes "この属性系のスキルが";
+			mes "戦闘でとても";
+			mes "役立っていることと";
+			mes "思います。";
+			mes "知識こそが、";
+			mes "結局は力になるものですね……";
+			close;
+		}
+		mes "[ミシュナ]";
+		mes "あら、私が教えたことを";
+		mes "どこかで忘れて";
+		mes "しまったようですね。もしかして";
+		mes "私が差し上げたスキル巻物の";
+		mes "写しをなくしてしまいましたか？";
+		mes "大丈夫、思い出す手伝いをしましょう。";
+		next;
+		if(.@Element == 0) {
+			mes "[ミシュナ]";
+			mes "以前に学んでいなくても";
+			mes "構いません。習得条件さえ";
+			mes "満たしていれば、どの";
+			mes "^FF0000エレメンタルチェンジ^000000スキルを";
+			mes "選ぶか、選択する機会を差し上げます。";
+			next;
+			mes "[ミシュナ]";
+			mes "一度エレメンタルチェンジの";
+			mes "スキルを習得すると、";
+			mes "後から変更はできません。";
+			mes "覚えておいてくださいね。";
+			mes "さて、どのスキルを学びたいですか？";
+			next;
+			setarray .@ReqSkill[0],280,283,282,281;
+			setarray .@ReqSkill$[0],"ブレイズ","クエイク","トルネード","ツナミ";
+			setarray .@Skill[0],1018,1017,1019,1008;
+			setarray .@Skill$[0],"火","地","風","水";
+			while(1) {
+				set .@i, select("火のエレメンタルチェンジ:地のエレメンタルチェンジ:風のエレメンタルチェンジ:水のエレメンタルチェンジ")-1;
+				if(getskilllv(.@ReqSkill[.@i]) == 0) {
+					mes "[ミシュナ]";
+					mes "残念ですが、まだ";
+					mes "^FF0000エンドウ"+.@ReqSkill$[.@i]+"^000000という";
+					mes "スキルを習得していません。^FF0000"+.@Skill$[.@i]+"の";
+					mes "エレメンタルチェンジ^000000には必要です。";
+					mes "エンドウ"+.@ReqSkill$[.@i]+"を習得するか、";
+					mes "別のエレメンタルチェンジスキルを選んでください。";
+					next;
+				}
+				else {
+					mes "[ミシュナ]";
+					mes "よろしい、それでは";
+					mes "^FF0000"+.@Skill$[.@i];
+					mes "エレメンタルチェンジ^000000スキルと";
+					mes "^FF0000エレメンタルコンバーター";
+					mes "作成スキル^000000を教えましょう。";
+					mes "呪文を唱える間、じっとしていてください。";
+					next;
+					mes "[ミシュナ]";
+					mes "%$#@!#$% ヤップ～～";
+					specialeffect2 EF_RUWACH;
+					next;
+					mes "[ミシュナ]";
+					mes "ヤップ！";
+					specialeffect2 EF_BRANDISHSPEAR;
+					next;
+					mes "^3355FFあなたは見事、";
+					mes "習得した属性は"+.@Skill$[.@i]+"で、";
+					mes "エレメンタルチェンジと";
+					mes "エレメンタルコンバーター作成のスキルを習得しました。^000000";
+					skill .@Skill[.@i],1,SKILL_PERM;
+					if(.@Convert == 0)
+						skill "SA_CREATECON",1,SKILL_PERM;
+					next;
+					break;
+				}
+			}
+		}
+		else if(.@Convert == 0) {
+			mes "[ミシュナ]";
+			mes "よろしい、それでは";
+			mes "呪文を唱えて";
+			mes "忘れてしまったスキルを";
+			mes "思い出す手伝いをしましょう。";
+			mes "動かないで、できるだけ";
+			mes "じっとしていてください……";
+			next;
+			mes "[ミシュナ]";
+			mes "%$#@!#$% ヤップ～～";
+			specialeffect2 EF_RUWACH;
+			next;
+			mes "[ミシュナ]";
+			mes "ヤップ！";
+			specialeffect2 EF_BRANDISHSPEAR;
+			next;
+			mes "^3355FFあなたは見事、";
+			mes "エレメンタルコンバーター";
+			mes "作成のスキルを思い出し、";
+			mes "再び使えるようになった。^000000";
+			skill "SA_CREATECON",1,SKILL_PERM;
+			next;
+		}
+		mes "[ミシュナ]";
+		mes "あら、思ったより";
+		mes "早くこれらのスキルを";
+		mes "習得したのですね。それでは、";
+		mes "その才能をどうか正しい目的のために";
+		mes "うまく活かしてくださいね。";
+		mes "また会いましょう、"+strcharinfo(0)+"。";
+		close;
+	}
+	else if(SAG_SK == 0) {
+		mes "[ミシュナ]";
+		mes "こんにちは、私はミシュナ、";
+		mes "ここシュバイヒルビル魔法学院の";
+		mes "講師の一人です。";
+		mes "何かご用でしょうか？";
+		next;
+		select("新しい知識を求めています。");
+		mes "[ミシュナ]";
+		mes "あら、あなたが"+strcharinfo(0)+"さんね。";
+		mes "お会いできるのを";
+		mes "楽しみにしていました。";
+		mes "知識を尊く求める者として、";
+		mes "最近復元された";
+		mes "バーモント卿の巻物を読んでみては？";
+		next;
+		mes "[ミシュナ]";
+		mes "バーモント卿の巻物には";
+		mes "火・水・地・風という";
+		mes "4つの属性の知識が記されています。";
+		mes "この知識は、セージの";
+		mes "新しいスキル2つに応用できます。";
+		next;
+		mes "[ミシュナ]";
+		mes "1つ目は^FF0000エレメンタル";
+		mes "チェンジ^000000と呼ばれるもので、";
+		mes "習得した";
+		mes "エレメンタルチェンジスキルの属性に応じて、";
+		mes "モンスターの属性を変化させられます。";
+		next;
+		mes "[ミシュナ]";
+		mes "2つ目は";
+		mes "エレメンタルコンバーター作成、";
+		mes "つまり";
+		mes "エレメンタルチェンジスキルに必要な変換アイテムを作れるスキルです。";
+		next;
+		mes "[ミシュナ]";
+		mes "これら2つのスキルの知識は";
+		mes "長年失われていましたが、";
+		mes "ようやく";
+		mes "そのほとんどを";
+		mes "取り戻すことができました。";
+		mes "さて、あなたはこれらのスキルを学ぶ準備はできていますか？";
+		next;
+		if(select("また今度にします。:はい、できています。") == 1) {
+			mes "[ミシュナ]";
+			mes "あら、今は";
+			mes "お忙しいのですね。";
+			mes "問題ありません、学ぶ準備が";
+			mes "できたらまた来てください。それでは、";
+			mes "さようなら、良い一日を～";
+			close;
+		}
+		mes "[ミシュナ]";
+		mes "承知しました。まず、";
+		mes "エレメンタルコンバーター";
+		mes "作成のスキルを";
+		mes "学ばなければなりません。これは";
+		mes "エレメンタルチェンジを学ぶのに欠かせないものです。";
+		next;
+		mes "[ミシュナ]";
+		mes "必要な材料を";
+		mes "持ってきてもらえれば、";
+		mes "基本のエレメンタルコンバーターを";
+		mes "作って、スキルを学べるようにしましょう。";
+		mes "そうですね、";
+		mes "持ってきてほしいものは……";
+		next;
+		mes "[ミシュナ]";
+		mes "^ff0000角^000000 7個、";
+		mes "^ff0000レインボーシェル^000000 12個、";
+		mes "^ff0000カタツムリの殻^000000 10個、";
+		mes "^ff0000白紙の巻物^000000 4個、";
+		mes "^ff0000サソリの尻尾^000000 10個です。^000000";
+		next;
+		mes "[ミシュナ]";
+		mes "それでは、";
+		mes "ここで";
+		mes "お戻りをお待ちしています。";
+		mes "スキルを私の手本から学ぶには、";
+		mes "これらの材料でコンバーターを作る必要があることを忘れないでくださいね……";
+		set SAG_SK,1;
+		close;
+	}
+	else if(SAG_SK == 1) {
+		if (countitem(904) < 10 || countitem(947) < 7 || countitem(1013) < 12 || countitem(946) < 10 || countitem(7433) < 4) {
+			mes "[ミシュナ]";
+			mes "うーん、まだ";
+			mes "材料をすべて";
+			mes "集めきれていないようですね、";
+			mes "エレメンタルコンバーターを作るための。";
+			mes "念のため、持ってきてほしいものを";
+			mes "もう一度お伝えしておきますね……";
+			next;
+			mes "[ミシュナ]";
+			mes "^ff0000角^000000 7個、";
+			mes "^ff0000レインボーシェル^000000 12個、";
+			mes "^ff0000カタツムリの殻^000000 10個、";
+			mes "^ff0000白紙の巻物^000000 4個、";
+			mes "^ff0000サソリの尻尾^000000 10個です。^000000";
+			next;
+			mes "[ミシュナ]";
+			mes "忘れないでくださいね、";
+			mes "これらすべての材料が";
+			mes "コンバーターを作るために必要です。";
+			mes "そうすれば";
+			mes "私が実演するのを見て、";
+			mes "エレメンタルコンバーター作成のスキルを学べます。";
+			close;
+		}
+		else {
+			mes "[ミシュナ]";
+			mes "素晴らしい、全部持ってきましたね。";
+			mes "それでは、スキルについて説明しましょう。";
+			mes "セージが学ぶスキルによって、";
+			mes "作れるエレメンタルコンバーターの種類が決まります。";
+			next;
+			mes "[ミシュナ]";
+			mes "^FF0000エンドウブレイズ^000000のスキルがあれば";
+			mes "火属性のコンバーターを作れます。";
+			mes "^FF0000エンドウクエイク^000000のスキルは";
+			mes "地属性のコンバーターを";
+			mes "作れるようにします。";
+			next;
+			mes "[ミシュナ]";
+			mes "^FF0000エンドウトルネード^000000は";
+			mes "風属性のコンバーターを作れるようにし、";
+			mes "^FF0000エンドウツナミ^000000は";
+			mes "水属性のコンバーターを";
+			mes "作れるようにします。";
+			mes "ここまでは大丈夫ですか？";
+			next;
+			mes "[ミシュナ]";
+			mes "さて、エレメンタルコンバーターの";
+			mes "作成成功率は";
+			mes "エンドウブレイズ、エンドウクエイク、エンドウトルネード、";
+			mes "エンドウツナミのスキルレベルと、";
+			mes "あなたの能力に左右されます。";
+			next;
+			mes "[ミシュナ]";
+			mes "それでは、この";
+			mes "バーモントの巻物の写しを";
+			mes "受け取ってください。";
+			mes "エレメンタルコンバーターを";
+			mes "作るとき、参考にしてください。";
+			mes "エレメンタルコンバーター作成スキルを使う際に。";
+			next;
+			mes "^3355FFあなたは";
+			mes "バーモントの巻物の写しを";
+			mes "読み返し、";
+			mes "エレメンタルコンバーター作成のスキルを習得した。^000000";
+			specialeffect2 EF_ABSORBSPIRITS;
+			delitem 904,10; // Scorpion_Tail
+			delitem 947,7; // Horn
+			delitem 1013,12; // Rainbow_Shell
+			delitem 946,10; // Snail's_Shell
+			delitem 7433,4; // Blank_Scroll
+			set SAG_SK,2;
+			skill "SA_CREATECON",1,SKILL_PERM;
+			next;
+			mes "[ミシュナ]";
+			mes "すごいですね、"+strcharinfo(0)+"さん！";
+			mes "そんなに早く";
+			mes "スキルを習得するなんて！さすが";
+			mes "あなたが最高のセージの";
+			mes "一人と言われるだけありますね！";
+			next;
+			mes "[ミシュナ]";
+			mes "さあ、これでもう一つの";
+			mes "スキル、エレメンタルチェンジを";
+			mes "学ぶ準備が整いました。それでは、";
+			mes "この講義のために少し";
+			mes "準備が必要ですので、また後日";
+			mes "会って話しましょうね？";
+			close;
+		}
+	}
+	else if(SAG_SK == 2) {
+		if(getskilllv("SA_CREATECON") == 0) {
+			skill "SA_CREATECON",1,SKILL_PERM;
+			mes "－ミシュナと話している間に、^ff0000エレメンタルコンバーター作成のスキル^000000を思い出した！－";
+			next;
+		}
+		mes "[ミシュナ]";
+		mes "以前に学んでいなくても";
+		mes "構いません。習得条件さえ";
+		mes "満たしていれば、どの";
+		mes "^FF0000エレメンタルチェンジ^000000スキルを";
+		mes "選ぶか、選択する機会を差し上げます。";
+		next;
+		mes "[ミシュナ]";
+		mes "一度エレメンタルチェンジの";
+		mes "スキルを習得すると、";
+		mes "後から変更はできません。";
+		mes "覚えておいてくださいね。";
+		mes "さて、どのスキルを学びたいですか？";
+		next;
+		setarray .@ReqSkill[0],280,283,282,281;
+		setarray .@ReqSkill$[0],"ブレイズ","クエイク","トルネード","ツナミ";
+		setarray .@ReqItem$[0],"レッドブラッド","グリーンライブ","ウィンドオブヴァーデュア","クリスタルブルー";
+		setarray .@Skill$[0],"火","地","風","水";
+		while(1) {
+			set .@i, select("火のエレメンタルチェンジ:地のエレメンタルチェンジ:風のエレメンタルチェンジ:水のエレメンタルチェンジ")-1;
+			if(getskilllv(.@ReqSkill[.@i]) == 0) {
+				mes "[ミシュナ]";
+				mes "残念ですが、まだ";
+				mes "^FF0000エンドウ"+.@ReqSkill$[.@i]+"^000000という";
+				mes "スキルを習得していません。"+.@Skill$[.@i]+"のエレメンタルチェンジスキルには必要です。エンドウ";
+				mes .@ReqSkill$[.@i]+"を習得するか、別のエレメンタルチェンジスキルを選んでください。";
+				next;
+			}
+			else {
+				mes "[ミシュナ]";
+				mes "よろしい、それでは";
+				mes "以下のアイテムを";
+				mes "持ってきてください、";
+				mes .@Skill$[.@i]+"のエレメンタルチェンジスキルを学ぶために。";
+				next;
+				mes "[ミシュナ]";
+				mes "^FF0000"+.@ReqItem$[.@i]+"^000000 20個、";
+				mes "^FF0000フェイヨン溶液^000000 1個、";
+				mes "^FF0000モロク溶液^000000 1個です。";
+				mes "材料がすべて揃ったら、";
+				mes "また私のところへ戻ってきてください。";
+				set SAG_SK, 10 * (.@i+1); //10,20,30,40
+				close;
+			}
+		}
+	}
+	else if(SAG_SK == 10 || SAG_SK == 20 || SAG_SK == 30 || SAG_SK == 40) {
+		if(getskilllv("SA_CREATECON") == 0) {
+			skill "SA_CREATECON",1,SKILL_PERM;
+			mes "－ミシュナと話している間に、^ff0000エレメンタルコンバーター作成のスキル^000000を思い出した！－";
+			next;
+		}
+		set .@i, (SAG_SK/10) - 1;
+		setarray .@ReqItem[0],990,993,992,991;
+		setarray .@ReqItem$[0],"レッドブラッド","グリーンライブ","ウィンドオブヴァーデュア","クリスタルブルー";
+		setarray .@Skill[0],1018,1017,1019,1008;
+		setarray .@Skill$[0],"火","地","風","水";
+		if (countitem(.@ReqItem[.@i]) < 20 || countitem(1089) < 1 || countitem(1088) < 1) {
+			mes "[ミシュナ]";
+			mes "必要な材料を";
+			mes "集めるのに";
+			mes "苦労していますか？念のため、";
+			mes "何を持ってきてほしいか、";
+			mes "もう一度お伝えしますね。学ぶのは"+.@Skill$[.@i];
+			mes "のエレメンタルチェンジスキルです。";
+			next;
+			mes "[ミシュナ]";
+			mes "^ff0000"+.@ReqItem$[.@i]+"^000000 20個、";
+			mes "^ff0000フェイヨン溶液^000000 1個、";
+			mes "^ff0000モロク溶液^000000 1個です。";
+			mes "忘れずに、";
+			mes "次に会うときまでに";
+			mes "材料を準備しておいてくださいね。";
+			close;
+		}
+		mes "[ミシュナ]";
+		mes "あら、お帰りなさい。これで";
+		mes "ようやく";
+		mes .@Skill$[.@i]+"のエレメンタルチェンジ";
+		mes "スキルについて教えられます。";
+		mes "このスキルは、対象とした";
+		mes "モンスターの属性を永続的に"+.@Skill$[.@i]+"へ変化させることがあります。";
+		next;
+		mes "[ミシュナ]";
+		mes "忘れないでください、";
+		mes "このスキルを使うには";
+		mes "エレメンタルコンバーターが必要で、";
+		mes "エレメンタルコンバーター作成スキルと";
+		mes "同じように成功率があります。ご注意を。";
+		next;
+		mes "[ミシュナ]";
+		mes "さて、"+strcharinfo(0)+"さん、";
+		mes "呪文を唱えて";
+		mes "あなたが";
+		mes "属性が"+.@Skill$[.@i]+"の";
+		mes "エレメンタルチェンジスキルを覚える手伝いをしましょう。じっとしていてくださいね……";
+		next;
+		mes "^3355FFミシュナが";
+		mes "不思議な呪文を";
+		mes "唱え始めると、";
+		mes "柔らかな青い光が彼の体を";
+		mes "包み、次第に強く、明るくなっていく。^000000";
+		specialeffect2 EF_RUWACH;
+		next;
+		mes "[ミシュナ]";
+		mes "@#$%^~ ヤップ！";
+		specialeffect2 EF_BRANDISHSPEAR;
+		delitem .@ReqItem[.@i],20;
+		delitem 1089,1; // Payon Potion
+		delitem 1088,1; // Morocc Potion
+		set SAG_SK,100;
+		skill .@Skill[.@i],1,0;
+		next;
+		mes "[ミシュナ]";
+		mes strcharinfo(0)+"さん……";
+		mes "うれしいことに、";
+		mes "見事に";
+		mes .@Skill$[.@i]+"のエレメンタルチェンジ";
+		mes "スキルを記憶しましたね。";
+		mes "戦いで役立つことを願っています。また会いましょう～";
+		close;
+	}
+	else {
+		mes "[ミシュナ]";
+		mes "もしセージや賢者の";
+		mes "お友達で、まだ";
+		mes "バーモント卿の巻物から";
+		mes "スキルを学んでいない方が";
+		mes "いらしたら、ぜひ私のもとへ寄こしてください。";
+		next;
+		mes "[ミシュナ]";
+		mes "この属性系のスキルが";
+		mes "戦闘でとても";
+		mes "役立っていることと";
+		mes "思います。";
+		mes "知識こそが、";
+		mes "結局は力になるものですね……";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//===== Additional Comments: ================================= 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//= Somehow eA engine doesn't let you keep learn't skill V_V'
+//= 1.2 Added to correct locations, correct NPC's, fixed
+//= some of the items required and made them into real
+//= quests. [Reddozen] 
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a fixed an item ID typo, thx 2Spiritual Kid
+//= 1.3b Splitted into different files [DracoRPG]
+//= 1.3c Fixed some typos [IVBela]
+//============================================================

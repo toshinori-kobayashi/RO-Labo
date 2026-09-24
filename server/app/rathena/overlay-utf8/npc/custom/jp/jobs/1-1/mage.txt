@@ -1,0 +1,700 @@
+//===== rAthena Script ======================================= 
+//= Mage Job Quest
+//===== By: ================================================== 
+//= kobra_k88; L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 2.0
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Mage classes
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working.
+//= 1.1 Fixed input ingridients bug [Lupus]
+//= 1.2 Added instant job change for High Novice [Lupus]
+//= 1.3 Added Baby Class support [Lupus]
+//= 1.4 Optimised and moved first checker to Jfunc1-1 [massdriller]
+//= 1.5 Now saves/restores all quest skills [Lupus]
+//= 1.6 Merged back JFunc, CHANGED NUMBERS TO CONSTANTS [Lupus]
+//= 1.7 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     No longer uses function "F_ToHigh"
+//= 1.7a Fixed a "If" in the quest. (bugreport:489) [Samuray22]
+//= 1.8 Added Quest Log commands. [L0ne_W0lf]
+//= 1.9 Fixed an issue with completequest by adding checkquest. [Kisuka]
+//= 2.0 Moved "Dollshoi" and "Ponka-Hontas" NPCs. [Euphy]
+//============================================================ 
+//= Japanese overlay: translated strings only (structure identical to upstream). Managed as UTF-8, converted to CP932 at build.
+
+geffen_in,164,124,4	script	マジシャンギルド職員::Mage Guildsman	123,{
+	if (Upper == 1) {
+		if (ADVJOB == Job_High_Wizard || ADVJOB == Job_Professor) {
+			if (Class == Job_Novice_High) {
+				mes "[マジシャンギルド職員]";
+				mes "おお、久しぶりだな！てっきり死んだものだと思っていたぞ？";
+				next;
+				mes "[マジシャンギルド職員]";
+				mes "ああ、生まれ変わってきたんだな。戻ってきてくれて嬉しいぞ。";
+				next;
+				if (!callfunc("F_CanChangeJob")) {
+					mes "[マジシャンギルド職員]";
+					mes "すまないが、まだ魔法を学ぶ準備ができていないようだ。まずは基本スキルを覚えてきたらどうだ？";
+					next;
+					mes "[マジシャンギルド職員]";
+					mes "焦らなくていい。学べば学ぶほど、また魔法を学ぶ準備が整っていくものだ。";
+					close;
+				}
+				mes "[マジシャンギルド職員]";
+				mes "まあ、一度マジシャンの試験に合格しているんだ。資格を疑うことはしない。すぐにでも魔法の力を取り戻したいだろう？";
+				next;
+				skill "NV_TRICKDEAD",0,SKILL_PERM;
+				jobchange Job_Mage_High;
+				skill "MG_ENERGYCOAT",1,SKILL_PERM;
+				mes "[マジシャンギルド職員]";
+				mes "おお、なぜか前よりずっと良く見えるな。いずれにせよ、君ならマジシャンとしても、より良くやってくれると信じているぞ。";
+				close;
+			}
+			else {
+				mes "[マジシャンギルド職員]";
+				mes "他に何か力になれることはあるか？なければ、そろそろ自分の実力を試しに行ってはどうだ？世界が君を待っているぞ～！";
+				close;
+			}
+		}
+		else {
+			mes "[マジシャンギルド職員]";
+			mes "なんだ、マジシャンギルドに興味があるのか？こう言いたくはないが、君はここにいるべき者じゃない。";
+			next;
+			mes "[マジシャンギルド職員]";
+			mes "なぜまだ私の前に立っているのかわからないが、君はマジシャンに向いていないのは確かだ。";
+			close;
+		}
+	}
+	mes "[マジシャンギルド職員]";
+	mes "よお。どうした？";
+	next;
+	switch(select("マジシャンになりたい。:条件を教えてほしい。:特に何も。")) {
+	case 1:
+		mes "[マジシャンギルド職員]";
+		if (BaseJob == Job_Mage) {
+			mes "おいおい、気づいていないのか？もう君はマジシャンじゃないか、バカだな！";
+			next;
+			mes "[マジシャンギルド職員]";
+			mes "そのうち、心の力だけで火を起こせるようになったとき、自分の内なる力に気づくだろうさ！";
+			close;
+		}
+		if (BaseJob != Job_Novice) {
+			mes "おいおい～冗談はよせ。既に別の職業に就いているんだから、マジシャンにはなれないぞ。";
+			close;
+		}
+		if (job_magician_q == 0) {
+			mes "マジシャンになりたいのか……？";
+			if (Sex == SEX_MALE)
+				mes "おや、見てみろ！なかなか可愛いじゃないか～！まあ、俺のタイプじゃないが……";
+			else {
+				mes "おお、なんて魅力的な子なんだ～！";
+				mes "君みたいな子、好みだぞ～";
+			}
+			next;
+			mes "[マジシャンギルド職員]";
+			mes "よし、マジシャンになりたいんだったな？それなら、このマジシャン申込書にサインしてくれ。";
+			next;
+			if (select("サインする。:やめる。") == 1) {
+				mes "[マジシャンギルド職員]";
+				mes "よし。そこにサインしてくれ。おお、字が上手いな。よし、君の名前は……" + strcharinfo(0) + "、だな。";
+				next;
+				mes "[マジシャンギルド職員]";
+				mes "さて、そろそろ";
+				mes "君に試験を出そうか。";
+				switch(rand(0,3)) {
+				case 1:
+					mes "^3355FF混合溶液 1号^000000を";
+					mes "作って持ってきてくれ。";
+					set job_magician_q,1;
+					break;
+				case 2:
+					mes "^3355FF混合溶液 2号^000000を";
+					mes "作って持ってきてくれ。";
+					set job_magician_q,2;
+					break;
+				case 3:
+					mes "^3355FF混合溶液 3号^000000を";
+					mes "作って持ってきてくれ。";
+					set job_magician_q,3;
+					break;
+				default:
+					mes "^3355FF混合溶液 4号^000000を";
+					mes "作って持ってきてくれ。";
+					set job_magician_q,4;
+				}
+				next;
+				getitem 1092,1; //Empty_Cylinder
+				mes "[マジシャンギルド職員]";
+				mes "必要な材料は、このギルドにあるガイドブックに載っている。行く前によく確認しておくといい。";
+				next;
+				mes "[マジシャンギルド職員]";
+				mes "材料をすべて集めたら、部屋の中央にある機械を使って溶液を調合するんだ。健闘を祈る！";
+				close;
+			}
+			mes "[マジシャンギルド職員]";
+			mes "な、なんだってー！？マジシャンになりたいと言った直後に気が変わるのか！？もっとしっかりしてくれ！";
+			close;
+		}
+		mes "ん？準備はいいか……？";
+		if (!callfunc("F_CanChangeJob")) {
+			mes "おっと、残念だな。まだ条件を満たしていないようだ。";
+			next;
+			mes "[マジシャンギルド職員]";
+			mes "まずはノービスのジョブレベル9に到達してから戻ってきてくれ。基本スキルも全部覚えておくのを忘れるなよ。";
+			close;
+		}
+		mes "" + strcharinfo(0) + "の試験は……";
+		if (job_magician_q == 1)
+			mes "混合溶液 1号の作製。";
+		else if (job_magician_q == 2)
+			mes "混合溶液 2号の作製。";
+		else if (job_magician_q == 3)
+			mes "混合溶液 3号の作製。";
+		else
+			mes "混合溶液 4号の作製。";
+		next;
+		mes "[マジシャンギルド職員]";
+		mes "よし、では";
+		mes "正確に溶液を作れているか";
+		mes "確認しよう……";
+		next;
+		mes "[マジシャンギルド職員]";
+		if (countitem(1071) == 0 && countitem(1085) == 0 && countitem(1086) == 0 && countitem(1087) == 0 && countitem(1090) == 0) {
+			mes "おい、頼んだ溶液は";
+			mes "どこだ……？見せてもらわないと確認できないだろう？";
+			close;
+		}
+		else {
+			if ((job_magician_q == 1 && countitem(1071) == 0) || (job_magician_q == 2 && countitem(1085) == 0) || (job_magician_q == 3 && countitem(1086) == 0) || (job_magician_q == 4 && countitem(1087) == 0)) {
+				mes "待て。";
+				mes "これは私が頼んだ";
+				mes "溶液じゃないぞ！";
+				next;
+				mes "[マジシャンギルド職員]";
+				if (job_magician_q == 1)
+					mes "混合溶液 1号を作って持ってくるはずだろう。もう一度やり直してこい。";
+				else if (job_magician_q == 2)
+					mes "混合溶液 2号を作って持ってくるはずだろう。もう一度やり直してこい。";
+				else if (job_magician_q == 3)
+					mes "混合溶液 3号を作って持ってくるはずだろう。もう一度やり直してこい。";
+				else
+					mes "混合溶液 4号を作って持ってくるはずだろう。もう一度やり直してこい。";
+
+				if (countitem(1071) != 0) delitem 1071,1; //Mage_Test_1
+				else if (countitem(1085) != 0) delitem 1085,1; //Mage_Test_2
+				else if (countitem(1086) != 0) delitem 1086,1; //Mage_Test_3
+				else if (countitem(1087) != 0) delitem 1087,1; //Mage_Test_4
+				else delitem 1090,1; //Mage_Test_Etc
+				close;
+			}
+		}
+		if (countitem(1071) != 0) delitem 1071,1; //Mage_Test_1
+		else if (countitem(1085) != 0) delitem 1085,1; //Mage_Test_2
+		else if (countitem(1086) != 0) delitem 1086,1; //Mage_Test_3
+		else if (countitem(1087) != 0) delitem 1087,1; //Mage_Test_4
+		else delitem 1090,1; //Mage_Test_Etc
+		mes "うむ。かなり頑張った跡が見えるな。初心者の挑戦としては、これは本当に良い出来だ。";
+		mes "よくやった！";
+		next;
+		mes "[マジシャンギルド職員]";
+		mes "よし！マジシャン試験に合格したと言えて嬉しいぞ。すぐにでも転職させてやろう！";
+		next;
+		mes "[マジシャンギルド職員]";
+		mes "……コホン";
+		mes "おめでとう！";
+		mes "君は今、マジシャンになった！";
+		next;
+		for ( .@quest_id = 1005; .@quest_id <= 1008; .@quest_id++ ) {
+			if (isbegin_quest(.@quest_id) == 1)
+				completequest .@quest_id;
+		}
+		callfunc "Job_Change",Job_Mage;
+		callfunc "F_ClearJobVar";
+		set Zeny,Zeny+50;
+		mes "[マジシャンギルド職員]";
+		mes "『ウェルカム・トゥ・マイ・ワールド～』";
+		mes "へへ、ちょっと言ってみたかっただけだ。知っての通り、有名な映画の台詞だぞ～";
+		next;
+		mes "[マジシャンギルド職員]";
+		mes "これで君も私たちと同じマジシャンだ。仲良くやっていこうじゃないか？";
+		close;
+	case 2:
+		mes "[マジシャンギルド職員]";
+		mes "マジシャンになりたいのか？";
+		if (Sex == SEX_MALE)
+			mes "君みたいな可愛い子になら、喜んで条件を説明してやろう！";
+		else
+			mes "君みたいな綺麗な子になら、喜んで条件を説明してやろう！";
+		next;
+		mes "[マジシャンギルド職員]";
+		mes "まず、ノービスとしてジョブレベル10に到達し、基本スキルを全て覚える必要がある。その後、マジシャン試験に合格しなければならない。";
+		next;
+		if (job_magician_q != 0) {
+			mes "[マジシャンギルド職員]";
+			mes "君の試験は";
+			switch(job_magician_q) {
+			case 1:
+				mes "私のために";
+				mes "^3355FF混合溶液 1号^000000を";
+				mes "作って持ってきてくれ。";
+				if (isbegin_quest(1005) == 0)
+					setquest 1005;
+				break;
+			case 2:
+				mes "私のために";
+				mes "^3355FF混合溶液 2号^000000を";
+				mes "作って持ってきてくれ。";
+				if (isbegin_quest(1006) == 0)
+					setquest 1006;
+				break;
+			case 3:
+				mes "私のために";
+				mes "^3355FF混合溶液 3号^000000を";
+				mes "作って持ってきてくれ。";
+				if (isbegin_quest(1007) == 0)
+					setquest 1007;
+				break;
+			default:
+				mes "私のために";
+				mes "^3355FF混合溶液 4号^000000を";
+				mes "作って持ってきてくれ。";
+				if (isbegin_quest(1008) == 0)
+					setquest 1008;
+				break;
+			}
+			next;
+			mes "[マジシャンギルド職員]";
+			mes "溶液の材料は、このギルドにあるガイドブックで調べられるぞ。";
+		}
+		else {
+			mes "[マジシャンギルド職員]";
+			mes "どの混合溶液を作る必要があるかは、申込書にサインした後に教えるぞ。";
+		}
+		next;
+		mes "[マジシャンギルド職員]";
+		mes "マジシャンになる準備ができたら教えてくれ、いいな？";
+		close;
+	case 3:
+		mes "[マジシャンギルド職員]";
+		mes "特に何も……？";
+		close;
+	}
+}
+
+geffen_in,164,112,4	script	Mixing Machine	111,{
+	mes "[調合機]";
+	mes "この機械はゲフェンのマジシャンギルドの所有物で、魔法用の溶液を調合するためだけに使われる。";
+	next;
+	if (select("機械を使う。:キャンセル。") == 1) {
+		mes "[調合機]";
+		mes "溶液用の";
+		mes "溶剤を";
+		mes "選んでくれ。";
+		next;
+		switch(select("フェイヨン溶液。:モロク溶液。:溶剤なし。")) {
+		case 1:
+			if (countitem(1089) == 0) {
+				mes "[調合機]";
+				mes "エラー。";
+				mes "アイテムが見つからない。";
+				mes "もう一度確認してくれ。";
+				mes "処理を中断する。";
+				close;
+			}
+			set .@mixitem2,1;
+			break;
+		case 2:
+			if (countitem(1088) == 0) {
+				mes "[調合機]";
+				mes "エラー。";
+				mes "アイテムが見つからない。";
+				mes "もう一度確認してくれ。";
+				mes "処理を中断する。";
+				close;
+			}
+			set .@mixitem2,2;
+			break;
+		case 3:
+			set .@mixitem2,0;
+			break;
+		}
+		while (1) {
+			if (.@progress == 2) {
+				mes "[調合機]";
+				if (.@mixitem1_1 != 0) mes "ジェロピー：" + .@mixitem1_1 + "個。";
+				if (.@mixitem1_2 != 0) mes "綿毛：" + .@mixitem1_2 + "個。";
+				if (.@mixitem1_3 != 0) mes "ミルク：" + .@mixitem1_3 + "個。";
+				if (.@mixitem2 == 0) mes "溶剤：なし。";
+				if (.@mixitem2 == 1) mes "溶剤：フェイヨン溶液。";
+				if (.@mixitem2 == 2) mes "溶剤：モロク溶液。";
+				next;
+				mes "[調合機]";
+				mes "調合を開始するか、混合するアイテムの数を再入力するか選んでくれ。";
+				next;
+				switch(select("調合を開始する。:アイテム数を再入力する。:リセット。")) {
+				case 1:
+					mes "[調合機]";
+					mes "アイテムを調合容器に入れてくれ。数量が正しいか確認するんだぞ。";
+					next;
+					mes "[調合機]";
+					mes "一度調合容器に入れたアイテムは、調整も取り戻すこともできない。";
+					next;
+					mes "[調合機]";
+					mes "全て正しければ、準備ができ次第「調合」ボタンを押してくれ。そうでなければ「キャンセル」ボタンを押すんだ。";
+					next;
+					if (select("「調合」ボタンを押す。:「キャンセル」ボタンを押す。") == 1) {
+						mes "[調合機]";
+						mes "アイテムを調合容器に入れている。少し待ってくれ。";
+						next;
+						mes "[調合機]";
+						if (countitem(909) < .@mixitem1_1) {
+							mes "ジェロピーが足りない。";
+							mes "もう一度確認してくれ。";
+							mes "処理を中断した。";
+							close;
+						}
+						else if (countitem(914) < .@mixitem1_2) {
+							mes "綿毛が足りない。";
+							mes "もう一度確認してくれ。";
+							mes "処理を中断した。";
+							close;
+						}
+						else if (countitem(519) < .@mixitem1_3) {
+							mes "ミルクが足りない。";
+							mes "もう一度確認してくれ。";
+							mes "処理を中断した。";
+							close;
+						}
+						else if (.@mixitem2 == 1 || .@mixitem2 == 2) {
+							if (countitem(1089) == 0 && countitem(1088) == 0) {
+								mes "溶液が見つからない。";
+								mes "もう一度確認してくれ。";
+								mes "処理を中断した。";
+								close;
+							}
+						}
+						if (.@mixitem1_1 != 0) delitem 909,.@mixitem1_1; //Jellopy
+						if (.@mixitem1_2 != 0) delitem 914,.@mixitem1_2; //Fluff
+						if (.@mixitem1_3 != 0) delitem 519,.@mixitem1_3; //Milk
+						if (.@mixitem2 == 1) delitem 1089,1; //Payon_Potion
+						if (.@mixitem2 == 2) delitem 1088,1; //Morocc_Potion
+						mes "アイテムの準備ができた。";
+						mes "蓋を閉めてくれ。";
+						set .@progress,3;
+						next;
+					}
+					break;
+				case 2:
+					set .@continue,0;
+					next;
+					break;
+				case 3:
+					set .@mixitem1_1,0;
+					set .@mixitem1_2,0;
+					set .@mixitem1_3,0;
+					set .@progress,0;
+					set .@continue,0;
+					mes "[調合機]";
+					mes "リセット完了。";
+					mes "もう一度始めるか？";
+					next;
+					if (select("はい。:いいえ。") == 1)
+						break;
+					mes "[調合機]";
+					mes "処理を中断した。";
+					mes "ありがとう。";
+					close;
+				}
+				if (.@progress == 3) break;
+			}
+			else if (.@progress == 1) {
+				mes "[調合機]";
+				mes "何も見当たらない。";
+				next;
+			}
+			mes "[調合機]";
+			mes "混ぜるアイテムを選んでくれ。";
+			while(1) {
+				switch(select("ジェロピー。:綿毛。:ミルク。:調合準備完了。")) {
+				case 1:
+					while(1) {
+						input .@input;
+						if (.@input > 10000) {
+							next;
+							mes "[調合機]";
+							mes "エラー：上限を超えている。10,000未満の数値を入力してもう一度試してくれ。";
+							next;
+						}
+						else {
+							if (countitem(909) > 0) set .@mixitem1_1,.@mixitem1_1 + .@input;
+							set .@progress,2;
+							break;
+						}
+					}
+					break;
+				case 2:
+					while(1) {
+						input .@input;
+						if (.@input > 10000) {
+							next;
+							mes "[調合機]";
+							mes "エラー：上限を超えている。10,000未満の数値を入力してもう一度試してくれ。";
+							next;
+						}
+						else {
+							if (countitem(914) > 0) set .@mixitem1_2,.@mixitem1_2 + .@input;
+							set .@progress,2;
+							break;
+						}
+					}
+					break;
+				case 3:
+					while(1) {
+						input .@input;
+						if (.@input > 10000) {
+							next;
+							mes "[調合機]";
+							mes "エラー：上限を超えている。10,000未満の数値を入力してもう一度試してくれ。";
+							next;
+						}
+						else {
+						if (countitem(519) > 0) set .@mixitem1_3,.@mixitem1_3 + .@input;
+							set .@progress,2;
+							break;
+						}
+					}
+					break;
+
+				case 4:
+					if (.@progress != 2)
+						set .@progress,1;
+					set .@continue,1;
+					next;
+				}
+				if (.@continue) break;
+			}
+		}
+		mes "[調合機]";
+		mes "魔法の粉の";
+		mes "シリアル番号を";
+		mes "入力してくれ。";
+		next;
+		while(1) {
+			input .@input;
+			if (.@input < 1000 || .@input > 9999) {
+				mes "[調合機]";
+				if (.@input == 0) {
+					mes "このメニューをスキップするか？";
+					next;
+					if (select("はい。:いいえ。") == 1) {
+						break;
+					}
+				}
+				else {
+					mes "無効なシリアル番号だ。";
+					mes "もう一度試してくれ。";
+					next;
+				}
+			}
+			else {
+				mes "[調合機]";
+				mes "シリアル番号は#" + .@input + "で間違いないか？";
+				next;
+				if (select("確認する。:キャンセル。") == 1) {
+					if (.@input == 8472)
+						set .@magic_powder,1;
+					else if (.@input == 3735)
+						set .@magic_powder,2;
+					else if (.@input == 2750)
+						set .@magic_powder,3;
+					else if (.@input == 5429)
+						set .@magic_powder,4;
+					else
+						set .@magic_powder,5;
+				}
+				break;
+			}
+		}
+		mes "[調合機]";
+		mes "触媒となる";
+		mes "宝石を選んでくれ。";
+		next;
+		switch(select("黄色いジェムストーン。:赤いジェムストーン。:青いジェムストーン。:1カラットダイヤモンド。:スキップ。")) {
+		case 1: set .@mixitem3,1; break;
+		case 2: set .@mixitem3,2; break;
+		case 3: set .@mixitem3,3; break;
+		case 4: set .@mixitem3,4; break;
+		case 5: break;
+		}
+		mes "[調合機]";
+		mes "準備完了。";
+		mes "調合処理を";
+		mes "開始する。";
+		mes "少し待ってくれ。";
+		next;
+		mes "[調合機]";
+		mes "- 本日の格言 -";
+		switch(rand(1,5)) {
+		case 1:
+			mes "目には目を：人から奪ったなら、何らかの形で返すか償わなければならない。";
+			break;
+		case 2:
+			mes "信用は人の通貨：本物の信頼には、計り知れない価値がある。";
+			break;
+		case 3:
+			mes "因果応報：結局のところ、人は自分が他人にした通りの扱いを受けるものだ。";
+			mes "つまり「他人を傷つければ、避けられない形で自分も傷つけられる」ということだ。";
+			break;
+		case 4:
+			mes "遠くの親戚より近くの他人：助けが必要なとき、頼りになるのは身近な人たちだ。";
+			break;
+		default:
+			mes "類は友を呼ぶ：友人を見れば、その人の人柄がわかるものだ。";
+		}
+		next;
+		if (.@mixitem1_1 == 2 && .@mixitem1_2 == 3 && .@mixitem1_3 == 1 && .@mixitem2 == 1 && .@mixitem3 == 1 && .@magic_powder == 1) {
+			mes "[調合機]";
+			mes "マジシャン試験溶液 1号。";
+			getitem 1071,1; //Mage_Test_1
+			next;
+		}
+		else if (.@mixitem1_1 == 3 && .@mixitem1_2 == 1 && .@mixitem1_3 == 1 && .@mixitem2 == 0 && .@mixitem3 == 2 && .@magic_powder == 2) {
+			mes "[調合機]";
+			mes "マジシャン試験溶液 2号。";
+			getitem 1085,1; //Mage_Test_2
+			next;
+		}
+		else if (.@mixitem1_1 == 6 && .@mixitem1_2 == 1 && .@mixitem1_3 == 0 && .@mixitem2 == 1 && .@mixitem3 == 3 && .@magic_powder == 3) {
+			mes "[調合機]";
+			mes "マジシャン試験溶液 3号。";
+			getitem 1086,1; //Mage_Test_3
+			next;
+		}
+		else if (.@mixitem1_1 == 2 && .@mixitem1_2 == 3 && .@mixitem1_3 == 0 && .@mixitem2 == 2 && .@mixitem3 == 4 && .@magic_powder == 4) {
+			mes "[調合機]";
+			mes "マジシャン試験溶液 4号。";
+			getitem 1087,1; //Mage_Test_4
+			next;
+		}
+		else {
+			mes "[調合機]";
+			mes "予期しない";
+			mes "エラーが発生した。";
+			getitem 1090,1; //Mage_Test_Etc
+			next;
+		}
+		mes "[調合機]";
+		mes "調合完了。";
+		mes "ありがとう。";
+		close;
+	}
+	close;
+}
+
+// The Morocc Solution and Payon Solution traders
+// are also used in the Sage skill quests, and have
+// been moved to npc/quests/mage_solution.txt.
+//
+// pay_arche,122,100,0	script	Dollshoi	88,{}
+// moc_ruins,91,150,0	script	Ponka-Hontas	93,{}
+
+geffen_in,177,112,4	script	Bookshelf	111,{
+	mes "[ガイドブック]";
+	mes "このガイドブックはゲフェンのマジシャン協会の所有物だ。大切に扱ってくれ。";
+	next;
+	switch(select("溶液 1号について。:溶液 2号について。:溶液 3号について。:溶液 4号について。:閉じる。")) {
+	case 1:
+		mes "[マジシャン試験溶液 1号]";
+		mes "* 材料リスト *";
+		mes "ジェロピー2個";
+		mes "綿毛3個";
+		mes "ミルク1個";
+		next;
+		mes "[マジシャン試験溶液 1号]";
+		mes "* 溶剤 *";
+		mes "フェイヨン溶液";
+		mes "入手場所：";
+		mes "アーチャーの村フェイヨンにある小さな泉。";
+		next;
+		mes "[マジシャン試験溶液 1号]";
+		mes "* 魔力シリアルコード *";
+		mes "8472";
+		next;
+		mes "[マジシャン試験溶液 1号]";
+		mes "* 触媒 *";
+		mes "黄色いジェムストーン";
+		mes "（提供：";
+		mes "調合機）";
+		close;
+	case 2:
+		mes "[マジシャン試験溶液 2号]";
+		mes "* 材料リスト *";
+		mes "ジェロピー3個";
+		mes "綿毛1個";
+		mes "ミルク1個";
+		next;
+		mes "[マジシャン試験溶液 2号]";
+		mes "* 溶剤 *";
+		mes "なし";
+		next;
+		mes "[マジシャン試験溶液 2号]";
+		mes "* 魔力シリアルコード *";
+		mes "3735";
+		next;
+		mes "[マジシャン試験溶液 2号]";
+		mes "* 触媒 *";
+		mes "赤いジェムストーン";
+		mes "（提供：";
+		mes "調合機）";
+		close;
+	case 3:
+		mes "[マジシャン試験溶液 3号]";
+		mes "* 材料リスト *";
+		mes "ジェロピー6個";
+		mes "綿毛1個";
+		next;
+		mes "[マジシャン試験溶液 3号]";
+		mes "* 溶剤 *";
+		mes "フェイヨン溶液";
+		mes "入手場所：";
+		mes "アーチャーの村フェイヨンにある小さな泉。";
+		next;
+		mes "[マジシャン試験溶液 3号]";
+		mes "* 魔力シリアルコード *";
+		mes "2750";
+		next;
+		mes "[マジシャン試験溶液 3号]";
+		mes "* 触媒 *";
+		mes "青いジェムストーン";
+		mes "（提供：";
+		mes "調合機）";
+		close;
+	case 4:
+		mes "[マジシャン試験溶液 4号]";
+		mes "* 材料リスト *";
+		mes "ジェロピー2個";
+		mes "綿毛3個";
+		next;
+		mes "[マジシャン試験溶液 4号]";
+		mes "* 溶剤 *";
+		mes "モロク溶液";
+		mes "入手場所：";
+		mes "モロクのピラミッド入口近くにある小さな泉。";
+		next;
+		mes "[マジシャン試験溶液 4号]";
+		mes "* 魔力シリアルコード *";
+		mes "5429";
+		next;
+		mes "[マジシャン試験溶液 4号]";
+		mes "* 触媒 *";
+		mes "1カラットダイヤモンド";
+		mes "（提供：";
+		mes "調合機）";
+		close;
+	}
+	close;
+}

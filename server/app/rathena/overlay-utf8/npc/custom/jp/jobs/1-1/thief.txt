@@ -1,0 +1,539 @@
+//===== rAthena Script =======================================
+//= Thief Job Quest
+//===== By: ==================================================
+//= rAthena Dev Team
+//===== Current Version: =====================================
+//= 1.8
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Job quest for Thief classes
+//===== Additional Comments: =================================
+//= 1.0 Fully working.
+//= 1.1 Added instant job change for High Novice [Lupus]
+//= 1.3 Added Baby Class support [Lupus]
+//= 1.4 Optimised and moved first checker to Jfunc1-1 [massdriller]
+//=     Fixed possible EXP abuse [Lupus]
+//= 1.5 Now saves/restores all quest skills [Lupus]
+//= 1.6 Merged back JFunc [Lupus] 1.6a typos
+//= 1.7 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     No longer uses function "F_ToHigh"
+//= 1.8 Added Quest Log commands. [L0ne_W0lf]
+//============================================================
+
+moc_prydb1,39,129,2	script	シーフ案内係::Thief Guide	69,{
+	if (Upper == 1) {
+		if (ADVJOB == Job_Assassin_Cross || ADVJOB == Job_Stalker) {
+			if (Class == Job_Novice_High) {
+				mes "[シーフガイド]";
+				mes "おや？お前、知り合いだったか？やけに見覚えがあって気味が悪いな。双子じゃあるまいな？";
+				next;
+				if (!callfunc("F_CanChangeJob")) {
+					mes "[シーフガイド]";
+					mes "なんだ、シーフになりたいのか？悪いが、まだ修行が足りないようだな。";
+					next;
+					mes "[シーフガイド]";
+					mes "じっくり基本スキルを全部覚えてくるんだな。じゃ、またな～！";
+					close;
+				}
+				mes "[シーフガイド]";
+				mes "お前、まるで一生分の戦いを潜り抜けてきたような顔してるな。よし、今すぐシーフに昇格させてやる。お前らタフな連中には欲しいものをくれてやらんとな…";
+				next;
+				skill "NV_TRICKDEAD",0,SKILL_PERM;
+				jobchange Job_Thief_High;
+				skill "TF_SPRINKLESAND",1,SKILL_PERM;
+				skill "TF_BACKSLIDING",1,SKILL_PERM;
+				skill "TF_PICKSTONE",1,SKILL_PERM;
+				skill "TF_THROWSTONE",1,SKILL_PERM;
+				mes "[シーフガイド]";
+				mes "シーフになったからにはシーフらしく生きるんだな。よし、行ってこい！次！";
+				close;
+			}
+			else {
+				mes "[シーフガイド]";
+				if (Sex == SEX_MALE)
+					mes "よう、兄弟。";
+				else
+					mes "あら、あなた～。";
+				close;
+			}
+		}
+		else {
+			mes "[シーフガイド]";
+			if (Sex == SEX_MALE)
+				mes "よう、兄弟。";
+			else
+				mes "あら、あなた。";
+			mes "…おい！お前、シーフになるには真面目すぎるだろ！！とっとと消えな、忙しいんだ。次！";
+			close;
+		}
+	}
+	if (BaseJob == Job_Thief) {
+		mes "[シーフガイド]";
+		mes "困ったことがあれば、いつでも遠慮なく話しかけてくれ。いいな？";
+		close;
+	}
+	else if (BaseJob != Job_Novice && BaseJob != Job_Thief) {
+		mes "[シーフガイド]";
+		mes "何だってんだ…？";
+		switch(Class) {
+		case 1:
+			mes "ほう。";
+			mes "こいつは";
+			mes "でかい剣だな。";
+			next;
+			mes "[シーフガイド]";
+			mes "つまり…";
+			mes "何かの埋め合わせ";
+			mes "でもしてんの";
+			mes "か、相棒？";
+			break;
+		case 2:
+			mes "メイジがこんな所で何してる？カード手品でもよそでやってりゃいいだろ。まあ、自由の国だしな…";
+			next;
+			mes "[シーフガイド]";
+			mes "って、待てよ";
+			mes "違うか…";
+			mes "とっとと出てけ！";
+			break;
+		case 3:
+			mes "おい、アーチャーは";
+			mes "森の中ででも";
+			mes "遊んでるのが";
+			mes "お似合いだろ？";
+			break;
+		case 4:
+			mes "俺たちは盗みで食ってるんだぜ？アコライトがこんな所で何してるんだ？";
+			break;
+		case 5:
+			mes "お前、商人";
+			mes "だろ？なんで";
+			mes "盗賊の巣に";
+			mes "入ってきたんだ！？";
+			next;
+			mes "[シーフガイド]";
+			mes "盗んでくれって";
+			mes "言ってるようなもんだぞ！";
+			mes "さあ、さっさと";
+			mes "出てきな～";
+			break;
+		case 8:
+			mes "なんてこった…";
+			mes "俺、死ぬのか？";
+			next;
+			mes "[シーフガイド]";
+			mes "でなけりゃプリーストがこんな所に来るわけないだろ。悪事を全部懺悔しといたほうがよさそうだな。";
+			close;
+		case 12:
+			mes "お前、昔は俺たちの仲間だったろ！？ずいぶん変わったな。今じゃ随分と危険な感じだぜ…";
+			close;
+		case 17:
+			mes "おい、急に随分とかっこよくなったな！俺には夢見ることしかできない腕前を持ってるに違いない！";
+			close;
+		}
+		next;
+		mes "[シーフガイド]";
+		mes "（ため息）なあ、お前がこんな所にいる理由なんて本当にないだろ。行くべき所へ行くんだな。";
+		close;
+	}
+	if (job_thief_q == 3 && countitem(1069) > 0 || countitem(1070) > 0) {
+		mes "[シーフガイド]";
+		mes "うーん？";
+		mes "シーフ試験のために";
+		mes "キノコを集めてきたな？";
+		next;
+		mes "[シーフガイド]";
+		mes "ほら、すぐ隣にいるあいつに話しかけろ。キノコの確認はあいつの担当だ。";
+		close;
+	}
+	else if (job_thief_q == 3) {
+		mes "[シーフガイド]";
+		mes "で、キノコ農場は";
+		mes "どうだった？";
+		mes "楽しかったか？";
+		next;
+		if (select("ああ、なかなか良かった。:最悪だった。") == 1) {
+			mes "[シーフガイド]";
+			mes "へへっ！いい心構えだ。俺たちの稼業じゃ、多少汚れ仕事も楽しまなきゃやってられないからな。";
+			close;
+		}
+		mes "[シーフガイド]";
+		mes "そうか？俺もあそこには行ったことあるから、誰にでも合う場所じゃないのは分かるさ。とはいえシーフ稼業だって華やかな夜遊びばかりじゃないんだぜ。";
+		close;
+	}
+	if (job_thief_q == 2) {
+		mes "[シーフガイド]";
+		mes "おい、こんな所で何してる？キノコを集めてるはずだろ？それとも、もう一回説明が要るのか？";
+		next;
+		if  (select("はい。:いえ、大丈夫です。") == 1) {
+			mes "[シーフガイド]";
+			mes "（ため息）まあ、どこにでも一人はいるもんだ。よし、よく聞け。";
+			next;
+			mes "[シーフガイド]";
+			mes "いいか、試験のために農場からキノコを盗んでくるんだ。心配するな、あの農場主は盗まれて当然の奴だからな。";
+			next;
+			mes "[シーフガイド]";
+			mes "とにかく、^0000FFオレンジ網茸^000000と^0000FFオレンジぬめり茸^000000の2種類のキノコを集めるんだ。";
+			next;
+			mes "[シーフガイド]";
+			mes "農場にはキノコを守るモンスターがいるから気をつけろ。楽な仕事じゃないぞ。";
+			next;
+			mes "[シーフガイド]";
+			mes "キノコを集めてここに戻ってきたら、集めた数で採点してやる。";
+			next;
+			mes "[シーフガイド]";
+			mes "オレンジ網茸1つにつき3点、オレンジぬめり茸1つにつき1点だ。合格には合計25点が必要だぞ。";
+			next;
+			mes "[シーフガイド]";
+			mes "外に出て、ピラミッド東の平原へまっすぐ向かうんだ。すると2本の柱の間に仲間の一人がいるはずだ。";
+			next;
+			mes "[シーフガイド]";
+			mes "そいつに話しかければ、裏口から農場へ連れて行ってくれる。";
+			next;
+			mes "[シーフガイド]";
+			mes "その平原での座標はたしか「^FF0000141, 125^000000」だ。今いる座標を確認するには、チャット欄で^3355FF/where^000000と入力すればいい。";
+			close;
+		}
+		mes "[シーフガイド]";
+		mes "ふん。一瞬、何か大事な話でもあるのかと思ったぜ。";
+		close;
+	}
+	mes "[シーフガイド]";
+	if (job_thief_q == 0) {
+		mes "こんな穴倉に";
+		mes "何の用だ？";
+	}
+	else {
+		mes "ああ…";
+		mes "戻ってきたか。";
+		mes "本当に";
+		mes "また挑む覚悟はできたのか？";
+	}
+	next;
+	if (select("よう、シーフになりに来たんだ！:いや、ちょっと見て回ってるだけだ。") == 1) {
+		if (job_thief_q == 0) {
+			mes "[シーフガイド]";
+			mes "へっ、その自信は気に入った。だがな、シーフ稼業ってのは噂ほど格好いいもんじゃないぞ。";
+			next;
+			mes "[シーフガイド]";
+			mes "それでも…";
+			mes "お前、本当に";
+			mes "シーフに";
+			mes "なりたいのか？";
+			next;
+			switch(select("ああ。:いや、時間の無駄だった。:なんでシーフになったんだ？")) {
+			case 1:
+				mes "[シーフガイド]";
+				mes "本気か…";
+				break;
+			case 2:
+				mes "[シーフガイド]";
+				mes "だよな…";
+				mes "分かる気がするぜ。";
+				break;
+			case 3:
+				mes "[シーフガイド]";
+				mes "俺か…？";
+				mes "あの頃は他に道がなかった。盗むか飢えるかの二択だったのさ。まあ、別にお前に身の上話をする気はないがな。";
+				break;
+			}
+			next;
+			mes "[シーフガイド]";
+			mes "それで、正式に";
+			mes "シーフに";
+			mes "申し込むのか？";
+			next;
+			switch(select("ああ、申し込む。:シーフになるなんて怖すぎる！")) {
+			case 1:
+				mes "[シーフガイド]";
+				mes "よし、お前の";
+				mes "名前を教えろ。";
+				next;
+				mes "[シーフガイド]";
+				mes "" + strcharinfo(0) + "？";
+				mes "" + strcharinfo(0) + "とは、変わった名前だな。まあ、ちょっと待ってろ。";
+				set job_thief_q,1;
+				next;
+				mes "[シーフガイド]";
+				mes "よし、登録は完了した。準備ができたら試験を始めるといい。";
+				next;
+				switch(select("ああ、準備はできてる。:いや、まだ準備できてない。")) {
+				case 1:
+					break;
+				case 2:
+					mes "[シーフガイド]";
+					mes "準備が";
+					mes "できてない？";
+					mes "どういうことだ！？";
+					close;
+				}
+				break;
+			case 2:
+				mes "[シーフガイド]";
+				mes "怖すぎるだと！？";
+				mes "はーっはっはっは！";
+				mes "おいおい…！";
+				mes "傑作だな！";
+				close;
+			}
+		}
+		else {
+			mes "[シーフガイド]";
+			mes "よし…";
+			mes "ちょっと";
+			mes "待ってろ。";
+			next;
+		}
+		mes "[シーフガイド]";
+		mes "お前の名前は…";
+		mes strcharinfo(0) + "？えーと、どこだったか。ああ、あったあった。ええと…";
+		next;
+		mes "[シーフガイド]";
+		if (!callfunc("F_CanChangeJob")) {
+			mes "かわいいもんだ。やる気は分かるが、シーフになるには基本スキルを全部覚えないとな。";
+			close;
+		}
+		mes "よし。お前の犯罪歴を見せてもらったが、なかなか面白い経歴じゃないか。シーフの素質があるかもしれないな。";
+		next;
+		mes "[シーフガイド]";
+		mes "気分がいいから、この面接は合格ということにしてやる。よくやった！";
+		set job_thief_q,2;
+		setquest 1013;
+		next;
+		mes "[シーフガイド]";
+		mes "さて、次はお前の実力を試す番だ。試験について何か知ってるか？";
+		next;
+		switch(select("ああ、知ってる。:いや、知らない。")) {
+		case 1:
+			mes "[シーフガイド]";
+			mes "そうか？なら話は早いな。";
+			break;
+		case 2:
+			mes "[シーフガイド]";
+			mes "よし、教えてやろう。よく聞け。この試験でシーフに相応しいかどうかが決まるんだ。";
+			next;
+			mes "[シーフガイド]";
+			mes "シブの農場に忍び込んでもらう。あいつはモロクで一番性根の腐った商人だ。";
+			next;
+			mes "[シーフガイド]";
+			mes "いいか、試験のためにあいつの農場からキノコを盗んでくるんだ。心配するな、盗まれて当然の奴だからな。";
+			next;
+			mes "[シーフガイド]";
+			mes "とにかく、^0000FFオレンジ網茸^000000と^0000FFオレンジぬめり茸^000000の2種類のキノコを集めるんだ。";
+			next;
+			mes "[シーフガイド]";
+			mes "農場にはキノコを守るモンスターがいるから気をつけろ。楽な仕事じゃないぞ。";
+			next;
+			mes "[シーフガイド]";
+			mes "キノコを集めてここに戻ってきたら、集めた数で採点してやる。";
+			next;
+			mes "[シーフガイド]";
+			mes "オレンジ網茸1つにつき3点、オレンジぬめり茸1つにつき1点だ。合格には合計25点が必要だぞ。";
+			next;
+			mes "[シーフガイド]";
+			mes "外に出て、ピラミッド東の平原へまっすぐ向かうんだ。すると2本の柱の間に仲間の一人がいるはずだ。";
+			next;
+			mes "[シーフガイド]";
+			mes "そいつに話しかければ、裏口から農場へ連れて行ってくれる。";
+			next;
+			mes "[シーフガイド]";
+			mes "その平原での座標はたしか「^FF0000141, 125^000000」だ。今いる座標を確認するには、チャット欄で^3355FF/where^000000と入力すればいい。";
+		}
+		next;
+		mes "[シーフガイド]";
+		mes "キノコ農場に入る前に、計画と準備を忘れるなよ。手早く動いて、殺られないようにな？";
+		close;
+	}
+	close;
+}
+
+moc_prydb1,42,133,2	script	ブラッド::Comrade	118,{
+	if (BaseJob == Job_Thief) {
+		mes "[ブラッド]";
+		mes "特に何かあるわけじゃない。また何か動きがあったら来てくれ、いいな？";
+		close;
+	}
+	else if (BaseJob != Job_Novice && BaseJob != Job_Thief) {
+		mes "[仲間]";
+		mes "うーん…";
+		mes "お前、どうも";
+		mes "シーフには見えないな。";
+		next;
+		mes "[仲間]";
+		mes "一体ここで";
+		mes "何してるんだ？";
+		close;
+	}
+	if (job_thief_q == 0 || job_thief_q == 1) {
+		mes "[仲間]";
+		mes "どうした？シーフになりたいなら、俺の隣にいる女に話しかけろ。";
+		close;
+	}
+	else if (job_thief_q == 2) {
+		mes "[仲間]";
+		mes "面接は通ったのか？";
+		mes "だったら何を待ってるんだ？";
+		close;
+	}
+	else if (job_thief_q == 3) {
+		mes "[仲間]";
+		mes "ああ、ガイドから話は聞いてる。じゃあ、キノコを確認させてもらうか…";
+		if (countitem(1069) == 0 && countitem(1070) == 0) {
+			next;
+			mes "[仲間]";
+			mes "なんだこりゃ…";
+			mes "キノコを1つも持ってないじゃないか！戻って集めてこい。じゃないとシーフになる試験には合格できないぞ！";
+			close;
+		}
+		next;
+		set .@thief_item1,countitem(1069) * 3;
+		set .@thief_item2,countitem(1070);
+		set .@total_thief,.@thief_item1 + .@thief_item2;
+		set .@money_thief,((.@thief_item1 * 5) + (.@thief_item2 * 2)) + 200;
+		mes "[仲間]";
+		if (countitem(1069) != 0) {
+			mes "まず、集めたオレンジ網茸から確認しよう。";
+			mes "ほう、" + countitem(1069) + "個か。";
+		}
+		if (countitem(1070) != 0)
+			mes "次はオレンジぬめり茸だ。こっちは" + countitem(1070) + "個集めたか。";
+		next;
+		mes "[仲間]";
+		mes "ということは";
+		mes "合計で…";
+		next;
+		mes "[仲間]";
+		mes "うーむ、" + .@total_thief + "度を光速倍にして、円周率かける高さの積分で割って、政治の絶対値を足して…";
+		next;
+		mes "[仲間]";
+		mes "よし！";
+		mes "分かったぞ。";
+		next;
+		mes "[仲間]";
+		if (.@total_thief > 25) {
+			mes "25点よりも";
+			mes "多く稼いだな！";
+			mes "大したもんだ！";
+		}
+		else if (.@total_thief == 25) {
+			mes "ちょうど25点だ！";
+			mes "よくやった！やるじゃないか！";
+		}
+		else {
+			mes "合格に必要な25点には明らかに足りないな。もっとキノコを集めてこい！";
+			close;
+		}
+		next;
+		mes "[仲間]";
+		mes strcharinfo(0) + "…";
+		mes "正式なシーフ試験に合格した。お前はもう俺たちの仲間だ。";
+		if (countitem(1069) != 0) delitem 1069,countitem(1069); //Mushroom_Of_Thief_1
+		if (countitem(1070) != 0) delitem 1070,countitem(1070); //Mushroom_Of_Thief_2
+		callfunc "Job_Change",Job_Thief;
+		callfunc "F_ClearJobVar";
+		completequest 1013;
+		next;
+		mes "[仲間]";
+		mes "シーフになったこと、おめでとう！これからはシーフギルドの誇り高き一員として振る舞うんだぞ。";
+		next;
+		mes "[仲間]";
+		mes "ギルドの名を汚すようなことがあれば、命はないと思え。仲間たちの誇りとなることを期待しているぞ。";
+		next;
+		mes "[ブラッド]";
+		mes "（コホン）ギルドへようこそ、相棒！俺はブラッド、ここで人事を担当している。";
+		next;
+		mes "[ブラッド]";
+		mes "新入り用のささやかな支度金だ。好きに使うといい。それじゃあ、またな～。";
+		set Zeny, Zeny+.@money_thief;
+		close;
+	}
+}
+
+moc_ruins,141,125,3	script	しょうもない男::Mr. Irrelevant	83,{
+	if (BaseJob == Job_Thief) {
+		mes "[しょうもない男]";
+		mes "おお、シーフになったんだな。お前はいつか仲間になると思ってたぜ。";
+		next;
+		mes "[しょうもない男]";
+		mes "キノコ農場から盗むくらい、もうお前には簡単すぎるだろ。もっと腕を磨いて、この道を極めるんだな。";
+		close;
+	}
+	else if (BaseJob != Job_Novice && BaseJob != Job_Thief) {
+		mes "[しょうもない男]";
+		switch(rand(4)) {
+		case 1:
+			mes "きつい酒が飲みたい気分だぜ。";
+			close;
+		case 2:
+			mes "金をよこせ。";
+			next;
+			mes "[しょうもない男]";
+			mes "冗談だ、今は仕事中じゃないからな。";
+			close;
+		case 3:
+			mes "誰がイカレてるだって！？！？";
+			close;
+		case 4:
+			mes "お前に話すことなんて何もない。放っておいてくれないか？";
+			close;
+		default:
+			mes "今日は仲間とピラミッドで狩りをするのにちょうどよさそうな日だな。";
+			close;
+		}
+	}
+	if (job_thief_q == 3) {
+		mes "[しょうもない男]";
+		mes "はーっはっはっは～！";
+		mes "まだ試験に";
+		mes "合格してないのか？";
+		mes "よし、中へ入れてやる…";
+		close2;
+		switch(rand(5)) {
+		case 1: warp "job_thief1",228,106; end;
+		case 2: warp "job_thief1",38,50; end;
+		case 3: warp "job_thief1",66,331; end;
+		case 4: warp "job_thief1",196,331; end;
+		default: warp "job_thief1",309,234; end;
+		}
+	}
+	else if (job_thief_q == 2) {
+		mes "[しょうもない男]";
+		mes "ふむ…";
+		mes "試験を受けに来たんだな？その目を見れば、何か知ってるのが分かるぜ。";
+		next;
+		mes "[しょうもない男]";
+		mes "名前は" + strcharinfo(0) + "だな？ああ、名簿に載ってる。よし、キノコ農場に入れてやるが、安全は保証できんぞ…";
+		close2;
+		set job_thief_q,3;
+		switch(rand(5)) {
+		case 1: warp "job_thief1",228,106; end;
+		case 2: warp "job_thief1",38,50; end;
+		case 3: warp "job_thief1",66,331; end;
+		case 4: warp "job_thief1",196,331; end;
+		default: warp "job_thief1",309,234; end;
+		}
+	}
+	else if (job_thief_q == 1) {
+		mes "[しょうもない男]";
+		mes "何か妙な匂いがすると思ったら…お前からか。一体どういうわけだ？";
+		close;
+	}
+	mes "[しょうもない男]";
+	mes "おい、ノービス！シーフギルドに加わってみないか？俺たちの身勝手な大義に、新入りはいつでも歓迎さ。";
+	next;
+	mes "[しょうもない男]";
+	mes "詳しい話はピラミッド地下1階の地下室で聞けるぞ。";
+	close;
+}
+
+// Monsters
+//============================================================
+job_thief1,0,0	monster	Orange Mushroom	1182,180
+job_thief1,0,0	monster	Fabre	1184,50
+job_thief1,0,0	monster	Chonchon	1183,50
+job_thief1,0,0	monster	Spore	1014,30
+
+//============================================================
+// mapflag
+//============================================================

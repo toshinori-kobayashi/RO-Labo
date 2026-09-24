@@ -1,0 +1,2006 @@
+//===== rAthena Script ======================================= 
+//= Alchemist Job Quest
+//===== By: ==================================================
+//= nestor_zulueta (Fusion), converted by Darkchild
+//===== Current Version: ===================================== 
+//= 3.1
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Alchemist classes
+//===== Additional Comments: ================================= 
+//= 2.5 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     No longer uses function "F_BlockHigh"
+//= 2.6 Corrected a bug in advanced class checking. [L0ne_W0lf]
+//= 2.7 Added missing checkweights. [L0ne_W0lf]
+//= 2.8 Fixed minor typo in test section. [L0ne_W0lf]
+//= 2.9 Added Quest Log commands. [Kisuka]
+//= 3.0 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 3.1 Added missing changequest commands. [Kisuka]
+//============================================================ 
+
+alde_alche,27,185,5	script	アルケミストギルド職員#am::Alchemist Guildsman#am	744,{
+	mes "[パーミー・ジャニーノ]";
+	if (Upper == 1) {
+		mes "ようこそ";
+		mes "錬金術師組合……あっ";
+		mes "そ、そんな……どうして";
+		mes "こんなことが……？";
+		next;
+		mes "[パーミー・ジャニーノ]";
+		mes "ま、待って……";
+		mes "ごめんなさい、少し";
+		mes "混乱してしまって。あなたが";
+		mes "昔知っていた人にそっくりで。";
+		mes "それでも、あなたには";
+		mes "何だか不思議な感じがするんです……";
+		close;
+	}
+	if (BaseJob != Job_Merchant) {
+		if (BaseJob == Job_Alchemist) {
+			mes "ようこそ、" + strcharinfo(0) + "さん。";
+			mes "錬金術師ギルドは";
+			mes "今日もいつも通り忙しいですよ。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "皆それぞれの研究で";
+			mes "忙しくしていますが、最近は生体工学の分野で進展があったみたいです。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "皆、生体工学の研究が良い結果につながることを願っています。そういえば、人工生命の研究をしているアルケミストたちはどうしているのかしら……";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "錬金術師ギルドへ";
+			mes "ようこそ。";
+			mes "私たちは新しい発想を";
+			mes "持つ才能ある人材を";
+			mes "募集しています。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "化学に興味があるなら、もっと知識をつけてからまた訪ねてくださいね。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "ただし、まずは";
+			mes "商人として";
+			mes "アイテムについての";
+			mes "知識を身につける必要がありますよ。";
+			close;
+		}
+		mes "錬金術師ギルドへ";
+		mes "ようこそ。";
+		mes "私たちは新しい発想を";
+		mes "持つ才能ある人材を";
+		mes "募集しています。";
+		next;
+		mes "[パーミー・ジャニーノ]";
+		mes "優秀な商人を知っていたら、ぜひこちらに紹介してくださいね。そういう方は錬金術や実験の才能があることが多いんですよ～";
+		close;
+	}
+	if (ALCH_Q == 0) {
+		mes "錬金術師ギルドへ";
+		mes "ようこそ。";
+		mes "本日はどのようなご用件でしょうか？";
+		next;
+		switch(select("アルケミストについて知りたい:アルケミストになりたい:何でもない")) {
+		case 1:
+			mes "[パーミー・ジャニーノ]";
+			mes "アルケミストは既存の材料から新しい物質やアイテムを研究し、作り出します。私たちの知識があれば、原子レベルで化学物質の性質を変えることもできるんですよ。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "多くの人は私たちの最終目標が";
+			mes "金を作ることだと思っていますが、それが全てではありません。薬や";
+			mes "新素材を生み出すことも目指しているんです。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "生命の創造を";
+			mes "研究している者も少しいますが、多くはそれを神の領域だと考えています。その分野はあまりに複雑なので、大抵はもう少し手頃な研究を扱っていますね。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "アルケミストになることに興味があるなら、まずは商人としてたくさん経験を積むことをお勧めします。商人は材料を扱いながら学べる絶好の機会ですから。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "アルケミストを目指すかどうかは";
+			mes "あなた次第です。アルケミストへの道はとても険しく、商売ではなく実験と研究に力を注ぐ必要がありますよ。";
+			close;
+		case 2:
+			mes "[パーミー・ジャニーノ]";
+			mes "そうですか。";
+			mes "はじめまして。";
+			mes "私は錬金術師ギルドの";
+			mes "パーミー・ジャニーノです。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "ギルドに加入して";
+			mes "訓練を修了すれば、";
+			mes "正式にアルケミストとして";
+			mes "認められ、私たちの研究に";
+			mes "貢献できるようになりますよ。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "ですが、誰でも受け入れるわけではありません。";
+			mes "科学の様々な分野を";
+			mes "探求するための強い忍耐力と";
+			mes "誠実な熱意が必要です。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "錬金術師ギルドに";
+			mes "加入するにはいくつか";
+			mes "条件がありますが、";
+			mes "それは申請の後で";
+			mes "お話ししますね。";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "それでは、";
+			mes "登録の申請を";
+			mes "してみますか？";
+			next;
+			if (select("申請します:また今度にします") == 1) {
+				if (JobLevel < 40) {
+					mes "[パーミー・ジャニーノ]";
+					mes "うーん……";
+					mes "ちょっと待ってくださいね。";
+					mes "残念ですが、";
+					mes "今のあなたには商人としての";
+					mes "経験がまだ";
+					mes "足りないようです。";
+					next;
+					mes "[パーミー・ジャニーノ]";
+					mes "アルケミストになるには";
+					mes "少なくとも^551A8Bジョブレベル40^000000が";
+					mes "必要です。条件を満たしたら";
+					mes "また";
+					mes "来てくださいね？";
+					close;
+				}
+				mes "[パーミー・ジャニーノ]";
+				mes "よろしい、申請を受理しました。それでは正式な訓練を始める前に、申請料の50,000Zenyを支払い、いくつかアイテムを持ってきてもらう必要があります。";
+				next;
+				mes "[パーミー・ジャニーノ]";
+				mes "ですが、^551A8B古い魔法の本^000000と^551A8B鍛冶屋のハンマー^000000を";
+				mes "持ってきてもらえれば、アイテムの条件として代わりに受け付けますよ。";
+				next;
+				mes "[パーミー・ジャニーノ]";
+				mes "さて……";
+				mes "こちらに";
+				mes "署名をお願いします。";
+				next;
+				select(strcharinfo(0));
+				mes "[パーミー・ジャニーノ]";
+				mes "よろしい、よろしい。それでは";
+				mes "申請料のZenyの準備ができたら、必要なアイテムをお伝えします。よく聞いてくださいね。";
+				next;
+				if (Zeny < 50000) {
+					mes "[パーミー・ジャニーノ]";
+					mes "あら、あら。Zenyが";
+					mes "足りないようですね。";
+					mes "50,000Zeny貯まったらまた来てください。そうでないと申請を進められません。";
+					close;
+				}
+				set Zeny, Zeny-50000;
+				mes "[パーミー・ジャニーノ]";
+				mes "そうですね。";
+				mes "" + strcharinfo(0);
+				mes "が持ってくる必要があるのは……";
+				switch(rand(1,3)) {
+				case 1:
+					set ALCH_Q,1;
+					setquest 2028;
+					mes "^551A8Bバーサークポーション7個^000000です。";
+					break;
+				case 2:
+					set ALCH_Q,2;
+					setquest 2029;
+					mes "^551A8Bミニ溶鉱炉100個^000000です。";
+					break;
+				case 3:
+					set ALCH_Q,3;
+					setquest 2030;
+					mes "^551A8B火の矢7,500本^000000です。";
+				}
+				next;
+				mes "[パーミー・ジャニーノ]";
+				mes "それらのアイテムを";
+				mes "集めたら、また";
+				mes "私のところへ戻ってきてください。";
+				mes "アルケミストとしての訓練が始まりますよ。";
+				mes "また今度～";
+				close;
+			}
+			mes "[パーミー・ジャニーノ]";
+			mes "才能ある商人は";
+			mes "いつでも歓迎しますよ。";
+			mes "また近いうちにどうぞ。";
+			close;
+		case 3:
+			mes "[パーミー・ジャニーノ]";
+			mes "ええと……";
+			mes "何か用があれば";
+			mes "教えてくださいね。";
+			close;
+		}
+	}
+	else if (ALCH_Q >= 1 && ALCH_Q <= 3) {
+		if (countitem(1006) > 0 && countitem(1005) > 0) {
+			mes "あら、まあ～！";
+			mes "古い魔法の本と";
+			mes "鍛冶屋のハンマーを";
+			mes "持ってきてくれたんですね。";
+			mes "これらのアイテムは";
+			mes "有効に使わせてもらいますね。";
+			next;
+			delitem 1006,1; //Old_Magic_Book
+			delitem 1005,1; //Hammer_Of_Blacksmith
+			mes "[パーミー・ジャニーノ]";
+			mes "さて、あとはアルケミストの";
+			mes "基本を学び、薬品や薬の調合手順を身につける必要がありますね。";
+			set ALCH_Q,4;
+			if(checkquest(2028) != -1) {
+				changequest 2028,2031;
+			}
+			else if(checkquest(2029) != -1) {
+				changequest 2029,2031;
+			}
+			else {
+				changequest 2030,2031;
+			}
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "でもその前に、ラスプチンに話をしてもらう必要があります。彼と何を話すことになるのか、私にもよく分からないのですが……";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "たいしたことではないと思いますが、それでもラスプチンと話す必要があります。どうやら彼もアルケミストの選考に関わっているようですから。";
+			close;
+		}
+		switch(ALCH_Q) {
+		case 1: setarray .@items[0],657,7; break;
+		case 2: setarray .@items[0],612,100; break;
+		case 3: setarray .@items[0],1752,7500; break;
+		}
+		if (countitem(.@items[0]) >= .@items[1]) {
+			mes "準備が";
+			mes "整ったようですね。";
+			mes "ギルドでこれらのアイテムを";
+			mes "有効に使わせてもらいます。";
+			next;
+			delitem .@items[0],.@items[1];
+			mes "[パーミー・ジャニーノ]";
+			mes "さて、あとはアルケミストの";
+			mes "基本を学び、薬品や薬の調合手順を身につける必要がありますね。";
+			set ALCH_Q,4;
+			if(checkquest(2028) != -1) {
+				changequest 2028,2031;
+			}
+			else if(checkquest(2029) != -1) {
+				changequest 2029,2031;
+			}
+			else {
+				changequest 2030,2031;
+			}
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "でもその前に、ラスプチンに話をしてもらう必要があります。彼と何を話すことになるのか、私にもよく分からないのですが……";
+			next;
+			mes "[パーミー・ジャニーノ]";
+			mes "たいしたことではないと思いますが、それでもラスプチンと話す必要があります。どうやら彼もアルケミストの選考に関わっているようですから。";
+			close;
+		}
+		mes "準備はできていませんか？";
+		mes "前にも言った通り、";
+		mes "持ってきてもらう必要があるのは";
+		mes "^551A8B"+callfunc("F_InsertPlural",.@items[1],getitemname(.@items[0]))+"^000000.";
+		next;
+		mes "[パーミー・ジャニーノ]";
+		mes "必要なアイテムの";
+		mes "準備ができたら";
+		mes "また来てくださいね。";
+		close;
+	}
+	else if (ALCH_Q == 4) {
+		mes "ラスプチンさんに";
+		mes "会いに行ってください。";
+		mes "アルケミストの選考に";
+		mes "関わっているそうですよ、詳しいことは分かりませんが。";
+		next;
+		mes "[パーミー・ジャニーノ]";
+		mes "大したことには";
+		mes "ならないと思いますよ。";
+		mes "きっと面接して、簡単な";
+		mes "質問をされるだけでしょう。";
+		close;
+	}
+	else {
+		mes "ああ、すみませんが";
+		mes "今は取り込み中でして～";
+		next;
+		mes "[パーミー・ジャニーノ]";
+		mes "次に誰を訪ねればいいか";
+		mes "分からないなら、";
+		mes "他の人に聞いてみては？";
+		mes "頑張ってくださいね～";
+		close;
+	}
+}
+
+alde_alche,175,107,3	script	ラスプチン・グレゴリー#am::Fastidious Alchemist#am	749,{
+	mes "[ラスプチン・グレゴリー]";
+	if (BaseJob != Job_Merchant) {
+		if (BaseJob == Job_Alchemist) {
+			mes "ヒッヒッヒ";
+			mes "ケヘヘヘッ～！";
+			mes "あん？何の用だ？！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "俺の実験結果を盗んだり、成果をパクりに来たんじゃないだろうな？知的財産の窃盗など、よくもまあ考えたもんだ！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "違うんだろうな？";
+			mes "まあ、同業者として";
+			mes "忠告しておくが、";
+			mes "そういう小細工は";
+			mes "この錬金術師ギルドでは";
+			mes "許されないぞ！";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "ヒッヒッヒ";
+			mes "ケヘヘヘッ～！";
+			mes "可愛いもんだな、わざわざ";
+			mes "こんな所まで遊びに来るとは……";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "今回は";
+			mes "見逃してやる……";
+			mes "だが次はそう簡単には";
+			mes "帰れると思うなよ……";
+			close;
+		}
+		else {
+			mes "何の用だ？！";
+			mes "俺が何をしているのか";
+			mes "気になるってのか？";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ヒッヒ";
+			mes "ケヘヘヘッ～！";
+			mes "そりゃあもちろん";
+			mes "研究に";
+			mes "忙しいんだよ！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "このポーションが";
+			mes "完成すれば……";
+			mes "一国だって";
+			mes "丸ごと支配できるぞ！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ヒッヒッヒ！";
+			mes "こんなに";
+			mes "危険な代物は";
+			mes "秘密にしとかないとな！";
+			mes "分かったか？";
+			close;
+		}
+	}
+	if (ALCH_Q == 0) {
+		mes "ヒッヒッヒ";
+		mes "ケヘヘヘッ～！";
+		mes "何の";
+		mes "用だ、坊主？";
+		next;
+		mes "[ラスプチン・グレゴリー]";
+		mes "商人なら店でも出して商品を売ってりゃいいものを。なんでこんな所をうろついてるんだ？";
+		next;
+		mes "[ラスプチン・グレゴリー]";
+		mes "ヘヘヘッ～！";
+		mes "どこかよそで商売しろ！";
+		mes "俺は俺の";
+		mes "暗い研究に集中させてくれ！";
+		close;
+	}
+	else if (ALCH_Q >= 1 && ALCH_Q <= 3) {
+		mes "ヒッヒッヒ";
+		mes "ケヘヘヘッ～！";
+		mes "何の";
+		mes "用だ、坊主？";
+		next;
+		mes "[ラスプチン・グレゴリー]";
+		mes "何？";
+		mes "錬金術を学びたいだと？！";
+		mes "そんな戯言を";
+		mes "口にするんじゃねえ！";
+		next;
+		mes "[ラスプチン・グレゴリー]";
+		mes "千年、いや、それ以上学んでも無駄だ！諦めて自分の店の心配でもしてろ！";
+		close;
+	}
+	else if ((ALCH_Q == 4) || (ALCH_Q == 5)) {
+		if (ALCH_Q == 4) {
+			mes "ヒッヒッヒ";
+			mes "ケヘヘヘッ～！";
+			mes "何の";
+			mes "用だ、坊主？";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "何？";
+			mes "ギルドに入りたいだと！？";
+			mes "気に入らんな……";
+			mes "全く気に入らん……！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "近頃は薬草を少し混ぜられるだけで";
+			mes "自分をアルケミストだと思う輩ばかりだ。だから俺の面接が必要なんだよ。";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ヒッヒッヒ";
+			mes "ケヘヘヘッ～！";
+			mes "馬鹿で無能な奴らはふるい落として";
+			mes "全部追い返してやる！間抜けは要らねえんだよ！";
+			next;
+			if (JobLevel == 50) {
+				mes "[ラスプチン・グレゴリー]";
+				mes "待てよ……";
+				mes "お前のことを";
+				mes "見誤っていたかもな。";
+				if (Sex == SEX_MALE) {
+					mes "見た目は優男かもしれんが、";
+					mes "その目を見りゃ";
+					mes "頭がいいのは分かるぜ。";
+				}
+				else {
+					mes "フン。可愛い顔してるが、";
+					mes "賢いのは目を見りゃ分かるぜ。";
+				}
+				next;
+				mes "[ラスプチン・グレゴリー]";
+				mes "お前はただの馬鹿な小僧じゃないな。";
+				mes "商人として苦労してきたのが分かる。上出来だ。ケヘヘヘッ～";
+				next;
+				mes "[ラスプチン・グレゴリー]";
+				mes "よし、お互いに知恵の無駄遣いをせずに済むよう、面接は合格ってことにしてやる。";
+				next;
+				mes "[ラスプチン・グレゴリー]";
+				mes "さっさとアルケミストになって、しっかり研究しろ。そうすりゃ俺の役に立つこともあるだろうさ。ハーッハッハッハッ～！";
+				next;
+				mes "[ラスプチン・グレゴリー]";
+				mes "さあダーウィンのところへ行け！";
+				mes "実験のやり方を教えてくれる。俺が寄越したと";
+				mes "言えばいい。";
+				set ALCH_Q,6;
+				changequest 2031,2032;
+				close;
+			}
+			else {
+				mes "[ラスプチン・グレゴリー]";
+				mes "驚いたか？";
+				mes "ケヘヘヘッ～アルケミストになるのが";
+				mes "服を着替えるだけの";
+				mes "話だと";
+				mes "思っていたなら、";
+				mes "とんだ勘違いだぜ。";
+				next;
+				mes "[ラスプチン・グレゴリー]";
+				mes "さあ、この問題を";
+				mes "全部解いてみろ。";
+				mes "お前がどれだけ賢いか";
+				mes "見せてもらおうか。";
+			}
+		}
+		else if (ALCH_Q == 5) {
+			mes "何だと……？！";
+			mes "また試験を";
+			mes "受けたいってのか？！";
+			mes "帰れと";
+			mes "言ったはずだぞ！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "気に入らねえ……";
+			mes "全く気に入らねえ！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "分かった……";
+			mes "前回の情けない出来には目をつぶって";
+			mes "もう一度チャンスをやる。今度こそ";
+			mes "しくじるなよ、分かったか？";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "それじゃあ、";
+			mes "今回は全部";
+			mes "^551A8B正解^000000を";
+			mes "出してみせろ。";
+		}
+		next;
+		switch(rand(1,3)) {
+		case 1:
+			mes "[ラスプチン・グレゴリー]";
+			mes "12 + 23 + 34 + 45 = ?";
+			next;
+			input .@input;
+			if (.@input != 114) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "1000 - 36 - 227 - 348 = ?";
+			next;
+			input .@input;
+			if (.@input != 389) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "14 * 17 * 3 = ?";
+			next;
+			input .@input;
+			if (.@input != 714) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "9765 / 3 / 5 / 7 = ?";
+			next;
+			input .@input;
+			if (.@input != 93) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "(47 * 28) - (1376 / 4) = ?";
+			next;
+			input .@input;
+			if (.@input != 972) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "(2646 / 7) + (13 * 28) = ?";
+			next;
+			input .@input;
+			if (.@input != 742) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "赤ポーション12個、";
+			mes "蝶の羽1個、";
+			mes "ハエの羽5個を";
+			mes "24％引きで買うと";
+			mes "いくらになる？";
+			next;
+			input .@input;
+			if (.@input != 909) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "シミター3本、";
+			mes "ヘルム2個、";
+			mes "ロングコート1着の";
+			mes "合計重量は？";
+			next;
+			input .@input;
+			if (.@input != 450) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ビレッタ、";
+			mes "マント、オペラマスク、";
+			mes "リボン、マフラー、";
+			mes "ブーツ、";
+			mes "イヤーマフの";
+			mes "合計防御力は？";
+			next;
+			input .@input;
+			if (.@input != 20) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ヘルムを5個";
+			mes "24％引きで買って";
+			mes "20で売ったら";
+			mes "利益は";
+			mes "いくらになる？";
+			next;
+			input .@input;
+			if (.@input != 8800) set .@w_point,.@w_point+1;
+			break;
+		case 2:
+			mes "[ラスプチン・グレゴリー]";
+			mes "13 + 25 + 37 + 48 = ?";
+			next;
+			input .@input;
+			if (.@input != 123) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "1000 - 58 - 214 - 416 = ?";
+			next;
+			input .@input;
+			if (.@input != 312) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "12 * 24 * 3 = ?";
+			next;
+			input .@input;
+			if (.@input != 864) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "10530 / 3 / 5 / 2 = ?";
+			next;
+			input .@input;
+			if (.@input != 351) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "(35 * 19) - (1792 / 7) = ?";
+			next;
+			input .@input;
+			if (.@input != 409) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "(2368 / 8) + (24 * 17) = ?";
+			next;
+			input .@input;
+			if (.@input != 704) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "(2646 / 7) + (13 * 28) = ?";
+			next;
+			input .@input;
+			if (.@input != 742) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "緑ポーション15個、";
+			mes "ルーペ6個、";
+			mes "トラップ4個を";
+			mes "24％引きで買うと";
+			mes "合計金額は";
+			mes "いくらになる？";
+			next;
+			input .@input;
+			if (.@input != 934) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "リングポンメルセイバー3本、";
+			mes "キャップ4個、";
+			mes "ブーツ2個の";
+			mes "合計重量は？";
+			next;
+			input .@input;
+			if (.@input != 550) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "バックラー、";
+			mes "ロングコート、ガスマスク、";
+			mes "ビッグリボン、";
+			mes "キュートリボン、";
+			mes "サッカト、メガネの";
+			mes "合計防御力は？";
+			next;
+			input .@input;
+			if (.@input != 16) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "タイツを";
+			mes "24％引きで買って、";
+			mes "定価の20％で";
+			mes "売ったら";
+			mes "利益はいくらになる？";
+			next;
+			input .@input;
+			if (.@input != 8520) set .@w_point,.@w_point+1;
+			break;
+		case 3:
+			mes "[ラスプチン・グレゴリー]";
+			mes "12 + 23 + 34 + 45 = ?";
+			next;
+			input .@input;
+			if (.@input != 114) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "1000 - 58 - 214 - 416 = ?";
+			next;
+			input .@input;
+			if (.@input != 312) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "14 * 17 * 3 = ?";
+			next;
+			input .@input;
+			if (.@input != 714) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "10530 / 3 / 5 / 2 = ?";
+			next;
+			input .@input;
+			if (.@input != 351) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "(47 * 28) - (1376 / 4) = ?";
+			next;
+			input .@input;
+			if (.@input != 972) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "(2646 / 7) + (13 * 28) = ?";
+			next;
+			input .@input;
+			if (.@input != 742) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "赤ポーション6個、";
+			mes "緑ポーション7個、";
+			mes "ハエの羽8個を";
+			mes "24％引きで買うと";
+			mes "合計金額は";
+			mes "いくらになる？";
+			next;
+			input .@input;
+			if (.@input != 798) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "リングポンメルセイバー2本、";
+			mes "キャップ3個、";
+			mes "ブーツ3個の";
+			mes "合計重量は？";
+			next;
+			input .@input;
+			if (.@input != 480) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ミラーシールド、ミスタースマイル、";
+			mes "レザージャケット、シルクローブ、";
+			mes "ウェディングベール、マフラー、眼帯の合計防御力は？";
+			next;
+			input .@input;
+			if (.@input != 12) set .@w_point,.@w_point+1;
+			mes "[ラスプチン・グレゴリー]";
+			mes "パッドアーマーを4着";
+			mes "24％引きで買って";
+			mes "定価の20％で";
+			mes "売ったら、この取引で";
+			mes "いくら儲かる？";
+			next;
+			input .@input;
+			if (.@input != 7680) set .@w_point,.@w_point+1;
+		}
+		if (.@w_point == 0) {
+			mes "[ラスプチン・グレゴリー]";
+			mes "ほう……";
+			mes "見事だ！素晴らしい！";
+			mes "全問正解とはな！？";
+			mes "ケヘヘヘッ、こりゃ認めるしかねえな……";
+			next;
+		}
+		else if (.@w_point == 1) {
+			mes "[ラスプチン・グレゴリー]";
+			mes "1問間違えたな！";
+			mes "だが見逃してやる。";
+			mes "面接は合格だ！";
+			next;
+		}
+		else if (.@w_point == 2 && ALCH_Q == 5) {
+			mes "[ラスプチン・グレゴリー]";
+			mes "計算がかなり";
+			mes "苦手なようだが、";
+			mes "今回は見逃してやる……";
+			next;
+		}
+		else {
+			set ALCH_Q,5;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ケヘヘヘッ！馬鹿め！";
+			mes "お前の答えを聞いてるだけで";
+			mes "俺まで馬鹿になりそうだ！";
+			mes "これじゃ全問不正解も";
+			mes "同然だな！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "こんな簡単な問題も";
+			mes "満足に答えられない奴が";
+			mes "どうやって";
+			mes "アルケミストになろうってんだ？！";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "ふむ……？";
+			mes "何か1問でも";
+			mes "合ってたか？";
+			next;
+			mes "[ラスプチン・グレゴリー]";
+			mes "馬鹿め！ちょっとしたミス一つで";
+			mes "錬金術は全部台無しになるんだぞ！さっさと失せろ！";
+			mes "反吐が出る！";
+			close;
+		}
+		mes "[ラスプチン・グレゴリー]";
+		mes "さっさとアルケミストになって、しっかり研究しろ。そうすりゃ俺の役に立つこともあるだろうさ。ハーッハッハッハッ～！";
+		next;
+		mes "[ラスプチン・グレゴリー]";
+		mes "さあダーウィンのところへ行け！";
+		mes "実験のやり方を教えてくれる。俺が寄越したと";
+		mes "言えばいい。";
+		set ALCH_Q,6;
+		changequest 2031,2032;
+		close;
+	}
+	else if (ALCH_Q == 6) {
+		mes "何やってんだ？";
+		mes "さっさとダーウィンを探しに行け。";
+		next;
+		mes "[ラスプチン・グレゴリー]";
+		mes "ケヘヘヘヘヘヘヘヘッ～";
+		mes "これで終わりだと思うなよ！";
+		close;
+	}
+	mes "ケヘヘヘヘヘヘヘヘッ～";
+	mes "これで終わりだと思うなよ！";
+	close;
+}
+
+alde_alche,13,15,7	script	勉強中の男#am::Studying Man#am	750,{
+	if (checkweight(1201,1) == 0) {
+		mes "- ちょっと待って！ -";
+		mes "- 今のあなたは -";
+		mes "- 荷物を持ちすぎています。 -";
+		mes "- また今度 -";
+		mes "- 倉庫に預けてから来てください。 -";
+		close;
+	}
+	mes "[ダーウィン]";
+	if (BaseJob != Job_Merchant) {
+		if (BaseJob == Job_Alchemist) {
+			mes "ああ……";
+			mes "君は……";
+			mes "アルケミストに";
+			mes "なったんだね。";
+			next;
+			mes "[ダーウィン]";
+			mes "覚えておいてくれ……";
+			mes "夢を";
+			mes "叶えようとする";
+			mes "その道のりで、";
+			mes "大切なものを";
+			mes "失わないように。";
+			next;
+			mes "[ダーウィン]";
+			mes "ああ……";
+			mes "ハルモナ……";
+			mes "愛しい人よ……";
+			close;
+		}
+		else {
+			mes "夢がある限り、";
+			mes "人は";
+			mes "全てを持っているのと同じだ。";
+			mes "夢が無ければ、";
+			mes "もう失うものすら無い。";
+			next;
+			mes "[ダーウィン]";
+			mes "この呪われた瞳は……";
+			mes "もうずっと前に";
+			mes "夢を見失ってしまった。";
+			mes "ハハハハ……";
+			next;
+			mes "[ダーウィン]";
+			mes "楽園なんて";
+			mes "本当にあるのだろうか……？";
+			mes "愛しい人がいなければ……";
+			mes "ハルモナがいなければ……";
+			close;
+		}
+	}
+	if (ALCH_Q == 6) {
+		mes "...";
+		next;
+		mes "[ダーウィン]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[ダーウィン]";
+		mes "...";
+		mes "......";
+		mes "誰だ……？";
+		next;
+		monster "alde_alche",13,15,"ウルフ",1013,1;
+		killmonsterall "alde_alche";
+		mes "[ダーウィン]";
+		mes "狼か？";
+		mes "それとも人間か？";
+		mes "何かを求めて";
+		mes "ここに来たのだろう？";
+		next;
+		mes "[ダーウィン]";
+		mes "結局のところ……";
+		mes "誰もが満たしたい";
+		mes "欲望を持っている。気をつけるんだ。";
+		mes "花に引き寄せられる";
+		mes "野生の狼のようにはならぬように。";
+		next;
+		mes "[ダーウィン]";
+		mes "何かを得ようと努力するあまり、大切な何かを犠牲にしてしまうこともある。";
+		next;
+		mes "[ダーウィン]";
+		mes "喜びや幸せを育むことは";
+		mes "花を育てることによく似ている。";
+		mes "何かが欠けていれば、";
+		mes "花はしおれてしまう……";
+		next;
+		mes "[ダーウィン]";
+		mes "こんな場所に";
+		mes "何の用だね？";
+		next;
+		switch(select("実験のやり方を学びたい:花についてもっと聞きたい:何でもない")) {
+		case 1:
+			mes "[ダーウィン]";
+			mes "錬金術を";
+			mes "学びたいのかね？";
+			mes "私が知っていることは全て、";
+			mes "自分の夢を";
+			mes "叶えるために";
+			mes "学んだことなのだ……";
+			next;
+			mes "[ダーウィン]";
+			mes "基礎は";
+			mes "教えてあげよう……";
+			mes "だがその先に";
+			mes "学ぶことは全て、";
+			mes "君自身の意志で";
+			mes "進めていく必要がある。";
+			next;
+			mes "[ダーウィン]";
+			mes "簡単な薬の";
+			mes "作り方を";
+			mes "教えよう。まずは";
+			mes "以下の材料を";
+			mes "すぐに持ってきてくれ。";
+			next;
+			mes "[ダーウィン]";
+			mes "^551A8B調合ボウル3個^000000、";
+			mes "^551A8B空き瓶3個^000000、";
+			mes "^551A8B赤ハーブ1個^000000、";
+			mes "^551A8B黄ハーブ1個^000000、";
+			mes "^551A8B白ハーブ1個^000000だ。";
+			set ALCH_Q,7;
+			changequest 2032,2033;
+			next;
+			mes "[ダーウィン]";
+			mes "全部";
+			mes "揃ったら、";
+			mes "また私のところへ戻ってきてくれ。";
+			close;
+		case 2:
+			mes "[ダーウィン]";
+			mes "花……？";
+			mes "私の心の";
+			mes "最も暗い奥底に、";
+			mes "かすかに覚えている";
+			mes "一輪の花がある……";
+			next;
+			mes "[ダーウィン]";
+			mes "愛する人のために、";
+			mes "私は全ての力を";
+			mes "たった一つのことの";
+			mes "研究に注いだ。";
+			next;
+			mes "[ダーウィン]";
+			mes "詳しくは話さないが、";
+			mes "簡単に言えば";
+			mes "狼と花の関係について";
+			mes "研究していたのだ。";
+			next;
+			mes "[ダーウィン]";
+			mes "そう……";
+			mes "それは一輪の花だった。";
+			mes "その輝きは、楽園を";
+			mes "見せてくれると言われていた。";
+			mes "^551A8B幻の花^000000……";
+			next;
+			mes "[ダーウィン]";
+			mes "私はホムンクルスまで";
+			mes "作ってみせたが、";
+			mes "花から新しい命を生み出せるなど、誰も信じてくれなかった……";
+			next;
+			mes "[ダーウィン]";
+			mes "それから……";
+			mes "いろいろあって、今の私には何も残っていない。もう時間に意味など無いのだ。";
+			next;
+			mes "[ダーウィン]";
+			mes "ああ……";
+			mes "ハルモナ……";
+			mes "どこへ行ってしまったのだ？";
+			mes "美しい花の咲く野原に";
+			mes "いてくれるといいのだが……";
+			close;
+		case 3:
+			mes "[ダーウィン]";
+			mes "自分にとって";
+			mes "最も大切なものが";
+			mes "何かを考えてみるといい。";
+			mes "それに気づかなければ、";
+			mes "守ることもできないのだから。";
+			close;
+		}
+	}
+	else if (ALCH_Q == 7) {
+		mes "...";
+		mes "......";
+		next;
+		mes "[ダーウィン]";
+		mes "...";
+		mes "......";
+		mes "誰だ……？";
+		next;
+		mes "[ダーウィン]";
+		mes "ああ……";
+		mes "君は";
+		mes "錬金術を学びたいと言っていた者だね。";
+		mes "準備はできたかね？";
+		next;
+		if (countitem(710) > 0) {
+			mes "[ダーウィン]";
+			mes "待ってくれ。";
+			mes "その幻の花……";
+			mes "一体どこで手に入れたんだ？";
+			next;
+			mes "[ダーウィン]";
+			mes "どこで見つけたんだ！？";
+			mes "月明かりの下で";
+			mes "ゆっくりと";
+			mes "咲くこの花を？";
+			mes "美しい……！";
+			next;
+			mes "[ダーウィン]";
+			mes "そ、その花を……";
+			mes "私に見せてくれないか。";
+			mes "幻の花だ！";
+			mes "うわああああああ！！";
+			next;
+			mes "[ダーウィン]";
+			mes "どうか";
+			mes "この花を私に譲ってはもらえないか？";
+			mes "きっとこれが、私がずっと探し求めていたムーンライトフラワーだ！";
+			next;
+			if (select("すみません、渡せません:あなたに渡そうと持ってきました") == 1) {
+				mes "[ダーウィン]";
+				mes "分かった。";
+				mes "そんなに大切な花を";
+				mes "誰にでも";
+				mes "譲れるものではないな。";
+				mes "まあ……それでいい。";
+				next;
+				mes "[ダーウィン]";
+				mes "ただ昔の記憶がよみがえっただけだ。最初から頼むべきではなかった。とにかく、実験に必要なものを持ってきてくれ。";
+				next;
+				mes "[ダーウィン]";
+				mes "その花はどこか別の";
+				mes "場所に置いてきてくれ。あまりに多くの";
+				mes "記憶がよみがえってしまうから……";
+				close;
+			}
+			mes "[ダーウィン]";
+			mes "本気か……？";
+			mes "本当にいいのか！？";
+			mes "ありがとう！";
+			mes "こんなに大切な花を。";
+			mes "ああ、ハルモナ、愛しい人……";
+			next;
+			mes "[ダーウィン]";
+			mes "そうだ……";
+			mes "この礼はきっとしよう。";
+			mes "私の錬金術の知識を、直接君の心に植えつけてあげよう……";
+			next;
+			mes "[ダーウィン]";
+			mes "目を大きく見開いて、";
+			mes "私の目をよく見るんだ！！";
+			mes "最後まで目をそらすなよ！！";
+			next;
+			mes "Lorem ipsum dolor sit amet,";
+			next;
+			mes "Lorem ipsum dolor sit amet,";
+			mes "consectetuer adipiscing elit.";
+			next;
+			mes "Lorem ipsum dolor sit amet,";
+			mes "consectetuer adipiscing elit.";
+			mes "Aenean fermentum ullamcorper.";
+			next;
+			mes "Lorem ipsum dolor sit amet,";
+			mes "consectetuer adipiscing elit.";
+			mes "Aenean fermentum ullamcorper.";
+			mes "Vestibulum ante ipsum primis in";
+			next;
+			mes "Lorem ipsum dolor sit amet,";
+			mes "consectetuer adipiscing elit.";
+			mes "Aenean fermentum ullamcorper.";
+			mes "Vestibulum ante ipsum primis in";
+			mes "faucibus orci luctus et ultrices";
+			next;
+			mes "Lorem ipsum dolor sit amet,";
+			mes "consectetuer adipiscing elit.";
+			mes "Aenean fermentum ullamcorper.";
+			mes "Vestibulum ante ipsum primis in";
+			mes "faucibus orci luctus et ultrices";
+			mes "posuere cubilia Curae; Morbi";
+			next;
+			mes "Lorem ipsum dolor sit amet,";
+			mes "consectetuer adipiscing elit.";
+			mes "Aenean fermentum ullamcorper.";
+			mes "Vestibulum ante ipsum primis in";
+			mes "faucibus orci luctus et ultrices";
+			mes "posuere cubilia Curae; Morbi";
+			mes "massa, fermentum vitae...";
+			next;
+			delitem 710,1; //Illusion_Flower
+			mes "[ダーウィン]";
+			mes "^666666*ハッ……*^000000";
+			mes "君はもう";
+			mes "アルケミストだ！！";
+			mes "ギルドへ行って";
+			mes "商人としての最後の";
+			mes "名残を捨て去ってくるといい！！";
+			set ALCH_Q,40;
+			changequest 2033,2034;
+			close;
+		}
+		else if (countitem(7134) > 2 && countitem(713) > 2 && countitem(507) > 0 && countitem(508) > 0 && countitem(509) > 0) {
+			mes "[ダーウィン]";
+			mes "全部揃っているようだね。約束通り、簡単な薬の作り方を教えよう。";
+			next;
+			mes "[ダーウィン]";
+			mes "まず調合ボウルを用意する。それから、こうやってハーブを中に入れ、ゆっくりとすり潰していく。";
+			next;
+			mes "[ダーウィン]";
+			mes "少しずつ";
+			mes "清水を注ぎながらかき混ぜ、";
+			mes "とろみが出るまで続ける。";
+			mes "そのあと、さらにハーブを加える。";
+			next;
+			mes "[ダーウィン]";
+			mes "こうやって作るんだ。十分だと思ったら、そっと空き瓶に混合物を注ぐといい。";
+			delitem 7134,3; //Medicine_Bowl
+			delitem 713,3; //Empty_Bottle
+			delitem 507,1; //Red_Herb
+			delitem 508,1; //Yellow_Herb
+			delitem 509,1; //White_Herb
+			next;
+			mes "[ダーウィン]";
+			mes "はい、";
+			mes "これで完成だ。";
+			mes "それでは、今説明した";
+			mes "簡単な手順で";
+			mes "薬を作ってみてくれ。";
+			next;
+			switch(select("調合ボウルを準備する:調合ボウルを頭に乗せる:調合ボウルを蹴る")) {
+			case 1:
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "な……何を……？";
+				next;
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "やめなさい！";
+				next;
+				break;
+			}
+			switch(select("調合ボウルに土を入れる:調合ボウルにハーブを入れる:調合ボウルにハープを入れる")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "……えっ！？";
+				mes "それは";
+				mes "薬じゃない！";
+				next;
+				break;
+			case 2:
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "ハープを？";
+				mes "一体どうやって";
+				mes "そんなことを……？";
+				next;
+				break;
+			}
+			switch(select("ハーブをすり潰す:調合ボウルをすり潰す:ダーウィンの足をすり潰す")) {
+			case 1:
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "な、何を";
+				mes "しているんだ！？";
+				next;
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "うっ……！";
+				mes "一体";
+				mes "何のつもりだ";
+				mes "……！？";
+				next;
+				break;
+			}
+			switch(select("清水を吹きかける:清水を飲む:清水を注ぐ")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "ん？";
+				mes "何をしているんだ？";
+				next;
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "ま、待て……";
+				mes "休憩でも";
+				mes "しているのか？";
+				next;
+				break;
+			case 3:
+				break;
+			}
+			switch(select("ハーブをすり潰し続ける:ハーブを食べ続ける:踊って歌い続ける")) {
+			case 1:
+				break;
+			case 2:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "ハーブを食べる？";
+				mes "今は目の前の作業に";
+				mes "集中したほうが";
+				mes "いいと思うが……";
+				next;
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "歌って";
+				mes "踊る？アルケミストは";
+				mes "そんなことしないぞ、";
+				mes "頭がおかしくなったのか？";
+				next;
+				break;
+			}
+			switch(select("麺を入れて炒める:空き瓶に注ぐ:調合ボウルを持って飲む")) {
+			case 1:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "私たちはアルケミストだ、";
+				mes "レストランのシェフじゃない。";
+				next;
+				break;
+			case 2:
+				break;
+			case 3:
+				set .@w_point,.@w_point+1;
+				mes "[ダーウィン]";
+				mes "ふむ……";
+				mes "かなり雑だな……";
+				next;
+				break;
+			}
+			if (.@w_point > 0) {
+				mes "[ダーウィン]";
+				mes "...";
+				mes "......";
+				next;
+				mes "[ダーウィン]";
+				mes "手順通りにやらなかったから";
+				mes "混合物を台無しにしてしまったな！もう一度材料を集めて、";
+				mes "うまくできるまでやり直すといい。";
+				close;
+			}
+			getitem 501,1; //Red_Potion
+			getitem 503,1; //Yellow_Potion
+			getitem 504,1; //White_Potion
+			mes "[ダーウィン]";
+			mes "よくやった。";
+			mes "初めてにしては上出来だ。今作った薬は持って行っていいぞ。";
+			set ALCH_Q,8;
+			changequest 2033,2035;
+			next;
+			mes "[ダーウィン]";
+			mes "さあ、隣の部屋に行って";
+			mes "ヴァン・ヘルモントに話しかけて";
+			mes "訓練を続けるといい。";
+			next;
+			mes "[ダーウィン]";
+			mes "忘れないでくれ……";
+			mes "自分にとって最も大切なものは、";
+			mes "常に守り抜くのだ。";
+			close;
+		}
+		else {
+			mes "[ダーウィン]";
+			mes "持ってくるものを";
+			mes "忘れてしまったのかね？";
+			mes "もう一度";
+			mes "言っておこう。次は";
+			mes "これを持ってくるように……";
+			next;
+			mes "[ダーウィン]";
+			mes "^551A8B調合ボウル3個^000000、";
+			mes "^551A8B空き瓶3個^000000、";
+			mes "^551A8B赤ハーブ1個^000000、";
+			mes "^551A8B黄ハーブ1個^000000、";
+			mes "^551A8B白ハーブ1個^000000だ。";
+			next;
+			mes "[ダーウィン]";
+			mes "準備が";
+			mes "できたら";
+			mes "また来てくれ……";
+			close;
+		}
+	}
+	else if (ALCH_Q == 8) {
+		mes "ヴァン・ヘルモントの所へ";
+		mes "行けと言ったはずだ。";
+		mes "もっと教えてあげたいところだが、";
+		mes "それはできないのだ。";
+		next;
+		mes "[ダーウィン]";
+		mes "ああ……";
+		mes "ハルモナ、愛しい人よ。";
+		mes "もうあの花すら見えない。私の魂も静かに";
+		mes "しおれていく……";
+		close;
+	}
+	else if (ALCH_Q == 40) {
+		mes "私はすでに私の知識を全て君に与えた。もう教えることは";
+		mes "何も残っていない。";
+		next;
+		mes "[ダーウィン]";
+		mes "2階に行って組合長に話しかけるといい。それが";
+		mes "終われば、アルケミストとしての人生が始まるだろう。";
+		close;
+	}
+	else {
+		mes "夢がある限り、";
+		mes "人は";
+		mes "全てを持っているのと同じだ。";
+		mes "夢が無ければ、";
+		mes "もう失うものすら無い。";
+		next;
+		mes "[ダーウィン]";
+		mes "この呪われた瞳は……";
+		mes "もうずっと前に";
+		mes "夢を見失ってしまった。";
+		mes "ハハハハ……";
+		next;
+		mes "[ダーウィン]";
+		mes "楽園なんて";
+		mes "本当にあるのだろうか……？";
+		mes "愛しい人がいなければ……";
+		mes "ハルモナがいなければ……";
+		close;
+	}
+}
+
+alde_alche,79,19,5	script	ヴァン・ヘルモント#am::Experiment Expert#am	748,{
+	mes "[ヴァン・ヘルモント]";
+	if (BaseJob != Job_Merchant) {
+		if (BaseJob == Job_Alchemist) {
+			mes "何の用だ？";
+			mes "忙しいんだ！！";
+			mes "邪魔をせずに";
+			mes "さっさと行ってくれ。";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "全くもう……";
+			mes "怠けていたら";
+			mes "研究なんて一生完成しないぞ。外に出て学べるだけ学んでくるんだ。";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "科学雑誌を読んで、実験をする。それが錬金術というものだ。さあ、私は仕事に戻らせてもらうぞ！";
+			close;
+		}
+		else {
+			mes "あと少し……";
+			mes "もう少しなのに……";
+			mes "ああっ！あと少しで";
+			mes "できるところだったのに";
+			mes "……！";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "なぜだ……？！";
+			mes "またしても失敗だと！？";
+			mes "計算は";
+			mes "全部合っていたはずだ！ま、待て……！";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "もしや、中性子勾配を使って熱流束を安定させれば、うまくいくかもしれん……！";
+			close;
+		}
+	}
+	if (ALCH_Q == 8) {
+		mes "うわああああ……！";
+		mes "なぜこの式がうまくいかないんだ？何が問題なんだ？理論上は全て正しいはずなのに、どこかに式の誤りがあるに違いない……";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "ここに注げば止まるはずだ。いや待て、これは違う溶液だ！なぜこんな";
+		mes "馬鹿なミスを！？一体いつ";
+		mes "入れ替わったんだ！？";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "よし、よし……";
+		mes "この部分を直せばいい。";
+		mes "最初からやり直す必要は無い。";
+		mes "直すだけだ……いや待て。待て……";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes ".................";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "ん……？";
+		mes "誰だ、お前は？";
+		next;
+		if (select("アルケミストになりたいです:……………") == 2) {
+			mes "[ヴァン・ヘルモント]";
+			mes "ふむ……？";
+			mes "何だ、見学したかっただけか？まあいい、静かにして、終わったらすぐに帰るんだぞ。";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "邪魔をせず、あちこち触って回らないでくれ。揮発性の物質もあるかもしれないから、事故が起きたら危険だ。";
+			close;
+		}
+		mes "[ヴァン・ヘルモント]";
+		mes "お前が……？";
+		mes "アルケミストに？";
+		mes "おかしな商人もいたもんだな。";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "まあいいだろう、だが今は非常に急を要する実験があって";
+		mes "手が離せないんだ。だから";
+		mes "邪魔をしないでくれ。";
+		next;
+		if (select("何か教えてください:……") == 1) {
+			mes "[ヴァン・ヘルモント]";
+			mes "うわああ……！";
+			mes "邪魔をするなと言ったばかりだろう？そんなに理解が難しいことか？";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "分かった、分かった。課題を出してやろう。何か新しいことを";
+			mes "学んで戻ってこい。そうだな、";
+			mes "何がいいか……";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "よし、決めたぞ。";
+			mes "モルゲンシュタインから";
+			mes "中和剤と混合剤の";
+			mes "作り方を学んでこい。";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "何も持っていく必要は無い。ただ彼の作業を見て、それらの溶液の作り方を教えてもらうんだ。分かったな？";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			set ALCH_Q,9;
+			changequest 2035,2036;
+			mes "それじゃあ、また今度な。";
+			mes "できるだけ早く";
+			mes "出発したほうがいいぞ。";
+			close;
+		}
+		mes "[ヴァン・ヘルモント]";
+		mes "...";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "...";
+		mes "......";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "この化合物の燃焼速度を再調整すれば、この粒子流束における凝集傾向を打ち消せるはずだ……";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "だがこの自然発生的な";
+		mes "結晶化については";
+		mes "どうすればいいんだ！？このマトリクスを取り除くわけにもいかない、触媒を三重点に到達させるために必要なんだ。";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "くそっ！";
+		mes "一体";
+		mes "どうすればいいんだ！？";
+		close;
+	}
+	else if (ALCH_Q == 9) {
+		mes "よし、ここでテンタクルに切れ込みを入れて、ジェロピーとネバネバした液体の溶液を中に加えれば……あれ、調合ボウルはどこに行ったんだ？";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "こんな時に限って全部使い切ったのか！？ニコラスならまだ残っているかもしれないな。ああ、面倒だ。待てよ。ちょっと待て……";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "...";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "...";
+		mes "......";
+		mes "誰だ、お前は？";
+		next;
+		if (select("アルケミストになりたいのですが:……………") == 2) {
+			mes "[ヴァン・ヘルモント]";
+			mes "ふむ……？";
+			mes "何だ、見学したかっただけか？まあいい、静かにして、終わったらすぐに帰るんだぞ。";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "邪魔をせず、あちこち触って回らないでくれ。揮発性の物質もあるかもしれないから、事故が起きたら危険だ。";
+			close;
+		}
+		mes "[ヴァン・ヘルモント]";
+		mes "ああ、そうか。前に来た商人だな。それでモルゲンシュタインから何を学んできた？遊びで行かせたわけじゃないんだぞ。";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "いくつか";
+		mes "質問をして";
+		mes "学んだことを";
+		mes "確認させてもらおう。";
+		next;
+		if(MISC_QUEST & 4) {
+			mes "[ヴァン・ヘルモント]";
+			mes "中和剤を作るのに";
+			mes "必要ないアイテムは";
+			mes "どれだ？";
+			next;
+			if (select("Karvodailnirol:Detrimindexta:Alcohol") != 1) set .@w_point,.@w_point+1;
+			mes "[ヴァン・ヘルモント]";
+			mes "混合剤を作るのに";
+			mes "必要ないアイテムは";
+			mes "どれだ？";
+			next;
+			if (select("Karvodailnirol:Detrimindexta:Alcohol") != 2) set .@w_point,.@w_point+1;
+			if (.@w_point > 0) {
+				mes "[ヴァン・ヘルモント]";
+				mes "モルゲンシュタインの話を全く聞いていなかったのか？もう一度";
+				mes "作るところを見学しに行ったほうがいいかもしれんな。";
+				next;
+				mes "[ヴァン・ヘルモント]";
+				mes "実験に必要な正確なアイテムが分からないようでは、";
+				mes "自分を傷つけることになりかねないぞ！";
+				close;
+			}
+			mes "[ヴァン・ヘルモント]";
+			mes "よし、よく学んだようだな。";
+			mes "実験について少しは分かったようだ。もうここでの用は済んだから、私は実験を続けさせてもらうぞ。";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "外に出て隣の部屋を探し、";
+			mes "ニコラスに話しかけるといい。彼が訓練を続けてくれる。";
+			next;
+			set ALCH_Q,20;
+			changequest 2036,2037;
+			mes "[ヴァン・ヘルモント]";
+			mes "まだこんな所で";
+			mes "何をしているんだ？";
+			mes "行け！お互い";
+			mes "もっと大事な";
+			mes "用があるだろう！";
+			close;
+		}
+		else {
+			mes "[ヴァン・ヘルモント]";
+			mes "中和剤を作るのに";
+			mes "必要なアイテムは";
+			mes "何だ？";
+			next;
+			select("羽根:ネバネバした液体:動物の残骸");
+			mes "[ヴァン・ヘルモント]";
+			mes "混合剤を作るのに";
+			mes "必要なアイテムは";
+			mes "何だ？";
+			next;
+			select("モンスターの餌:古代の唇:腐った包帯");
+			mes "[ヴァン・ヘルモント]";
+			mes "正直に言え。本当は分かっていないんだろう！？モルゲンシュタインの所へ行って教わってこいと言ったはずだぞ！？";
+			next;
+			mes "[ヴァン・ヘルモント]";
+			mes "彼と話すまで戻ってくることなど考えるなよ！さあ、邪魔をせずにさっさと出て行け！";
+			close;
+		}
+	}
+	else if (ALCH_Q == 20) {
+		mes "何だと……？";
+		mes "隣のニコラスと";
+		mes "話せと言ったはずだが？";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "私は研究を続けねばならんし、";
+		mes "お前はアルケミストになる手続きを終わらせる必要がある。さあ、さっさと動け！";
+		close;
+	}
+	else {
+		mes "あと少し……";
+		mes "もう少しなのに……";
+		mes "ああっ！あと少しで";
+		mes "できるところだったのに";
+		mes "……！";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "なぜだ……？！";
+		mes "またしても失敗だと！？";
+		mes "計算は";
+		mes "全部合っていたはずだ……待てよ……";
+		next;
+		mes "[ヴァン・ヘルモント]";
+		mes "もしや、中性子勾配を使って熱流束を安定させれば、うまくいくかもしれん……";
+		close;
+	}
+}
+
+alde_alche,101,184,4	script	アルケミスト組合長#am::Master Alchemist#am	122,{
+	cutin "job_alche_vincent",2;
+	mes "[ヴィンセント・カルシャロ]";
+	if (Upper == 1) {
+		mes "君は転生したのだね……";
+		mes "素晴らしい、実に素晴らしい。";
+		next;
+		mes "[ヴィンセント・カルシャロ]";
+		mes "君の居場所はもうここには無い。";
+		mes "広い世界へ出て、旅を続けるといい、我が友よ。";
+		close2;
+		cutin "",255;
+		end;
+	}
+	if (BaseJob != Job_Merchant) {
+		if (BaseJob == Job_Alchemist) {
+			mes "ようこそ！";
+			mes "研究の調子は";
+			mes "どうかね？";
+			next;
+			mes "[ヴィンセント・カルシャロ]";
+			mes "実験からは時として予期せぬ結果が得られるものだ。それは研究の後退に見えるかもしれないが、そうした結果が新たな発見につながることもある。";
+			next;
+			mes "[ヴィンセント・カルシャロ]";
+			mes "何か新しいことを発見したら、";
+			mes "私たちに教えてくれ。我々は皆、科学の謎を解き明かすために協力し合っているのだということを忘れずにな！";
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "ふむ……";
+			mes "ノービスか？";
+			mes "こんな場所で";
+			mes "遊んでいては";
+			mes "いけないよ。";
+			next;
+			mes "[ヴィンセント・カルシャロ]";
+			mes "この建物には揮発性の化学物質や";
+			mes "危険な材料がたくさんある。外で遊んだほうがずっといいだろう。";
+		}
+		else {
+			mes "ふむ……？";
+			mes "冒険者が";
+			mes "錬金術師ギルドに";
+			mes "何の用かね？";
+			next;
+			mes "[ヴィンセント・カルシャロ]";
+			mes "残念だが、";
+			mes "我々のギルドの一員でなければ、";
+			mes "ここで力になれることは";
+			mes "あまり無いのだ。";
+		}
+		close2;
+		cutin "",255;
+		end;
+	}
+	if (ALCH_Q == 0) {
+		mes "ふむ……？";
+		mes "商人か？";
+		mes "錬金術を学ぶことに";
+		mes "興味があるのかね？";
+		next;
+		mes "[ヴィンセント・カルシャロ]";
+		mes "ここは錬金術師ギルドだ。";
+		mes "私たちは魔法を使わずに新しい素材を生み出すため、様々な物質の研究と実験を行っている。";
+		next;
+		mes "[ヴィンセント・カルシャロ]";
+		mes "いつの日か、生命の秘密や";
+		mes "その他の科学の謎を解き明かせればと願っている。";
+		next;
+		mes "[ヴィンセント・カルシャロ]";
+		mes "長く商人として旅をしてきたなら、科学への好奇心も芽生えてきたことだろう。錬金術を学びたいなら、錬金術師ギルドに加入してみてはどうかね？";
+		close2;
+		cutin "",255;
+		end;
+	}
+	else if (ALCH_Q == 40) {
+		if (JobLevel < 40) {
+			set ALCH_Q,0;
+			mes "ふむ……まだ資格を満たしていないようだね。";
+			mes "覚えておくといい、アルケミストになるには少なくともジョブレベル40に達する必要がある。";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (SkillPoint) {
+			mes "ああ、もうすぐ";
+			mes "アルケミストに";
+			mes "なれそうだが、その前に";
+			mes "未使用のスキルポイントを";
+			mes "振り分けてもらう必要がある。";
+			next;
+			mes "[ヴィンセント・カルシャロ]";
+			mes "余っている";
+			mes "スキルポイントを";
+			mes "全部使い切ったら、";
+			mes "また話しかけてくれ。";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (checkquest(2039) != -1) {
+			changequest 2039,2040;
+		}
+		if (checkquest(2034) != -1) {
+			changequest 2034,2040;
+		}
+		mes "ああ、よくやった。";
+		mes "君が錬金術の基礎を";
+		mes "全て身につけたことが";
+		mes "見て取れるよ。";
+		next;
+		set ALCH_Q,0;
+		completequest 2040;
+		set .@jlevel,JobLevel;
+		callfunc "Job_Change",Job_Alchemist;
+		callfunc "F_ClearJobVar";
+		mes "[ヴィンセント・カルシャロ]";
+		mes "これより君は";
+		mes "私たちの誉れある";
+		mes "ギルドの一員だ。";
+		mes "大いに学んでくれることを願っているよ……";
+		next;
+		if (.@jlevel == 50) {
+			getitem 7133,1; //Slim_Potion_Create_Book
+			mes "[ヴィンセント・カルシャロ]";
+			mes "君に";
+			mes "特別な物を";
+			mes "贈ろう。これを使えば";
+			mes "研究者としての人生を";
+			mes "始められるだろう。";
+		}
+		else {
+			switch(rand(1,6)) {
+			case 1:
+				getitem 7127,1; //Alcol_Create_Book
+				break;
+			case 2:
+				getitem 7128,1; //FireBottle_Create_Book
+				break;
+			case 3:
+				getitem 7129,1; //Acid_Create_Book
+				break;
+			case 4:
+				getitem 7130,1; //Plant_Create_Book
+				break;
+			case 5:
+				getitem 7131,1; //Mine_Create_Book
+				break;
+			case 6:
+				getitem 7144,1; //Normal_Potion_Book
+			}
+			mes "[ヴィンセント・カルシャロ]";
+			mes "それと……";
+			mes "研究を始める";
+			mes "君への";
+			mes "ちょっとした";
+			mes "贈り物だ。";
+		}
+		next;
+		mes "[ヴィンセント・カルシャロ]";
+		mes "それでは";
+		mes "また会おう……";
+		mes "アルケミストとしての";
+		mes "誇りを";
+		mes "忘れずにな！";
+		close2;
+		cutin "",255;
+		end;
+	}
+	else {
+		mes "ああ……";
+		mes "君はすでに";
+		mes "アルケミストになるための";
+		mes "訓練に";
+		mes "登録済みのはずだが。";
+		next;
+		mes "[ヴィンセント・カルシャロ]";
+		mes "他のアルケミストたちの";
+		mes "話をよく聞いて、指示に従うといい。彼らから多くを学べるだろう。";
+		close2;
+		cutin "",255;
+		end;
+	}
+}
+
+alde_alche,145,19,1	script	ニコラス・フラメル#am::Chief Researcher#am	57,{
+	if (checkweight(1201,1) == 0) {
+		mes "- ちょっと待って！ -";
+		mes "- 今のあなたは -";
+		mes "- 荷物を持ちすぎています。 -";
+		mes "- また今度 -";
+		mes "- 倉庫に預けてから来てください。 -";
+		close;
+	}
+	if (ALCH_Q > 19 && ALCH_Q < 22) {
+		if (ALCH_Q == 20) {
+			mes "[ニコラス・フラメル]";
+			mes "おお……";
+			mes "君がアルケミストになりたいという";
+			mes "生意気な";
+			mes "商人か？";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "誰でもアルケミストになれるわけではないぞ。強い動機と明確な目標、そして高い集中力が必要なのだ。";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "アルケミストは多くの化学方程式や科学法則、その他の情報を暗記しなければならない。実際なかなか大変なことなのだ。";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "集中力が無ければ、後で錬金術の図表を見たときに混乱してしまうだろう。私の試験は、まさにその能力を測るものだ。";
+			next;
+		}
+		mes "[ニコラス・フラメル]";
+		mes "これから渡す文字の羅列の中に";
+		mes "紛れている単語を見つけてもらう。文字の";
+		mes "一部か全部を使ってできる単語だ。";
+		next;
+		mes "[ニコラス・フラメル]";
+		mes "パズルの";
+		mes "文字の中に";
+		mes "^551A8B実際にある^000000単語を選べば合格だ。";
+		next;
+		switch(rand(1,3)) {
+		case 1:
+			mes "t m y a n y e o b n e g p r i";
+			next;
+			if (select("Brake:Brass:Bug:Broken:Brigan?") == 5) set .@alch_t,.@alch_t+10;
+			mes "o n c u t a p j l e r s v m u";
+			next;
+			if (select("vendor:storage:weapon:simple:streetshop") == 1) set .@alch_t,.@alch_t+10;
+			mes "t v a r m e g p h e u b o y l";
+			next;
+			if (select("molasses:party:leader:sweets:treacle") == 2) set .@alch_t,.@alch_t+10;
+			mes "q z a h n a i n b r d p t n c";
+			next;
+			if (select("partisan:partizan:pato:paros:pack") == 2) set .@alch_t,.@alch_t+10;
+			break;
+		case 2:
+			mes "m p d i c f a r o g n k w a s";
+			next;
+			if (select("packman:sunshine:ragnarok:wonderland:frost") == 1) set .@alch_t,.@alch_t+10;
+			mes "g b n o p r e f a r e t a s k";
+			next;
+			if (select("purple:smoker:ragnarok:bolt:burnt wood") == 3) set .@alch_t,.@alch_t+10;
+			mes "u g n i s j e k c e o g n d p";
+			next;
+			if (select("scab:kinship:donate:source:opening") == 5) set .@alch_t,.@alch_t+10;
+			mes "r o e h n r o m c a i n p t t";
+			next;
+			if (select("forgemerchant:potionmerchant:dcmerchant:vendingmerchant:battlemerchant") == 2) set .@alch_t,.@alch_t+10;
+			break;
+		case 3:
+			mes "s m i e x b w u n e t a g l r";
+			next;
+			if (select("tiger:wolf:pumpkin:tripped:tore") == 1) set .@alch_t,.@alch_t+10;
+			mes "n i e g b o p d s o a u w r v";
+			next;
+			if (select("bash:provoke:endure:stun:abracadabra") == 3) set .@alch_t,.@alch_t+10;
+			mes "l r m g r e x t a v i n e d e";
+			next;
+			if (select("alberta:latifoliate:crimson:maple:evergreen") == 5) set .@alch_t,.@alch_t+10;
+			mes "r o e h n r o m c a i n p t t";
+			next;
+			if (select("forgemerchant:potionmerchant:dcmerchant:vendingmerchant:battlemerchant") == 2) set .@alch_t,.@alch_t+10;
+			break;
+		}
+		mes "[ニコラス・フラメル]";
+		mes "ああ、終わったね。";
+		mes "それでは、見てみよう……";
+		if (.@alch_t > 30) {
+			set ALCH_Q,22;
+			mes "見事な出来だ！";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "よし、隠れた単語を全部見つけたな。それだけの集中力があれば、情報の暗記も問題無いだろう。";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "少し時間をくれれば";
+			mes "次の訓練課題を";
+			mes "準備しておこう。";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "ああ、それと";
+			mes "次に話しかける前に";
+			mes "^551A8B所持品に十分な空きを^000000確保しておくように。";
+			close;
+		}
+		else {
+			set ALCH_Q,21;
+			mes "^666666*ハッ！*^000000 ひ、ひどい……！";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "この結果を見る限り、君には明らかに集中力の問題があるようだね。";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "こんな簡単な単語パズルすら解けないようでは、どうやって実験や研究の管理ができるというのかね？";
+			next;
+			mes "[ニコラス・フラメル]";
+			mes "もう一度試験を受ける前に、";
+			mes "少しリラックスして";
+			mes "休んではどうかね？";
+			close;
+
+		}
+	}
+	else if (ALCH_Q == 22) {
+		if (MaxWeight - Weight < 1370) {
+			mes "[ニコラス・フラメル]";
+			mes "おっと……";
+			mes "荷物を持ちすぎだ！まずは倉庫に何か預けてきなさい。";
+			close;
+		}
+		mes "[ニコラス・フラメル]";
+		mes "よし……";
+		mes "次の";
+		mes "課題では";
+		mes "^551A8Bジュノー^000000へ旅してもらう。";
+		next;
+		mes "[ニコラス・フラメル]";
+		mes "そこで^551A8Bバイン^000000と^551A8Bバジン^000000に話しかける必要がある。あの二人はジュノーのセージたちと錬金術の研究をしているのだ。";
+		mes "彼らの研究を手伝えば、何か学べるものがあるだろう。";
+		next;
+		mes "[ニコラス・フラメル]";
+		mes "手伝いを終えたら";
+		mes "また私のところへ戻ってきなさい。彼らが実験を続けるには、これらのアイテムが全て必要になる。";
+		next;
+		set ALCH_Q,23;
+		changequest 2037,2038;
+		mes "[ニコラス・フラメル]";
+		mes "混合剤1個、";
+		mes "焦げた木5個、";
+		mes "細かい砂5個、";
+		mes "原石オリデオコン3個、";
+		mes "原石エルニウム3個だ。";
+		getitem 974,1; //Mixture
+		getitem 7068,5; //Burn_Tree
+		getitem 7043,5; //Fine_Sand
+		getitem 756,3; //Oridecon_Stone
+		getitem 757,3; //Elunium_Stone
+		next;
+		mes "[ニコラス・フラメル]";
+		mes "よろしい。";
+		mes "道中気をつけて、";
+		mes "無事に";
+		mes "戻ってきなさい。";
+		close;
+	}
+	else if (ALCH_Q == 23) {
+		mes "[ニコラス・フラメル]";
+		mes "ジュノーへ行って";
+		mes "バインとバジンの";
+		mes "錬金術の研究を";
+		mes "手伝えと言ったはずだが？";
+		close;
+	}
+	else if (ALCH_Q == 24) {
+		set ALCH_Q,40;
+		changequest 2038,2039;
+		mes "[ニコラス・フラメル]";
+		mes "ああ、戻ってきたか！";
+		mes "ちょうどバインとバジンから";
+		mes "連絡があったところだ。君の手伝いにとても満足していたそうだよ。";
+		next;
+		mes "[ニコラス・フラメル]";
+		mes "あの兄弟の手伝いが";
+		mes "できるほどなら、";
+		mes "アルケミストになる資格は";
+		mes "十分にあるだろう。";
+		next;
+		mes "[ニコラス・フラメル]";
+		mes "よくやった！";
+		mes "あとは2階の組合長に話しかけるだけだ！おめでとう、もうすぐアルケミストになれるぞ！";
+		close;
+	}
+	else if (ALCH_Q == 40 && BaseJob == Job_Merchant) {
+		mes "[ニコラス・フラメル]";
+		mes "あとは2階の組合長に話しかけるだけだ！おめでとう、もうすぐアルケミストになれるぞ！";
+		close;
+	}
+	else {
+		mes "[ニコラス・フラメル]";
+		mes "Lorem ipsum dolor sit amet,";
+		mes "consectetuer adipiscing elit.";
+		mes "Vivamus sem. Sed metus";
+		mes "lacus, viverra id, rutrum eget,";
+		mes "rhoncus sit amet, lectus.";
+		next;
+		mes "[ニコラス・フラメル]";
+		mes "Suspendisse sit amet urna in";
+		mes "nisl fringilla faucibus. Nulla scelerisque eros...";
+		mes "^666666*ブツブツ……*^000000";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 Working.
+//=     npc/quests/counteragent_mixture.txt Also Needed
+//=     npc/quests/quests_yuno.txt Also Needed [Darkchild]
+//= 1.1 Fixed some minor bugs.  Optimized some lines. Re-organized the script a bit. 
+//=     Giving Parmry NPC, Hammer and Old Book now waves the 50000 fee. (based of mRO website)
+//=     Having a joblvl of 50 allows you to skip Rasputin's test. (based of mRO website) [kobra_k88]
+//= 1.2 fixed a few typos (have to hunt more) [Lupus]
+//= 1.3 Added Baby Class Support [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//=     2nd Job Quests again. It also guides adv classes where
+//=     to go. [Lupus]
+//= 1.6a fixed some wrong answers, thanks to zlider for info [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.2 Got rid of 'al_morgen' var. Now uses (MISC_QUEST & 4) [Lupus]
+//= 2.3 Optimized, changed job numbers to constants. Fixed some spelling [Lupus]
+//= 2.4 Added alternative prizes according to JobLevel [Lupus]
+//= 2.4a Fixed 2 wrong answers in Rasputin's test [Lupus]
+//============================================================ 

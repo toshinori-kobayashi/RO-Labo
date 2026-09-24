@@ -1,0 +1,4319 @@
+//===== rAthena Script ======================================= 
+//= Ep 10+ Novice Training Grounds
+//===== By: ================================================== 
+//= Dr.Evil & MasterOfMuppets
+//===== Current Version: ===================================== 
+//= 2.4
+//===== Compatible With: ===================================== 
+//= rAthena Project; SVN 3422+
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Novice Training Grounds
+//===== Additional Comments: ================================= 
+//= 1.7D Added confirm character name thing on receptionist. [Kisuka]
+//= 1.8 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//=     NPCs are not backwards compatable, and will remove
+//=     old variables used in the previous novice grounds.
+//= 1.9 Fixed problem with Hanson's dialog. (bugreport:1703) [L0ne_W0lf]
+//=     Fixed Entrance Guard clearing vars. (bugreport:1695)
+//=     Added duplicate NPCs to combat training maps.
+//= 2.0 Fixed savepoint not being changed sometimes. [L0ne_W0lf]
+//= 2.1 Corrected spacing issue in welcome message. [L0ne_W0lf]
+//= 2.2 Corrected Leo's endless dialog. [L0ne_W0lf]
+//= 2.3 Added fix to Hanson from GM-windsor- and Saithis. [L0ne_W0lf]
+//= 2.3a Correct a wrong variable name. (bugreport:2293) [Samuray22]
+//= 2.4 Corrected an error in Hanson. (bugreport:2374) [L0ne_W0lf]
+//============================================================ 
+
+// Bulletin Board
+new_1-1,66,114,4	script	Bulletin Board#nv	111,{
+	mes "^FF0000=================================^000000";
+	mes "^FF0000 ^000000 ^E40CAA【ようこそ】^CC0000 ^FF9000初心者^7FFF00修練^00FF00場^E40CAA【ようこそ】^FF0000^000000";
+	mes "^FF0000=================================^000000";
+	close;
+}
+
+new_2-1,66,114,4	duplicate(Bulletin Board#nv)	Bulletin Board#nv2	111
+new_3-1,66,114,4	duplicate(Bulletin Board#nv)	Bulletin Board#nv3	111
+new_4-1,66,114,4	duplicate(Bulletin Board#nv)	Bulletin Board#nv4	111
+new_5-1,66,114,4	duplicate(Bulletin Board#nv)	Bulletin Board#nv5	111
+
+new_1-1,144,116,2	script	衛兵#nv1::Guard#nv1	105,{
+	mes "[修練場の衛兵]";
+	mes "修練場へようこそ。";
+	mes "ここは外郭だ。訓練を始めるには、城の中へ入るといい。";
+	close;
+}
+
+new_2-1,144,116,2	duplicate(Guard#nv1)	衛兵#nv2-1::Guard#nv2-1	105
+new_3-1,144,116,2	duplicate(Guard#nv1)	衛兵#nv3-1::Guard#nv3-1	105
+new_4-1,144,116,2	duplicate(Guard#nv1)	衛兵#nv4-1::Guard#nv4-1	105
+new_5-1,144,116,2	duplicate(Guard#nv1)	衛兵#nv5-1::Guard#nv5-1	105
+
+new_1-1,144,107,2	script	衛兵#nv2::Guard#nv2	105,{
+	mes "[修練場の衛兵]";
+	if(rand(2)) {
+		mes "さあ、入れ！";
+		mes "君を";
+		mes "この修練場に";
+		mes "歓迎しよう！";
+		next;
+		mes "[修練場の衛兵]";
+		mes "ここでは";
+		mes "この先ラグナロクの世界で";
+		mes "繰り広げる冒険に向けて";
+		mes "備えることができるぞ！";
+	}
+	else {
+		mes "行け、ノービスよ、行け！";
+		mes "戦い、強くなるのだ！明るい明日を見据えてな！";
+	}
+	close;
+}
+
+new_2-1,144,107,2	duplicate(Guard#nv2)	衛兵#nv2-2::Guard#nv2-2	105
+new_3-1,144,107,2	duplicate(Guard#nv2)	衛兵#nv3-2::Guard#nv3-2	105
+new_4-1,144,107,2	duplicate(Guard#nv2)	衛兵#nv4-2::Guard#nv4-2	105
+new_5-1,144,107,2	duplicate(Guard#nv2)	衛兵#nv5-2::Guard#nv5-2	105
+
+
+// Receptionist
+new_1-2,100,29,4	script	修練場の受付#nv1::Receptionist#nv1	86,{
+	mes "[修練場の受付]";
+	mes "こんにちは、見たところ新顔のようですね。";
+	mes "お名前は？";
+	next;
+	input .@charname$;
+	if (.@charname$!=strcharinfo(0)) {
+		mes "[修練場の受付]";
+		mes "すみません、うまく";
+		mes "聞き取れなかったようです。";
+		close;
+	}
+	mes "[修練場の受付]";
+	mes "ようこそ！";
+	mes "ここは";
+	mes "^3355FF修練場^000000の入口です。";
+	next;
+	mes "[修練場の受付]";
+	mes "ラグナロクの世界が";
+	mes "初めてでしたら、";
+	mes "詳しい説明のために";
+	mes "「^3355FF修練場の説明^000000」を";
+	mes "選んでください。";
+	next;
+	while (1) {
+		switch(select("修練を申し込む。:ラグナロクオンラインに直接向かう。:^3355FF修練場の説明。^000000:少し考えさせてください。")) {
+		case 1:
+			mes "[修練場の受付]";
+			mes "ノービス訓練へのお申し込み、ありがとうございます。各訓練コースの詳細については、案内員にお尋ねください。";
+			next;
+			mes "[修練場の受付]";
+			mes "訓練の進め方について質問があれば、遠慮なく教官に尋ねてください。";
+			next;
+			mes "[修練場の受付]";
+			mes "それでは";
+			mes "修練場へ転送します。";
+			close2;
+			warp "new_1-2",100,70;
+			end;
+		case 2:
+			mes "[修練場の受付]";
+			mes "わかりました。";
+			mes "全力を";
+			mes "尽くしてください、";
+			mes "幸運を祈ります！";
+			close2;
+			set nov_1st_cos,0;
+			set nov_2nd_cos,0;
+			set nov_3_swordman,0;
+			set nov_3_archer,0;
+			set nov_3_thief,0;
+			set nov_3_magician,0;
+			set nov_3_acolyte,0;
+			set nov_3_merchant,0;
+			switch(rand(6)) {
+			case 0:
+				savepoint "prontera",273,354,1,1;
+				warp "prontera",273,354;
+				break;
+			case 1:
+				savepoint "morocc",160,94,1,1;
+				warp "morocc",160,94;
+				break;
+			case 2:
+				savepoint "geffen",120,100,1,1;
+				warp "geffen",120,100;
+				break;
+			case 3:
+				savepoint "payon",70,100,1,1;
+				warp "payon",70,100;
+				break;
+			case 4:
+				savepoint "alberta",116,57,1,1;
+				warp "alberta",116,57;
+				break;
+			case 5:
+				savepoint "izlude",94,103,1,1;
+				warp "izlude",94,103;
+			}
+			end;
+		case 3:
+			mes "[修練場の受付]";
+			mes "この修練場は、ラグナロクオンラインの新規プレイヤーに役立つ情報を提供するため、ルーンミッドガッツ王国教育局によって設立されました。";
+			next;
+			mes "[修練場の受付]";
+			mes "訓練課程は、基礎知識の授業と、実戦訓練の２つで構成されています。";
+			next;
+			mes "[修練場の受付]";
+			mes "最初の課程では、より快適にゲームを進めるために必要な知識を学びます。";
+			next;
+			mes "[修練場の受付]";
+			mes "実戦訓練では、";
+			mes "弱いモンスターと実際に戦うことで、戦闘の基本を学びます。";
+			next;
+			mes "[修練場の受付]";
+			mes "この実戦練習を通じて、";
+			mes "本格的な冒険に出る前に、より多くの経験を積むことができます。";
+			next;
+			mes "[修練場の受付]";
+			mes "訓練の最後には、初期職業について説明します。自分に合った職業を選ぶ参考にしてください。";
+			next;
+			mes "[修練場の受付]";
+			mes "修練場での訓練に参加したい場合は、メニューの「^3355FF修練を申し込む^000000」を選んでください。";
+			next;
+			mes "[修練場の受付]";
+			mes "基礎訓練を省略して、すぐにラグナロクオンラインの世界に入りたい場合は、「^3355FFラグナロクオンラインに直接向かう^000000」を選んでください。";
+			next;
+			break;
+		case 4:
+			mes "[修練場の受付]";
+			mes "わかりました。";
+			mes "ごゆっくりどうぞ。";
+			close;
+		}
+	}
+}	
+new_2-2,100,29,4	duplicate(Receptionist#nv1)	修練場の受付#nv2::Receptionist#nv2	86
+new_3-2,100,29,4	duplicate(Receptionist#nv1)	修練場の受付#nv3::Receptionist#nv3	86
+new_4-2,100,29,4	duplicate(Receptionist#nv1)	修練場の受付#nv4::Receptionist#nv4	86
+new_5-2,100,29,4	duplicate(Receptionist#nv1)	修練場の受付#nv5::Receptionist#nv5	86
+
+new_1-1,53,114,4	script	シオン#nv1::Shion#nv1	727,{
+	if (nov_get_item04 > 9 || nov_get_item05 > 9) {
+		mes "[シオン]";
+		mes "ん……？";
+		mes "まだこんな所で";
+		mes "何をしているのですか？";
+		mes "あ、^3355FF蝶の羽^000000を使いましたね？";
+		next;
+		mes "[シオン]";
+		mes "いえいえいえ～";
+		mes "蝶の羽は、ここでの訓練を終えた^666666後^000000に街へ戻りたい時に使うものですよ？";
+		next;
+		mes "[シオン]";
+		mes "それでは";
+		mes "修練場に";
+		mes "送り返しますね。";
+		close2;
+		warp "new_1-2",99,99;
+		end;
+	}
+	else if (nov_1st_cos > 2) {
+		mes "[シオン]";
+		mes "修練場は";
+		mes "右手にある橋を";
+		mes "渡ってすぐの";
+		mes "所にありますよ。";
+		next;
+		mes "[シオン]";
+		mes "授業を";
+		mes "いくつか受けることに";
+		mes "なりますが、";
+		mes "きっと後悔はしませんよ。";
+		mes "さあ、行ってらっしゃい！";
+		close;
+	}
+	else if (nov_1st_cos == 2) {
+		mes "[シオン]";
+		mes "ちょっと……";
+		mes "このいたずらっ子！";
+		next;
+		mes "[シオン]";
+		mes "待って……";
+		mes "落ち着くのよ、シオン。";
+		mes "私はプロの";
+		mes "指導員なんだから、";
+		mes "ノービス相手に怒っちゃダメ！";
+		next;
+		mes "[シオン]";
+		mes "さあ、今すぐ右手の橋を渡って！^666666コホン^000000　城が見えてきますから、中で色々な教官に会えますよ。";
+		next;
+		mes "[シオン]";
+		mes "入口が見当たらない時は、^3355FFマウスの右ボタン^000000を押しながらドラッグして視点を変えてみてください。簡単でしょう？";
+		next;
+		mes "[シオン]";
+		mes "視点を元に戻すには、";
+		mes "マウスの右ボタンをダブルクリックしてください。それでは、お気をつけて！";
+		next;
+		mes "[シオン]";
+		mes "ああ、行く前に一つ、";
+		mes "女性への接し方も覚えておくといいですよ？そうすればこんな贈り物がもらえるかもしれません！";
+		set nov_1st_cos,3;
+		getexp 9,0;
+		close;
+	}
+	else if (nov_1st_cos == 1) {
+		mes "[シオン]";
+		mes "あら……？";
+		mes "どうして";
+		mes "まだここに？";
+		mes "^666666はぁ……^000000";
+		next;
+		mes "[シオン]";
+		mes "いいですか、修練場に入れば、プレイに役立つ色々なことが学べますよ。Zenyやその他の報酬がもらえることもあります。";
+		next;
+		mes "[シオン]";
+		mes "こんな風に";
+		mes "経験値だってもらえます！";
+		set nov_1st_cos,3;
+		getexp 9,0;
+		next;
+		mes "[シオン]";
+		mes "修練場で学ぶことは、すべてあなたのプレイの役に立ちます。だから前向きに考えてくださいね？";
+		close;
+	}
+	else {
+		mes "[シオン]";
+		mes "こんにちは～";
+		mes "修練場へ";
+		mes "ようこそ！";
+		next;
+		mes "[シオン]";
+		mes "ええと。";
+		mes "あなたの名前は……";
+		mes "" + strcharinfo(0) + "。";
+		next;
+		mes "[シオン]";
+		mes "私はシオンよ。";
+		mes "ええ、もちろん初対面ね。あはははっ～！";
+		next;
+		mes "[シオン]";
+		mes "さて、何かお手伝いできることはある？";
+		mes "質問があれば聞いてね～";
+		next;
+		switch(select("どこへ行けばいい？:基本インターフェースについて。:あなたは一体何者？")) {
+		case 1:
+			mes "[シオン]";
+			mes "右手に橋が";
+			mes "見えるでしょう？橋を渡れば城に着くわ。あとは中に入るだけよ！";
+			next;
+			mes "[シオン]";
+			mes "城の入口は";
+			mes "^4D4DFF回転する白い光^000000よ。このポータルを使って、別の場所へ移動できるの。";
+			next;
+			mes "[シオン]";
+			mes "移動の仕方は分かる？";
+			mes "行きたい場所を左クリックすれば、そこまで歩いていくわ。簡単でしょう？";
+			next;
+			mes "[シオン]";
+			mes "さあ、行ってみて！";
+			mes "とにかく、冒険を始めるにはまず城に入らないとね。";
+			next;
+			mes "[シオン]";
+			mes "入口には";
+			mes "兵士がいるから、";
+			mes "迷う心配はないわ。";
+			mes "気をつけてね～！";
+			set nov_1st_cos,1;
+			close;
+		case 2:
+			mes "[シオン]";
+			mes "基本インターフェース……";
+			mes "クリック、ダブルクリック、ドラッグの意味は分かる？";
+			next;
+			mes "[シオン]";
+			mes "マウスの左ボタンを";
+			mes "一回押すのが";
+			mes "クリック。続けて二回押すのがダブルクリックよ。";
+			next;
+			mes "[シオン]";
+			mes "ドラッグというのは、何かをクリックした状態でマウスボタンを";
+			mes "押したまま動かすことよ。";
+			next;
+			mes "[シオン]";
+			mes "基本インターフェースの話を始める前に、";
+			mes "この言葉はよく使うから覚えておいてね。";
+			next;
+			mes "[シオン]";
+			mes "城の中には基本インターフェースを教えてくれる教官がいるわ。城に入って訓練を始めてね。";
+			next;
+			mes "[シオン]";
+			mes "城の入口の";
+			mes "正体は";
+			mes "^4D4DFF回転する白い光^000000です。";
+			next;
+			mes "[シオン]";
+			mes "入口には";
+			mes "兵士がいるから、";
+			mes "迷う心配はないわ。";
+			mes "気をつけてね～！";
+			set nov_1st_cos,1;
+			close;
+		case 3:
+			mes "[シオン]";
+			mes "私？シオンよ！";
+			mes "でもその聞き方は失礼ね！こっちはボランティアで時間と労力を割いているんだから、少しは敬意を払ってほしいわ！";
+			set nov_1st_cos,2;
+			close;
+		}
+	}
+}
+
+new_2-1,53,114,4	duplicate(Shion#nv1)	シオン#nv2::Shion#nv2	727
+new_3-1,53,114,4	duplicate(Shion#nv1)	シオン#nv3::Shion#nv3	727
+new_4-1,53,114,4	duplicate(Shion#nv1)	シオン#nv4::Shion#nv4	727
+new_5-1,53,114,4	duplicate(Shion#nv1)	シオン#nv5::Shion#nv5	727
+
+
+// Interfaces Tutor
+new_1-2,99,105,3	script	操作教官#nv1::Interfaces Tutor#nv1	751,{
+	if (nov_get_item02 > 9 && nov_get_item03 > 9 && nov_get_item04 > 9) {
+		mes "[クリス]";
+		mes "必修課程はすべて修了したね。補助教官たちとはもう話したかい？次は実戦訓練だが、進んでみるかい？";
+		next;
+		switch(select("もちろん！:いえ、また後で来ます。:街へ送ってください！")) {
+		case 1:
+			mes "[クリス]";
+			mes "次の課程は実戦訓練だ。次の教官の話をよく聞いて、無事に修了することを願っているよ。幸運を。";
+			close2;
+			warp "new_1-2",28,178;
+			end;
+		case 2:
+			mes "[クリス]";
+			mes "それなら、必修課程の基礎知識だけでは新米冒険者には足りないかもしれないから、その間に補助教官たちに話を聞いておくといい。";
+			next;
+			mes "[クリス]";
+			mes "私の助けが必要な時は、いつでも遠慮なく戻ってきなさい。";
+			close;
+		case 3:
+			mes "[クリス]";
+			mes "それでは、街へ送ってほしいのかな？十分学んだと自信があるなら、右手の^3355FFカプラ職員^000000に話しかけるといい。";
+			next;
+			mes "[クリス]";
+			mes "カプラサービスは外の世界に出てから、とても便利だよ。テレポートサービスで街から街へ移動できるし、カプラ倉庫にアイテムを安全に預けられる。";
+			next;
+			mes "[クリス]";
+			mes "もう会うことはないかもしれないが、強くなって立派な冒険者になることを願っているよ。幸運を。";
+			close;
+		}
+	}
+	else if (nov_get_item02 < 10) {
+		mes "[クリス]";
+		mes "こんにちは、";
+		mes "登録証明を見せてもらえるかな？";
+		next;
+		if (NEW_MES_FLAG0) {
+			mes "[クリス]";
+			mes "ああ、" + strcharinfo(0) + "、もう提供していない古い訓練課程に申し込んでいるようだね。新しい登録証明を発行してあげよう。";
+			set NEW_MES_FLAG0,0;
+			set NEW_MES_FLAG1,0;
+			set NEW_MES_FLAG2,0;
+			set NEW_MES_FLAG3,0;
+			set NEW_MES_FLAG4,0;
+			set NEW_MES_FLAG5,0;
+			set NEW_LVUP0,0;
+			set NEW_LVUP1,0;
+			set NEW_JOBLVUP,0;
+			next;
+		}
+		mes "[クリス]";
+		mes "さて、これで";
+		mes "準備は整ったね。";
+		mes "私の授業では";
+		mes "最も基本的な";
+		mes "インターフェースの使い方を教えるよ。";
+		next;
+		mes "[クリス]";
+		mes strcharinfo(0)+"。";
+		mes "インターフェースの";
+		mes "基礎について、もっと";
+		mes "学んでみるかい？";
+		next;
+		switch(select("はい。:いや、もうプロだから～:キャンセル。")) {
+		case 1:
+			mes "[クリス]";
+			mes "まず、画面上のインターフェースウィンドウはすべてドラッグで動かせる。ウィンドウをクリックし、マウスボタンを押したまま動かせばいい。";
+			next;
+			mes "[クリス]";
+			mes "それでは、各インターフェースウィンドウを、画面上のデフォルトの位置に沿って説明していこう。";
+			next;
+			mes "[クリス]";
+			mes "画面の左上には、キャラクター名とレベルが表示されたウィンドウがある。これが^3355FF基本情報ウィンドウ^000000だ。";
+			next;
+			mes "[クリス]";
+			if (BaseLevel < 8) {
+				mes "経験値を";
+				mes "少し分けてあげよう。";
+				mes "基本情報ウィンドウを見て、ベースレベルの経験値ゲージの変化を確認するといい。";
+				next;
+				mes "[クリス]";
+				mes "見えたかい……？";
+				mes "経験値を得ると、";
+				mes "経験値ゲージが満ちていく。";
+				mes "100%になるとレベルが上がり、ゲージは0に戻るんだ。";
+				set nov_get_item02,10;
+				switch (BaseLevel) {
+				case 1: getexp 10,0; break;
+				case 2: getexp 17,0; break;
+				case 3: getexp 26,0; break;
+				case 4: getexp 37,0; break;
+				case 5: getexp 78,0; break;
+				case 6: getexp 115,0; break;
+				case 7: getexp 155,0; break;
+				}
+			}
+			else {
+				mes "でも……";
+				mes "君はもうベースレベルの経験値ゲージに慣れているようだね。";
+			}
+			next;
+			mes "[クリス]";
+			mes "基本情報ウィンドウの下部には、２つの経験値ゲージバーがある。上のバーが現在のベースレベル、下のバーが現在のジョブレベルの経験値を表しているよ。";
+			next;
+			mes "[クリス]";
+			mes "ジョブレベルの";
+			mes "経験値バーが満ちると、ジョブレベルが上がり^3355FFスキルポイント^000000がもらえる。スキルポイントはキャラクターのスキルを覚えるのに使うんだ。";
+			next;
+			mes "[クリス]";
+			mes "基本情報";
+			mes "ウィンドウの右側には、";
+			mes "様々な";
+			mes "メニューボタンがある。";
+			next;
+			mes "[クリス]";
+			mes "これらのメニューボタンをクリックすると、所持品ウィンドウや";
+			mes "パーティウィンドウなど、他のインターフェースウィンドウが開くよ。";
+			next;
+			mes "[クリス]";
+			mes "さて……";
+			mes "^3355FFチャットウィンドウ^000000は";
+			mes "画面の下部に";
+			mes "配置されている。";
+			next;
+			mes "[クリス]";
+			mes "チャットウィンドウの右下には青いボタンが２つある。左のボタンでチャットの設定を変更できるよ。";
+			next;
+			mes "[クリス]";
+			mes "「^3355FF全体へ送信^000000」";
+			mes "を選ぶと、画面内の";
+			mes "全員とチャットできる。";
+			next;
+			mes "[クリス]";
+			mes "「^3355FFパーティへ送信^000000」と「^3355FFギルドへ送信^000000」を選べば、距離に関係なくパーティやギルドのメンバーだけにメッセージを送れるよ。";
+			next;
+			mes "[クリス]";
+			mes "チャットウィンドウ右側の";
+			mes "スクロールバーをドラッグすれば、会話を見返せる。チャットウィンドウは常に有効だから、他のプレイヤーとのやり取りに困ることはないよ。";
+			next;
+			mes "[クリス]";
+			mes "さて、最も重要なインターフェースの一つが^3355FFミニマップ^000000だ。画面の右上にある。";
+			next;
+			mes "[クリス]";
+			mes "ミニマップの赤い点は、別の場所へつながる^3355FFワープポータル^000000の位置を示している。";
+			next;
+			mes "[クリス]";
+			mes "パーティやギルドに加入していれば、同じマップにいる仲間の位置もミニマップに表示されるよ。";
+			next;
+			mes "[クリス]";
+			mes "基本情報ウィンドウ右側の";
+			mes "メニューボタンをクリックして、他のインターフェースにも慣れておいてくれ。";
+			next;
+			mes "[クリス]";
+			mes "さて、ゲーム内インターフェースの簡単な説明はここまでだ。今は情報量が多く感じるかもしれないが、すぐに自然と身につくよ。";
+			if (JobLevel < 7) {
+				next;
+				mes "[クリス]";
+				mes "ジョブ経験値を少し分けてあげよう。スキルウィンドウを開いて、スキルポイントを^3355FF基本スキル^000000に割り振るといい。";
+				set nov_get_item02,11;
+				switch (JobLevel) {
+				case 1: getexp 0,10; break;
+				case 2: getexp 0,18; break;
+				case 3: getexp 0,28; break;
+				case 4: getexp 0,40; break;
+				case 5: getexp 0,91; break;
+				case 6: getexp 0,151; break;
+				}
+			}
+			else {
+				mes "[クリス]";
+				mes "君のジョブレベルは思ったよりずっと高いね。もう基礎情報は知っているはずだ。";
+			}
+			next;
+			mes "[クリス]";
+			mes "さて、エドウィンに話しかけてみてはどうだい？スキルの基本的な使い方をもっと教えてくれるよ。ああ、それとささやかな贈り物だ。ぼろぼろのノービス忍装束をあげよう！";
+			set nov_get_item02,12;
+			getitem 2352,1; //Novice_Plate
+			close;
+		case 2:
+			mes "[クリス]";
+			mes "実戦訓練";
+			mes "コースまで";
+			mes "案内しよう。";
+			mes "復習したくなったら、いつでも戻ってきていいからね。";
+			close2;
+			warp "new_1-2",28,178;
+			end;
+		case 3:
+			emotion ET_PROFUSELY_SWEAT;
+			close;
+		}
+	}
+	else if (nov_get_item03 < 10) {
+		mes "[クリス]";
+		mes "どうしたのかな？";
+		mes "登録証明を見せてくれるかい？";
+		next;
+		mes "[クリス]";
+		mes "まだスキル情報の授業を受けていないようだね。この部屋の一番左にいる教官に話しかけて、授業を受けるといい。";
+		next;
+		switch(select("ありがとうございます！:授業はもう疲れました～:キャンセル")) {
+		case 1:
+			mes "[クリス]";
+			mes "スキル情報の授業を受ければ、スキルの使い方がよく分かるようになるよ。";
+			next;
+			mes "[クリス]";
+			mes "スキルの使い方はミッドガルドで生き延びるために欠かせないから、ぜひ授業を受けることを勧めるよ。さあ、案内しよう。";
+			close2;
+			warp "new_1-2",84,107;
+			end;
+		case 2:
+			mes "[クリス]";
+			mes "なるほど。それなら実戦訓練コースの準備はできているはずだ。すぐに送ってあげようか？";
+			next;
+			if (select("いえ！ま、待ってください！:お願いします～！") == 1) {
+				mes "[クリス]";
+				mes "……！？";
+				mes "そ……そうか。";
+				mes "準備ができたら";
+				mes "また来るといい。";
+				close;
+			}
+			else {
+				mes "[クリス]";
+				mes "幸運を、";
+				mes "若きノービスよ。";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			}
+		case 3:
+			emotion ET_PROFUSELY_SWEAT;
+			close;
+		}
+	}
+	else if (nov_get_item04 < 10) {
+		mes "[クリス]";
+		mes "どうしたのかな？";
+		mes "登録証明を見せてくれるかい？";
+		next;
+		mes "[クリス]";
+		mes "まだアイテム情報の授業を受けていないようだね。この部屋の一番右にいる教官に話しかけて、彼女の授業を受けるといい。";
+		next;
+		switch(select("ありがとうございます。:授業はもう疲れました～:キャンセル")) {
+		case 1:
+			mes "[クリス]";
+			mes "アイテム情報の授業では、ホットキーとホットキーバーの使い方をしっかり学べるよ。さあ、案内しよう。";
+			close2;
+			warp "new_1-2",115,107;
+			end;
+		case 2:
+			mes "[クリス]";
+			mes "なるほど。それなら実戦訓練コースの準備はできているはずだ。すぐに送ってあげようか？";
+			next;
+			if (select("いえ！ま、待ってください！:お願いします～！") == 1) {
+				mes "[クリス]";
+				mes "……！？";
+				mes "そ……そうか。";
+				mes "準備ができたら";
+				mes "また来るといい。";
+				close;
+			}
+			else {
+				mes "[クリス]";
+				mes "幸運を、";
+				mes "若きノービスよ。";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			}
+		case 3:
+			emotion ET_PROFUSELY_SWEAT;
+			close;
+		}
+	}
+}
+
+new_1-2,83,111,3	script	スキル教官#nv::Skill Tutor#nv	753,{
+	if (nov_get_item02 > 9 && nov_get_item03 > 9 && nov_get_item04 > 9) {
+		mes "[セシル]";
+		mes "おや……？";
+		mes "また何か用かい？";
+		mes "必修課程は全部終わったみたいだね。補助教官たちにも会ったかい？";
+		next;
+		switch(select("次のコースへ送ってください！:補助教官？:街へ連れてってください！")) {
+		case 1:
+			mes "[セシル]";
+			mes "ああ！そうそう。";
+			mes "そろそろ実戦訓練コースを受けないとね。";
+			next;
+			mes "[セシル]";
+			mes "いやあ、実戦訓練コースの教官がうらやましいよ。基礎情報を教えるのなんて、モンスターをぶちのめすのに比べたら全然かっこよくないからね。";
+			next;
+			mes "[セシル]";
+			mes "ああ、そうだ。";
+			mes "実戦訓練だったね。";
+			mes "今すぐ送るよ。";
+			mes "幸運を、坊や！";
+			close2;
+			warp "new_1-2",28,178;
+			end;
+		case 2:
+			mes "[セシル]";
+			mes "補助教官のことは";
+			mes "知っているよね？";
+			next;
+			mes "[セシル]";
+			mes "いいかい。この部屋にいる３人の教官が教えるのは、あくまで最も基本的な情報だけだ。私たちの授業はさっさと済ませるためのものなんだよ。";
+			next;
+			mes "[セシル]";
+			mes "でも、もっと詳しい情報を学んだ方が役立つ人もいるだろうね。";
+			next;
+			mes "[セシル]";
+			mes "ラグナロクが本当に初めてなら、補助教官の授業を一度は受けてみて損はないよ。";
+			next;
+			mes "[セシル]";
+			mes "レオ・ハンダーソンという男がスキルに詳しいらしいから、彼の知識はきっと役に立つと思うよ。";
+			close;
+		case 3:
+			mes "[セシル]";
+			mes "街……？";
+			mes "私が君専用のペコペコにでも見えるのかい？";
+			next;
+			mes "[セシル]";
+			mes "そうか、君にはまだ分からないかもしれないね。街に移動したいなら、右手のカプラのお姉さんに話しかけるといい。";
+			close;
+		}
+	}
+	if (nov_get_item03 < 10) {
+		mes "[セシル]";
+		mes ""+strcharinfo(0)+"";
+		mes "へえ、いい名前だね！";
+		if (NEW_MES_FLAG0) {
+			mes "ところで、登録証明の期限が切れているから、新しいものをあげよう。";
+			mes "新しいのをあげよう。";
+			set NEW_MES_FLAG0,0;
+			set NEW_MES_FLAG1,0;
+			set NEW_MES_FLAG2,0;
+			set NEW_MES_FLAG3,0;
+			set NEW_MES_FLAG4,0;
+			set NEW_MES_FLAG5,0;
+			set NEW_LVUP0,0;
+			set NEW_LVUP1,0;
+			set NEW_JOBLVUP,0;
+		}
+		mes "それでは、授業を始めようか？";
+		next;
+		switch(select("何を教えてくれるんですか？:今すぐ実戦訓練がしたいです！:キャンセル")) {
+		case 1:
+			mes "[セシル]";
+			mes "力のために生き";
+			mes "力のために死ぬ！";
+			mes "我が必殺の一撃を";
+			mes "伝授してやろう！";
+			next;
+			mes "[セシル]";
+			mes "なんてね、冗談だよ！";
+			mes "実際はスキルの使い方を教えるだけさ。まあ、力のために生きているのは本当だけどね。";
+			next;
+			mes "[セシル]";
+			mes "基本情報ウィンドウの^3355FFスキル^000000ボタンをクリックすると、スキルウィンドウが開く。'^3355FFAlt^000000'キーと'^3355FFS^000000'キーを同時に押しても開けるよ。";
+			next;
+			mes "[セシル]";
+			mes "スキルウィンドウを";
+			mes "開くと、";
+			mes "「^3355FF基本スキル^000000」という";
+			mes "アイコンが見えるはずだ。";
+			if (JobLevel < 7) {
+				next;
+				mes "[セシル]";
+				mes "さて、スキルウィンドウの下部には、残りスキルポイントの数が表示されている。";
+				next;
+				mes "[セシル]";
+				mes "スキルウィンドウを開いて（'Alt'＋'S'）、基本スキルのアイコン横にある「^3355FFレベルアップ^000000」ボタンをクリックし、基本スキルにスキルポイントを割り振るといい。";
+				set nov_get_item03,10;
+				switch (JobLevel) {
+				case 1: getexp 0,10; break;
+				case 2: getexp 0,18; break;
+				case 3: getexp 0,28; break;
+				case 4: getexp 0,40; break;
+				case 5: getexp 0,91; break;
+				case 6: getexp 0,151; break;
+				}
+			}
+			else {
+				next;
+				mes "[セシル]";
+				mes "ほう。実はジョブレベルが思ったより高いね。もうスキルの基本は分かっているようだ。";
+			}
+			next;
+			mes "[セシル]";
+			mes "基本スキルにスキルポイントは割り振ったかい？いずれ基本スキルを極める必要があるから、今のうちにやっておくといい。";
+			next;
+			mes "[セシル]";
+			mes "スキルについてもっと詳しく知りたいなら、補助教官の一人、レオ・ハンダーソンに話しかけるといい。";
+			next;
+			mes "[セシル]";
+			mes "おっと、忘れるところだった！";
+			mes "^3355FF応急手当^000000のスキルを教えてあげよう。危険な時にとても役立つスキルだよ。";
+			next;
+			mes "^3355FFあなたは";
+			mes "^4A708B応急手当^3355FFのスキルを習得した。^000000";
+			skill "NV_FIRSTAID",1,SKILL_PERM;
+			set NOV_SK,3;
+			set nov_get_item03,11;
+			next;
+			if (JobLevel < 7) {
+				mes "^3355FF少しの";
+				mes "ジョブ経験値を得た。^000000";
+				set nov_get_item03,12;
+				switch (JobLevel) {
+				case 1: getexp 0,10; break;
+				case 2: getexp 0,18; break;
+				case 3: getexp 0,28; break;
+				case 4: getexp 0,40; break;
+				case 5: getexp 0,91; break;
+				case 6: getexp 0,151; break;
+				}
+			}
+			next;
+			mes "[セシル]";
+			mes "さあ、スキルウィンドウを開いて";
+			mes "^3355FF応急手当^000000のアイコンがあるか確認してみて。使うにはそのアイコンをダブルクリックするんだ。";
+			mes "試してみるといい！";
+			percentheal -50,0;
+			next;
+			mes "[セシル]";
+			mes "応急手当のようなアクティブスキルは、使うのに一定のSPが必要だ。応急手当はHPを少し回復できるから、ノービスには便利なスキルだよ。";
+			next;
+			mes "[セシル]";
+			mes "君は";
+			mes "いい生徒だったから、";
+			mes "ご褒美をあげよう！";
+			if (BaseLevel < 8) {
+				mes "見ろ、ボーナス経験値だ！";
+				set nov_get_item03,13;
+				switch (BaseLevel) {
+				case 1: getexp 10,0; break;
+				case 2: getexp 17,0; break;
+				case 3: getexp 26,0; break;
+				case 4: getexp 37,0; break;
+				case 5: getexp 78,0; break;
+				case 6: getexp 115,0; break;
+				case 7: getexp 155,0; break;
+				}
+			}
+			else {
+				next;
+				mes "[セシル]";
+				mes "おっと。思ったよりレベルがずっと高いね。それでも、君を誇りに思うよ！";
+			}
+			next;
+			mes "[セシル]";
+			mes "さて、基礎はこれで終わりだ。もっと詳しく学びたいなら、補助教官たちに話を聞くといい。";
+			next;
+			switch(select("分かりました。:今すぐ実戦訓練に送ってください！:キャンセル")) {
+			case 1:
+				mes "[セシル]";
+				mes "修練場の";
+				mes "みんなは";
+				mes "喜んで君の力に";
+				mes "なってくれるはずだ。頑張って！";
+				close;
+			case 2:
+				mes "[セシル]";
+				mes "へへっ～！";
+				mes "よし、習うより慣れろだ！実戦訓練の連中のところへ送ってあげよう。気をつけてな！";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			case 3:
+				emotion ET_HUK;
+				close;
+			}
+		case 2:
+			mes "[セシル]";
+			mes "へへっ～！";
+			mes "よし、習うより慣れろだ！実戦訓練の連中のところへ送ってあげよう。気をつけてな！";
+			close2;
+			warp "new_1-2",28,178;
+			end;
+		case 3:
+			emotion ET_HUK;
+			close;
+		}
+	}
+	else if (nov_get_item02 < 10) {
+		mes "[セシル]";
+		mes "さて、何を";
+		mes "お手伝いしようか？";
+		mes "おや、まだ基本インターフェースの授業を受けていないのかい？まあ、あの授業は退屈だからな～";
+		next;
+		switch(select("ああ、あの授業を受けた方がよさそうですね。:実戦訓練に送ってください。:キャンセル")) {
+		case 1:
+			mes "[セシル]";
+			mes "ああ、それがいい。あの授業では経験値やアイテムももらえるからね。よし、インターフェース教官はこの部屋の中央にいるよ。頑張って～";
+			close;
+		case 2:
+			mes "[セシル]";
+			mes "へへっ～！";
+			mes "よし、習うより慣れろだ！実戦訓練の連中のところへ送ってあげよう。気をつけてな！";
+			close2;
+			warp "new_1-2",28,178;
+			end;
+		case 3:
+			emotion ET_HUK;
+			close;
+		}
+	}
+	else if (nov_get_item04 < 10) {
+		mes "[セシル]";
+		mes "さて、何を";
+		mes "お手伝いしようか？";
+		mes "おや、まだアイテム情報の授業を受けていないのかい？まあ、あの授業は退屈だからな～";
+		next;
+		switch(select("ああ、あの授業を受けた方がよさそうですね。:実戦訓練に送ってください。:キャンセル")) {
+		case 1:
+			mes "[セシル]";
+			mes "ああ、それがいい。あの授業では経験値やアイテムももらえるからね。よし、アイテム教官はこの部屋の一番右にいるよ。頑張って～";
+			close;
+		case 2:
+			mes "[セシル]";
+			mes "へへっ～！";
+			mes "よし、習うより慣れろだ！実戦訓練の連中のところへ送ってあげよう。気をつけてな！";
+			close2;
+			warp "new_1-2",28,178;
+			end;
+		case 3:
+			emotion ET_HUK;
+			close;
+		}
+	}
+}
+
+new_1-2,115,111,3	script	アイテム教官#nv::Item Tutor#nv	726,{
+	if (nov_get_item02 > 9 && nov_get_item03 > 9 && nov_get_item04 > 9) {
+		mes "[アリス]";
+		mes "あら……？";
+		mes "誰かお探し？必修課程は全部終わったみたいね。どこへ行きたいの？";
+		next;
+		switch(select("よく分かりません～！:街へ送ってください。:キャンセル")) {
+		case 1:
+			mes "[アリス]";
+			mes "うーん……";
+			mes "他は全部学んだみたいだから、";
+			mes "残るは実戦訓練だけね。今すぐ受けてみる？";
+			next;
+			switch(select("はい。:あ、ま、待って。")) {
+			case 1:
+				mes "[アリス]";
+				mes "私があげたアイテムはすぐ使えるようにしておいて、防具も全部装備してね？それじゃ、気をつけて。";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			case 2:
+				mes "[アリス]";
+				mes "分かったわ、大丈夫よ。";
+				mes "困ったことがあったら";
+				mes "いつでも来てね。";
+				close;
+			}
+		case 2:
+			mes "[アリス]";
+			mes "ああ、なるほど。";
+			mes "街に移動したいなら、私の右にいるカプラのお姉さんがテレポートさせてくれるわ。気をつけてね～";
+			close;
+		case 3:
+			mes "[アリス]";
+			mes "ふんっ……！";
+			close;
+		}
+	}
+	else if (nov_get_item04 < 10) {
+		mes "[アリス]";
+		mes "^666666ふわぁ～^000000";
+		mes "退屈だわ。";
+		mes "あら！こんにちは、新顔さんね。";
+		if (NEW_MES_FLAG0) {
+			mes "あら、登録証明の期限が切れていたのね。大丈夫、新しいのをあげるわ！はい、どうぞ。";
+			set NEW_MES_FLAG0,0;
+			set NEW_MES_FLAG1,0;
+			set NEW_MES_FLAG2,0;
+			set NEW_MES_FLAG3,0;
+			set NEW_MES_FLAG4,0;
+			set NEW_MES_FLAG5,0;
+			set NEW_LVUP0,0;
+			set NEW_LVUP1,0;
+			set NEW_JOBLVUP,0;
+		}
+		mes "それで、私の";
+		mes "アイテム情報の授業を受けに来たの？";
+		next;
+		switch(select("はい！:いいえ、結構です。:街へはどう行けばいいですか？")) {
+		case 1:
+			mes "[アリス]";
+			mes "心配ないわ、すぐ終わるから。";
+			mes "所持品ウィンドウを開いてみて。";
+			mes "基本情報ウィンドウの「^3355FFアイテム^000000」ボタンか、'^3355FFAlt^000000'キーと'^3355FFE^000000'キーを同時に押せば開けるわよ。";
+			next;
+			mes "[アリス]";
+			mes "所持品ウィンドウには^3355FFアイテム^000000、^3355FF装備^000000、^3355FFその他^000000という３つのタブがあるわ。消費できるアイテムは^4A708Bアイテム^000000タブにあるの。";
+			next;
+			mes "[アリス]";
+			mes "それじゃ、所持品ウィンドウの^4A708Bアイテム^000000タブをクリックしてみて。ノービスポーションをあげたから、ダブルクリックで飲めるわ。試してみて！";
+			set nov_get_item04,10;
+			getitem 569,1; //Novice_Potion
+			percentheal -50,0;
+			next;
+			mes "[アリス]";
+			if (countitem(569) < 1) {
+				if (BaseLevel < 8) {
+					mes "いいわね～！";
+					mes "話を聞いてくれた";
+					mes "お礼に";
+					mes "ちょっとしたご褒美をあげるわ。";
+					set nov_get_item04,11;
+					switch (BaseLevel) {
+					case 1: getexp 10,0; break;
+					case 2: getexp 17,0; break;
+					case 3: getexp 26,0; break;
+					case 4: getexp 37,0; break;
+					case 5: getexp 78,0; break;
+					case 6: getexp 115,0; break;
+					case 7: getexp 155,0; break;
+					}
+				}
+				else {
+					mes "よくやったわ！レベルがもう高くなければ、もっと経験値をあげられたのだけど。";
+				}
+			}
+			else {
+				mes "あら……";
+				mes "まあ、後で";
+				mes "飲んでもいいわよ。";
+			}
+			next;
+			mes "[アリス]";
+			mes "所持品ウィンドウの";
+			mes "^4A708B装備^000000タブにある";
+			mes "アイテムについて説明するわね。";
+			next;
+			mes "[アリス]";
+			mes "^4A708B装備^000000タブをクリックすると、所持品の中で装備できるアイテムが全部見られるわ。試しに着けられるように、装備をいくつかあげるわね。";
+			next;
+			mes "[アリス]";
+			mes "受け取った？いいわ。";
+			mes "それじゃ、";
+			mes "あげたばかりの";
+			mes "ノービススリッパを";
+			mes "ダブルクリックして装備してみて。";
+			set nov_get_item04,12;
+			getitem 2510,1; //Novice_Hood
+			getitem 2414,1; //Novice_Boots
+			getitem 5055,1; //Novice_Egg_Cap
+			next;
+			mes "[アリス]";
+			if (isequipped(2414)) {
+				if (BaseLevel < 8) {
+					mes "やったー！";
+					mes "できたわね！";
+					mes "ご褒美をあげなきゃ！";
+					set nov_get_item04,13;
+					switch (BaseLevel) {
+					case 1: getexp 10,0; break;
+					case 2: getexp 17,0; break;
+					case 3: getexp 26,0; break;
+					case 4: getexp 37,0; break;
+					case 5: getexp 78,0; break;
+					case 6: getexp 115,0; break;
+					case 7: getexp 155,0; break;
+					}
+				}
+				else {
+					mes "よくやったわ！レベルがもう高くなければ、もっと経験値をあげられたのだけど。";
+				}
+			}
+			else {
+				mes "あらら……";
+				mes "装備は";
+				mes "ダブルクリックしないと";
+				mes "身につけられないの。";
+				mes "それだけは";
+				mes "覚えておいてね？";
+			}
+			disable_items;
+			next;
+			mes "[アリス]";
+			mes "それじゃ";
+			mes "'^3355FFF12^000000'キーを押してみて？";
+			mes "画面にホットキーバーが";
+			mes "表示されるはずよ。";
+			next;
+			mes "[アリス]";
+			mes "ホットキーバーには、アイテムやスキル、装備をホットキーとして割り当てられるわ。スキルウィンドウのスキルアイコンや、所持品ウィンドウのアイテムをホットキーバーにドラッグするだけよ。";
+			next;
+			mes "[アリス]";
+			mes "ホットキーは'^3355FFF1^000000'から'^3355FFF9^000000'まであるわ。";
+			mes "スキルの授業を受けたなら、応急手当のスキルをもらっているはずよ。応急手当のスキルアイコンをホットキーバーにドラッグ＆ドロップしてみて。";
+			next;
+			mes "[アリス]";
+			mes "参考までに、ホットキーに";
+			mes "割り当てられるのはアクティブスキルだけよ。アクティブスキルは色のついた四角いアイコンで、ダブルクリックで使えるの。";
+			next;
+			mes "[アリス]";
+			mes "「基本スキル」のようなパッシブスキルは、ホットキーバーにドラッグできないわ。パッシブスキルは常に効果が発動しているから、使う必要がないの。";
+			set nov_get_item04,14;
+			if (JobLevel < 7) {
+				switch (JobLevel) {
+				case 1: getexp 0,10; break;
+				case 2: getexp 0,18; break;
+				case 3: getexp 0,28; break;
+				case 4: getexp 0,40; break;
+				case 5: getexp 0,91; break;
+				case 6: getexp 0,151; break;
+				}
+			}
+			next;
+			mes "[アリス]";
+			mes "さて、これで終わり！";
+			mes "実戦訓練で役立つ";
+			mes "アイテムをいくつかあげるわね。";
+			next;
+			mes "[アリス]";
+			mes "ただし、この修練場では^ff0000ハエの羽や蝶の羽を使わないで^000000。ずっとここから出られなくなるかもしれないわ。それらは卒業した時のためのものよ、いい？";
+			set nov_get_item04,15;
+			getitem 601,10; //Wing_Of_Fly
+			getitem 602,2; //Wing_Of_Butterfly
+			getitem 569,50; //Novice_Potion
+			next;
+			mes "[アリス]";
+			mes "それと最後に……";
+			if (JobLevel < 7) {
+				mes "ジョブ経験値を";
+				mes "少しあげるわ！";
+				set nov_get_item04,16;
+				switch (JobLevel) {
+				case 1: getexp 0,10; break;
+				case 2: getexp 0,18; break;
+				case 3: getexp 0,28; break;
+				case 4: getexp 0,40; break;
+				case 5: getexp 0,91; break;
+				case 6: getexp 0,151; break;
+				}
+			}
+			else {
+				mes "ジョブ経験値をあげようと思ったけど、今のところ十分足りているみたいね。";
+			}
+			next;
+			switch(select("次はどうすればいいですか？:実際の戦闘の授業に送ってください！:キャンセル")) {
+			case 1:
+				mes "[アリス]";
+				mes "まだなら、辺りを歩いて";
+				mes "他の教官にも話しかけてみたら？";
+				next;
+				mes "[アリス]";
+				mes "この修練場のみんなは、喜んで力になってくれるはずよ。";
+				mes "退屈なら";
+				mes "この辺りを探検してみてもいいかも。";
+				next;
+				mes "[アリス]";
+				mes "右の部屋にいる補助教官たちは役立つ知識を持っているわ。この辺りには面白い隠れ場所もあるの。頑張ってね！";
+				close;
+			case 2:
+				mes "[アリス]";
+				mes "ずいぶん意欲的なノービスね！よし、実戦訓練担当のところへ送ってあげる。教官の話はちゃんと聞くのよ。";
+				next;
+				mes "[アリス]";
+				mes "何しろ……";
+				mes "モンスターと戦う時は命がけなんだから！それじゃ、気をつけてね～";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			case 3:
+				mes "[アリス]";
+				mes "ふんっ！";
+				close;
+			}
+		case 2:
+			mes "[アリス]";
+			mes "本当に実戦訓練へ行きたいの？全員の教官と話した？先に済ませておいた方がいいわよ。";
+			next;
+			switch(select("いいえ、いいえ！実戦の授業に送ってください！:あ、待って！")) {
+			case 1:
+				mes "[アリス]";
+				mes "ずいぶん意欲的なノービスね！よし、実戦訓練担当のところへ送ってあげる。教官の話はちゃんと聞くのよ。";
+				next;
+				mes "[アリス]";
+				mes "何しろ……";
+				mes "モンスターと戦う時は命がけなんだから！それじゃ、気をつけてね～";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			case 2:
+				mes "[アリス]";
+				mes "それは賢い判断ね。これから先、無料でアイテムや経験値をもらえる機会はそう多くないわよ。今のうちにしっかり活用しておくといいわ！";
+				close;
+			}
+		case 3:
+			mes "[アリス]";
+			mes "街に行きたいなら、右手のカプラ職員に聞いてね。それじゃ、気をつけて～";
+			close;
+		}
+	}
+	else if (nov_get_item02 < 10) {
+		mes "[アリス]";
+		mes "それで、何を";
+		mes "お手伝いしようか？";
+		mes "うーん、まだ基本インターフェースの授業を受けていないみたいね。先にそっちを受ける？";
+		next;
+		switch(select("その授業を受けに行きます。:実戦訓練に送ってください。:キャンセル")) {
+		case 1:
+			mes "[セシル]";
+			mes "いいわね～";
+			mes "その授業では大事なことが学べて、経験値やアイテムももらえるわ。基本インターフェースの教官はこの部屋の中央にいるから、行ってらっしゃい～";
+			close;
+		case 2:
+			mes "[アリス]";
+			mes "本当に実戦訓練へ行きたいの？全員の教官と話した？先に済ませておいた方がいいわよ。";
+			next;
+			switch(select("実戦訓練がしたいです～！:あ、待って！")) {
+			case 1:
+				mes "[アリス]";
+				mes "ずいぶん意欲的なノービスね！よし、実戦訓練担当のところへ送ってあげる。教官の話はちゃんと聞くのよ。";
+				next;
+				mes "[アリス]";
+				mes "何しろ……";
+				mes "モンスターと戦う時は命がけなんだから！それじゃ、気をつけてね～";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			case 2:
+				mes "[アリス]";
+				mes "それは賢い判断ね。これから先、無料でアイテムや経験値をもらえる機会はそう多くないわよ。今のうちにしっかり活用しておくといいわ！";
+				close;
+			}
+		case 3:
+			mes "[アリス]";
+			mes "街に行きたいなら、右手のカプラ職員に聞いてね。それじゃ、気をつけて～";
+			close;
+		}
+	}
+	else if (nov_get_item03 < 10) {
+		mes "[アリス]";
+		mes "それで、何を";
+		mes "お手伝いしようか？";
+		mes "まだ^4d4dffスキル情報の授業^000000を受けていないみたいね。先にそっちを受ける？";
+		next;
+		switch(select("その授業を受けます。:実戦訓練に送ってください。:キャンセル")) {
+		case 1:
+			mes "[アリス]";
+			mes "それはいい考えね。この部屋の一番左にいる教官、セシルに話しかけてみて？";
+			close2;
+			warp "new_1-2",84,107;
+			end;
+		case 2:
+			mes "[アリス]";
+			mes "本当に実戦訓練へ行きたいの？全員の教官と話した？先に済ませておいた方がいいわよ。";
+			next;
+			switch(select("実戦訓練がしたいです～！:あ、待って！")) {
+			case 1:
+				mes "[アリス]";
+				mes "ずいぶん意欲的なノービスね！よし、実戦訓練担当のところへ送ってあげる。教官の話はちゃんと聞くのよ。";
+				next;
+				mes "[アリス]";
+				mes "何しろ……";
+				mes "モンスターと戦う時は命がけなんだから！それじゃ、気をつけてね～";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			case 2:
+				mes "[アリス]";
+				mes "それは賢い判断ね。これから先、無料でアイテムや経験値をもらえる機会はそう多くないわよ。今のうちにしっかり活用しておくといいわ！";
+				close;
+			}
+		case 3:
+			mes "[アリス]";
+			mes "街に行きたいなら、右手のカプラ職員に聞いてね。それじゃ、気をつけて～";
+			close;
+		}
+	}
+}
+
+new_1-2,118,108,3	script	カプラ職員#nv1::Kafra Employee#nv1	117,{
+	mes "[カプラ職員]";
+	mes "ようこそ";
+	mes "カプラサービス社へ。";
+	mes "カプラサービスは";
+	mes "いつもあなたの味方です。";
+	if (NEW_MES_FLAG0) {
+		set NEW_MES_FLAG0,0;
+		set NEW_MES_FLAG1,0;
+		set NEW_MES_FLAG2,0;
+		set NEW_MES_FLAG3,0;
+		set NEW_MES_FLAG4,0;
+		set NEW_MES_FLAG5,0;
+		set NEW_LVUP0,0;
+		set NEW_LVUP1,0;
+		set NEW_JOBLVUP,0;
+	}
+	next;
+	mes "[カプラ職員]";
+	mes "私はカプラサービス社本社から、あなたのような新人プレイヤーを手助けするために派遣されました。";
+	next;
+	mes "[カプラ職員]";
+	mes "よく聞いてください！";
+	mes "街へ移動すると、";
+	mes "^4d4dff二度とこの修練場には戻れません^000000。";
+	next;
+	if ( select("テレポートサービス","カプラサービスについて") == 1 ) {
+		if (nov_get_item02 < 10 && nov_get_item03 < 10 && nov_get_item04 < 10) {
+			mes "[カプラ職員]";
+			mes "なるほど、すぐにルーンミッドガッツのどこかの街へテレポートしたいのですね。まずは、ラグナロクの様々な街や都市について簡単にご紹介します。";
+			next;
+			mes "[カプラ職員]";
+			mes "プロンテラはルーンミッドガッツ王国の首都で、近くには衛星都市のイズルードがあります。";
+			next;
+			mes "[カプラ職員]";
+			mes "^996633モロク^000000は砂漠にある街です。シーフやアサシンへ転職できる街です。";
+			next;
+			mes "[カプラ職員]";
+			mes "^006600フェイヨン^000000は山間の街で、アーチャー村があることで有名です。ここでノービスはアーチャーへ転職できます。";
+			next;
+			mes "[カプラ職員]";
+			mes "魔法の都^993300ゲフェン^000000は、マジシャンやウィザードになるための街です。";
+			next;
+			mes "[カプラ職員]";
+			mes "港町^003399アルベルタ^000000には商人ギルドがあります。船旅をしたい場合もアルベルタへ行く必要があります。";
+			next;
+			mes "[カプラ職員]";
+			mes "行き先を";
+			mes "選んでください。";
+			next;
+			switch(select("プロンテラ:モロク:フェイヨン:アルベルタ:ゲフェン")) {
+			case 1:
+				set .@dest$,"プロンテラ";
+				set .@mapn$,"prontera";
+				set .@saveX,117; set .@saveY,72;
+				set .@warpX,150; set .@warpY,50;
+				break;
+			case 2:
+				set .@dest$,"モロク";
+				set .@mapn$,"morocc";
+				set .@saveX,150; set .@saveY,99;
+				set .@warpX,155; set .@warpY,110;
+				break;
+			case 3:
+				set .@dest$,"フェイヨン";
+				set .@mapn$,"payon";
+				set .@saveX,70; set .@saveY,100;
+				set .@warpX,166; set .@warpY,67;
+				break;
+			case 4:
+				set .@dest$,"アルベルタ";
+				set .@mapn$,"alberta";
+				set .@saveX,30; set .@saveY,232;
+				set .@warpX,114; set .@warpY,58;
+				break;
+			case 5:
+				set .@dest$,"ゲフェン";
+				set .@mapn$,"geffen";
+				set .@saveX,119; set .@saveY,37;
+				set .@warpX,122; set .@warpY,65;
+				break;
+			}
+			mes "[カプラ職員]";
+			mes "あなたは";
+			mes ""+.@dest$+"へ行くことにしました。";
+			mes "神のご加護がありますように。";
+			close2;
+			if (nov_get_item05 < 11) {
+				set nov_get_item05,11;
+				getitem 569,100; //Novice_Potion
+				getitem 1243,1; //Novice_Knife
+				getitem 2414,1; //Novice_Boots
+				getitem 2510,1; //Novice_Hood
+				getitem 2352,1; //Novice_Plate
+				getitem 2112,1; //Novice_Guard
+				getitem 601,10; //Wing_Of_Fly
+				getitem 602,2; //Wing_Of_Butterfly
+				getitem 7059,5; //Cargo_Free_Ticket
+				getitem 7060,5; //Warp_Free_Ticket
+			}
+			set nov_1st_cos,0;
+			set nov_2nd_cos,0;
+			set nov_3_swordman,0;
+			set nov_3_archer,0;
+			set nov_3_thief,0;
+			set nov_3_magician,0;
+			set nov_3_acolyte,0;
+			set nov_3_merchant,0;
+			savepoint .@mapn$,.@saveX,.@saveY,1,1;
+			warp .@mapn$,.@warpX,.@warpY;
+			end;
+		}
+		else {
+			switch(select("実戦訓練コース:プロンテラ:モロク:フェイヨン:アルベルタ:ゲフェン")) {
+			case 1:
+				mes "[カプラ職員]";
+				mes "ありがとうございます、";
+				mes "それでは";
+				mes "実戦訓練コースへ送りますね。";
+				close2;
+				warp "new_1-2",28,178;
+				end;
+			case 2:
+				set .@dest$,"プロンテラ";
+				set .@mapn$,"prontera";
+				set .@saveX,117; set .@saveY,72;
+				set .@warpX,150; set .@warpY,50;
+				break;
+			case 3:
+				set .@dest$,"モロク";
+				set .@mapn$,"morocc";
+				set .@saveX,150; set .@saveY,99;
+				set .@warpX,155; set .@warpY,110;
+				break;
+			case 4:
+				set .@dest$,"フェイヨン";
+				set .@mapn$,"payon";
+				set .@saveX,70; set .@saveY,100;
+				set .@warpX,166; set .@warpY,67;
+				break;
+			case 5:
+				set .@dest$,"アルベルタ";
+				set .@mapn$,"alberta";
+				set .@saveX,30; set .@saveY,232;
+				set .@warpX,114; set .@warpY,58;
+				break;
+			case 6:
+				set .@dest$,"ゲフェン";
+				set .@mapn$,"geffen";
+				set .@saveX,119; set .@saveY,37;
+				set .@warpX,122; set .@warpY,65;
+				break;
+			}
+			mes "[カプラ職員]";
+			mes "あなたは";
+			mes ""+.@dest$+"へ行くことにしました。";
+			mes "神のご加護がありますように。";
+			close2;
+			if (nov_get_item05 < 11) {
+				set nov_get_item05,11;
+				getitem 7059,5; //Cargo_Free_Ticket
+				getitem 7060,5; //Warp_Free_Ticket
+			}
+			set nov_1st_cos,0;
+			set nov_2nd_cos,0;
+			set nov_3_swordman,0;
+			set nov_3_archer,0;
+			set nov_3_thief,0;
+			set nov_3_magician,0;
+			set nov_3_acolyte,0;
+			set nov_3_merchant,0;
+			savepoint .@mapn$,.@saveX,.@saveY,1,1;
+			warp .@mapn$,.@warpX,.@warpY;
+			end;
+		}
+	}
+	else {
+		mes "[カプラ職員]";
+		mes "それでは";
+		mes "カプラサービスをご紹介しますね。";
+		mes "メニューから";
+		mes "詳しく知りたい";
+		mes "サービスを選んでください。";
+		next;
+		while(1) {
+			switch(select("セーブサービス:倉庫サービス:テレポートサービス:カートレンタルサービス:キャンセル")) {
+			case 1:
+				mes "[カプラ職員]";
+				mes "カプラ職員に話しかけてセーブサービスを頼むと、戦闘で倒れた後に生き返る場所を変更できます。";
+				next;
+				mes "[カプラ職員]";
+				mes "リスポーン地点は常に最後にセーブした場所です。蝶の羽を使うと";
+				mes "最後にセーブした場所へ戻れます。";
+				next;
+				mes "[カプラ職員]";
+				mes "セーブサービスは";
+				mes "カプラサービス社が";
+				mes "無料で";
+				mes "提供しています～！";
+				if (nov_1st_cos < 20) {
+					set nov_1st_cos,20;
+					switch (BaseLevel) {
+					case 1: getexp 10,0; break;
+					case 2: getexp 17,0; break;
+					case 3: getexp 26,0; break;
+					case 4: getexp 37,0; break;
+					case 5: getexp 78,0; break;
+					case 6: getexp 115,0; break;
+					case 7: getexp 155,0; break;
+					}
+				}
+				next;
+				break;
+			case 2:
+				mes "[カプラ職員]";
+				mes "カプラサービス社は、ミッドガルド大陸で長く輝かしい歴史を持つ、世界最大の企業です。";
+				next;
+				mes "[カプラ職員]";
+				mes "アイテムはお好きな街で";
+				mes "自由に預けたり引き出したりできます。この倉庫は同じアカウントの全キャラクターで共有されます。";
+				next;
+				mes "[カプラ職員]";
+				mes "すぐに必要のないアイテムを全部持ち歩くのは大変です。倉庫をご利用いただき、アイテムを安全に保管してください。";
+				next;
+				mes "[カプラ職員]";
+				mes "この便利な倉庫サービスは";
+				mes "街ごとに異なるわずかな手数料でご利用いただけます。";
+				next;
+				mes "[カプラ職員]";
+				mes "ただし、倉庫を利用するには";
+				mes "最低でも";
+				mes "^3355FF基本スキルレベル6^000000が必要です。";
+				next;
+				mes "[カプラ職員]";
+				mes "倉庫は消費アイテム、装備、その他の３つに分類されています。";
+				next;
+				mes "[カプラ職員]";
+				mes "カプラ倉庫には最大300のスロットがあり、300種類までのアイテムを預けられます。";
+				next;
+				mes "[カプラ職員]";
+				mes "ただし装備品は1つにつき1スロットを使います。カプラ倉庫に預けられるアイテムの総数は最大30,000個です。";
+				if (nov_3_archer < 20) {
+					if (JobLevel < 7) {
+						set nov_3_archer,20;
+						switch (JobLevel) {
+						case 1: getexp 0,10; break;
+						case 2: getexp 0,18; break;
+						case 3: getexp 0,28; break;
+						case 4: getexp 0,40; break;
+						case 5: getexp 0,91; break;
+						case 6: getexp 0,151; break;
+						}
+					}
+				}
+				next;
+				break;
+			case 3:
+				mes "[カプラ職員]";
+				mes "カプラサービス社は";
+				mes "移動時間を大幅に短縮できる便利なテレポートサービスを";
+				mes "お客様に提供しています。";
+				next;
+				mes "[カプラ職員]";
+				mes "私たちのテレポートサービスは安全で快適、ミッドガルド大陸の様々な土地を存分に探索できます。";
+				next;
+				mes "[カプラ職員]";
+				mes "お客様のご愛顧に感謝し、これからも";
+				mes "最高のサービスを提供して参ります。";
+				next;
+				break;
+			case 4:
+				mes "[カプラ職員]";
+				mes "カプラサービス社は";
+				mes "商人はもちろん、ブラックスミスやアルケミストにもカートレンタルサービスを提供しています。";
+				next;
+				mes "[カプラ職員]";
+				mes "何とも謎めいた";
+				mes "^CE6300スーパーノービス^000000もカートを使えますが、正式には契約を結んでおりません。それでも、なぜか……";
+				next;
+				mes "[カプラ職員]";
+				mes "いずれにせよ、商人、ブラックスミス、アルケミストがカートをレンタルするには^3355FFプッシュカート^000000スキルを覚える必要があります。";
+				next;
+				mes "[カプラ職員]";
+				mes "カートレンタルサービスの";
+				mes "料金は";
+				mes "街によって異なります。";
+				next;
+				break;
+			case 5:
+				mes "[カプラ職員]";
+				mes "ありがとうございました。";
+				close;
+			}
+
+		}
+	}
+}
+
+//Interface Assistant
+new_1-2,161,182,5	script	教官#nv::Instructor#nv	92,{
+	mes "[エドウィン]";
+	mes "私の授業へようこそ。";
+	mes "詳しく知りたい";
+	mes "内容を選んでください。";
+	next;
+	while(1) {
+		switch(select("基本情報ウィンドウ:パーティウィンドウ:アイテムウィンドウ:オプションウィンドウ:装備ウィンドウ:キャンセル")) {
+		case 1:
+			mes "[エドウィン]";
+			mes "それでは";
+			mes "基本情報ウィンドウを";
+			mes "見てみましょうか。";
+			next;
+			mes "[エドウィン]";
+			mes "このウィンドウには名前、職業、ベースレベル、";
+			mes "ジョブレベルが表示されます。^800FFFベースレベル^000000はキャラクターのレベルです。";
+			next;
+			mes "[エドウィン]";
+			mes "ベースレベルの下に表示される^800fffジョブレベル^000000は";
+			mes "キャラクターの職業レベルです。転職したばかりの時は";
+			mes "ジョブレベル1になります。";
+			next;
+			mes "[エドウィン]";
+			mes "基本情報ウィンドウでは、現在の経験値がベースレベルの経験値バーに表示されます。";
+			next;
+			mes "[エドウィン]";
+			mes "ラグナロクオンラインの経験値はパーセンテージで表示されます。ベース経験値とジョブ経験値は別々に管理されます。";
+			next;
+			mes "[エドウィン]";
+			mes "ベースレベルまたは";
+			mes "ジョブレベルのバーが100に達すると、レベルが1つ上がり、バーは次のレベルに向けて0に戻ります。";
+			next;
+			mes "[エドウィン]";
+			mes "HPとは「ヒットポイント」の略です。";
+			mes "HPが0になると気絶して戦えなくなります。リスポーン地点に戻るか、誰かに生き返らせてもらいましょう。";
+			next;
+			mes "[エドウィン]";
+			mes "フィールドやダンジョンで死ぬと";
+			mes "^FF0000経験値が-1%^000000のペナルティを受けるので気をつけてください。";
+			next;
+			mes "[エドウィン]";
+			mes "SPとは「スペルポイント」の略です。";
+			mes "第一次職に転職すると、その職業固有のスキルを覚えますが、使用にはSPが必要です。スキルについてはスキル教官が詳しく教えてくれます。";
+			next;
+			mes "[エドウィン]";
+			mes "持てるアイテムの重量制限を確認したい時は、";
+			mes "基本情報ウィンドウの左下を見てください。";
+			next;
+			mes "[エドウィン]";
+			mes "現在の所持重量は、最大重量制限の隣に表示されます。";
+			next;
+			mes "[エドウィン]";
+			mes "最大重量の50%を超えて持ち歩くと、休んでもHPとSPが回復しなくなるので注意してください。";
+			next;
+			mes "[エドウィン]";
+			mes "重量制限の隣にある数値は、ミッドガルドの通貨Zenyの現在の所持額を示しています。";
+			next;
+			mes "[エドウィン]";
+			mes "基本情報ウィンドウの";
+			mes "右側には、他のインターフェースウィンドウを開くボタンが並んでいます。1つずつクリックして、何ができるか確認してみてください。";
+			next;
+			mes "[エドウィン]";
+			mes "基本情報ウィンドウの最小化・最大化のショートカットは";
+			mes "'^3355FFAlt^000000 + ^3355FFV^000000'です。";
+			next;
+			break;
+		case 2:
+			mes "[エドウィン]";
+			mes "パーティウィンドウは";
+			mes "基本情報ウィンドウの^3355FFフレンド^000000ボタンから開けます。ショートカットは'^3355FFAlt^000000 + ^3355FFZ^000000'です。このウィンドウでパーティメンバーを確認できます。";
+			next;
+			mes "[エドウィン]";
+			mes "パーティリーダーは";
+			mes "経験値やアイテムの分配方法を決められます。また、ミニマップでパーティメンバーの位置も確認できます。";
+			next;
+			mes "[エドウィン]";
+			mes "パーティウィンドウの^3355FFフレンド^000000ボタンをクリックすると、フレンドリストが見られます。";
+			mes "フレンドリストを使えば";
+			mes "友達にウィスパーを送れます。";
+			next;
+			mes "[エドウィン]";
+			mes "パーティの組み方について詳しく知りたければ、スキル教官に聞いてみてください。まあ、自分で試してみてもいいでしょうけど。";
+			next;
+			break;
+		case 3:
+			mes "[エドウィン]";
+			mes "アイテムウィンドウは";
+			mes "消費アイテム、装備、その他の３つに分かれています。";
+			next;
+			mes "[エドウィン]";
+			mes "重量制限があるので、持ち運べるアイテムの量には限りがあります。荷物が多すぎる時は、余分な物をカプラ倉庫に預けましょう。";
+			next;
+			mes "[エドウィン]";
+			mes "また、装備や消費アイテムはホットキーバーでホットキーに割り当てることもできます。";
+			next;
+			mes "[エドウィン]";
+			mes "ホットキーウィンドウは^3355FFF12^000000キーで開きます。F1からF9キーがホットキーとして割り当てられます。";
+			next;
+			mes "[エドウィン]";
+			mes "ホットキーには";
+			mes "全部で3セットあります。";
+			mes "F12ボタンを押すと";
+			mes "セットを切り替えられます。";
+			next;
+			break;
+		case 4:
+			mes "[エドウィン]";
+			mes "オプションウィンドウは";
+			mes "基本情報ウィンドウの^3355FFオプション^000000ボタンから開けます。'^3355FFAlt^000000 + ^3355FFO^000000'キーでも開けます。";
+			next;
+			mes "[エドウィン]";
+			mes "オプションウィンドウでは、音量、GUIスキン、スキンの透明度を調整できます。";
+			next;
+			mes "[エドウィン]";
+			mes "サウンドボタンでBGMのオン・オフや音量調整ができます。効果音についても同様です。";
+			next;
+			mes "[エドウィン]";
+			mes "スキンオプションでは、ゲーム内ウィンドウのGUIスキンを変更できます。持っているスキンの一覧をスクロールして";
+			mes "選んでください。";
+			next;
+			mes "[エドウィン]";
+			mes "公式サイトから公式スキンをダウンロードすることもできます。";
+			mes "^0000FFhttp://iro.ragnarokonline.com^000000";
+			next;
+			mes "[エドウィン]";
+			mes "スナップオプションを使うと、マウスカーソルが対象の近くに来た時に自動的にその対象へ合わせられます。";
+			next;
+			mes "[エドウィン]";
+			mes "攻撃のためにクリックすると、マウスカーソルは自動的に剣の形に変わります。スキルやアイテムのターゲット指定にもスナップ機能が働きます。";
+			next;
+			mes "[エドウィン]";
+			mes "慣れないうちは便利だったり、逆にやりづらく感じたりするかもしれません。でも慣れてくれば、自分でスナップの設定を調整できるようになります。";
+			next;
+			mes "[エドウィン]";
+			mes "まあ、これは経験次第ですね。オプションウィンドウの説明はここまでです。";
+			next;
+			break;
+		case 5:
+			mes "[エドウィン]";
+			mes "基本情報ウィンドウの";
+			mes "^3355FF装備^000000ボタンをクリックするか、";
+			mes "'^3355FFAlt^000000 + ^3355FFQ^000000'キーを押してください。";
+			next;
+			mes "[エドウィン]";
+			mes "装備ウィンドウには";
+			mes "現在装備しているアイテムが表示されます。最初は誰もがナイフと";
+			mes "コットンシャツを装備しています。";
+			next;
+			mes "[エドウィン]";
+			mes "装備を変更する方法は2つあります。所持品ウィンドウで装備をダブルクリックするか、";
+			mes "装備ウィンドウへドラッグ＆ドロップしてください。";
+			next;
+			mes "[エドウィン]";
+			mes "装備をホットキーに割り当てることもできます。所持品ウィンドウからホットキーウィンドウへ装備をドラッグしてください。";
+			mes "（'^3355FFF12^000000'キー）";
+			next;
+			break;
+		case 6:
+			mes "[エドウィン]";
+			mes "何か";
+			mes "質問があれば、";
+			mes "気軽に聞いてくださいね～";
+			close;
+		}
+	}
+}
+
+new_1-2,182,182,3	script	身体学教官::Somatology Instructor	754,{
+	mes "[ジェア・リオット]";
+	mes "ようこそ、新米冒険者さん。";
+	mes "私、ジェア・リオットが、キャラクターステータスの基本的な";
+	mes "ルールについて教えましょう。";
+	next;
+	mes "[ジェア・リオット]";
+	mes "「ステータス」とも呼ばれる";
+	mes "それらは、キャラクターの土台となる基本的な要素です。";
+	next;
+	mes "[ジェア・リオット]";
+	mes "何よりもステータスについて学ぶお手伝いをしたいので、気になるステータスがあれば";
+	mes "何でも聞いてください。";
+	next;
+	mes "[ジェア・リオット]";
+	mes "ラグナロクオンラインでは、";
+	mes "キャラクターステータスは力、俊敏、体力、知力、器用、運の6つです。";
+	next;
+	mes "[ジェア・リオット]";
+	mes "あなたの必要に合わせて授業を進めたいので、";
+	mes "知りたいステータスを聞いてください。まずは'^3355FFAlt^000000 + ^3355FFA^000000'キーでステータスウィンドウを開いてみましょう。";
+	next;
+	while(1) {
+		switch(select("力と俊敏:体力と知力:器用と運:続けなくて結構です。")) {
+		case 1:
+			mes "[ジェア・リオット]";
+			mes "まず力について説明しましょう。";
+			mes "^4D4DFF力（STR）^000000は";
+			mes "^4D4DFF物理攻撃力（ATK）^000000と";
+			mes "^4D4DFF最大重量制限^000000を上げます。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "STR1につき物理攻撃力が1上がります。STRが10の倍数になると、一定の攻撃力ボーナスが加算されます。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "攻撃力ボーナスの計算方法は、STRの合計値の一の位を取り除き、残った数を2乗するというものです。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "例えば攻撃力が「48＋1」と表示されているとします。これは合計49の力です。一の位の「9」を取り除くと「4」が残ります。4を2乗すると16になります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "つまり物理攻撃力ボーナスは16です。合計STRが50なら攻撃力ボーナスは25、STRが100なら攻撃力ボーナスは100になります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "さて、次は";
+			mes "俊敏（AGI）に移りましょう。";
+			mes "俊敏は回避率と攻撃速度に影響します。回避率が高いほど、敵の攻撃をかわせる確率が上がります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "回避率は";
+			mes "ベースレベルの数値に";
+			mes "AGIを加えた";
+			mes "値と等しくなります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "例えばAGIが40でベースレベルが30なら、回避率は70になります。とても単純でしょう！回避率の計算式に従うと、回避率は合計70になります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "ただし、AGIが関係するのは通常の回避率だけです。完全回避は攻撃回避の成功を左右する別の要素ですが、それについては";
+			mes "LUKステータスの時に話しましょう。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "AGIを上げるもう一つの利点は、攻撃速度（ASPD）も上がることです。つまり、近接攻撃の間隔が短くなります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "ただしASPDは";
+			mes "職業によって";
+			mes "変わるので、覚えておいてください。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "^666666ふう！^000000";
+			mes "一日で扱うには";
+			mes "少し情報が多すぎましたね。";
+			mes "それでは次の";
+			mes "話題に移りましょうか？";
+			next;
+			break;
+		case 2:
+			mes "[ジェア・リオット]";
+			mes "次の話題は";
+			mes "体力（VIT）と";
+			mes "知力（INT）です。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "^4D4DFF体力^000000は^4D4DFF最大HP、HP回復量、防御力^000000に影響します。VITによるHPの増加量は職業によって異なります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "全職業の中で、剣士系職業が";
+			mes "VITの上昇による恩恵を最も受けられます。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "防御力を確認しましょう。";
+			mes "ステータスウィンドウでは防御力はDEFと表示されます。数値が2つ表示され、2つ目の数値がVITによって加算された防御力を示しています。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "最初に";
+			mes "表示される防御力は、装備と防具から計算された防御力です。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "装備は敵からのダメージを割合で軽減し、VITは一定量で軽減します。だから防御力は2つの数値で表示されるのです。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "次の話題は";
+			mes "知力（INT）です。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "INTは^4D4DFF最大SP^000000、^4D4DFFSP回復量^000000、^4D4DFF魔法攻撃力（MATK）^000000、^4D4DFF魔法防御力（MDEF）^000000に影響します。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "INT1につき増えるSP量とMATKは";
+			mes "VITと同じく職業によって異なります。つまり、職業によって自然とINTの恩恵を受けやすいものがあるということです。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "通常のDEFと同じく、魔法防御力（MDEF）も2つの数値で表示されます。INTによるMDEFは、2つ目に表示される数値です。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "自然の力を操る術を学ぶには、知力を優先すべきです。だからこそ、セージやウィザードは";
+			mes "INTステータスに力を入れるのです。";
+			next;
+			break;
+		case 3:
+			mes "[ジェア・リオット]";
+			mes "最後の話題は";
+			mes "器用（DEX）と";
+			mes "運（LUK）です。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "器用は主に命中率、攻撃速度（ASPD）、";
+			mes "平均攻撃力に影響します。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "説明しましょう……";
+			mes "DEXが低いと、与えられる最小ダメージと";
+			mes "最大ダメージの差が大きくなります。攻撃のダメージが不安定になるのです。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "メイン武器として^4D4DFF弓^000000を使うなら、";
+			mes "攻撃力は^4D4DFFDEX^000000に基づきます。だからアーチャーはDEXを上げることに力を入れるべきです。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "DEXの量は";
+			mes "命中率にも影響します。命中率はベースレベルの数値にDEXを加えて計算されます。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "例えば、";
+			mes "ベースレベル40でDEXが20なら、";
+			mes "命中率は60になります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "最後に、DEXは呪文やスキルの詠唱時間も短縮します。だから、マジシャンやウィザードにも";
+			mes "少しはDEXがあると便利です。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "それでは";
+			mes "LUKステータスについて話しましょう。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "運（LUK）はクリティカル攻撃の確率、";
+			mes "回避率、モンスターへのわずかなダメージ増加に影響します。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "クリティカル攻撃は誰でも初期値1から始まり、^4d4dff3 LUK^000000ごとに^4d4dff1^000000ずつ上がります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "LUKが多いほど敵に^3355FFクリティカル攻撃^000000を与える確率が上がります。クリティカル攻撃は敵の防御を貫通するので役立ちます。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "クリティカル攻撃を出せたかどうかは、通常より大きなダメージが敵に与えられ、ダメージ数値が爆発的な赤いエフェクトと共に表示されることで分かります。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "LUK10ごとに完全回避率が1ポイント加算されます。完全回避は回避率に似たようなものです。完全回避が発生すると、頭上に「^FF7F00Lucky^000000」という文字が表示されます。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "回避率に似ていますが、完全回避は別の計算方法で決まる、攻撃回避のもう一つの要素です。";
+			next;
+			mes "[ジェア・リオット]";
+			mes "まあ、そうですね、";
+			mes "運があるのは良いことですが、だからといって何よりも優先すべきものというわけではありません。";
+			next;
+			break;
+		case 4:
+			mes "[ジェア・リオット]";
+			mes "他に何か";
+			mes "質問はありますか？";
+			mes "私の授業が";
+			mes "役に立てば嬉しいです。";
+			close;
+		}
+	}
+}
+
+new_1-2,184,172,1	script	スキルの心得::Understandings of Skills	47,{
+	mes "[レオ・ハンダーソン]";
+	mes "ようこそ～";
+	mes "おや、なんて";
+	mes "可愛いノービスちゃんだ～！";
+	next;
+	mes "[レオ・ハンダーソン]";
+	mes "私、レオ・ハンダーソンが、";
+	mes "君の成長に責任を感じて、全力で教えよう。さあ、学びたい内容を選んでくれ。";
+	emotion ET_CHUP;
+	next;
+	while(1) {
+		switch(select("パッシブスキルとアクティブスキル:基本スキル:感情表現の使い方:キャンセル。")) {
+		case 1:
+			mes "[レオ・ハンダーソン]";
+			mes "まずは";
+			mes "パッシブスキルについて説明しよう。";
+			mes "スキルウィンドウを";
+			mes "開いてくれるかい？";
+			mes "('^3355FFAlt^000000' + '^3355FFS^000000')";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "さて、";
+			mes "ジョブレベルが上がるたびに";
+			mes "^3355FFスキルポイント^000000がもらえるのは知っているね？スキルポイントはスキルを覚えるのに使うんだ～";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "基本スキルのアイコンは見えるかい？スキルウィンドウの一番上にある。基本スキルのアイコン横の「レベルアップ」ボタンをクリックして、スキルポイントを基本スキルに使うといい。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "基本スキルのアイコンの右に「パッシブ」";
+			mes "という言葉が見えるだろう。つまりこのスキルはパッシブで、SPを消費しないということだ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "さて、基本スキルのアイコンを右クリックしてみてくれ。基本スキルの簡単な説明が読めるはずだ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "アクティブスキルは、SPを消費しないパッシブスキルとは違って、使うたびに";
+			mes "SPが必要になる。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "アクティブスキルは、スキルウィンドウでアイコンをダブルクリックすることで使える。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "また、スキルウィンドウからスキルアイコンをドラッグして、ホットキーバー（'^3355FFF12^000000'キー）にドロップすれば、そのスキルにホットキーを割り当てられる。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "アクティブスキルを使うのに必要なSPの量は、";
+			mes "そのスキルのアイコンの右側に表示される。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "一般的に、パッシブスキルは精神的・肉体的な鍛錬や体力作りに関するスキルだ。特殊な能力や攻撃はアクティブスキルになる。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "まだ私の授業に";
+			mes "自信が持てないなら、";
+			mes "もう一度";
+			mes "説明してもいいよ。";
+			next;
+			break;
+		case 2:
+			mes "[レオ・ハンダーソン]";
+			mes "基本スキルは";
+			mes "純粋にパッシブスキルで";
+			mes "ラグナロクオンラインを";
+			mes "プレイするのに必要なものだ。";
+			mes "心配ないよ、";
+			mes "覚えるのは簡単さ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "スキルウィンドウで";
+			mes "マウスを右クリックすれば（'^3355FFAlt^000000' + '^3355FFS^000000'）スキルの説明を確認できるが、より理解を深めてもらうために";
+			mes "この授業を用意したんだ。";
+			next;
+			while(1) {
+				switch(select("取引と交換:パーティの結成と加入:チャットルームを開く:倉庫の利用:もう知っているから結構です。")) {
+				case 1:
+					mes "[レオ・ハンダーソン]";
+					mes "公式サイト^0000FFiro.ragnarokonline.com^000000にアクセスすれば、取引についての詳しい説明が画像付きで見られるよ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "他の人とアイテムや";
+					mes "Zenyを取引するには、";
+					mes "最低でも^3355FF基本スキルレベル1^000000を覚えている必要がある。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "取引する時は、アイテムやZenyを交換したい相手の";
+					mes "近くにいる必要がある。相手が2セル以上離れていると、取引は成立しないんだ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "相手を右クリックすると";
+					mes "小さなメニューが表示される。";
+					mes "そのメニューから選ぶんだ。";
+					mes "^800fff取引を申し込む^000000をね。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "その後、相手が";
+					mes "取引を受けるかどうかを選ぶ。もし取引の申し込みが受け入れられたら、取引ウィンドウが表示される。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "アイテムを取引するには、所持品ウィンドウ（'^3355FFAlt^000000' + '^3355FFE^000000'）からアイテムをドラッグして、取引ウィンドウの左側にドロップするんだ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "相手が渡してくれたアイテムは取引ウィンドウの右側に表示される。相手が";
+					mes "約束通りのアイテムを取引しているか、必ず確認しよう。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "Zenyを取引するには、取引したいZenyの金額を入力すればいい。アイテムやZenyを取引ウィンドウに入れたら、ウィンドウ下部の「OK」ボタンを押して取引を確定するんだ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "取引が確定したら、";
+					mes "「取引」ボタンを押して取引を完了する。どちらかが「OK」ボタンを押していないと、取引は完了できない。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "どちらかがウィンドウ右側の「キャンセル」ボタンを押すと、取引は中止される。";
+					next;
+					break;
+				case 2:
+					mes "[レオ・ハンダーソン]";
+					mes "それでは";
+					mes "パーティシステムについて説明しよう。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "パーティシステムを使えば、";
+					mes "少人数のグループを組んで、協力してモンスターを狩ったり、一緒に楽しんだりできるんだ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "パーティを組むには";
+					mes "チャットウィンドウで";
+					mes "次のコマンドを入力する。";
+					mes "^4F4FFF//organize ''パーティ名''^000000";
+					mes "と入力すればいい。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "もちろん、";
+					mes "パーティシステムを使うには";
+					mes "^4d4dff基本スキルレベル7^000000";
+					mes "以上が必要だよ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "パーティメンバーで得たアイテムや経験値の";
+					mes "分配についてもっと説明できるけど、それは後で自分で試してみるといい。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "パーティシステムの";
+					mes "説明はこれで終わりだ～";
+					mes "君みたいな可愛いノービスなら";
+					mes "すぐに";
+					mes "覚えられるだろうね～";
+					emotion ET_CHUP;
+					next;
+					break;
+				case 3:
+					mes "[レオ・ハンダーソン]";
+					mes "君が";
+					mes "^4D4DFF基本スキルレベル4^000000";
+					mes "以上を持っていれば、自分のチャットルームを開ける。基本情報ウィンドウの";
+					mes "^3355FFチャット^000000ボタンをクリックするか、'^3355FFAlt^000000' + '^3355FFC^000000'を押すんだ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "チャットルームを開いたら、";
+					mes "キャラクター名を右クリックすることで、チャットルームメンバーの情報を確認できる。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "同じ方法でそのキャラクターをフレンド登録することもできる。もし君がルームの";
+					mes "主なら、";
+					mes "ルームの設定を変更できるよ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "チャットルームにいる間は、";
+					mes "ルームの外のチャットは聞こえない。それは覚えておいてくれ。";
+					next;
+					break;
+				case 4:
+					mes "[レオ・ハンダーソン]";
+					mes "カプラサービス社の職員は";
+					mes "世界中に配置されていて、便利なサービスと倉庫を提供している。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "実は、この部屋のすぐ外にもカプラ職員がいる。話しかければ、喜んでカプラサービスについて詳しく説明してくれるよ。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "ところで、";
+					mes "^4d4dff個人のカプラ倉庫^000000は";
+					mes "^4D4DFF基本スキルレベル6^000000";
+					mes "以上で利用できるようになる。";
+					next;
+					mes "[レオ・ハンダーソン]";
+					mes "アイテムを持ちすぎると重量が重くなりすぎて、休んでもHPやSPが回復しなくなるし、モンスターとも戦えなくなる！だから、不要な物はカプラ倉庫に預けておこう。";
+					next;
+					break;
+				case 5:
+					mes "[レオ・ハンダーソン]";
+					mes "おや、そうかい？";
+					mes "思った通り、";
+					mes "君は可愛いだけじゃなく";
+					mes "賢いんだね～！";
+					mes "私、レオもとても感心したよ。";
+					next;
+					set .@end,1;
+				}
+				if (.@end) break;
+			}
+			mes "[レオ・ハンダーソン]";
+			mes "他の話題も";
+			mes "もっと知りたい";
+			mes "かい？";
+			next;
+			break;
+		case 3:
+			mes "[レオ・ハンダーソン]";
+			mes "^4d4dff感情表現^000000は、オンラインで";
+			mes "^4D4DFF気持ちを表現する^000000のによく使われる。楽しいコミュニケーション手段だよ！";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "感情表現を使うには、まず";
+			mes "^4D4DFF基本スキルレベル2^000000";
+			mes "以上が必要だ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "感情表現アイコンリスト";
+			mes "を確認できるよ";
+			mes "('^3355FFAlt^000000' + '^3355FFL^000000')。各アイコンをクリックすれば表示コマンドが分かる";
+			mes "よ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "感情表現をショートカットリスト";
+			mes "（'^3355FFAlt^000000' + '^3355FFM^000000'）に登録すれば、ショートカットだけで使えるようになる。これについても公式サイトに詳しく説明があるよ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "ああ～これだけは言わせてくれ、";
+			mes "自分の気持ちを";
+			mes "正直に表現することは";
+			mes "関係において大切なんだ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "'^4D4DFFCtrl^000000'キーを押しながら";
+			mes "じゃんけんも";
+			mes "'^4D4DFF - ^000000'、'^4D4DFF = ^000000'、'^4D4DFF \\ ^000000' キーでできるよ。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "もちろん、韓国語でグー、パー、チョキを意味する^4D4DFF//bawi^000000、^4D4DFF//bo^000000、^4D4DFF//gawi^000000をチャットウィンドウに入力してもいい。";
+			next;
+			mes "[レオ・ハンダーソン]";
+			mes "他にもっと多くの感情表現コマンドを確認するには、チャットウィンドウに^4d4dff//emotion^000000と入力してリストを見てくれ～";
+			emotion ET_THROB;
+			next;
+			break;
+		case 4:
+			mes "[レオ・ハンダーソン]";
+			mes "そうか……";
+			mes "もう私は";
+			mes "必要ないみたいだね！ああ！";
+			mes "みんな成長が";
+			mes "早いんだから！";
+			close;
+		}
+	}
+}
+
+new_1-2,121,101,2	script	案内兵士#nv1::Guide Soldier#nv1	105,{
+	mes "[案内兵士]";
+	mes "私たち案内兵士は、あらゆる街の入口で場所の情報を提供しています。特別な制服を着ているので、すぐに見分けられますよ。";
+	next;
+	mes "[案内兵士]";
+	mes "初めて街を訪れる時は、";
+	mes "私たちに主要な場所を確認することをお勧めします。";
+	next;
+	mes "[案内兵士]";
+	mes "説明の授業を受けたいなら、この修練場内を歩いて様々な教官に話しかけてください。良い一日を。";
+	close;
+}
+
+new_1-2,17,182,5	script	ヘルパー#nv::Helper#nv	84,{
+	if (nov_2nd_cos < 11) {
+		mes "[エルミーン]";
+		mes "おめでとう！";
+		mes "第1訓練課程に合格したね！わあ～、ラグナロクオンラインについて少し理解が深まったみたいだね。";
+		next;
+		mes "[エルミーン]";
+		mes "この授業では実戦の基礎を学ぶよ。説明課程で頑張ったなら、初期装備をもらっているはずだね。";
+		next;
+		mes "[エルミーン]";
+		mes "戦闘に入る前に";
+		mes "装備を確認してね。武器と防具、全部きちんと装備してる？";
+		next;
+		switch(select("はい:いいえ")) {
+		case 1:
+			mes "[エルミーン]";
+			mes "まず、カーソルをモンスターに合わせる。左クリックすると、モンスターに一撃与えられるよ。";
+			next;
+			mes "[エルミーン]";
+			mes "左クリックを連打するのが面倒なら、'^4D4DFFCtrl^000000'キーを押しながらモンスターを左クリックしてみて。どちらかが倒れるか、逃げるまで攻撃を続けるよ。";
+			next;
+			mes "[エルミーン]";
+			mes "カーソルをモンスターに合わせたまま左マウスボタンを押しっぱなしにしてもいい。それでも'^4D4DFFCtrl^000000'キーすら押すのが面倒な人もいるけどね。";
+			next;
+			mes "[エルミーン]";
+			mes "そんな人は、チャットウィンドウに^E79E29//nc^000000というコマンドを入力して。そうすれば左クリックした時、";
+			mes "モンスターを自動で攻撃し続けるよ！";
+			next;
+			mes "[エルミーン]";
+			mes "モンスターがアンデッド属性なら、持っているなら「ヒール」スキルを攻撃に使えるよ。";
+			next;
+			mes "[エルミーン]";
+			mes "'^4D4DFFShift^000000'キーを押しながらヒールスキルを使えば、モンスターをターゲットにしてダメージを与えられる。";
+			next;
+			mes "[エルミーン]";
+			mes "もちろん、面倒くさがりな人のための便利なオプションもあるよ。チャットウィンドウに^E79E29//ns^000000というコマンドを入力してみて。";
+			next;
+			mes "[エルミーン]";
+			mes "これで、Shiftキーを押さなくてもヒールスキルでモンスターを攻撃できるようになる。便利でしょう？";
+			next;
+			mes "[エルミーン]";
+			mes "こういう戦闘コマンドは分かったかな？さて、次はモンスターの行動や属性、戦闘で得られる経験値、倒したモンスターから手に入るアイテムについて教えるよ。";
+			next;
+			mes "[エルミーン]";
+			mes "実戦訓練は、新米冒険者にとって実は結構危険なんだ。私の魔法の力で";
+			mes "少し力を分けてあげよう。";
+			next;
+			mes "[エルミーン]";
+			mes "はああああ～！";
+			if (nov_2nd_cos < 1) {
+				if (BaseLevel == 1) {
+					set nov_2nd_cos,12;
+					getexp 9,0;
+				}
+				else if (BaseLevel == 2) {
+					set nov_2nd_cos,13;
+					getexp 16,0;
+				}
+				else if (BaseLevel == 3) {
+					set nov_2nd_cos,14;
+					getexp 25,0;
+				}
+				else if (BaseLevel == 4) {
+					set nov_2nd_cos,15;
+					getexp 36,0;
+				}
+				else if (BaseLevel == 5) {
+					set nov_2nd_cos,16;
+					getexp 77,0;
+				}
+				else if (BaseLevel == 6) {
+					set nov_2nd_cos,17;
+					getexp 112,0;
+				}
+				else if (BaseLevel >= 7) {
+					set nov_2nd_cos,18;
+					getexp 153,0;
+				}
+			}
+			next;
+			mes "[エルミーン]";
+			mes "どの話題を";
+			mes "先に";
+			mes "説明しようか？";
+			next;
+			while(1) {
+				switch(select("モンスター:経験値:アイテム:やめる。")) {
+				case 1:
+					mes "[エルミーン]";
+					mes "近づく前から先制攻撃してくる、好戦的なモンスターがたくさんいるよ。";
+					next;
+					mes "[エルミーン]";
+					mes "仲間と協力するモンスターもいくつかいる。そのうちの1体を攻撃すると、群れ全体が復讐しようと群がってくるよ。";
+					next;
+					mes "[エルミーン]";
+					mes "どのモンスターも、種族、サイズ、属性で分類できる。例えば人間種、動物、聖、悪魔属性のモンスターがいるよ。";
+					next;
+					mes "[エルミーン]";
+					mes "モンスターの属性が分かれば、その知識を戦闘に役立てられる。";
+					next;
+					mes "[エルミーン]";
+					mes "特定のモンスター属性へのダメージを上げたり、特定の属性からのダメージを減らしたりするカードを手に入れれば、戦闘がずっと楽になるよ。";
+					next;
+					mes "[エルミーン]";
+					mes "モンスターはサイズによっても小・中・大に分けられる。特定のサイズへのダメージを上げる";
+					mes "カードもいくつかあるよ。";
+					next;
+					mes "[エルミーン]";
+					mes "それに、武器にはそれぞれ得意不得意がある。武器のサイズによって、モンスターに与えるダメージが変わるんだ。";
+					next;
+					mes "[エルミーン]";
+					mes "例えば、ダガー系武器は小型モンスターに100%のダメージを与えるけど、大型モンスターには50%しか与えられない。";
+					next;
+					mes "[エルミーン]";
+					mes "よくあるモンスター属性には水、風、地、火、闇、無、聖がある。反対属性のモンスターを攻撃すれば、追加ダメージを与えられるよ～";
+					next;
+					mes "[エルミーン]";
+					mes "でも、モンスターと同じ属性の";
+					mes "スキルや武器で攻撃すると、ダメージが大きく減ったり、完全に無効化されたりする。回復させてしまうことさえあるよ！";
+					next;
+					mes "[エルミーン]";
+					mes "無属性モンスターの場合、通常武器ではダメージを与えられない。でも、それ以外の属性を持つ武器なら、いくらかダメージを与えられるよ。";
+					next;
+					break;
+				case 2:
+					mes "[エルミーン]";
+					mes "基本的に、モンスターに最も多くダメージを与えたキャラクターが、そのモンスターから最も多くの経験値を受け取るよ。";
+					next;
+					mes "[エルミーン]";
+					mes "つまり、モンスターの総HPに対して自分が与えたダメージの割合に応じた経験値をもらえるということだ。";
+					next;
+					mes "[エルミーン]";
+					mes "例えば、「Z」というキャラクターがいたとする。Zは総HP100のモンスターに65ダメージを与え、そのモンスターは倒した時1000経験値をくれるとする。すると、Zは650経験値をもらえる。";
+					next;
+					mes "[エルミーン]";
+					mes "ただし、この法則は状況によって少し変わってくる。";
+					next;
+					mes "[エルミーン]";
+					mes "同じモンスターに2人がそれぞれ65ダメージを与えた場合、もらえる経験値はモンスターの残りHPによって変わってくる。";
+					next;
+					mes "[エルミーン]";
+					mes "例えば、君がすでに攻撃しているモンスターに誰かが割り込んで攻撃し、君と同じ量のダメージを与えたとする。";
+					next;
+					mes "[エルミーン]";
+					mes "この場合、君はそのモンスターが与える経験値全体の2/3を受け取り、もう一人は1/3を受け取ることになる。";
+					next;
+					mes "[エルミーン]";
+					mes "でも、誰かがすでに攻撃しているモンスターに攻撃を加えるのは、ラグナロクオンラインでは推奨されない。それはマナー違反とされているんだ。";
+					next;
+					mes "[エルミーン]";
+					mes "パーティプレイでは、パーティリーダーが経験値を均等分配に設定できる。";
+					next;
+					mes "[エルミーン]";
+					mes "この方法だと、パーティメンバーはキャラクターレベルとパーティの人数に応じて経験値を分け合うことになる。";
+					next;
+					mes "[エルミーン]";
+					mes "それに、パーティプレイにはソロより多くの経験値を得られるボーナスもある。この仕組みを使えば、もっと早くレベルを上げられるよ。";
+					next;
+					break;
+				case 3:
+					mes "[エルミーン]";
+					mes "モンスターを倒すと、";
+					mes "運が良ければアイテムを手に入れられる。それに、特定のキャラクターは「盗む」スキルでモンスターからアイテムを盗むこともできるよ。";
+					next;
+					mes "[エルミーン]";
+					mes "盗むスキルを使ったせいで倒した後にアイテムが手に入らなくなる、なんて心配はいらないよ。盗むスキルを使っても、モンスターのアイテムドロップ率には一切影響しないからね。";
+					next;
+					mes "[エルミーン]";
+					mes "複数人でモンスターを倒した場合、最も多くダメージを与えた人がアイテムを優先的に拾う権利を持つよ。";
+					next;
+					break;
+				case 4:
+					mes "[エルミーン]";
+					mes "何か質問があれば";
+					mes "気軽に";
+					mes "聞いてね。";
+					close;
+				}
+			}
+		case 2:
+			mes "[エルミーン]";
+			mes "訓練課程でもらった装備は大切にしてね。一度失ったら、二度と取り戻せないから。";
+			close;
+		}
+	}
+	else {
+		mes "[エルミーン]";
+		mes "どの話題を";
+		mes "説明しようか？";
+		next;
+		while(1) {
+			switch(select("モンスター:経験値:アイテム:やめる。")) {
+			case 1:
+				mes "[エルミーン]";
+				mes "近づく前から先制攻撃してくる、好戦的なモンスターがたくさんいるよ。";
+				next;
+				mes "[エルミーン]";
+				mes "仲間と協力するモンスターもいくつかいる。そのうちの1体を攻撃すると、群れ全体が復讐しようと群がってくるよ。";
+				next;
+				mes "[エルミーン]";
+				mes "どのモンスターも、種族、サイズ、属性で分類できる。例えば人間種、動物、聖、悪魔属性のモンスターがいるよ。";
+				next;
+				mes "[エルミーン]";
+				mes "モンスターの属性が分かれば、その知識を戦闘に役立てられる。";
+				next;
+				mes "[エルミーン]";
+				mes "特定のモンスター属性へのダメージを上げたり、特定の属性からのダメージを減らしたりするカードを手に入れれば、戦闘がずっと楽になるよ。";
+				next;
+				mes "[エルミーン]";
+				mes "モンスターはサイズによっても小・中・大に分けられる。特定のサイズへのダメージを上げるカードもいくつかあるよ。";
+				next;
+				mes "[エルミーン]";
+				mes "それに、武器にはそれぞれ得意不得意がある。武器のサイズによって、モンスターに与えるダメージが変わるんだ。";
+				next;
+				mes "[エルミーン]";
+				mes "例えば、ダガー系武器は小型モンスターに100%のダメージを与えるけど、大型モンスターには50%しか与えられない。";
+				next;
+				mes "[エルミーン]";
+				mes "よくあるモンスター属性には水、風、地、火、闇、無、聖がある。反対属性のモンスターを攻撃すれば、追加ダメージを与えられるよ～";
+				next;
+				mes "[エルミーン]";
+				mes "でも、モンスターと同じ属性の";
+				mes "スキルや武器で攻撃すると、ダメージが大きく減ったり、完全に無効化されたりする。回復させてしまうことさえあるよ！";
+				next;
+				mes "[エルミーン]";
+				mes "無属性モンスターの場合、通常武器ではダメージを与えられない。でも、それ以外の属性を持つ武器なら、いくらかダメージを与えられるよ。";
+				next;
+				break;
+			case 2:
+				mes "[エルミーン]";
+				mes "基本的に、モンスターに最も多くダメージを与えたキャラクターが、そのモンスターから最も多くの経験値を受け取るよ。";
+				next;
+				mes "[エルミーン]";
+				mes "つまり、モンスターの総HPに対して自分が与えたダメージの割合に応じた経験値をもらえるということだ。";
+				next;
+				mes "[エルミーン]";
+				mes "例えば、「Z」というキャラクターがいたとする。Zは総HP100のモンスターに65ダメージを与え、そのモンスターは倒した時1000経験値をくれるとする。すると、Zは650経験値をもらえる。";
+				next;
+				mes "[エルミーン]";
+				mes "ただし、この法則は状況によって少し変わってくる。";
+				next;
+				mes "[エルミーン]";
+				mes "同じモンスターに2人がそれぞれ65ダメージを与えた場合、もらえる経験値はモンスターの残りHPによって変わってくる。";
+				next;
+				mes "[エルミーン]";
+				mes "例えば、君がすでに攻撃しているモンスターに誰かが割り込んで攻撃し、君と同じ量のダメージを与えたとする。";
+				next;
+				mes "[エルミーン]";
+				mes "この場合、君はそのモンスターが与える経験値全体の2/3を受け取り、もう一人は1/3を受け取ることになる。";
+				next;
+				mes "[エルミーン]";
+				mes "でも、誰かがすでに攻撃しているモンスターに攻撃を加えるのは、ラグナロクオンラインでは推奨されない。それはマナー違反とされているんだ。";
+				next;
+				mes "[エルミーン]";
+				mes "パーティプレイでは、パーティリーダーが経験値を均等分配に設定できる。";
+				next;
+				mes "[エルミーン]";
+				mes "この方法だと、パーティメンバーはキャラクターレベルとパーティの人数に応じて経験値を分け合うことになる。";
+				next;
+				mes "[エルミーン]";
+				mes "それに、パーティプレイにはソロより多くの経験値を得られるボーナスもある。この仕組みを使えば、もっと早くレベルを上げられるよ。";
+				next;
+				break;
+			case 3:
+				mes "[エルミーン]";
+				mes "モンスターを倒すと、";
+				mes "運が良ければアイテムを手に入れられる。それに、特定のキャラクターは「盗む」スキルでモンスターからアイテムを盗むこともできるよ。";
+				next;
+				mes "[エルミーン]";
+				mes "盗むスキルを使ったせいで倒した後にアイテムが手に入らなくなる、なんて心配はいらないよ。盗むスキルを使っても、モンスターのアイテムドロップ率には一切影響しないからね。";
+				next;
+				mes "[エルミーン]";
+				mes "複数人でモンスターを倒した場合、最も多くダメージを与えた人がアイテムを優先的に拾う権利を持つよ。";
+				next;
+				break;
+			case 4:
+				mes "[エルミーン]";
+				mes "何か質問があれば";
+				mes "気軽に";
+				mes "聞いてね。";
+				close;
+			}
+		}
+	}
+}
+
+new_1-2,38,182,3	script	ミュリエル#nv::Entrance Guard#nv	92,{
+	if (nov_2nd_cos == 0) {
+		mes "[ミュリエル]";
+		mes "申し訳ありませんが、戦闘の指導を受けていない方を実戦訓練場に入れるわけにはいきません。";
+		next;
+		mes "[ミュリエル]";
+		mes "まずはこの部屋の左側にいるヘルパーに話しかけて、戦闘の指導を受けてはいかがですか？";
+		close;
+	}
+	else if (nov_2nd_cos > 0 && nov_2nd_cos < 21) {
+		mes "[ミュリエル]";
+		mes "実戦訓練は、ミッドガルドで身を守るための基本的な戦闘技術を身につける、実際の戦闘の授業です。";
+		next;
+		mes "[ミュリエル]";
+		mes "できるだけ多くのモンスターを倒して、ベースレベルを最低2回上げてください。";
+		next;
+		mes "[ミュリエル]";
+		mes "実戦訓練を修了するには、ベースレベルを2回上げる必要があります。モンスターはどれも弱くて倒しやすいですが、油断しないでくださいね。";
+		next;
+		mes "[ミュリエル]";
+		mes "すぐに";
+		mes "試験を受けたい";
+		mes "ですか？";
+		next;
+		switch(select("はい:もう少し時間が必要です。")) {
+		case 1:
+			mes "[ミュリエル]";
+			mes "戦闘でベースレベルを2回上げたら、";
+			mes "必ず北側にいる係員に話しかけてくださいね。";
+			next;
+			mes "[ミュリエル]";
+			mes "役立つ物資をいくつか渡しておきますので、いざという時に使ってください。";
+			if (nov_2nd_cos == 12) {
+				set nov_2nd_cos,22;
+			}
+			else if (nov_2nd_cos == 13) {
+				set nov_2nd_cos,23;
+			}
+			else if (nov_2nd_cos == 14) {
+				set nov_2nd_cos,24;
+			}
+			else if (nov_2nd_cos == 15) {
+				set nov_2nd_cos,25;
+			}
+			else if (nov_2nd_cos == 16) {
+				set nov_2nd_cos,26;
+			}
+			else if (nov_2nd_cos == 17) {
+				set nov_2nd_cos,27;
+			}
+			else if (nov_2nd_cos == 18) {
+				set nov_2nd_cos,28;
+			}
+			else {
+				set nov_2nd_cos,29;
+			}
+			getitem 602,1; //Wing_Of_Butterfly
+			getitem 601,9; //Wing_Of_Fly
+			getitem 1243,1; //Novice_Knife
+			getitem 2112,1; //Novice_Guard
+			getitem 611,2; //Spectacles
+			getitem 569,300; //Novice_Potion
+			close2;
+			savepoint "new_1-2",23,188,1,1;
+			warp "new_1-3",96,21;
+			end;
+		case 2:
+			mes "[ミュリエル]";
+			mes "大丈夫ですよ。";
+			mes "試験に合格できるか不安なら、もう一度左のヘルパーに話しかけてみては？準備ができたら";
+			mes "また来てくださいね。";
+			close;
+		}
+		close;
+	}
+	else if ((nov_2nd_cos > 20) && (nov_2nd_cos < 31)) {
+		mes "[ミュリエル]";
+		mes "あらら、気をつけてと言ったのに。元気を出して！大したことではありませんよ。";
+		mes " ";
+		mes "失敗は成功のもと。";
+		mes "試験は";
+		mes "何度でも挑戦できます。";
+		next;
+		mes "[ミュリエル]";
+		mes "もう一度";
+		mes "挑戦しますか？";
+		next;
+		switch(select("はい。:もう少し時間をください。")) {
+		case 1:
+			mes "[ミュリエル]";
+			mes "もう一度";
+			mes "物資をお渡ししますね。";
+			mes "気をつけて！";
+			if (nov_2nd_cos == 22) {
+				set nov_2nd_cos,33;
+				getexp 16,0;
+			}
+			else if (nov_2nd_cos == 23) {
+				set nov_2nd_cos,34;
+				getexp 25,0;
+			}
+			else if (nov_2nd_cos == 24) {
+				set nov_2nd_cos,35;
+				getexp 36,0;
+			}
+			else if (nov_2nd_cos == 25) {
+				set nov_2nd_cos,36;
+				getexp 77,0;
+			}
+			else if (nov_2nd_cos == 26) {
+				set nov_2nd_cos,37;
+				getexp 112,0;
+			}
+			else if (nov_2nd_cos == 27) {
+				set nov_2nd_cos,38;
+				getexp 153,0;
+			}
+			else if (nov_2nd_cos == 28) {
+				set nov_2nd_cos,39;
+				getexp 200,0;
+			}
+			else if (nov_2nd_cos == 29) {
+				set nov_2nd_cos,40;
+				getexp 200,0;
+			}
+			percentheal 100,0;
+			getitem 569,50; //Novice_Potion
+			close2;
+			warp "new_1-3",96,21;
+			end;
+		case 2:
+			mes "[ミュリエル]";
+			mes "大丈夫ですよ。";
+			mes "試験に合格できるか不安なら、もう一度左のヘルパーに話しかけてみては？準備ができたら";
+			mes "また来てくださいね。";
+			close;
+		}
+	}
+	else if (nov_2nd_cos > 30) {
+		mes "[ミュリエル]";
+		mes "あらら、気をつけてと言ったのに。元気を出して！大したことではありませんよ。";
+		mes " ";
+		mes "失敗は成功のもと。";
+		mes "試験は何度でも挑戦できます。";
+		next;
+		mes "[ミュリエル]";
+		mes "もう一度挑戦しますか？";
+		next;
+		switch(select("はい:もう少し時間をください。")) {
+		case 1:
+			mes "[ミュリエル]";
+			mes "HPを";
+			mes "回復させますね。";
+			mes "気をつけて！";
+			percentheal 100,0;
+			close2;
+			warp "new_1-3",96,21;
+			end;
+		case 2:
+			mes "[ミュリエル]";
+			mes "大丈夫ですよ。";
+			mes "試験に合格できるか不安なら、もう一度左のヘルパーに話しかけてみては？準備ができたらまた来てくださいね。";
+			close;
+		}
+	}
+}
+
+//Teleport NPC
+new_1-3,95,30,4	script	教官#nv1::NovHoffman	84,{
+	mes "[ホフマン]";
+	mes "やあ～";
+	mes "君にちょっとした";
+	mes "指導をしに来たよ。";
+	next;
+	mes "[ホフマン]";
+	mes "ここのモンスターは";
+	mes "みんな弱くて倒しやすいけど、気をつけて。";
+	mes "結構好戦的な奴も";
+	mes "多いからな！";
+	next;
+	mes "[ホフマン]";
+	mes "もしここのモンスターじゃ物足りないなら、ここよりモンスターが強い別の訓練場に送ってあげられるよ。";
+	next;
+	mes "[ホフマン]";
+	mes "でも心配しすぎなくていい、";
+	mes "ノービスに";
+	mes "不可能なわけじゃない。";
+	mes "やってみるかい？";
+	next;
+	switch(select("もっと手強いのが欲しいです～:強いモンスターと戦いたいです！:キャンセル")) {
+	case 1:
+		mes "[ホフマン]";
+		mes "わかった、それなら";
+		mes "モンスターが強い訓練場に案内しよう。神のご加護を……";
+		next;
+		if (strnpcinfo(2) == "nv1") {
+			if (rand(2)) {
+				warp "new_2-3",96,21;
+			}
+			else {
+				warp "new_3-3",96,21;
+			}
+		}
+		else {
+			warp "new_1-3",96,21;
+		}	
+		end;
+	case 2:
+		mes "[ホフマン]";
+		mes "よほど";
+		mes "厳しい挑戦が好きなんだな、";
+		mes "だろう？";
+		mes "気をつけろよ、";
+		mes "結構きついぞ……";
+		next;
+		if (strnpcinfo(2) == "nv1" || strnpcinfo(2) == "nv2" || strnpcinfo(2) == "nv3") {
+			if (rand(2)) {
+				warp "new_4-3",96,21;
+			}
+			else {
+				warp "new_5-3",96,21;
+			}
+		}
+		else {
+			if (rand(2)) {
+				warp "new_2-3",96,21;
+			}
+			else {
+				warp "new_3-3",96,21;
+			}
+		}
+		end;
+	case 3:
+		mes "[ホフマン]";
+		mes "うーん……？";
+		mes "もっと厳しい場所へ行くのが";
+		mes "不安かい？まあ、まだ新米冒険者だからね、無理もない。幸運を～";
+		close;
+	}
+}
+
+new_2-3,95,30,4	duplicate(NovHoffman)	教官#nv2::Trainer#nv2	84
+new_3-3,95,30,4	duplicate(NovHoffman)	教官#nv3::Trainer#nv3	84
+new_4-3,95,30,4	duplicate(NovHoffman)	教官#nv4::Trainer#nv4	84
+new_5-3,95,30,4	duplicate(NovHoffman)	教官#nv5::Trainer#nv5	84
+
+new_1-3,96,174,3	script	試験官#nv1::NovKeyman	85,{
+	mes "[キーマン]";
+	mes "いいぞ！！";
+	mes "これでモンスターとの";
+	mes "戦い方は分かったね？";
+	mes "次の課程に";
+	mes "進んでみるかい？";
+	next;
+	switch(select("はい:いいえ")) {
+	case 1:
+		mes "[キーマン]";
+		mes "君が";
+		mes "立派な戦士になることを";
+		mes "願っているよ。良い旅を。";
+		close2;
+		warp "new_1-4",99,10;
+		return
+		end;
+	case 2:
+		mes "[キーマン]";
+		mes "そうか……";
+		mes "戦闘の基礎にもっと慣れるまで練習しても損はないよ。";
+		close;
+	}
+}
+
+new_2-3,96,174,3	duplicate(NovKeyman)	試験官#nv2::Test Examiner#nv2	85
+new_3-3,96,174,3	duplicate(NovKeyman)	試験官#nv3::Test Examiner#nv3	85
+new_4-3,96,174,3	duplicate(NovKeyman)	試験官#nv4::Test Examiner#nv4	85
+new_5-3,96,174,3	duplicate(NovKeyman)	試験官#nv5::Test Examiner#nv5	85
+
+//Potato Merchant
+new_1-2,28,185,4	shop	ジャガイモ商人::Potato Merchant	90,516:15
+
+new_1-4,100,29,1	script	ハンソン#nv::Hanson#nv	46,{
+	if (checkweight(909,400) == 0) {
+		mes "[ハンソン]";
+		mes "ずいぶん荷物を抱え込んでいるようだね。そんなに集めてどうするんだい？いらない物は処分して身軽になっておいで。";
+		close;
+	}
+	if (nov_3_swordman == 20) {
+		mes "[ハンソン]";
+		mes "こんにちは、";
+		mes "^A62A2A" + strcharinfo(0) + "さん^000000。";
+		mes "よくここまで";
+		mes "頑張って来たね。";
+		next;
+		mes "[ハンソン]";
+		mes "この修練場最後の試験は性格診断だが、";
+		mes "必須の課程ではないよ。";
+		next;
+		mes "[ハンソン]";
+		mes "ただ、この試験を受けると";
+		mes "いくつか利点があるんだ。この試験を受ければ、ラグナロクオンラインの世界に出た時に役立つ、たくさんの回復アイテムがもらえるよ。";
+		next;
+		mes "[ハンソン]";
+		mes "それに、課程を終えると君の性格に一番合っていそうな職業を提案して、その職業に転職できる街までテレポートしてあげよう。";
+		next;
+		mes "[ハンソン]";
+		mes "さて……";
+		mes "どう";
+		mes "したいかな？";
+		next;
+		mes "[ハンソン]";
+		mes "すぐにラグナロクオンラインを始めるかい？それとも先にこの性格診断課程を受けるかい？";
+		next;
+		switch(select("この課程を受けます。:ラグナロクオンラインを始めさせてください。")) {
+		case 1:
+			mes "[ハンソン]";
+			mes "いい選択だ！";
+			mes "本当に準備万端なプレイヤーになりたいなら、全ての訓練課程を受けておくべきだからね！";
+			next;
+			mes "[ハンソン]";
+			mes "よし、第1回性格診断を始めよう。リラックスして";
+			mes "気楽に受けてくれ。";
+			next;
+			mes "[ハンソン]";
+			mes "覚えておいてほしいが、この試験は君の性格を確認するだけのもので、正解も不正解もない。さあ！試験を始めよう！";
+			next;
+			mes "[ハンソン]";
+			mes "次の中から、";
+			mes "自分に一番当てはまる";
+			mes "言葉を選んでくれ。";
+			next;
+			switch(select("勉強:運動:奉仕活動:暴力")) {
+			case 1:
+				set .@magician_p,.@magician_p+1;
+				break;
+			case 2:
+				set .@thief_p,.@thief_p+1;
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			case 3:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			case 4:
+				set .@thief_p,.@thief_p+1;
+				break;
+			}
+			switch(select("変化:維持")) {
+			case 1:
+				set .@magician_p,.@magician_p+1;
+				break;
+			case 2:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			}
+			switch(select("消費する側:売る側:作る側")) {
+			case 1:
+				set .@swordman_p,.@swordman_p+1;
+				set .@thief_p,.@thief_p+1;
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			case 2:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			case 3:
+				set .@magician_p,.@magician_p+1;
+				break;
+			}
+			switch(select("有名人:慎重さ")) {
+			case 1:
+				set .@thief_p,.@thief_p+1;
+				break;
+			case 2:
+				set .@archer_p,.@archer_p+1;
+				break;
+			}
+			switch(select("理論:経験")) {
+			case 1:
+				set .@magician_p,.@magician_p+1;
+				break;
+			case 2:
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			}
+			switch(select("過去:現実:未来")) {
+			case 1:
+				set .@archer_p,.@archer_p+1;
+				break;
+			case 2:
+				set .@merchant_p,.@merchant_p+1;
+				set .@thief_p,.@thief_p+1;
+				break;
+			case 3:
+				set .@magician_p,.@magician_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "次の質問には";
+			mes "「はい」か「いいえ」で";
+			mes "答えてくれ。";
+			next;
+			mes "[ハンソン]";
+			mes "従順に生きるくらいなら";
+			mes "死んだ方がましだ。";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			case 2:
+				set .@thief_p,.@thief_p+1;
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "自分より優れた人を見ると";
+			mes "よく";
+			mes "苛立ってしまう。";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			case 2:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "危険な場所を";
+			mes "探検するのは";
+			mes "苦にならない。";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			case 2:
+				set .@magician_p,.@magician_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "自分は";
+			mes "リーダータイプの";
+			mes "人間だと思う。";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			case 2:
+				set .@archer_p,.@archer_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "ダンジョンを";
+			mes "探検していて、";
+			mes "行き止まりにたどり着いた。";
+			next;
+			mes "[ハンソン]";
+			mes "そこには「押すな」と書かれた看板があり、その隣の壁には、なぜかボタンのように見える石がある。";
+			next;
+			mes "[ハンソン]";
+			mes "君は";
+			mes "そのボタンを押したい";
+			mes "衝動に負けてしまう？";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@thief_p,.@thief_p+1;
+				break;
+			case 2:
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "存在しないものが";
+			mes "よく見える。";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			case 2:
+				set .@magician_p,.@magician_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "崖から落ちたら、";
+			mes "まるで飛んでいるような";
+			mes "気分になりそうだ。";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			case 2:
+				set .@magician_p,.@magician_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "金がものを言う。";
+			next;
+			switch(select("はい。:いいえ。")) {
+			case 1:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			case 2:
+				set .@archer_p,.@archer_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "それでは、別の質問をしよう。リラックスして気楽に、自分に一番合う答えを選んでくれ。";
+			next;
+			mes "[ハンソン]";
+			mes "びっしり詰まった";
+			mes "予定表を確認していると……";
+			next;
+			switch(select("ロボットになった気分だ。:誇らしく満足した気分だ。:予定？何のことだ？")) {
+			case 1:
+				set .@swordman_p,.@swordman_p+1;
+				set .@thief_p,.@thief_p+1;
+				break;
+			case 2:
+				set .@acolyte_p,.@acolyte_p+1;
+				set .@magician_p,.@magician_p+1;
+				break;
+			case 3:
+				set .@archer_p,.@archer_p+1;
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "ウィンドウショッピングをしていて、";
+			mes "お店ですごく気になる商品を見つけ、買おうか迷っている。";
+			mes "購入する前に";
+			mes "まずすることは……";
+			next;
+			switch(select("本当に必要か考える。:値段を確認する。:迷わず即買う！")) {
+			case 1:
+				set .@archer_p,.@archer_p+1;
+				break;
+			case 2:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			case 3:
+				set .@thief_p,.@thief_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "空欄を埋めてくれ：";
+			mes "他人と張り合うのは^3355FF_____^000000";
+			mes "だ……";
+			next;
+			switch(select("別に気にしない……:好きじゃない……:どうでもいい……")) {
+			case 1:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			case 2:
+				set .@thief_p,.@thief_p+1;
+				break;
+			case 3:
+				set .@acolyte_p,.@acolyte_p+1;
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "君は、多くの人との協力が必要な仕事を任された。一人でやろうとすれば、かなりの労力と時間がかかる。";
+			next;
+			mes "[ハンソン]";
+			mes "でも、他の人と協力すれば、簡単で楽しい仕事になる。君なら……";
+			next;
+			switch(select("大変でも自分一人でやる。:友達に手伝いを頼む。")) {
+			case 1:
+				set .@magician_p,.@magician_p+1;
+				break;
+			case 2:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "道端で";
+			mes "気を失って倒れている";
+			mes "女の子を見かけた。";
+			mes "君はどうする？";
+			next;
+			switch(select("病院に運ぶ。:行動する前に状況を見極める。:見て見ぬふりをする。")) {
+			case 1:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			case 2:
+				set .@swordman_p,.@swordman_p+1;
+				set .@archer_p,.@archer_p+1;
+				break;
+			case 3:
+				set .@magician_p,.@magician_p+1;
+				set .@thief_p,.@thief_p+1;
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "「衣類」を";
+			mes "拾った。";
+			mes "君はどうする？";
+			next;
+			switch(select("ブランドを確認する。:誰が落としたのか気になる。:拾った者勝ち！:そのままにしておく。")) {
+			case 1:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			case 2:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			case 3:
+				set .@merchant_p,.@merchant_p+1;
+				set .@thief_p,.@thief_p+1;
+				break;
+			case 4:
+				set .@magician_p,.@magician_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "会話の途中でうっかり失言してしまった。この状況をどう切り抜ける？";
+			next;
+			switch(select("冗談だったことにする。:話題を変える。:分析してみる。:素直に謝る。")) {
+			case 1:
+				set .@thief_p,.@thief_p+1;
+				break;
+			case 2:
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			case 3:
+				set .@magician_p,.@magician_p+1;
+				break;
+			case 4:
+				set .@acolyte_p,.@acolyte_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "恋人と旅行中、恋人があまり良くないお土産を買ってほしいと頼んできた。君はどうする？";
+			next;
+			switch(select("恋人のために買ってあげる。:「いや」と断る。:次の機会にすると約束する。")) {
+			case 1:
+				set .@swordman_p,.@swordman_p+1;
+				break;
+			case 2:
+				set .@merchant_p,.@merchant_p+1;
+				break;
+			case 3:
+				set .@thief_p,.@thief_p+1;
+				break;
+			}
+			mes "[ハンソン]";
+			mes "よし～！これで試験は終わりだ。修練場の全課程を修了したね。おめでとう！";
+			next;
+			mes "[ハンソン]";
+			mes "性格診断に合格した君のために、アイテムを用意しておいた。受け取ってくれ、これは君が勝ち取ったものだ。";
+			next;
+			//---------------------------------------------------------------------------------------------------------------------------------------------------
+			set nov_3_swordman,40;
+			getitem 501,4; //Red_Potion
+			getitem 503,2; //Yellow_Potion
+			getitem 506,2; //Green_Potion
+			//-------------------------------------------------------------------------------------------------------------------------------------------------
+			next;
+			mes "[ハンソン]";
+			mes "さて、性格診断の結果を分析して、君に合った職業を提案しよう。少し待っていてくれ。";
+			next;
+			mes "[ハンソン]";
+			mes "……";
+			next;
+			mes "[ハンソン]";
+			mes "……";
+			mes "………";
+			next;
+			mes "[ハンソン]";
+			mes "それでは";
+			mes "試験の";
+			mes "最終結果を発表しよう。";
+			next;
+			if (.@swordman_p > .@magician_p) {
+				if (.@swordman_p > .@merchant_p) {
+					if (.@swordman_p > .@thief_p) {
+						if (.@swordman_p > .@archer_p) {
+							if (.@swordman_p > .@acolyte_p) {
+								set .@job_c,1;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+					else {
+						if (.@thief_p > .@archer_p) {
+							if (.@thief_p > .@acolyte_p) {
+								set .@job_c,4;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+				}
+				else {
+					if (.@merchant_p > .@thief_p) {
+						if (.@merchant_p > .@archer_p) {
+							if (.@merchant_p > .@acolyte_p) {
+								set .@job_c,3;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+					else {
+						if (.@thief_p > .@archer_p) {
+							if (.@thief_p > .@acolyte_p) {
+								set .@job_c,4;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+				}
+			}
+			else {
+				if (.@magician_p > .@merchant_p) {
+					if (.@magician_p > .@thief_p) {
+						if (.@magician_p > .@archer_p) {
+							if (.@magician_p > .@acolyte_p) {
+								set .@job_c,2;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+					else {
+						if (.@thief_p > .@archer_p) {
+							if (.@thief_p > .@acolyte_p) {
+								set .@job_c,4;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+				}
+				else {
+					if (.@merchant_p > .@thief_p) {
+						if (.@merchant_p > .@archer_p) {
+							if (.@merchant_p > .@acolyte_p) {
+								set .@job_c,3;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+					else {
+						if (.@thief_p > .@archer_p) {
+							if (.@thief_p > .@acolyte_p) {
+								set .@job_c,4;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+						else {
+							if (.@archer_p > .@acolyte_p) {
+								set .@job_c,5;
+							}
+							else {
+								set .@job_c,6;
+							}
+						}
+					}
+				}
+			}
+			if (.@job_c == 1) {
+				mes "[ハンソン]";
+				mes "君はとても率直で裏表がないが、";
+				mes "強い意志を持ち、この世界で重要な人物になりたいと思っている。";
+				next;
+				mes "[ハンソン]";
+				mes "それに、いつも";
+				mes "弱い者を守ろうとするタイプだ。";
+				next;
+				mes "[ハンソン]";
+				mes "自分の意志を持つ君には、^696969剣士^000000が最も適した職業だ。";
+				next;
+				mes "[ハンソン]";
+				mes "それでは、この推薦を受け入れるかい？それとも自分で職業を選ぶかい？";
+				next;
+				switch(select("剣士！:自分で選びます！")) {
+				case 1:
+					mes "[ハンソン]";
+					mes "いい選択だ！";
+					mes "支給品を受け取ったら、剣士協会までテレポートしよう。";
+					next;
+					mes "^660000支給品リスト^000000";
+					mes "^000033カプラ倉庫無料チケット 5枚^000000";
+					mes "^000033カプラ移動無料チケット 5枚^000000";
+					////mes "^000099100 zeny^000000";
+					mes "^000033ファルシオン 1本^000000";
+					mes "^000033フラコン 7個^000000";
+					next;
+					set nov_3_swordman,40;
+					getitem 7059,5; //Cargo_Free_Ticket
+					getitem 7060,5; //Warp_Free_Ticket
+					getitem 1104,1; //Falchion
+					getitem 1010,7; //Phracon
+					////getgold 100
+					mes "[ハンソン]";
+					mes "支給品を全部受け取ったか、所持品を確認してくれ。受け取った物について簡単に説明しよう。";
+					next;
+					mes "[ハンソン]";
+					mes "カプラ倉庫とカプラ移動の無料チケットは、カプラ倉庫やテレポートサービスに使える。";
+					next;
+					mes "[ハンソン]";
+					mes "「Zeny」はミッドガルドの通貨だ。「ファルシオン」は剣士になったらとても役立つ武器だよ。";
+					next;
+					mes "[ハンソン]";
+					mes "「フラコン」はレベル1武器の精錬に使える鉱石だ。このフラコンでファルシオンを強化したいなら、街の鍛冶屋を訪ねるといい。";
+					next;
+					mes "[ハンソン]";
+					mes "君が送られる街はイズルード、プロンテラの衛星都市だ。剣士協会は街の西側にある。覚えておいてくれ。";
+					next;
+					mes "[ハンソン]";
+					mes "それでは";
+					mes "転送するよ。";
+					mes "幸運を、";
+					mes "^A62A2A" + strcharinfo(0) + "^000000";
+					mes "さようなら。";
+					close2;
+					set nov_1st_cos,0;
+					set nov_2nd_cos,0;
+					set nov_3_swordman,0;
+					set nov_3_archer,0;
+					set nov_3_thief,0;
+					set nov_3_magician,0;
+					set nov_3_acolyte,0;
+					set nov_3_merchant,0;
+					savepoint "izlude",93,104,1,1;
+					warp "izlude_in",74,167;
+					end;
+				case 2:
+					callsub S_UserJobchoice,"Swordsman";
+					end;
+				}
+			}
+			else if (.@job_c == 2) {
+				mes "[ハンソン]";
+				mes "君は周りの物事を分析するのが好きで、とても自立している。洞察力のある判断ができて、内気で論理的なところもある。";
+				next;
+				mes "[ハンソン]";
+				mes "観察力に優れた知性を持つ君には、^696969マジシャン^000000が最も適した職業だ。";
+				next;
+				mes "[ハンソン]";
+				mes "それでは、この推薦を受け入れるかい？それとも自分で職業を選ぶかい？";
+				next;
+				switch(select("マジシャン！:自分で選びます！")) {
+				case 1:
+					mes "[ハンソン]";
+					mes "いい選択だ！";
+					mes "支給品を受け取ったら、マジシャンの街までテレポートしよう。";
+					next;
+					mes "^660000支給品リスト^000000";
+					mes "^000033カプラ倉庫無料チケット 5枚^000000";
+					mes "^000033カプラ移動無料チケット 5枚^000000";
+					////mes "^000099100 zeny^000000";
+					mes "^000033ロッド 1本^000000";
+					mes "^000033カッター 1本^000000";
+					mes "^000033フラコン 7個^000000";
+					next;
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					set nov_3_swordman,40;
+					getitem 7059,5; //Cargo_Free_Ticket
+					getitem 7060,5; //Warp_Free_Ticket
+					getitem 1601,1; //Rod
+					getitem 1204,1; //Cutter
+					getitem 1010,7; //Phracon
+					////getgold 100
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					mes "[ハンソン]";
+					mes "支給品を全部受け取ったか、所持品を確認してくれ。受け取った物について簡単に説明しよう。";
+					next;
+					mes "[ハンソン]";
+					mes "カプラ倉庫とカプラ移動の無料チケットは、カプラ倉庫やテレポートサービスに使える。";
+					next;
+					mes "[ハンソン]";
+					mes "「Zeny」はミッドガルドの通貨だ。「カッター」は、マジシャンになる前にモンスターと戦えるように渡してあるよ。";
+					next;
+					mes "[ハンソン]";
+					mes "マジシャンになったら、渡してある「ロッド」を使えるようになる。マジシャンになりたての頃、とても役立つはずだ。";
+					next;
+					mes "[ハンソン]";
+					mes "「フラコン」はレベル1武器の精錬に使える鉱石だ。このフラコンでレベル1武器を強化したいなら、街の鍛冶屋を訪ねるといい。";
+					next;
+					mes "[ハンソン]";
+					mes "君が着く街は「ゲフェン」だ。";
+					mes "マジシャンギルドは街の北西にある。覚えておいてくれ。";
+					next;
+					mes "[ハンソン]";
+					mes "それでは転送するよ。";
+					mes "幸運を、^A62A2A" + strcharinfo(0) + "^000000、さようなら。";
+					close2;
+					set nov_1st_cos,0;
+					set nov_2nd_cos,0;
+					set nov_3_swordman,0;
+					set nov_3_archer,0;
+					set nov_3_thief,0;
+					set nov_3_magician,0;
+					set nov_3_acolyte,0;
+					set nov_3_merchant,0;
+					savepoint "geffen",119,37,1,1;
+					warp "geffen_in",163,98;
+					end;
+				case 2:
+					callsub S_UserJobchoice,"Mage";
+					end;
+				}
+			}
+			else if (.@job_c == 3) {
+				mes "[ハンソン]";
+				mes "君はとても意志が強く、きちんとしている。すでに人生の目標を定めていて、自分の行動にとても責任を持っている。";
+				next;
+				mes "[ハンソン]";
+				mes "成功への意欲と向上心を持つ君には、^696969商人^000000が最も適した職業だ。";
+				next;
+				mes "[ハンソン]";
+				mes "それでは、この推薦を受け入れるかい？それとも自分で職業を選ぶかい？";
+				next;
+				switch(select("商人！:自分で選びます！")) {
+				case 1:
+					mes "[ハンソン]";
+					mes "いい選択だ！";
+					mes "支給品を受け取ったら、商人の街までテレポートしよう。";
+					next;
+					mes "^660000支給品リスト^000000";
+					mes "^000033カプラ倉庫無料チケット 4枚^000000";
+					mes "^000033カプラ移動無料チケット 4枚^000000";
+					mes "^000033カート無料チケット 4枚^000000";
+					////mes "^000099100 zeny^000000";
+					mes "^000033バトルアックス 1本^000000";
+					mes "^000033フラコン 7個^000000";
+					next;
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					set nov_3_swordman,40;
+					getitem 7059,4; //Cargo_Free_Ticket
+					getitem 7060,4; //Warp_Free_Ticket
+					getitem 7061,4; //Cart_Free_Ticket
+					getitem 1351,1; //Battle_Axe
+					getitem 1010,7; //Phracon
+					////getgold 100
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					mes "[ハンソン]";
+					mes "支給品を全部受け取ったか、所持品を確認してくれ。受け取った物について簡単に説明しよう。";
+					next;
+					mes "[ハンソン]";
+					mes "カプラ倉庫とカプラ移動の無料チケットは、カプラ倉庫やテレポートサービスに使える。";
+					next;
+					mes "[ハンソン]";
+					mes "「Zeny」はミッドガルドの通貨だ。「バトルアックス」は商人になったらとても役立つよ。";
+					next;
+					mes "[ハンソン]";
+					mes "「フラコン」はレベル1武器の精錬に使える鉱石だ。このフラコンでバトルアックスを強化したいなら、街の鍛冶屋を訪ねるといい。";
+					next;
+					mes "[ハンソン]";
+					mes "君が送られる街はアルベルタだ。商人ギルドはアルベルタの南西にある。覚えておいてくれ。";
+					next;
+					mes "[ハンソン]";
+					mes "それでは";
+					mes "転送するよ。";
+					mes "幸運を、";
+					mes "^A62A2A" + strcharinfo(0) + "^000000";
+					mes "さようなら。";
+					close2;
+					set nov_1st_cos,0;
+					set nov_2nd_cos,0;
+					set nov_3_swordman,0;
+					set nov_3_archer,0;
+					set nov_3_thief,0;
+					set nov_3_magician,0;
+					set nov_3_acolyte,0;
+					set nov_3_merchant,0;
+					savepoint "alberta",30,232,1,1;
+					warp "alberta_in",62,44;
+					end;
+				case 2:
+					callsub S_UserJobchoice,"Merchant";
+					end;
+				}
+			}
+			else if (.@job_c == 4) {
+				mes "[ハンソン]";
+				mes "カルペ・ディエム：";
+				mes "今を生きろ。";
+				mes "それが君の生き方だ。";
+				next;
+				mes "[ハンソン]";
+				mes "生来の好奇心から、";
+				mes "のんきな冒険心と探求心が生まれている。";
+				next;
+				mes "[ハンソン]";
+				mes "そんな君には、";
+				mes "^696969シーフ^000000が最も適した職業だ。";
+				next;
+				mes "[ハンソン]";
+				mes "それでは、この推薦を受け入れるかい？それとも自分で職業を選ぶかい？";
+				next;
+				switch(select("シーフ！:自分で選びます！")) {
+				case 1:
+					mes "[ハンソン]";
+					mes "いい選択だ！";
+					mes "支給品を受け取ったら、シーフの街までテレポートしよう。";
+					next;
+					mes "^660000支給品リスト^000000";
+					mes "^000033カプラ倉庫無料チケット 5枚^000000";
+					mes "^000033カプラ移動無料チケット 5枚^000000";
+					////mes "^000099100 Zeny^000000";
+					mes "^000033メインゴーシュ 1本^000000";
+					mes "^000033フラコン 7個^000000";
+					next;
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					set nov_3_swordman,40;
+					getitem 7059,5; //Cargo_Free_Ticket
+					getitem 7060,5; //Warp_Free_Ticket
+					getitem 1207,1; //Main_Gauche
+					getitem 1010,7; //Phracon
+					////getgold 100
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					mes "[ハンソン]";
+					mes "支給品を全部受け取ったか、所持品を確認してくれ。受け取った物について簡単に説明しよう。";
+					next;
+					mes "[ハンソン]";
+					mes "カプラ倉庫とカプラ移動の無料チケットは、カプラ倉庫やテレポートサービスに使える。";
+					next;
+					mes "[ハンソン]";
+					mes "「Zeny」はミッドガルドの通貨だ。「メインゴーシュ」はシーフになったらとても役立つ武器だよ。";
+					next;
+					mes "[ハンソン]";
+					mes "「フラコン」はレベル1武器の精錬に使える鉱石だ。このフラコンでメインゴーシュを強化したいなら、街の鍛冶屋を訪ねるといい。";
+					next;
+					mes "[ハンソン]";
+					mes "君が送られる街はモロクだ。シーフギルドはモロク北西のピラミッド地下1階にある。覚えておいてくれ。";
+					next;
+					mes "[ハンソン]";
+					mes "それでは";
+					mes "転送するよ。";
+					mes "幸運を、";
+					mes "^A62A2A" + strcharinfo(0) + "^000000";
+					mes "さようなら。";
+					close2;
+					savepoint "morocc",150,99,1,1;
+					warp "moc_ruins",155,44;
+					end;
+				case 2:
+					callsub S_UserJobchoice,"Thief";
+					end;
+				}
+			}
+			else if (.@job_c == 5) {
+				mes "[ハンソン]";
+				mes "君はいつも、変わり者であっても他人を理解しようと努める。そして自分も理解してもらいたいと思っている。";
+				next;
+				mes "[ハンソン]";
+				mes "夢を追いかける中で、平凡な人間にはなりたくないと思っている。自然を感じ取る感受性を持つ君には、^696969アーチャー^000000が最も適した職業だ。";
+				next;
+				mes "[ハンソン]";
+				mes "それでは、この推薦を受け入れるかい？それとも自分で職業を選ぶかい？";
+				next;
+				switch(select("アーチャー！:自分で選びます！")) {
+				case 1:
+					mes "[ハンソン]";
+					mes "いい選択だ！";
+					mes "支給品を受け取ったら、アーチャーの街までテレポートしよう。";
+					next;
+					mes "^660000支給品リスト^000000";
+					mes "^000033カプラ倉庫無料チケット 5枚^000000";
+					mes "^000033カプラ移動無料チケット 5枚^000000";
+					////mes "^000099100 Zeny^000000";
+					mes "^000033コンポジットボウ 1本^000000";
+					mes "^000033フラコン 7個^000000";
+					next;
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					set nov_3_swordman,40;
+					getitem 7059,5; //Cargo_Free_Ticket
+					getitem 7060,5; //Warp_Free_Ticket
+					getitem 1704,1; //Composite_Bow
+					getitem 1010,7; //Phracon
+					////getgold 100
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					mes "[ハンソン]";
+					mes "支給品を全部受け取ったか、所持品を確認してくれ。受け取った物について簡単に説明しよう。";
+					next;
+					mes "[ハンソン]";
+					mes "カプラ倉庫とカプラ移動の無料チケットは、カプラ倉庫やテレポートサービスに使える。";
+					next;
+					mes "[ハンソン]";
+					mes "「Zeny」はミッドガルドの通貨だ。「コンポジットボウ」はアーチャーになったらとても役立つ武器だよ。";
+					next;
+					mes "[ハンソン]";
+					mes "「フラコン」はレベル1武器の精錬に使える鉱石だ。このフラコンでコンポジットボウを強化したいなら、街の鍛冶屋を訪ねるといい。";
+					next;
+					mes "[ハンソン]";
+					mes "君が送られる街はフェイヨンだ。アーチャーギルドは街の北西にある。覚えておいてくれ。";
+					next;
+					mes "[ハンソン]";
+					mes "それでは";
+					mes "転送するよ。";
+					mes "幸運を、";
+					mes "^A62A2A" + strcharinfo(0) + "^000000";
+					mes "さようなら。";
+					close2;
+					set nov_1st_cos,0;
+					set nov_2nd_cos,0;
+					set nov_3_swordman,0;
+					set nov_3_archer,0;
+					set nov_3_thief,0;
+					set nov_3_magician,0;
+					set nov_3_acolyte,0;
+					set nov_3_merchant,0;
+					savepoint "payon",70,100,1,1;
+					warp "payon_in02",64,65;
+					end;
+				case 2:
+					callsub S_UserJobchoice,"Archer";
+					end;
+				}
+			}
+			else if (.@job_c == 6) {
+				mes "[ハンソン]";
+				mes "君はとても心が温かく、思いやりがあって、他人のために自分を犠牲にすることも厭わない。";
+				next;
+				mes "[ハンソン]";
+				mes "いつも他人を助けたがるからこそ、みんなに好かれているんだ。";
+				next;
+				mes "[ハンソン]";
+				mes "心優しい君には、^696969アコライト^000000が最も適した職業だ。";
+				next;
+				mes "[ハンソン]";
+				mes "それでは、この推薦を受け入れるかい？それとも自分で職業を選ぶかい？";
+				next;
+				switch(select("アコライト！:自分で選びます！")) {
+				case 1:
+					mes "[ハンソン]";
+					mes "いい選択だ！";
+					mes "支給品を受け取ったら、聖堂の裏までテレポートしよう。";
+					next;
+					mes "^660000支給品リスト^000000";
+					mes "^000033カプラ倉庫無料チケット 5枚^000000";
+					mes "^000033カプラ移動無料チケット 5枚^000000";
+					////mes "^000099100 Zeny^000000";
+					mes "^000033メイス 1本^000000";
+					mes "^000033フラコン 7個^000000";
+					next;
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					set nov_3_swordman,40;
+					getitem 7059,5; //Cargo_Free_Ticket
+					getitem 7060,5; //Warp_Free_Ticket
+					getitem 1504,1; //Mace
+					getitem 1010,7; //Phracon
+					////getgold 100
+					//---------------------------------------------------------------------------------------------------------------------------------------------------
+					mes "[ハンソン]";
+					mes "支給品を全部受け取ったか、所持品を確認してくれ。受け取った物について簡単に説明しよう。";
+					next;
+					mes "[ハンソン]";
+					mes "カプラ倉庫とカプラ移動の無料チケットは、カプラ倉庫やテレポートサービスに使える。";
+					next;
+					mes "[ハンソン]";
+					mes "「Zeny」はミッドガルドの通貨だ。「メイス」はアコライトになったらとても役立つ武器だよ。";
+					next;
+					mes "[ハンソン]";
+					mes "「フラコン」はレベル1武器の精錬に使える鉱石だ。このフラコンでメイスを強化したいなら、街の鍛冶屋を訪ねるといい。";
+					next;
+					mes "[ハンソン]";
+					mes "アコライトになることを選んだね。君が送られる街はプロンテラだ。聖堂はプロンテラの北東にある。覚えておいてくれ。";
+					next;
+					mes "[ハンソン]";
+					mes "それでは";
+					mes "転送するよ。";
+					mes "幸運を、";
+					mes "^A62A2A" + strcharinfo(0) + "^000000";
+					mes "さようなら。";
+					close2;
+					set nov_1st_cos,0;
+					set nov_2nd_cos,0;
+					set nov_3_swordman,0;
+					set nov_3_archer,0;
+					set nov_3_thief,0;
+					set nov_3_magician,0;
+					set nov_3_acolyte,0;
+					set nov_3_merchant,0;
+					savepoint "prontera",117,72,1,1;
+					warp "prt_church",172,19;
+					end;
+				case 2:
+					callsub S_UserJobchoice,"Acolyte";
+					end;
+				}
+			}
+		case 2:
+			mes "[ハンソン]";
+			mes "わかった。";
+			mes "それでは";
+			mes "すぐに";
+			mes "ラグナロクオンラインの";
+			mes "世界へ転送しよう。";
+			next;
+			mes "[ハンソン]";
+			mes "もっと知識を深めたいなら、ミッドガルドで自分自身の経験を積んでほしい。";
+			next;
+			mes "[ハンソン]";
+			mes "最後に……";
+			mes "君が";
+			mes "素敵なプレイヤーになることを願っているよ、";
+			mes ""+ strcharinfo(0) +"。";
+			mes "さようなら。";
+			next;
+			set nov_3_swordman,40;
+			set nov_1st_cos,0;
+			set nov_2nd_cos,0;
+			set nov_3_swordman,0;
+			set nov_3_archer,0;
+			set nov_3_thief,0;
+			set nov_3_magician,0;
+			set nov_3_acolyte,0;
+			set nov_3_merchant,0;
+			set .@startmap,rand(1,6);
+			if ((.@startmap > 0) && (.@startmap < 2)) {
+				savepoint "prontera",117,72,1,1;
+				warp "prt_fild08",170,371;
+			}
+			else if ((.@startmap > 1) && (.@startmap < 3)) {
+				savepoint "geffen",119,37,1,1;
+				warp "gef_fild07",327,188;
+			}
+			else if ((.@startmap > 2) && (.@startmap < 4)) {
+				savepoint "alberta",30,232,1,1;
+				warp "pay_fild03",388,70;
+			}
+			else if ((.@startmap > 3) && (.@startmap < 5)) {
+				savepoint "morocc",150,99,1,1;
+				warp "moc_fild07",198,39;
+			}
+			else if ((.@startmap > 4) && (.@startmap < 6)) {
+				savepoint "payon",256,242,1,1;
+				warp "pay_fild01",334,354;
+			}
+			else if ((.@startmap > 5) && (.@startmap < 7)) {
+				savepoint "izlude",93,104,1,1;
+				warp "prt_fild08",357,212;
+			}
+			end;
+		}
+	}
+	else if (nov_3_swordman == 40) {
+		mes "[ハンソン]";
+		mes "おや……？";
+		mes "どうしてまだ";
+		mes "ここにいるんだい？";
+		next;
+		mes "[ハンソン]";
+		mes "何も言わないから、";
+		mes "もう行ったものだと思っていたよ。最終試験も終わって、支給品も全部渡したのに……";
+		next;
+		mes "[ハンソン]";
+		mes "あとは";
+		mes "君をミッドガルドへ";
+		mes "案内するだけだね～";
+		next;
+		set nov_1st_cos,0;
+		set nov_2nd_cos,0;
+		set nov_3_swordman,0;
+		set nov_3_archer,0;
+		set nov_3_thief,0;
+		set nov_3_magician,0;
+		set nov_3_acolyte,0;
+		set nov_3_merchant,0;
+		set .@startmap,rand(1,6);
+		if ((.@startmap > 0) && (.@startmap < 2)) {
+			savepoint "prontera",117,72,1,1;
+			warp "prt_fild08",170,371;
+		}
+		else if ((.@startmap > 1) && (.@startmap < 3)) {
+			savepoint "geffen",119,37,1,1;
+			warp "gef_fild07",327,188;
+		}
+		else if ((.@startmap > 2) && (.@startmap < 4)) {
+			savepoint "alberta",30,232,1,1;
+			warp "pay_fild03",388,70;
+		}
+		else if ((.@startmap > 3) && (.@startmap < 5)) {
+			savepoint "morocc",150,99,1,1;
+			warp "moc_fild07",198,39;
+		}
+		else if ((.@startmap > 4) && (.@startmap < 6)) {
+			savepoint "payon",70,100,1,1;
+			warp "pay_fild01",334,354;
+		}
+		else if ((.@startmap > 5) && (.@startmap < 7)) {
+			savepoint "izlude",93,104,1,1;
+			warp "prt_fild08",357,212;
+		}
+		end;
+	}
+	else {
+		mes "[ハンソン]";
+		mes "こんにちは、";
+		mes ""+ strcharinfo(0) +"だね。";
+		next;
+		mes "[ハンソン]";
+		mes "私はハンソン、";
+		mes "性格診断を";
+		mes "担当している";
+		mes "者だ。";
+		next;
+		mes "[ハンソン]";
+		mes "試験を始める前に、";
+		mes "ブルースに";
+		mes "「職業説明」を";
+		mes "受けてきてくれ。";
+		mes "それじゃ、頼んだよ。";
+		close;
+	}
+
+S_UserJobchoice:
+	mes "[ハンソン]";
+	mes "なるほど、君の自由だ。";
+	mes "推薦した職業に変える義務はないよ。なりたい職業を選んでくれ。";
+	next;
+	select( "剣士:マジシャン:商人:シーフ:アーチャー:アコライト" );
+	// @menu is already set by Core.
+	setarray .@Jobs$[1],"剣士","マジシャン","商人","シーフ","アーチャー","アコライト";
+
+	mes "[ハンソン]";
+	mes "君は";
+	if (@menu == 1) {
+		mes "剣士になることを選んだね。";
+		mes "送られる先は";
+		mes "イズルードの街だ。";
+		next;
+		mes "[ハンソン]";
+		mes "剣士協会はイズルードの北西にある。覚えておいてくれ。";
+	}
+	else if (@menu == 2) {
+		mes "マジシャンになることを選んだね。";
+		mes "送られる先は";
+		mes "ゲフェンの街だ。";
+		next;
+		mes "[ハンソン]";
+		mes "マジシャンギルドは街の北西にある。覚えておいてくれ。";
+	}
+	else if (@menu == 3) {					
+		mes "商人になることを選んだね。";
+		mes "送られる先は";
+		mes "アルベルタの街だ。";
+	}
+	else if (@menu == 4) {
+		mes "シーフになることを選んだね。";
+		mes "送られる先は";
+		mes "モロクの街だ。";
+		next;
+		mes "[ハンソン]";
+		mes "シーフギルドは街の北西にあるピラミッドの地下1階にある。覚えておいてくれ。";
+	}
+	else if (@menu == 5) {
+		mes "アーチャーになることを選んだね。";
+		mes "送られる先は";
+		mes "フェイヨンの街だ。";
+		next;
+		mes "[ハンソン]";
+		mes "アーチャーギルドはフェイヨンの北西にある。覚えておいてくれ。";
+	}
+	else {
+		mes "アコライトになることを選んだね。";
+		mes "送られる先は";
+		mes "プロンテラの街だ。";
+		next;
+		mes "[ハンソン]";
+		mes "プロンテラの聖堂は街の北東にある。覚えておいてくれ。";
+	}
+	next;
+	mes "[ハンソン]";
+	mes "支給品を";
+	mes "渡そう。それから";
+	mes "選んだ街まで";
+	mes "転送するよ。";
+	next;
+	mes "^660000支給品リスト^000000";
+	mes "^000033カプラ倉庫無料チケット 5枚^000000";
+	mes "^000033カプラ移動無料チケット 5枚^000000";
+	mes "^000033アドベンチャラースーツ 1着^000000";
+	////mes "^000099100 Zeny^000000";
+	next;
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	set nov_3_swordman,40;
+	getitem 7059,5; //Cargo_Free_Ticket
+	getitem 7060,5; //Warp_Free_Ticket
+	getitem 2305,1; //Adventure_Suit
+	////getgold 100
+	//------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	mes "[ハンソン]";
+	mes "支給品を全部受け取ったか、";
+	mes "所持品を確認してくれ。受け取った物について簡単に説明しよう。";
+	next;
+	mes "[ハンソン]";
+	mes "カプラ倉庫とカプラ移動の無料チケットは、カプラ倉庫やテレポートサービスに使える。";
+	next;
+	mes "[ハンソン]";
+	mes "「Zeny」はミッドガルドの通貨だ。「アドベンチャラースーツ」は" + .@Jobs$[@menu] + "になったら役立つだろう。";
+	next;
+	mes "[ハンソン]";
+	mes "それでは";
+	mes "転送するよ。";
+	mes "幸運を、";
+	mes "^A62A2A" + strcharinfo(0) + "^000000";
+	mes "さようなら。";
+	next;
+	set nov_1st_cos,0;
+	set nov_2nd_cos,0;
+	set nov_3_swordman,0;
+	set nov_3_archer,0;
+	set nov_3_thief,0;
+	set nov_3_magician,0;
+	set nov_3_acolyte,0;
+	set nov_3_merchant,0;
+	if(@menu == 1) {
+		savepoint "izlude",93,104,1,1;
+		warp "izlude_in",74,167;
+	}
+	else if (@menu == 2) {
+		savepoint "geffen",119,37,1,1;
+		warp "geffen_in",163,98;
+	}
+	else if (@menu == 3) {
+		savepoint "alberta",30,232,1,1;
+		warp "alberta_in",62,44;
+	}
+	else if (@menu == 4) {
+		savepoint "morocc",150,99,1,1;
+		warp "moc_ruins",155,44;
+	}
+	else if (@menu == 5) {
+		savepoint "payon",70,100,1,1;
+		warp "payon_in02",64,65;
+	}
+	else {
+		savepoint "prontera",117,72,1,1;
+		warp "prt_church",172,19;
+	}
+	return;
+}
+
+//Novice Instructor
+new_1-4,91,22,4	script	ブルース#nv::Bruce#nv	57,{
+	if (Class == Job_Novice) {
+		if (nov_3_swordman == 20) {
+			mes "[ブルース]";
+			mes "第一次職について";
+			mes "もう一度";
+			mes "説明しよう。";
+			mes "どの職業を";
+			mes "考えているんだい？";
+			next;
+			while(1) {
+				switch(select("剣士:マジシャン:アーチャー:商人:シーフ:アコライト:会話を終える。")) {
+				case 1:
+					mes "[ブルース]";
+					mes "名前の通り、";
+					mes "剣士は剣を扱う専門家だ。槍も使えるが、槍を持った剣士はあまり見かけない。";
+					next;
+					mes "[ブルース]";
+					mes "剣士は強い体力を持ち、重い防具や武器を装備できる。弓とロッドを除くほとんどの武器種は剣士でも装備できるんだ。";
+					next;
+					mes "[ブルース]";
+					mes "剣士唯一の弱点は魔法が使えないことだ。ただ、属性付きの武器を使えばそれを補える。";
+					next;
+					mes "[ブルース]";
+					mes "剣士最大の利点の一つは、莫大なHPを持つことだ。つまり、敵からのダメージに耐えやすいということだね。";
+					next;
+					mes "[ブルース]";
+					mes "強力な攻撃スキルを覚えれば、剣士は近接戦でほぼ無敵になる。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、剣士は一般的にタンカーの役割を担い、他の職業のキャラクターが攻撃されたり傷ついたりしないよう守るんだ。";
+					next;
+					mes "[ブルース]";
+					mes "剣士はパーティリーダーに理想的なキャラクターだ。第二次職に転職する際、剣士は^8E2323ナイト^000000か^8E2323クルセイダー^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 2:
+					mes "[ブルース]";
+					mes "マジシャンは火、水、地、雷の力を使って敵を攻撃する専門職だ。";
+					next;
+					mes "[ブルース]";
+					mes "ただし体力が弱いから、武器はロッドとナイフしか装備できず、防具も軽装のみだ。";
+					next;
+					mes "[ブルース]";
+					mes "体力は弱いが、強力な呪文で莫大なダメージを与えられる。この一点だけで多くの人がこの職業を選ぶんだ。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、マジシャンはパーティで強い攻撃役を担い、敵に大ダメージを与える役目を頼りにされる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、マジシャンは^8E2323ウィザード^000000か^8E2323セージ^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 3:
+					mes "[ブルース]";
+					mes "アーチャーは弓の扱いに長けた専門職で、遠距離攻撃はパーティでとても役立つ。";
+					next;
+					mes "[ブルース]";
+					mes "体力は弱いが、強力な弓による高い命中率を持つ。だから安全な距離からモンスターを攻撃して倒せるんだ。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、アーチャーはHPが比較的少ないが、遠距離攻撃のおかげで、敵が近づいて傷つけてくる前に簡単に片付けられる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、アーチャーは誰でも^8E2323ハンター^000000になれる。それ以外にも、男性アーチャーは^8E2323バード^000000、女性アーチャーは^8E2323ダンサー^000000になれるんだ。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 4:
+					mes "[ブルース]";
+					mes "商人は商売の専門職だ。商人ギルドの強い影響力もあって、Zeny稼ぎに専念したい人に人気の職業だ。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、商人は様々な経済スキルを持つ。NPCへの売却価格を上げたり、NPCからの割引を受けたりできるようになる。";
+					next;
+					mes "[ブルース]";
+					mes "それに、商人は";
+					mes "カートをレンタルでき、運搬能力が大幅に上がるほか、自分でアイテムと値段を決めて店を開けるようになる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、商人は^8E2323ブラックスミス^000000か^8E2323アルケミスト^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 5:
+					mes "[ブルース]";
+					mes "シーフはダガー系武器の扱いに長けた専門職だ。素早く攻撃し、敵の攻撃も軽々とかわす。";
+					next;
+					mes "[ブルース]";
+					mes "シーフは敵から身を隠したり、モンスターからアイテムを盗んだりするスキルを覚えられる。また、敵をじわじわと弱らせる";
+					mes "毒の扱いでも恐れられている。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、シーフは^8E2323アサシン^000000か^8E2323ローグ^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 6:
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、アコライトはルーンミッドガッツにおける神の使者だ。仲間を支援するスキルと、命を救うヒールの力を持っている。";
+					next;
+					mes "[ブルース]";
+					mes "アコライトの支援能力は、どんなパーティにも歓迎される。厳しい状況でも、アコライトのスキルがパーティの生存を支え、他のメンバーは攻撃に専念できる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、アコライトは^8E2323プリースト^000000か^8E2323モンク^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 7:
+					mes "[ブルース]";
+					mes "詳しい情報は";
+					mes "公式サイトを";
+					mes "見てくれ：";
+					mes " ";
+					mes "^0000FFiro.ragnarokonline.com^000000。";
+					next;
+					mes "[ブルース]";
+					mes "ハンソンが";
+					mes "待っているよ。この先も";
+					mes "頑張れよ、若きノービス。";
+					close;
+				}
+			}
+		}
+		else if (nov_3_swordman == 40) {
+			mes "[ブルース]";
+			mes "すまないが、";
+			mes "もう教えられることは";
+			mes "何もないよ。";
+			next;
+			mes "[ブルース]";
+			mes "ハンソンが";
+			mes "待っているよ。この先も";
+			mes "頑張れよ、若きノービス。";
+			close;
+		}
+		else {
+			mes "[ブルース]";
+			mes "全ての";
+			mes "訓練課程を";
+			mes "終えるまで、";
+			mes "ずいぶん";
+			mes "苦労したみたいだね。";
+			next;
+			mes "[ブルース]";
+			mes "こんにちは、";
+			mes "^A62A2A" + strcharinfo(0) + "さん^000000、";
+			mes "はじめまして。";
+			mes "私はルーンミッドガッツ王国の";
+			mes "ブルースだ。";
+			next;
+			mes "[ブルース]";
+			mes "私の役目は、それぞれの第一次職について教え、君がなりたい職業を決める手助けをすることだ。";
+			next;
+			mes "[ブルース]";
+			mes "第一次職は";
+			mes "^0000FF剣士、マジシャン、アーチャー、商人、シーフ、アコライト^000000だ。";
+			next;
+			mes "[ブルース]";
+			mes "それで……";
+			mes "どの職業を";
+			mes "考えているんだい？";
+			next;
+			while(1) {
+				switch(select("剣士:マジシャン:アーチャー:商人:シーフ:アコライト:会話を終える。")) {
+				case 1:
+					mes "[ブルース]";
+					mes "名前の通り、";
+					mes "剣士は剣を扱う専門家だ。槍も使えるが、槍を持った剣士は";
+					mes "あまり見かけない。";
+					next;
+					mes "[ブルース]";
+					mes "剣士は強い体力を持ち、重い防具や武器を装備できる。弓とロッドを除くほとんどの武器種は剣士でも装備できるんだ。";
+					next;
+					mes "[ブルース]";
+					mes "剣士唯一の弱点は魔法が使えないことだ。ただ、属性付きの武器を使えばそれを補える。";
+					next;
+					mes "[ブルース]";
+					mes "剣士最大の利点の一つは、莫大なHPを持つことだ。つまり、敵からのダメージに耐えやすいということだね。";
+					next;
+					mes "[ブルース]";
+					mes "強力な攻撃スキルを覚えれば、剣士は近接戦でほぼ無敵になる。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、剣士は一般的にタンカーの役割を担い、他の職業のキャラクターが攻撃されたり傷ついたりしないよう守るんだ。";
+					next;
+					mes "[ブルース]";
+					mes "剣士はパーティリーダーに理想的なキャラクターだ。第二次職に転職する際、剣士は^8E2323ナイト^000000か^8E2323クルセイダー^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 2:
+					mes "[ブルース]";
+					mes "マジシャンは火、水、地、雷の力を使って敵を攻撃する専門職だ。";
+					next;
+					mes "[ブルース]";
+					mes "ただし体力が弱いから、武器はロッドとナイフしか装備できず、防具も軽装のみだ。";
+					next;
+					mes "[ブルース]";
+					mes "体力は弱いが、強力な呪文で莫大なダメージを与えられる。この一点だけで多くの人がこの職業を選ぶんだ。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、マジシャンはパーティで強い攻撃役を担い、敵に大ダメージを与える役目を頼りにされる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、マジシャンは^8E2323ウィザード^000000か^8E2323セージ^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 3:
+					mes "[ブルース]";
+					mes "アーチャーは弓の扱いに長けた専門職で、遠距離攻撃はパーティでとても役立つ。";
+					next;
+					mes "[ブルース]";
+					mes "体力は弱いが、強力な弓による高い命中率を持つ。だから安全な距離からモンスターを攻撃して倒せるんだ。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、アーチャーはHPが比較的少ないが、遠距離攻撃のおかげで、敵が近づいて傷つけてくる前に簡単に片付けられる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、アーチャーは誰でも^8E2323ハンター^000000になれる。それ以外にも、男性アーチャーは^8E2323バード^000000、女性アーチャーは^8E2323ダンサー^000000になれるんだ。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 4:
+					mes "[ブルース]";
+					mes "商人は商売の専門職だ。商人ギルドの強い影響力もあって、Zeny稼ぎに専念したい人に人気の職業だ。";
+					next;
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、商人は様々な経済スキルを持つ。NPCへの売却価格を上げたり、NPCからの割引を受けたりできるようになる。";
+					next;
+					mes "[ブルース]";
+					mes "それに、商人は";
+					mes "カートをレンタルでき、運搬能力が大幅に上がるほか、自分でアイテムと値段を決めて店を開けるようになる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、商人は^8E2323ブラックスミス^000000か^8E2323アルケミスト^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 5:
+					mes "[ブルース]";
+					mes "シーフはダガー系武器の扱いに長けた専門職だ。素早く攻撃し、敵の攻撃も軽々とかわす。";
+					next;
+					mes "[ブルース]";
+					mes "シーフは敵から身を隠したり、モンスターからアイテムを盗んだりするスキルを覚えられる。また、敵をじわじわと弱らせる";
+					mes "毒の扱いでも恐れられている。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、シーフは^8E2323アサシン^000000か^8E2323ローグ^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 6:
+					mes "[ブルース]";
+					mes "ラグナロクオンラインでは、アコライトはルーンミッドガッツにおける神の使者だ。仲間を支援するスキルと、命を救うヒールの力を持っている。";
+					next;
+					mes "[ブルース]";
+					mes "アコライトの支援能力は、どんなパーティにも歓迎される。厳しい状況でも、アコライトのスキルがパーティの生存を支え、他のメンバーは攻撃に専念できる。";
+					next;
+					mes "[ブルース]";
+					mes "第二次職に転職する際、アコライトは^8E2323プリースト^000000か^8E2323モンク^000000になれる。";
+					set nov_3_swordman,20;
+					next;
+					break;
+				case 7:
+					mes "[ブルース]";
+					mes "詳しい情報は";
+					mes "公式サイトを";
+					mes "見てくれ：";
+					mes " ";
+					mes "^0000FFiro.ragnarokonline.com^000000。";
+					next;
+					mes "[ブルース]";
+					mes "ハンソンが";
+					mes "待っているよ。この先も";
+					mes "頑張れよ、若きノービス。";
+					close;
+				}
+			}
+
+		}
+	}
+}
+
+// Training Ground Mobs
+new_1-3,0,0	monster	Poring	1002,10
+new_1-3,0,0	monster	Drops	1113,10
+new_1-3,0,0	monster	Lunatic	1063,10
+new_1-3,0,0	monster	ChonChon	1011,10
+new_2-3,0,0	monster	Condor	1009,10
+new_2-3,0,0	monster	Picky	1050,10
+new_2-3,0,0	monster	Willow	1010,10
+new_2-3,0,0	monster	Roda Frog	1012,10
+new_3-3,0,0	monster	Condor	1009,10
+new_3-3,0,0	monster	Picky	1050,10
+new_3-3,0,0	monster	Willow	1010,10
+new_3-3,0,0	monster	Roda Frog	1012,10
+new_4-3,0,0	monster	Rocker	1052,10
+new_4-3,0,0	monster	Thief Bug	1051,10
+new_4-3,0,0	monster	Thief Bug	1053,10
+new_4-3,0,0	monster	Spore	1014,10
+new_5-3,0,0	monster	Rocker	1052,10
+new_5-3,0,0	monster	Thief Bug	1051,1
+new_5-3,0,0	monster	Thief Bug	1053,1
+new_5-3,0,0	monster	Spore	1014,1
+new_1-3,0,0	monster	Fabre	1184,5
+new_2-3,0,0	monster	Fabre	1184,5
+new_3-3,0,0	monster	Fabre	1184,5
+new_4-3,0,0	monster	Fabre	1184,5
+new_5-3,0,0	monster	Fabre	1184,5
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 Added the New Novice Training Grounds, a big thanks [MasterOfMuppets]
+//=     to Dr.Evil who did 90% of the work =)
+//= 1.0b Temp measure to stop exploits. [Vicious]
+//= 1.2 Removed Duplicates [Silent]
+//= 1.3 Removed Duplicates [Toms]
+//= 1.4 Added Kafra Free Cart Tickets, as in official one [Lupus]
+//= 1.5 Fixed warps, removed map duplicates, typos [Lupus]
+//= 1.6 Changed clone maps new_1-? -> new_zone0? [Lupus]
+//= 1.7 Now Kafra Tickets are given at correct NPC/Actions [Lupus]
+//= 1.7a a bit of optimization [Lupus]
+//= 1.7b Corrected a little Typo Error. (bugreport:728) [Samuray22]
+//= 1.7C Corrected another Typo Error. (bugreport:740) [Samuray22]
+//============================================================ 

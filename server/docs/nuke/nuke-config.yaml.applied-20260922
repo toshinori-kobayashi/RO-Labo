@@ -1,0 +1,152 @@
+regions:
+  - ap-northeast-1 
+  - ap-southeast-2
+  - us-east-1
+  - global
+
+blocklist:
+  - 772273521807
+  - 084375545263
+  - 484907491024
+  - 703671893455
+  - 704620585634
+  - 538172992106
+
+resource-types:
+  excludes:
+    - AthenaWorkGroup
+    - BedrockModelCustomizationJob
+    - Cloud9Environment
+    - CloudFormationStack
+    - CloudSearchDomain
+    - CloudTrailTrail
+    - CodeBuildBuild
+    - CodeStarProject
+    - EC2DefaultSecurityGroupRule
+    - ElasticTranscoderPipeline
+    - ElasticTranscoderPreset
+    - FMSNotificationChannel
+    - FMSPolicy
+    - GuardDutyDetector
+    - IAMGroup
+    - IAMGroupPolicyAttachment
+    - IAMLoginProfile
+    - IAMSAMLProvider
+    - IAMUserGroupAttachment
+    - IAMVirtualMFADevice
+    - Inspector2
+    - InspectorAssessmentRun
+    - InspectorAssessmentTarget
+    - InspectorAssessmentTemplate
+    - OpsWorksApp
+    - OpsWorksInstance
+    - OpsWorksLayer
+    - OpsWorksUserProfile
+    - OpsWorksCMBackup
+    - OpsWorksCMServer
+    - OpsWorksCMServerState
+    - RoboMakerRobotApplication
+    - RoboMakerSimulationApplication
+    - RoboMakerSimulationJob
+    - SSMAssociation
+    - SSMParameter
+    - SSMResourceDataSync
+    - SecurityHub
+    - ServiceCatalogTagOption
+    - ServiceCatalogTagOptionPortfolioAttachment
+    - Route53HostedZone
+
+accounts:
+  207567784705:
+    filters:
+      __global__:
+        - type: exact
+          property: tag:DoNotNuke
+          value: "true"
+      CloudWatchEventsRule:
+        - type: glob
+          property: Name
+          value: "aws-nuke-daily"
+        - type: exact
+          property: tag:DoNotNuke
+          value: "true"
+      CloudWatchEventsTarget:
+        - type: glob
+          property: Name
+          value: "aws-nuke-daily"
+        - type: exact
+          property: tag:DoNotNuke
+          value: "true"
+      S3Object:
+        - type: glob
+          property: Key
+          value: "nuke-config.yaml"
+        - type: exact
+          property: tag:DoNotNuke
+          value: "true"
+      EC2SecurityGroupRule:
+        - type: exact
+          property: tag:DoNotNuke
+          value: "true"
+      # IGW attachment は自身のタグを持たず、VPC/IGW 側のタグが tag:vpc:* / tag:igw:* として渡される。
+      # __global__ の tag:DoNotNuke には一致しないため、VPC または IGW に DoNotNuke=true が付いていれば残す。
+      EC2InternetGatewayAttachment:
+        - type: exact
+          property: tag:vpc:DoNotNuke
+          value: "true"
+        - type: exact
+          property: tag:igw:DoNotNuke
+          value: "true"
+      IAMRole:
+        - type: glob
+          property: RoleName
+          value: "AWSReservedSSO*"
+      IAMRolePolicyAttachment:
+        - type: exact
+          property: RoleName
+          value: "codebuild-aws-nuke-no-dry-run-service-role"
+        - type: exact
+          property: RoleName
+          value: "aws-nuke-no-dry-run-service-role"
+        - type: exact
+          property: RoleName
+          value: "Amazon_EventBridge_Invoke_CodeBuild_740180243"
+        - type: exact
+          property: RoleName
+          value: "aws-nuke-dry-run-service-role"
+        - type: exact
+          property: RoleName
+          value: "OrganizationAccountAccessRole"
+        - type: exact
+          property: RoleName
+          value: "Organizations-config-role"
+        - type: exact
+          property: tag:role:DoNotNuke
+          value: "true"
+      IAMRolePolicy:
+        - type: exact
+          property: role:RoleName
+          value: "Organizations-config-role"
+        - type: exact
+          property: tag:role:DoNotNuke
+          value: "true"
+
+settings:
+  ordering:
+    EC2VPC: 100
+    EC2RouteTable: 90
+    EC2Subnet: 80
+    EC2SecurityGroup: 70
+    EC2NatGateway: 60
+    EC2InternetGateway: 50
+    EC2NetworkInterface: 40
+    EC2Instance: 30
+    ELBv2: 20
+    ELB: 10
+  EC2Instance:
+    DisableDeletionProtection: true
+  RDSInstance:
+    DisableDeletionProtection: true
+    ForceDelete: true
+  SecretsManagerSecret:
+    ForceDelete: true

@@ -1,0 +1,129 @@
+//===== rAthena Script =======================================
+//= Veins Guide
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Veins City guide
+//===== Additional Comments: =================================
+//= 1.0 First version. [L0ne_W0lf]
+//= 1.1 Added second Veins guide NPC. [L0ne_W0lf]
+//= 1.2 Fixed a few small typos. [L0ne_W0lf]
+//============================================================
+
+veins,210,345,5	script	ベインス案内係#1::ve_guide	934,{
+	mes "[ベインス案内係]";
+	mes "砂漠の街ベインスは、厳しい砂嵐から逃れてきた冒険者たちを歓迎します。";
+	mes "案内を使うのが初めてなら、まずはこちらを確かめてみては…";
+	set .@loop1,1;
+	while(.@loop1) {
+		next;
+		switch(select("街の案内:ミニマップの印を消す:お知らせ:キャンセル")) {
+		case 1:
+			mes "[ベインス案内係]";
+			mes "ベインスの中の建物なら、どこでも教えられますよ。";
+			mes "さて、どこへ行きたいですか？";
+			if (.@compass_check == 0) {
+				mes "ミニマップに";
+				mes "目的地の印を";
+				mes "つけましょうか？";
+				next;
+				if (select("はい:いいえ") == 1) set .@compass_check,1;
+			}
+			set .@loop2,1;
+			while(.@loop2) {
+				if (.@wait_button_chk == 0) set .@wait_button_chk,1;
+				else next;
+
+				switch(select("神殿:宿屋:武器屋:道具屋:飛行船:酒場:地質学研究所:キャンセル")) {
+				case 1:
+					mes "[ベインス案内係]";
+					mes "神殿は北の方にあり、";
+					mes "いつも女神フレイアの敬虔な信者たちで賑わっています。";
+					if (.@compass_check == 1) viewpoint 1,196,258,1,0xFF0000;
+					break;
+				case 2:
+					mes "[ベインス案内係]";
+					mes "宿屋では旅の疲れを癒すことができますよ。";
+					mes "わたしのすぐ左の建物がベインスの宿屋です。";
+					if (.@compass_check == 1) viewpoint 1,128,266,2,0xFF00FF;
+					break;
+				case 3:
+					mes "[ベインス案内係]";
+					mes "そうですね、自分の身は自分で守らないと。";
+					mes "手頃な値段で質の良い武器が買えますよ。";
+					mes "ベインスの武器屋は西の方にあります。";
+					if (.@compass_check == 1) viewpoint 1,150,175,3,0x99FFFF;
+					break;
+				case 4:
+					mes "[ベインス案内係]";
+					mes "冒険に必要な物はちゃんと揃えましたか？";
+					mes "まだなら、街の中心にある道具屋を覗いてみるといいですよ。";
+					if (.@compass_check == 1) viewpoint 1,230,161,4,0x0000FF;
+					break;
+				case 5:
+					mes "[ベインス案内係]";
+					mes "ベインスでは貨物用の飛行船しか運航していないので、ご注意ください。";
+					if (.@compass_check == 1) viewpoint 1,273,285,5,0x00FF00;
+					break;
+				case 6:
+					mes "[ベインス案内係]";
+					mes "町の人たちと";
+					mes "仲良くなりたいなら、";
+					mes "西にある酒場で";
+					mes "一杯やってみては？";
+					if (.@compass_check == 1) viewpoint 1,150,217,6,0x00FF00;
+					break;
+				case 7:
+					mes "[ベインス案内係]";
+					mes "地質学に興味がありますか？";
+					mes "それなら、武器屋の2階にある";
+					mes "地質学研究所を";
+					mes "覗いてみるといいですよ。";
+					if (.@compass_check == 1) viewpoint 1,150,175,7,0x00FF00;
+					break;
+				case 8:
+					mes "[ベインス案内係]";
+					mes "ミニマップの印を全部消したくなったら、";
+					mes "また声をかけて「ミニマップの印を消す」を選んでくださいね。";
+					set .@loop2,0;
+					break;
+				}
+			}
+			break;
+
+		case 2:
+			viewpoint 2,196,258,1,0xFF0000;
+			viewpoint 2,128,266,2,0xFF00FF;
+			viewpoint 2,150,175,3,0x99FFFF;
+			viewpoint 2,230,161,4,0x0000FF;
+			viewpoint 2,273,285,5,0x00FF00;
+			viewpoint 2,150,217,6,0x00FF00;
+			viewpoint 2,150,175,7,0x00FF00;
+			mes "[ベインス案内係]";
+			mes "はい、これで印は消えました。まだ知りたい場所があれば、いつでも言ってくださいね。";
+			mes "ベインスでの滞在をお楽しみください。";
+			break;
+		case 3:
+			mes "[ベインス案内係]";
+			mes "「街の案内」メニューを使うと、";
+			mes "画面右上のミニマップに建物の場所が印されるようになります。";
+			mes "ミニマップが見当たらないときは、ショートカットキー「Ctrl+Tab」を押すか、基本情報ウィンドウの「Map」ボタンを押してください。";
+			mes "それと、街全体が見えないときは「－」ボタンでミニマップを縮小することもできます。";
+			break;
+		case 4:
+			mes "[ベインス案内係]";
+			mes "ベインスでの滞在をお楽しみください。";
+			close2;
+			set .@loop1,0;
+			break;
+		}
+	}
+	close;
+}
+
+veins,189,101,5	duplicate(ve_guide)	ベインス案内係#2::Veins Guide#2	934

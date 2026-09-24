@@ -1,0 +1,174 @@
+//===== rAthena Script =======================================
+//= Geffen Guides
+//===== By: ==================================================
+//= kobra_k88; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.4a
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official COnversion]
+//= Guides for the City of Geffen
+//===== Additional Comments: =================================
+//= Fully working.  Added a guide at every exit.
+//= 1.1 Now using duplicate command.
+//= 1.2 Optimized, updated common guide names [Lupus]
+//= 1.2a Small note that the BS guild moved to Einbroch [Poki#3]
+//= 1.3 Removed Duplicates [Silent]
+//= 1.4a Rescripted to official 10.3 standards. [L0ne_W0lf]
+//= 1.4 Fixed some errors with the loop[Samuray22]
+//=     Thanks to $ephiroth.
+//============================================================
+
+geffen,203,116,0	script	案内係#gef::GefGuide	705,{
+	cutin "gef_soldier",2;
+	mes "[ゲフェン案内係]";
+	mes "ゲフェンへようこそ。";
+	mes "魔法の都です。街のことで";
+	mes "分からないことがあれば";
+	mes "いつでも気軽に";
+	mes "聞いてください。^FFFFFFcobo^000000";
+	set .@loop1,1;
+	while (.@loop1) {
+		next;
+		switch(select("街の案内:ミニマップの印を消す:お知らせ:キャンセル")) {
+		case 1:
+			mes "[ゲフェン案内係]";
+			mes "以下のメニューから";
+			mes "行きたい場所を";
+			mes "選んでください。";
+			if (compass_check == 0) {
+				mes "ミニマップに";
+				mes "行き先の印を";
+				mes "つけましょうか？";
+				next;
+				if (select("はい:いいえ") == 1) set .@compass_check,1;
+			}
+			set .@loop2,1;
+			while (.@loop2) {
+				if (.@wait_button_chk == 0) set .@wait_button_chk,1;
+				else next;
+//				next;
+				switch(select("^FF0000魔法学院^000000:鍛冶屋:武器屋:道具屋:酒場:宿屋:ゲフェンタワー:キャンセル")) {
+				case 1:
+					mes "[ゲフェン案内係]";
+					mes "魔法学院はゲフェンの";
+					mes "北西にあり、";
+					mes "マジシャンへの転職を扱っています。";
+					if (.@compass_check)
+						viewpoint 1,61,180,2,0xFF0000;
+					break;
+				case 2:
+					mes "[ゲフェン案内係]";
+					mes "鍛冶屋は";
+					mes "ゲフェン中央から";
+					mes "南東にあります。";
+					if (.@compass_check)
+						viewpoint 1,182,59,3,0x00FF00;
+					break;
+				case 3:
+					mes "[ゲフェン案内係]";
+					mes "武器屋は";
+					mes "ゲフェン中央から";
+					mes "北西にあります。";
+					if (.@compass_check)
+						viewpoint 1,99,140,4,0xFF00FF;
+					break;
+				case 4:
+					mes "[ゲフェン案内係]";
+					mes "道具屋は";
+					mes "ゲフェン中央から";
+					mes "南西へ向かえば";
+					mes "見つかります。";
+					if (.@compass_check)
+						viewpoint 1,44,86,5,0xFF00FF;
+					break;
+				case 5:
+					mes "[ゲフェン案内係]";
+					mes "酒場は";
+					mes "ゲフェンタワーの";
+					mes "北東にあります。";
+					if (.@compass_check)
+						viewpoint 1,138,138,6,0xFF00FF;
+					break;
+				case 6:
+					mes "[ゲフェン案内係]";
+					mes "宿屋は";
+					mes "ゲフェン中央から";
+					mes "北東へ向かえば";
+					mes "見つかります。";
+					if (.@compass_check)
+						viewpoint 1,172,174,7,0xFF00FF;
+					break;
+				case 7:
+					mes "[ゲフェン案内係]";
+					mes "ゲフェンタワーは";
+					mes "街の中心にあります。";
+					mes "上層にはウィザードギルドが、";
+					mes "地下にはダンジョンがあり、";
+					mes "多くの謎に";
+					mes "包まれた塔です…";
+					if (.@compass_check)
+						viewpoint 1,120,114,8,0x00FF00;
+					break;
+				case 8:
+					mes "[ゲフェン案内係]";
+					mes "「ミニマップの印を";
+					mes "消す」を選んで";
+					mes "いただければ、";
+					mes "地図上の印を";
+					mes "消去できます。";
+					set .@loop2,0;
+					break;
+				}
+			}
+			break;
+		case 2:
+			viewpoint 2,237,41,2,0xFF0000;
+			viewpoint 2,237,41,3,0x00FF00;
+			viewpoint 2,46,345,4,0xFF00FF;
+			viewpoint 2,175,220,5,0xFF00FF;
+			viewpoint 2,134,221,6,0xFF00FF;
+			viewpoint 2,204,214,7,0xFF00FF;
+			viewpoint 2,204,214,8,0x00FF00;
+			set .@compass_check,0;
+			break;
+		case 3:
+			mes "[ゲフェン案内係]";
+			mes "魔法と技術の進歩により";
+			mes "情報システムが";
+			mes "更新されました。";
+			mes "これにより、ミニマップに";
+			mes "場所の印をつけて";
+			mes "案内できるようになりました。";
+			next;
+			mes "[ゲフェン案内係]";
+			mes "ミニマップは画面の";
+			mes "右上にあります。";
+			mes "見当たらない場合は";
+			mes "Ctrl+Tabキーを押すか、";
+			mes "基本情報の「Map」ボタンでも確認できます。";
+			next;
+			mes "[ゲフェン案内係]";
+			mes "ミニマップ上の";
+			mes "「+」「-」の記号で";
+			mes "拡大・縮小できます。";
+			mes "ゲフェンでの";
+			mes "冒険を";
+			mes "楽しんでください。";
+			break;
+		case 4:
+			mes "[ゲフェン案内係]";
+			mes "それでは冒険者よ、";
+			mes "これから歩む道が";
+			mes "安全でありますように…";
+			mes "道中お気をつけて。";
+			close2;
+			set .@loop1,0;
+		}
+	}
+	cutin "gef_soldier",255;
+	end;
+}
+
+geffen,118,62,0	duplicate(GefGuide)	案内係#2gef::Guide#2gef	705

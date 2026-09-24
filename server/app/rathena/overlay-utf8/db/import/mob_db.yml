@@ -1,0 +1,462 @@
+###########################################################################
+# Mob 表示名の日本語化（db/mob_db.yml への import オーバーレイ）
+###########################################################################
+#
+# 独自のカタカナ転写による初期セット。全 Mob ではない。追加はこのファイルに追記。
+#
+# 仕組み:
+#   conf/battle/monster.conf の override_mob_names: 2 により、スポーンファイルの
+#   表示名ではなく mob_db の JapaneseName が全 Mob の表示名として使われる。
+#   そのため spawn ファイルは一切改変しない。
+#   既存 Id に対しては Id + JapaneseName だけの記述で上書きできる
+#   （src/map/mob.cpp MobDatabase::parseBodyNode。AegisName / Name は既存 Mob では必須ではない）。
+#
+# 文字コード:
+#   このファイルは UTF-8 で管理し、イメージビルド時に iconv で CP932 へ変換して
+#   /opt/rathena/db/import/mob_db.yml に配置する。編集は UTF-8 / LF / BOM なしで行うこと。
+#
+# 記法:
+#   値はシングルクォートで囲む。YAML の二重引用符内では "\" がエスケープ扱いとなり、
+#   CP932 の 2 バイト目 0x5C（ソ・表・能 など）を含む名前が壊れるため使わないこと。
+#
+# 文字数:
+#   NAME_LENGTH は 24（実質 23 バイト）。CP932 換算で 24 バイトを超える名前は
+#   読み込み時に警告が出て切り詰められる。全角カナは 1 文字 2 バイト。
+#
+###########################################################################
+
+Header:
+  Type: MOB_DB
+  Version: 5
+
+Body:
+  - Id: 1002
+    JapaneseName: 'ポリン'
+  - Id: 1007
+    JapaneseName: 'ファブル'
+  - Id: 1008
+    JapaneseName: 'プパ'
+  - Id: 1010
+    JapaneseName: 'ウィロー'
+  - Id: 1011
+    JapaneseName: 'チョンチョン'
+  - Id: 1012
+    JapaneseName: 'ロダフロッグ'
+  - Id: 1013
+    JapaneseName: 'ウルフ'
+  - Id: 1014
+    JapaneseName: 'スポア'
+  - Id: 1015
+    JapaneseName: 'ゾンビ'
+  - Id: 1016
+    JapaneseName: 'アーチャースケルトン'
+  - Id: 1018
+    JapaneseName: 'クリーミー'
+  - Id: 1019
+    JapaneseName: 'ペコペコ'
+  - Id: 1020
+    JapaneseName: 'マンドラゴラ'
+  - Id: 1023
+    JapaneseName: 'オークウォリアー'
+  - Id: 1024
+    JapaneseName: 'ワームテール'
+  - Id: 1025
+    JapaneseName: 'スネーク'
+  - Id: 1026
+    JapaneseName: 'ムナック'
+  - Id: 1028
+    JapaneseName: 'ソルジャースケルトン'
+  - Id: 1029
+    JapaneseName: 'イシス'
+  - Id: 1030
+    JapaneseName: 'アナコンダック'
+  - Id: 1031
+    JapaneseName: 'ポポリン'
+  - Id: 1032
+    JapaneseName: 'ベリット'
+  - Id: 1033
+    JapaneseName: 'エルダーウィロー'
+  - Id: 1034
+    JapaneseName: 'タラフロッグ'
+  - Id: 1035
+    JapaneseName: 'ハンターフライ'
+  - Id: 1036
+    JapaneseName: 'グール'
+  - Id: 1037
+    JapaneseName: 'サイドワインダー'
+  - Id: 1038
+    JapaneseName: 'オシリス'
+  - Id: 1039
+    JapaneseName: 'バフォメット'
+  - Id: 1040
+    JapaneseName: 'ゴーレム'
+  - Id: 1041
+    JapaneseName: 'マミー'
+  - Id: 1042
+    JapaneseName: 'スチールチョンチョン'
+  - Id: 1044
+    JapaneseName: 'オボンヌ'
+  - Id: 1045
+    JapaneseName: 'マルク'
+  - Id: 1046
+    JapaneseName: 'ドッペルゲンガー'
+  - Id: 1049
+    JapaneseName: 'ピッキ'
+  - Id: 1050
+    JapaneseName: 'ピッキ'
+  - Id: 1051
+    JapaneseName: 'シーフバグ'
+  - Id: 1052
+    JapaneseName: 'ロッカー'
+  - Id: 1055
+    JapaneseName: 'ムカー'
+  - Id: 1056
+    JapaneseName: 'スモーキー'
+  - Id: 1057
+    JapaneseName: 'ヨーヨー'
+  - Id: 1058
+    JapaneseName: 'メタラー'
+  - Id: 1059
+    JapaneseName: 'ミストレス'
+  - Id: 1060
+    JapaneseName: 'ビッグフット'
+  - Id: 1061
+    JapaneseName: 'ナイトメア'
+  - Id: 1063
+    JapaneseName: 'ルナティック'
+  - Id: 1064
+    JapaneseName: 'メガロドン'
+  - Id: 1065
+    JapaneseName: 'ストラウフ'
+  - Id: 1066
+    JapaneseName: 'バドン'
+  - Id: 1067
+    JapaneseName: 'コルヌス'
+  - Id: 1068
+    JapaneseName: 'ヒドラ'
+  - Id: 1069
+    JapaneseName: 'ソードフィッシュ'
+  - Id: 1070
+    JapaneseName: 'ククレ'
+  - Id: 1071
+    JapaneseName: 'パイレーツスケルトン'
+  - Id: 1072
+    JapaneseName: 'カホ'
+  - Id: 1073
+    JapaneseName: 'クラブ'
+  - Id: 1074
+    JapaneseName: 'シェルフィッシュ'
+  - Id: 1076
+    JapaneseName: 'スケルトン'
+  - Id: 1077
+    JapaneseName: 'ポイズンスポア'
+  - Id: 1086
+    JapaneseName: 'ゴールデンシーフバグ'
+  - Id: 1087
+    JapaneseName: 'オークヒーロー'
+  - Id: 1088
+    JapaneseName: 'ボーカル'
+  - Id: 1089
+    JapaneseName: 'トード'
+  - Id: 1090
+    JapaneseName: 'マスタリング'
+  - Id: 1091
+    JapaneseName: 'ドラゴンフライ'
+  - Id: 1092
+    JapaneseName: 'バガボンドウルフ'
+  - Id: 1093
+    JapaneseName: 'エクリプス'
+  - Id: 1094
+    JapaneseName: 'アンバーナイト'
+  - Id: 1095
+    JapaneseName: 'アンドレ'
+  - Id: 1096
+    JapaneseName: 'エンジェリング'
+  - Id: 1098
+    JapaneseName: 'アヌビス'
+  - Id: 1099
+    JapaneseName: 'アルギオペ'
+  - Id: 1100
+    JapaneseName: 'アルゴス'
+  - Id: 1101
+    JapaneseName: 'バフォメットJr.'
+  - Id: 1102
+    JapaneseName: 'バースリー'
+  - Id: 1103
+    JapaneseName: 'キャラメル'
+  - Id: 1104
+    JapaneseName: 'ココ'
+  - Id: 1105
+    JapaneseName: 'デニーロ'
+  - Id: 1106
+    JapaneseName: 'デザートウルフ'
+  - Id: 1108
+    JapaneseName: 'デビエース'
+  - Id: 1109
+    JapaneseName: 'デビルチ'
+  - Id: 1110
+    JapaneseName: 'ドッケビ'
+  - Id: 1111
+    JapaneseName: 'ドレインリアー'
+  - Id: 1112
+    JapaneseName: 'ドレイク'
+  - Id: 1113
+    JapaneseName: 'ドロップス'
+  - Id: 1114
+    JapaneseName: 'ダスティネス'
+  - Id: 1115
+    JapaneseName: 'エドガ'
+  - Id: 1116
+    JapaneseName: 'エギラ'
+  - Id: 1117
+    JapaneseName: 'エビルドルイド'
+  - Id: 1118
+    JapaneseName: 'フローラ'
+  - Id: 1119
+    JapaneseName: 'フリルドラ'
+  - Id: 1120
+    JapaneseName: 'ゴーストリング'
+  - Id: 1121
+    JapaneseName: 'ジーアース'
+  - Id: 1122
+    JapaneseName: 'ゴブリン'
+  - Id: 1123
+    JapaneseName: 'ゴブリン'
+  - Id: 1124
+    JapaneseName: 'ゴブリン'
+  - Id: 1125
+    JapaneseName: 'ゴブリン'
+  - Id: 1126
+    JapaneseName: 'ゴブリン'
+  - Id: 1127
+    JapaneseName: 'ホード'
+  - Id: 1128
+    JapaneseName: 'ホルン'
+  - Id: 1129
+    JapaneseName: 'ホロン'
+  - Id: 1130
+    JapaneseName: 'ジャック'
+  - Id: 1131
+    JapaneseName: 'ジョーカー'
+  - Id: 1132
+    JapaneseName: 'カリツブルグ'
+  - Id: 1133
+    JapaneseName: 'コボルド'
+  - Id: 1134
+    JapaneseName: 'コボルド'
+  - Id: 1135
+    JapaneseName: 'コボルド'
+  - Id: 1138
+    JapaneseName: 'マグノリア'
+  - Id: 1139
+    JapaneseName: 'マンティス'
+  - Id: 1140
+    JapaneseName: 'マルドゥーク'
+  - Id: 1141
+    JapaneseName: 'マリナ'
+  - Id: 1142
+    JapaneseName: 'マリンスフィア'
+  - Id: 1143
+    JapaneseName: 'マリオネット'
+  - Id: 1144
+    JapaneseName: 'マルス'
+  - Id: 1145
+    JapaneseName: 'マーティン'
+  - Id: 1146
+    JapaneseName: 'マーター'
+  - Id: 1147
+    JapaneseName: 'マヤー'
+  - Id: 1148
+    JapaneseName: 'メドゥーサ'
+  - Id: 1149
+    JapaneseName: 'ミノタウロス'
+  - Id: 1150
+    JapaneseName: 'ムーンライトフラワー'
+  - Id: 1151
+    JapaneseName: 'ミスト'
+  - Id: 1152
+    JapaneseName: 'オークスケルトン'
+  - Id: 1153
+    JapaneseName: 'オークゾンビ'
+  - Id: 1154
+    JapaneseName: 'パサナ'
+  - Id: 1155
+    JapaneseName: 'ペティット'
+  - Id: 1156
+    JapaneseName: 'ペティット'
+  - Id: 1157
+    JapaneseName: 'ファラオ'
+  - Id: 1158
+    JapaneseName: 'フェン'
+  - Id: 1159
+    JapaneseName: 'フリオニ'
+  - Id: 1160
+    JapaneseName: 'ピエール'
+  - Id: 1161
+    JapaneseName: 'プランクトン'
+  - Id: 1163
+    JapaneseName: 'レイドリック'
+  - Id: 1164
+    JapaneseName: 'レクイエム'
+  - Id: 1165
+    JapaneseName: 'サンドマン'
+  - Id: 1166
+    JapaneseName: 'サベージ'
+  - Id: 1167
+    JapaneseName: 'サベージベビー'
+  - Id: 1169
+    JapaneseName: 'スケルワーカー'
+  - Id: 1170
+    JapaneseName: 'ソヒー'
+  - Id: 1174
+    JapaneseName: 'ステイナー'
+  - Id: 1175
+    JapaneseName: 'タロウ'
+  - Id: 1178
+    JapaneseName: 'ゼロム'
+  - Id: 1179
+    JapaneseName: 'ウィスパー'
+  - Id: 1180
+    JapaneseName: 'ナインテール'
+  - Id: 1188
+    JapaneseName: 'ボンゴン'
+  - Id: 1189
+    JapaneseName: 'オークアーチャー'
+  - Id: 1190
+    JapaneseName: 'オークロード'
+  - Id: 1192
+    JapaneseName: 'レイス'
+  - Id: 1193
+    JapaneseName: 'アラーム'
+  - Id: 1194
+    JapaneseName: 'アークラウズ'
+  - Id: 1195
+    JapaneseName: 'ライドワード'
+  - Id: 1196
+    JapaneseName: 'スケルプリズナー'
+  - Id: 1197
+    JapaneseName: 'ゾンビプリズナー'
+  - Id: 1201
+    JapaneseName: 'ライビオ'
+  - Id: 1202
+    JapaneseName: 'ペンダーク'
+  - Id: 1203
+    JapaneseName: 'ミステルテイン'
+  - Id: 1204
+    JapaneseName: 'ティルフィング'
+  - Id: 1205
+    JapaneseName: 'エクスキューショナー'
+  - Id: 1206
+    JapaneseName: 'アノリアン'
+  - Id: 1207
+    JapaneseName: 'スティング'
+  - Id: 1208
+    JapaneseName: 'ワンダラー'
+  - Id: 1209
+    JapaneseName: 'クランプ'
+  - Id: 1213
+    JapaneseName: 'ハイオーク'
+  - Id: 1214
+    JapaneseName: 'チョコ'
+  - Id: 1215
+    JapaneseName: 'ステムワーム'
+  - Id: 1216
+    JapaneseName: 'ペノメナ'
+  - Id: 1219
+    JapaneseName: 'アビスナイト'
+  - Id: 1242
+    JapaneseName: 'マリン'
+  - Id: 1246
+    JapaneseName: 'クリスマスクッキー'
+  - Id: 1252
+    JapaneseName: 'ガーム'
+  - Id: 1256
+    JapaneseName: 'ペスト'
+  - Id: 1257
+    JapaneseName: 'インジャスティス'
+  - Id: 1258
+    JapaneseName: 'ゴブリンアーチャー'
+  - Id: 1263
+    JapaneseName: 'ウィンドゴースト'
+  - Id: 1269
+    JapaneseName: 'クロック'
+  - Id: 1270
+    JapaneseName: 'クロックタワー管理者'
+  - Id: 1271
+    JapaneseName: 'アリゲーター'
+  - Id: 1272
+    JapaneseName: 'ダークロード'
+  - Id: 1273
+    JapaneseName: 'オークレディ'
+  - Id: 1275
+    JapaneseName: 'アリス'
+  - Id: 1276
+    JapaneseName: 'レイドリックアーチャー'
+  - Id: 1277
+    JapaneseName: 'グレイテストジェネラル'
+  - Id: 1278
+    JapaneseName: 'スタラクタイトゴーレム'
+  - Id: 1280
+    JapaneseName: 'スチームゴブリン'
+  - Id: 1281
+    JapaneseName: 'セージワーム'
+  - Id: 1282
+    JapaneseName: 'コボルドアーチャー'
+  - Id: 1283
+    JapaneseName: 'キメラ'
+  - Id: 1289
+    JapaneseName: 'マヤーパープル'
+  - Id: 1291
+    JapaneseName: 'レイスデッド'
+  - Id: 1292
+    JapaneseName: 'ミニデーモン'
+  - Id: 1293
+    JapaneseName: 'クリーミーフィアー'
+  - Id: 1294
+    JapaneseName: 'キラーマンティス'
+  - Id: 1295
+    JapaneseName: 'アウルバロン'
+  - Id: 1299
+    JapaneseName: 'ゴブリンリーダー'
+  - Id: 1300
+    JapaneseName: 'キャタピラー'
+  - Id: 1302
+    JapaneseName: 'ダークイリュージョン'
+  - Id: 1303
+    JapaneseName: 'ジャイアントホーネット'
+  - Id: 1304
+    JapaneseName: 'ジャイアントスパイダー'
+  - Id: 1305
+    JapaneseName: 'エンシェントワーム'
+  - Id: 1307
+    JapaneseName: 'キャットナインテール'
+  - Id: 1308
+    JapaneseName: 'パンツァーゴブリン'
+  - Id: 1309
+    JapaneseName: 'ガジョマート'
+  - Id: 1310
+    JapaneseName: 'マジョルロス'
+  - Id: 1311
+    JapaneseName: 'グリンブルスティ'
+  - Id: 1312
+    JapaneseName: 'タートルジェネラル'
+  - Id: 1313
+    JapaneseName: 'モブスター'
+  - Id: 1314
+    JapaneseName: 'パーミター'
+  - Id: 1315
+    JapaneseName: 'アサルター'
+  - Id: 1316
+    JapaneseName: 'ソルジャー'
+  - Id: 1318
+    JapaneseName: 'ヒーター'
+  - Id: 1319
+    JapaneseName: 'フリーザー'
+  - Id: 1320
+    JapaneseName: 'アウルデューク'
+  - Id: 1321
+    JapaneseName: 'ドラゴンテイル'
+  - Id: 1322
+    JapaneseName: 'スプリングラビット'
+  - Id: 1323
+    JapaneseName: 'シーオッター'

@@ -1,0 +1,118 @@
+//===== rAthena Script =======================================
+//= Juno Guides
+//===== By: ==================================================
+//= KitsuneStarwind, usul, kobra_k88; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.7
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Guides for the City of Juno
+//===== Additional Comments: =================================
+//= Edited Miss Yoon text. Added town soldiers by usul. Edited town soldiers
+//= and added map location option for them. [kobra_k88]
+//= 1.1 Changed sprites and cutins to Schwarzwald Republic ones
+//= 1.2 Optimized, updated common guide names [Lupus]
+//= 1.3 Updated the mini map localization function. [Musashiden]
+//= 1.4 Juno Guides are now up to date according to iRO. [Musashiden]
+//= 1.5 Removed Duplicates [Silent].
+//= 1.6 Changed one of the Juno soldier's sprite. [Musashiden]
+//= 1.7 Rescripted to official 10.3 standards. [L0ne_W0lf]
+//============================================================
+
+yuno,153,47,4	script	ジュノー案内係#yuno::Juno Guide#yuno	700,{
+	mes "[ジュノー案内係]";
+	mes "未来の理想を今に";
+	mes "形にする街、ジュノーへようこそ！";
+	next;
+	switch(select("武器屋:道具屋:セージ城（セージ転職施設）:書店街:ジュフェロ広場:共和国図書館:シュバイヒルビル魔法学院:モンスター博物館:鍛冶場:飛行場:会話を終える")) {
+	case 1:
+		viewpoint 1,120,138,0,0xFF3355;
+		mes "[ジュノー案内係]";
+		mes "ミニマップを";
+		mes "ご覧ください。";
+		mes "^FF3355+^000000 -> 武器屋";
+		mes "ありがとうございます、";
+		mes "良い一日を。";
+		close;
+	case 2:
+		viewpoint 1,193,142,1,0x3355FF;
+		mes "[ジュノー案内係]";
+		mes "ミニマップを";
+		mes "ご覧ください。";
+		mes "^3355FF+^000000 -> 道具屋";
+		mes "ありがとうございます、";
+		mes "良い一日を。";
+		close;
+	case 3:
+		viewpoint 1,90,318,2,0x33FF55;
+		mes "[ジュノー案内係]";
+		mes "ミニマップを";
+		mes "ご覧ください。";
+		mes "^33FF55+^000000 -> セージ城";
+		mes "（セージ転職施設）";
+		mes "ありがとうございます。良い一日を。";
+		close;
+	case 4:
+		viewpoint 1,257,102,3,0xFF3355;
+		mes "[ジュノー案内係]";
+		mes "ミニマップを";
+		mes "ご覧ください。";
+		mes "^FF3355+^000000 -> 書店街";
+		mes "ありがとうございます。良い一日を。";
+		close;
+	case 5:
+		viewpoint 1,157,170,4,0x3355FF;
+		mes "[ジュノー案内係]";
+		mes "ミニマップを";
+		mes "ご覧ください。";
+		mes "^3355FF+^000000 -> ジュフェロ広場";
+		mes "ありがとうございます、";
+		mes "良い一日を。";
+		close;
+	case 6:
+		viewpoint 1,336,204,5,0x33FF55;
+		mes "[ジュノー案内係]";
+		mes "ミニマップを";
+		mes "ご覧ください。";
+		mes "^33FF55+^000000 -> 共和国図書館";
+		mes "ありがとうございます。良い一日を。";
+		close;
+	case 7:
+		viewpoint 1,323,281,6,0xFF3355;
+		mes "[ジュノー案内係]";
+		mes "ミニマップをご覧ください。";
+		mes "^FF3355+^000000 -> シュバイヒルビル魔法学院";
+		mes "ありがとうございます。良い一日を。";
+		close;
+	case 8:
+		viewpoint 1,278,288,7,0x3355FF;
+		mes "[ジュノー案内係]";
+		mes "ミニマップをご覧ください。";
+		mes "^3355FF+^000000 -> モンスター博物館";
+		mes "ありがとうございます。良い一日を。";
+		close;
+	case 9:
+		viewpoint 1,120,138,8,0xFF3355;
+		mes "[ジュノー案内係]";
+		mes "ミニマップをご覧ください。";
+		mes "^FF3355+^000000 -> 鍛冶場";
+		mes "鍛冶場は武器屋の地下にあります。";
+		mes "ありがとうございます。良い一日を。";
+		close;
+	case 10:
+		viewpoint 1,53,214,9,0xFF3355;
+		mes "[ジュノー案内係]";
+		mes "ミニマップをご覧ください。";
+		mes "^FF3355+^000000 -> 飛行場";
+		mes "ありがとうございます。良い一日を。";
+		close;
+	case 11:
+		mes "[ジュノー案内係]";
+		mes "賢者たちの偉大な街。";
+		mes "知の都です！";
+		mes "ジュノーへようこそ。";
+		close;
+	}
+}

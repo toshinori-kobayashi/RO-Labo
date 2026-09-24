@@ -1,0 +1,124 @@
+//===== rAthena Script =======================================
+//= Umbala Guides
+//===== By: ==================================================
+//= Dizzy, Translated by Celest; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.5
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Guide for the City of Umbala
+//===== Additional Comments: =================================
+//= 1.1 Fixed location command format [Lupus]
+//= 1.2 Optimized, updated common guide names [Lupus]
+//= 1.4 Fitted the many lines into 1 or 2, and corrected some typos [erKURITA]
+//= 1.5 Rescripted to official 10.3 standards. [L0ne_W0lf]
+//= 1.6 Corrected activating ontouch. [L0ne_W0lf]
+//============================================================
+
+umbala,128,94,4	script	冒険者#um::Adventurer#um	702,{
+	mes "[冒険者]";
+	mes "ここはとても不思議な場所だ…";
+	mes "あまり開発が進んでおらず、";
+	mes "入り組んだ道がいくつもある…";
+	next;
+	mes "[冒険者]";
+	mes "だが、ここに何ヶ月も";
+	mes "滞在しているうちに、";
+	mes "この村の地理や";
+	mes "見どころには詳しくなった。";
+	mes "建物の場所を知りたければ、";
+	mes "遠慮なく聞いてくれ。";
+	next;
+	switch(select("建物の場所:ミニマップの印を消す:やめる")) {
+	case 1:
+		mes "[冒険者]";
+		mes "それで、どこを知りたいんだ？";
+		next;
+		switch(select("族長の家:シャーマンの家:武器屋:道具屋:バンジージャンプ場:キャンセル")) {
+		case 1:
+			mes "[冒険者]";
+			mes "^FF3355+^000000の印を";
+			mes "ミニマップにつけておいた。";
+			next;
+			mes "[冒険者]";
+			mes "外の世界の言葉を知るのは";
+			mes "族長だけだ。だから";
+			mes "何よりもまず彼を訪ねるといい。";
+			viewpoint 1,66,250,2,0xFF3355;
+			break;
+		case 2:
+			mes "[冒険者]";
+			mes "^CE6300+^000000の印を";
+			mes "ミニマップにつけておいた。";
+			next;
+			mes "[冒険者]";
+			mes "ウータンのシャーマンは";
+			mes "不思議な力を持っているらしい…";
+			mes "粗精霊石を作ったり、";
+			mes "純粋な精霊石を";
+			mes "粗精霊石に分けたりできるという話だ。";
+			viewpoint 1,217,186,3,0xCE6300;
+			break;
+		case 3:
+			mes "[冒険者]";
+			mes "^55FF33+^000000の印を";
+			mes "ミニマップにつけておいた。";
+			next;
+			mes "[冒険者]";
+			mes "ウータンたちは普段から";
+			mes "外敵の攻撃に備えて";
+			mes "武装しているそうだ。";
+			mes "過去に何度も外から襲われてきたらしい。";
+			viewpoint 1,126,154,4,0x55FF33;
+			break;
+		case 4:
+			mes "[冒険者]";
+			mes "^3355FF+^000000の印を";
+			mes "ミニマップにつけておいた。";
+			next;
+			mes "[冒険者]";
+			mes "旅に役立つ品が色々あるから、";
+			mes "道具屋を覗いてみてはどうだ？";
+			viewpoint 1,136,127,5,0x3355FF;
+			break;
+		case 5:
+			mes "[冒険者]";
+			mes "^00FF00+^000000の印を";
+			mes "ミニマップにつけておいた。";
+			next;
+			mes "[冒険者]";
+			mes "ウンバラには";
+			mes "「バンジージャンプ場」という珍しい場所がある。";
+			mes "自分の度胸を試したいなら、";
+			mes "このウータンの儀式に";
+			mes "自ら";
+			mes "参加してみてはどうだ？";
+			viewpoint 1,139,198,6,0x00FF00;
+			break;
+		case 6:
+			mes "[冒険者]";
+			mes "ミニマップの印を";
+			mes "消したいなら、";
+			mes "「ミニマップの印を消す」を選んでくれ。";
+		}
+		break;
+	case 2:
+		viewpoint 2,66,250,2,0xFF3355;
+		viewpoint 2,217,186,3,0xCE6300;
+		viewpoint 2,126,154,4,0x55FF33;
+		viewpoint 2,136,127,5,0x3355FF;
+		viewpoint 2,139,198,6,0x00FF00;
+		mes "[冒険者]";
+		mes "ミニマップの印を";
+		mes "全部消しておいた。また印をつけたければ";
+		mes "遠慮なく聞いてくれ。";
+		break;
+	case 3:
+		mes "[冒険者]";
+		mes "自分でウータンの文化を学ぶのも楽しいものだ。気をつけてな。";
+		break;
+	}
+	close;
+}

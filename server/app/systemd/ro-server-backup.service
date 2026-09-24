@@ -1,0 +1,11 @@
+[Unit]
+Description=rAthena MariaDB dump to /srv/ro-server/backups
+Documentation=file:///srv/ro-server/app/scripts/backup-db.sh
+Requires=docker.service
+After=docker.service ro-server.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/ro-server/app
+ExecStart=/srv/ro-server/app/scripts/backup-db.sh
+TimeoutStartSec=1800

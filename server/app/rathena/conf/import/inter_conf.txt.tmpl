@@ -1,0 +1,69 @@
+//--------------------------------------------------------------
+// DB 接続設定の上書き（conf/inter_athena.conf の最後に import される）
+// このファイルはテンプレート。entrypoint.sh が envsubst で
+// conf/import/inter_conf.txt に描画する（描画後は 0600）。
+//
+// ホスト名 mariadb は compose のサービス名。ポートは既定の 3306 のまま。
+//--------------------------------------------------------------
+
+// login-server 用
+login_server_ip: mariadb
+login_server_id: ${MARIADB_USER}
+login_server_pw: ${MARIADB_PASSWORD}
+login_server_db: ${MARIADB_DATABASE}
+
+// IP BAN 用（login-server が使用）
+ipban_db_ip: mariadb
+ipban_db_id: ${MARIADB_USER}
+ipban_db_pw: ${MARIADB_PASSWORD}
+ipban_db_db: ${MARIADB_DATABASE}
+
+// char-server 用
+char_server_ip: mariadb
+char_server_id: ${MARIADB_USER}
+char_server_pw: ${MARIADB_PASSWORD}
+char_server_db: ${MARIADB_DATABASE}
+
+// map-server 用
+map_server_ip: mariadb
+map_server_id: ${MARIADB_USER}
+map_server_pw: ${MARIADB_PASSWORD}
+map_server_db: ${MARIADB_DATABASE}
+
+// web-server 用（本構成では web-server を起動しないが設定は揃えておく）
+web_server_ip: mariadb
+web_server_id: ${MARIADB_USER}
+web_server_pw: ${MARIADB_PASSWORD}
+web_server_db: ${MARIADB_DATABASE}
+
+// ログ DB（sql_logs: yes のとき map-server が使用）
+log_db_ip: mariadb
+log_db_id: ${MARIADB_USER}
+log_db_pw: ${MARIADB_PASSWORD}
+log_db_db: ${MARIADB_DATABASE}
+
+//--------------------------------------------------------------
+// 文字コード（conf/inter_athena.conf の codepage 設定を上書き）
+//--------------------------------------------------------------
+// 役割分担:
+//   クライアント（kRO 2021-11-03 RagexeRE / 日本語 Windows / langtype 日本）は
+//     文字列を CP932（Shift_JIS 系）として解釈する。
+//   rAthena は文字列をバイト列として素通しするだけで、UTF-8 を扱わない。
+//   MariaDB のテーブルは utf8mb4（docker-compose.yml の mariadb command で指定）。
+//   → 接続の文字コードを cp932 にしておけば、CP932 <-> UTF-8 の変換は MariaDB 側が行う。
+//
+// これらの値は src/common/sql.cpp:167 の Sql_SetEncoding() に渡され、
+// 接続確立後に MariaDB の文字コードとして設定される。
+// （patches/0001-*.patch により mysql_set_character_set() 経由になり、
+//   mysql_real_escape_string() もクライアント側 cp932 として正しく動く）
+//
+// 指定しない場合 rAthena は SET NAMES を発行せず、接続は MariaDB 既定の utf8mb4 のまま
+// になるため、CP932 のバイト列が不正な UTF-8 として弾かれる / 化ける。
+
+// map-server / char-server 用
+default_codepage: cp932
+
+// login-server 用（login / ipban / log はそれぞれ別接続なので個別に指定する）
+login_codepage: cp932
+ipban_codepage: cp932
+log_codepage: cp932

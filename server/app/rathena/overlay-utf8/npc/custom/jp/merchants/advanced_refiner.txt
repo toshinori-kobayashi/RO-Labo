@@ -1,0 +1,213 @@
+//===== rAthena Script =======================================
+//= Advanced Refiner
+//===== Description: =========================================
+//= [Official Conversion]
+//= Refiner that uses Enriched ores to increase upgrade success.
+//= - Dialog is only partly official to iRO.
+//= - Uses the iRO position for this NPC.
+//===== Changelog: ===========================================
+//= 1.0 First Version. [L0ne_W0lf]
+//= 1.1 Fixed a weird carriage return. o_o [L0ne_W0lf]
+//= 1.2 Optimizing refine method [Zephyrus]
+//= 1.3 Typo fixes [Yommy]
+//= 1.4 Removed unnecessary dialogs [Zephyrus]
+//= 1.4a Added 'disable_items' command. [Euphy]
+//= 1.4b Fixed coordinates. [Euphy]
+//= 1.5 Some official script updates. [Euphy]
+//= 1.6 Added VIP features. [Euphy]
+//= 1.7 Removed re-roll behavior. [Secret]
+//============================================================
+
+payon,157,146,6	script	スンビ#cash::Suhnbi#cash	85,{
+	disable_items;
+	mes "[スンビ]";
+	mes "私は武具鍛冶師だ。";
+	mes "あらゆる武器や防具、";
+	mes "装備の精錬ができる。さあ、";
+	mes "何を精錬したいか言ってくれ。";
+	next;
+
+	setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+	for(set .@i,1; .@i<=10; set .@i,.@i+1) {
+		if (getequipisequiped(.@indices[.@i])) {
+			set .@menu$, .@menu$ + F_getpositionname(.@indices[.@i]) + "-[" + getequipname(.@indices[.@i]) + "]";
+			set .@equipped,1;
+		}
+		set .@menu$, .@menu$ + ":";
+	}
+	if (.@equipped == 0) {
+		mes "[スンビ]";
+		mes "お前が持っている物は、精錬できそうにないな…";
+		close;
+	}
+	set .@part, .@indices[ select(.@menu$) ];
+
+	if (!getequipisequiped(.@part)) //custom check
+		close;
+	if (!getequipisenableref(.@part)) {
+		mes "[スンビ]";
+		mes "他のブラックスミスを探すんだな。これは精錬できない代物だ。";
+		close;
+	}
+	if (getequiprefinerycnt(.@part) >= 10) {
+		mes "[スンビ]";
+		mes "うーん…誰かがもう極めてしまったようだな。これ以上は俺の出る幕じゃなさそうだ。";
+		close;
+	}
+
+	.@refineitemid = getequipid(.@part); // save id of the item
+	.@refinerycnt = getequiprefinerycnt(.@part); //save refinery count
+	.@price = getequiprefinecost(.@part, REFINE_COST_ENRICHED, REFINE_ZENY_COST);
+	.@material = getequiprefinecost(.@part, REFINE_COST_ENRICHED, REFINE_MATERIAL_ID);
+	.@itemtype = getiteminfo( .@refineitemid, ITEMINFO_TYPE );
+
+	// Make sure you have the necessary items and Zeny to refine your items
+	// Determines chance of failure and verifies that you want to continue.
+	callsub S_RefineValidate,.@itemtype,.@material,.@price,.@part,.@refineitemid,.@refinerycnt;
+
+	mes "[スンビ]";
+	mes "カンッ、カンッ、カンッ！！！";
+	if (getequippercentrefinery(.@part, true) > rand(100)) {
+		successrefitem .@part;
+		next;
+		emotion ET_BEST;
+		mes "[スンビ]";
+		mes "よし、できたぞ！";
+		mes "こんなに見事な"+((.@itemtype == IT_WEAPON)?"武器":"防具")+"を作ったのは久しぶりだ。強くなって嬉しいだろう！";
+		close;
+	}
+	failedrefitem .@part;
+	next;
+	emotion (!rand(5))?ET_MONEY:ET_HUK;
+	mes "[スンビ]";
+	mes "ぐぬぬぬぬぬっ！！！";
+	next;
+	mes "[スンビ]";
+	mes "…";
+	mes "……";
+	mes "………フフフフフ～";
+	mes "…………それがお前の選択で、俺の腕前だ。悔いはないだろう。";
+	close;
+
+S_RefineValidate:
+	.@itemtype = getarg(0);
+	.@item_req = getarg(1);
+	.@price = getarg(2);
+	.@part = getarg(3);
+	setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+
+	if( .@itemtype == IT_ARMOR ){
+		.@equip_lv = getequiparmorlv( .@part );
+
+		// If the VIP system is enabled, the prices for non-VIP players are considerably higher.
+		if (VIP_SCRIPT && !vip_status(VIP_STATUS_ACTIVE)) {
+			switch(.@equip_lv) {
+				case 1:
+					set .@price, .@price * 10;
+					break;
+				default:
+					// TODO:
+					close;
+			}
+		}
+	}else if( .@itemtype == IT_WEAPON ){
+		.@equip_lv = getequipweaponlv( .@part );
+
+		// If the VIP system is enabled, the prices for non-VIP players are considerably higher.
+		if (VIP_SCRIPT && !vip_status(VIP_STATUS_ACTIVE)) {
+			switch( .@equip_lv ){
+				case 1:
+					set .@price, .@price * 40;
+					break;
+				case 2:
+					set .@price, .@price * 50;
+					break;
+				case 3:
+					set .@price, .@price * 2;
+					break;
+				case 4:
+					set .@price, .@price * 2;
+					break;
+				default:
+					// TODO:
+					close;
+			}
+		}
+	}else{
+		// TODO:
+		close;
+	}
+
+	mes "[スンビ]";
+	if (.@itemtype == IT_WEAPON)
+		mes "レベル"+ .@equip_lv +"の武器を精錬したいのか？";
+	mes "精錬するには^ff9999"+ getitemname(.@item_req) +"^000000が1つと"+ .@price +"Zenyが必要だ。";
+	mes "続けるか？";
+	next;
+	if(select("はい:いいえ") == 1) {
+		if (getequippercentrefinery(.@part) < 100) {
+			if (.@itemtype == IT_WEAPON) {
+				mes "[スンビ]";
+				mes "おおっと！！";
+				mes "この武器はどうやら";
+				mes "何度も精錬されて";
+				mes "きたようだな…";
+				mes "もう一度精錬したら";
+				mes "壊れてしまうかもしれない。";
+				next;
+				mes "もし壊れてしまったら、";
+				mes "二度と使えなくなるぞ！";
+				mes "付いているカードや特殊効果も^ff0000すべて失われる^000000！";
+				mes "^ff0000おまけに装備そのものも壊れてしまう！^000000";
+				mes "それでも続けるつもりか？";
+				next;
+				if(select("はい:いいえ") == 2) {
+					mes "[スンビ]";
+					mes "そうか。";
+					mes "無茶な精錬で武器が壊れたら、俺も気分が悪いからな。";
+					close;
+				}
+			} else {
+				mes "[スンビ]";
+				mes "クスクス。ほう、これを精錬しようとは、なかなか度胸があるな。";
+				mes "かなり危険だとわかっているんだろうな？";
+				next;
+				mes "その防具が壊れたら、二度と使えなくなるぞ。";
+				mes "カードも改造の効果も^ff0000跡形もなく消えてしまう^000000。";
+				//mes "Everything will disappear. As in... GONE!";
+				mes "本当に続けるつもりか？";
+				next;
+				if(select("はい:いいえ") == 2) {
+					mes "[スンビ]";
+					mes "ばかばかしい。貴重な時間を無駄にさせるな。";
+					mes "とっとと失せろ、若造。";
+					close;
+				}
+			}
+		}
+		if (countitem(.@item_req) > 0 && Zeny > .@price) {
+			delitem .@item_req,1;
+			set Zeny, Zeny - .@price;
+
+			// anti-hack
+			if (callfunc("F_IsEquipIDHack", .@part, getarg(4)) ||
+				callfunc("F_IsEquipRefineHack", .@part, getarg(5)) || callfunc("F_IsEquipCardHack", .@part, .@card[0], .@card[1], .@card[2], .@card[3])) {
+				mes "[スンビ]";
+				emotion ET_FRET;
+				mes "ちょっと待て…";
+				mes "俺を馬鹿だと思っているのか？！";
+				mes "見てない隙に品物をすり替えたな！出て行け！";
+				close;
+			}
+
+			return;
+		}
+		mes "[スンビ]";
+		mes "持っているのはこれで全部か？";
+		mes "すまないが、材料が揃わなきゃ何もできない。それに、俺の仕事にも報酬がいるだろう？";
+		close;
+	}
+	mes "[スンビ]";
+	mes "気に入らなくても、どうしようもないな…";
+	close;
+}

@@ -1,0 +1,2265 @@
+//===== rAthena Script =======================================
+//= Assassin Job Quest
+//===== Description: =========================================
+//= [Official Conversion]
+//= Job Change quest for Assassin class.
+//===== Changelog: ===========================================
+//= 1.0 Used some dialogue from the aegis Assassin script translated By: Pgro Team (OwNaGe)
+//=     Also converted the booby traps from the aegis script.[kobra_k88]
+//= 1.1 Made adjustments to ontouch npcs to work with the new "ontouch" functionality.
+//=     Fixed some duplicate npc names.  Added missing waitingroom triggers.
+//=     Fixed warp in "TimerSin", was supposed to be an areawarp.
+//=     For some reason sometimes the "Nameless One" would have message windows
+//=     without controls.  Changed the doevent that triggers him to an
+//=     addtimer and that seemed make the prob. go away[kobra_k88]
+//= 1.2 Fixed WRONG skillpoint check! [Lupus]
+//= 1.2b Fixed missing commands and typos [Lupus]
+//= 1.3 Baby class Support added [Lupus]
+//= 1.5 Fixed possible EXP abuse [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//=     2nd Job Quests again. It also guides adv classes where
+//=     to go. [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.1 Removed Duplicates [Silent]
+//= 2.2 Merged back JFunc. Fixed missing dialogue [Lupus]
+//= 2.3 Fixed typo and change Nameless addtimer to 100 (with 700ms I
+//=     was still able to bypass it) [Toms]
+//= 2.4 Fixed skipping of Nameless NPC [Lupus]
+//= 2.5 Fixed a Rogue exploit [Lupus]
+//= 2.6 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 2.7 Several bugfixes with the help of Samuray22 and Barron-Monster. [L0ne_W0lf]
+//= 2.8 Removed duplicate warps. [L0ne_W0lf]
+//= 2.8a Deleted unused variables. [Samuray22]
+//= 2.8b Fixed error caused in last updated, removed useless variable 'joblvl'. [L0ne_W0lf]
+//= 2.9 Fixed an indent and added a 'break;' in hopes of 'fixing' an error [L0ne_W0lf]
+//= 2.9a Corrected a Typo error ";;". [Samuray22]
+//= 2.9b Moved a wrong 'break'. [Zephyrus_cr]
+//= 3.0 Now uses enable and disable waitingroomevent. [L0ne_W0lf]
+//= 3.1 Fixed problem with waiting room. (bugreport:1099) [L0ne_W0lf]
+//= 3.1a Follow up fix. Forgot to replace a label. [L0ne_W0lf]
+//= 3.1b Fixed waiting room not enabled in some situations [Zephyrus]
+//= 3.2 Fixed a question having all correct answers. [brianluau]
+//= 3.3 Added Quest Log commands. [Kisuka]
+//= 3.4 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 3.5 Fixed the waitingroom where player can enter the Test Area without passing the written exam. Now player will not be warp inside the Test Area when did not passed the written exam instead the player will be warp back to the written exam entrance [JayPee]
+//= 3.6 Fixed broken event calls. [Euphy]
+//= 3.7 Fixed issue that the player can't progress in the quest if timed out at weapon reward step. This issue is fixed on iRO but not on kRO. [https://forums.warpportal.com/index.php?/topic/130060-didnt-receive-necklace-of-oblivion-when-changing-assassin/#entry1496042] [MrAntares]
+//= 3.8 Another 'unofficial fix'. Player can't change job if time out after the necklace is deleted. [Atemo]
+//============================================================
+
+in_moc_16,19,33,1	script	ギルド職員#asn::Guildsman#asn	55,{
+	if (Upper == 1) {
+		mes "[凶暴そうな男]";
+		mes "ん？お前は……？";
+		mes "他の連中とはどこか違う気配がするな……";
+		next;
+		mes "[凶暴そうな男]";
+		mes "お前ほど威圧感のある奴には会ったことがない！なぜだか知らんが気に入らねえ。とっとと消えな！";
+		close;
+	}
+	if (SkillPoint) {
+		mes "[凶暴そうな男]";
+		mes "1次職のスキルポイントが余ってるうちは転職できないぞ。先にそっちを使い切ってきな。";
+		close;
+	}
+	if (ASSIN_Q == 4) {
+		mes "[凶暴そうな男]";
+		mes "おいおい、その顔をやめろ。そんなに痛いのか？";
+		next;
+		mes "[凶暴そうな男]";
+		mes "よしよし、痛いのは分かった分かった。ほら、HPとSPを回復させてやる。これで満足か？";
+		percentheal 100,100;
+		next;
+		mes "[凶暴そうな男]";
+		mes "生き延びるのがそんなに大変か？";
+		mes "次はもっと頑張ってみろ。アサシンになるってのは、無理に力むもんじゃないぞ……";
+		next;
+		if (select("何としてもアサシンになってみせる！:ああ、ちょっと休ませてくれ。") == 1) {
+			mes "[凶暴そうな男]";
+			mes "おお……";
+			mes "それなら";
+			mes "頑張ってみろ！";
+			close2;
+			ASSIN_Q = 0;
+			warp "in_moc_16",19,76;
+			end;
+		}
+		mes "[凶暴そうな男]";
+		mes "休むのか？まあいい、好きにしな。アサシンになる準備ができたと思ったら、また来い。";
+		next;
+		mes "[凶暴そうな男]";
+		mes "町に戻りたきゃ歩いて帰るんだな。ああ、セーブポイントの登録を忘れるなよ？";
+		close2;
+		ASSIN_Q = 0;
+		ASSIN_Q2 = 0;
+		if (ASSIN_Q3 < 3)
+			ASSIN_Q3 = 0;
+		savepoint "in_moc_16",18,14,1,1;
+		warp "in_moc_16",18,14;
+		end;
+	}
+	if (BaseJob == Job_Thief && countitem(1008) == 0 && ASSIN_Q > 7) {
+		mes "[熟練アサシン・ヒューイ]";
+		mes "おい、どうした……？なんで^006699忘却の首飾り^000000を持ってきてないんだ？持ってるはずだろ、どこにやった？";
+		next;
+		mes "[熟練アサシン・ヒューイ]";
+		mes "ギルドマスターにバレる前に、さっさと^006699忘却の首飾り^000000を取り直してこい！急いで、全力でな！";
+		next;
+		mes "[熟練アサシン・ヒューイ]";
+		mes "ようやく手に入れたら、俺のところに持ってこい！^666666（はぁ……）^000000";
+		close;
+	}
+	if (BaseJob == Job_Thief && countitem(1008) > 0 && ASSIN_Q > 7) {
+		mes "[熟練アサシン・ヒューイ]";
+		mes "おやおや、手に入れたのか。おめでとう！だが見るからに傷がついてるな、これじゃ受け取れない。お前は一生アサシンになれんぞ！";
+		next;
+		mes "[熟練アサシン・ヒューイ]";
+		mes "ハハハッ！冗談だ、本気にするな。だがこの首飾りは、まずギルドマスターに確認してもらう必要がある。";
+		next;
+		mes "[熟練アサシン・ヒューイ]";
+		mes "……";
+		next;
+		mes "[熟練アサシン・ヒューイ]";
+		mes "……";
+		mes "…………";
+		next;
+		mes "[熟練アサシン・ヒューイ]";
+		mes "よし！";
+		mes "認められたぞ！";
+		next;
+		delitem 1008,1; //Frozen_Heart
+		changequest 8007,8008;
+		completequest 8008;
+		callfunc "Job_Change",Job_Assassin;
+		callfunc "F_ClearJobVar";		// clears all job variables for the current player
+		mes "[熟練アサシン・ヒューイ]";
+		mes "よし！立派なアサシンになれるよう励め！信念を持って旅をし、誇りを持って仕留めろ。いつでも顔を出しに来い。改めて、おめでとう。";
+		close;
+	}
+	else if (countitem(1008) > 0 && BaseJob == Job_Thief && ASSIN_Q < 7) {
+		mes "[凶暴そうな男]";
+		mes "あん？";
+		mes "何の用だ？";
+		next;
+		mes "[凶暴そうな男]";
+		mes "^006699忘却の首飾り^000000を持ってるな……アサシンになりたいんだろ？ちょっと確認させろ……";
+		next;
+		mes "[凶暴そうな男]";
+		mes "……";
+		next;
+		mes "[凶暴そうな男]";
+		mes "……";
+		mes "…………";
+		next;
+		mes "[凶暴そうな男]";
+		mes "ちょっと待て……";
+		mes "このロクでなしが！これは偽物じゃねえか！";
+		next;
+		mes "[凶暴そうな男]";
+		mes "よくも偽物で俺を騙そうとしたな！馬鹿にしてんのか！？殺してやろうか……";
+		close2;
+		warp "moc_fild16",206,229;
+		end;
+	}
+	else {
+		mes "[凶暴そうな男]";
+		mes "何の用でここに来た？";
+		mes "その目つき、気に入らねえな……小僧が。";
+		next;
+		if (BaseClass == Job_Novice) {
+			mes "[凶暴そうな男]";
+			mes "おいノービス。ここからはさっさと出て行った方がいいぞ。お前の安全は保証できねえからな。";
+			close;
+		}
+		else if (BaseClass == Job_Swordman) {
+			mes "[凶暴そうな男]";
+			mes "剣を振るう男が何の用だ？物を叩き壊すならよそでやれ、この能無しが。";
+			close;
+		}
+		else if (BaseClass == Job_Mage) {
+			mes "[凶暴そうな男]";
+			mes "魔法使いがこんな所で何の用だ？";
+			next;
+			mes "[凶暴そうな男]";
+			mes "プロンテラやジュノーに図書館があるだろ、お前を歓迎してくれる場所がな。手品よろしく、さっさと消えな。";
+			close;
+		}
+		else if (BaseClass == Job_Archer) {
+			mes "[凶暴そうな男]";
+			mes "おやおや。";
+			mes "ずいぶんと立派な弓だな。";
+			next;
+			mes "[凶暴そうな男]";
+			mes "こんな場所に近づく度胸のある弓使いは滅多にいないぞ。で、一体何しに来たんだ！？";
+			close;
+		}
+		else if (BaseClass == Job_Acolyte) {
+			mes "[凶暴そうな男]";
+			mes "変な臭いがすると思ったら。神に仕える者がこんな所で何の用だ？お前の来る場所じゃないぞ。";
+			close;
+		}
+		else if (BaseClass == Job_Merchant) {
+			mes "[凶暴そうな男]";
+			mes "この辺りじゃ欲深い奴は好かれねえ。商品を売るならよそでやるんだな、金の亡者め。";
+			close;
+		}
+		else if (BaseJob == Job_Rogue) {
+			mes "[凶暴そうな男]";
+			mes "悩み事なんて一つもなさそうな顔をしてるな。まあ、ここにいる間はゆっくりしていけ。ローグギルドとアサシンギルドは昔から仲がいいからな。";
+			next;
+			mes "[凶暴そうな男]";
+			mes "ところで……";
+			mes "マーキーって";
+			mes "名前の女、見たことあるか？";
+			next;
+			mes "[凶暴そうな男]";
+			mes "マーキー……";
+			mes "永遠に一緒にいるって約束したんだ。^666666（はぁ……）^000000もうあいつはその約束、覚えちゃいないだろうな。まあ、あの頃は俺たちもガキだったし……";
+			close;
+		}
+		else if (BaseJob == Job_Assassin) {
+			mes "[熟練アサシン・ヒューイ]";
+			mes "おお、お前のこと覚えてるぞ～";
+			mes "確か名前は、ええと、妙な響きだったから覚えてるんだが……";
+			next;
+			mes "[熟練アサシン・ヒューイ]";
+			mes ":+:" + strcharinfo(0) + ":+:だったか？いや違う、ただの"+ strcharinfo(0) +"だな。で、調子はどうだ？";
+			next;
+			mes "[熟練アサシン・ヒューイ]";
+			mes "残念だが、今のところギルドからお前への依頼はない。しっかり訓練に励んでおけ。それじゃ、またな。";
+			close;
+		}
+		else if (BaseJob == Job_Thief && JobLevel > 39) {
+			if (SkillPoint) {
+				mes "[凶暴そうな男]";
+				mes "1次職のスキルポイントが余ってるうちは転職できないぞ。先にそのスキルポイントを使い切ってきな。";
+				close;
+			}
+			else {
+				mes "[凶暴そうな男]";
+				mes "ふむ……";
+				mes "シーフか……？";
+				next;
+				mes "[凶暴そうな男]";
+				mes "それも相当な手練れのシーフだな、財布が見当たらねえ。俺たちはお前みたいな奴を求めてるんだぜ。";
+				next;
+				mes "[凶暴そうな男]";
+				mes "それで、次のステップに進んでアサシンになる気はあるか？";
+				next;
+				switch(select("ああ。もうスリはやり尽くした。:条件は何だ？:また今度にする、まだ盗む物があるんでな。")) {
+				case 1:
+					mes "[凶暴そうな男]";
+					mes "客を迎えるのは久しぶりだ。";
+					mes "事務所へ送ってやる。";
+					close2;
+					ASSIN_Q = 0;
+					if (checkquest(8000) != -1) {
+						changequest 8000,8001;
+					} else {
+						setquest 8001;
+					}
+					warp "in_moc_16",19,76;
+					end;
+				case 2:
+					mes "[凶暴そうな男]";
+					mes "条件か？まず、シーフでなきゃならん。次に、シーフのジョブレベルが最低でも40は必要だ。";
+					next;
+					mes "[凶暴そうな男]";
+					mes "そして最後に、アサシンになるための試験に合格することだ。";
+					mes "分かったか？シーフとしての腕に自信があるなら、心配することはない。";
+					close;
+				case 3:
+					mes "[凶暴そうな男]";
+					mes "ふむ……";
+					mes "分かった。";
+					mes "だが、";
+					mes "準備ができたと思ったらまた来い。";
+					close;
+				}
+			}
+		}
+		else {
+			mes "[凶暴そうな男]";
+			mes "ふん。お前はまだアサシンになる資格がない。先に満たすべき条件があるんだぞ。";
+			next;
+			mes "[凶暴そうな男]";
+			mes "まあ、修行を続けるんだな。最低でもジョブレベル40は必要だ、分かったか？もっとも、40を超えていればそれに越したことはない。";
+			close;
+		}
+	}
+}
+
+in_moc_16,25,90,1	script	ギルド職員#ASN2::Guildsman#ASN2	730,2,2,{
+	mes "[アサシン・カイ]";
+	mes "んっ！？";
+	emotion ET_SURPRISE;
+	next;
+	mes "[アサシン・カイ]";
+	mes "もっと近くに来い。話をするなら面と向かってがいい。声を張り上げなきゃ聞こえないなんて、苛々するからな。";
+	mes "背後から話しかけられるのも気に食わん。";
+	close;
+
+OnTouch_:
+	if (ASSIN_Q2 == 4) {
+		mes "[アサシン・カイ]";
+		mes "あぁ？";
+		mes "さっき";
+		mes "俺の前を通り過ぎたばっかりだろう？";
+		next;
+		mes "[アサシン・カイ]";
+		mes "え……！？";
+		mes "落ちたのか？";
+		mes "あの";
+		mes "筆記試験に？";
+		mes "ブワーッハッハッハ！";
+		next;
+		mes "[アサシン・カイ]";
+		mes "いやはや……";
+		mes "こんな大した";
+		mes "落第者に会うのは久しぶりだ。";
+		next;
+		mes "[アサシン・カイ]";
+		mes "ハッ！";
+		mes "ハハハハハーッ！";
+		mes "ああ、笑いすぎて死にそうだ……";
+		next;
+		mes "[アサシン・カイ]";
+		mes "笑って悪いが、これは傑作すぎる！ハハハ～それで、ヒントが欲しいのか？";
+		next;
+		switch(select("お願いだ、ヒントをくれ。:笑うな！さっさとヒントをよこせ！:……黙れ、お前の助けなんかいらない！")) {
+		case 1:
+			mes "[アサシン・カイ]";
+			mes "ハーッハッハッハ！！！";
+			mes "おやおや、ずいぶんと素直じゃないか。まだアサシンにもなってないのに、俺を笑い死にさせる気か、まったく！";
+			next;
+			mes "[名もなき者]";
+			mes "ホッホッホ……";
+			next;
+			mes "[アサシン・カイ]";
+			mes "聞いたか、名もなき者よ！？「お願いだ、ヒントをくれ」だとよ。ハハハッ！";
+			next;
+			mes "[名もなき者]";
+			mes "ああ。";
+			mes "こいつはなかなか";
+			mes "哀れなほど笑える。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "ハハハハハハッ！";
+			mes "それでぇ～、お前は";
+			mes "ヒントが欲しいんだよな？";
+			next;
+			mes "[アサシン・カイ]";
+			mes "……";
+			next;
+			mes "[アサシン・カイ]";
+			mes "……";
+			mes "…………";
+			next;
+			mes "[アサシン・カイ]";
+			mes "……";
+			mes "…………";
+			mes "……………";
+			next;
+			mes "[アサシン・カイ]";
+			mes "……";
+			mes "…………";
+			mes "……………";
+			mes "………………";
+			next;
+			mes "[アサシン・カイ]";
+			mes "……";
+			mes "…………";
+			mes "……………";
+			mes "………………";
+			mes "…………………";
+			next;
+			mes "[アサシン・カイ]";
+			mes "やっぱやめた。";
+			mes "気が変わった！";
+			mes "結局ヒントはやらないことにした。ヒヒヒ～";
+			close;
+		case 2:
+			mes "[アサシン・カイ]";
+			if (Sex == SEX_MALE) {
+				mes "ふん。近頃のシーフにしちゃ、ずいぶんと自信満々だな。";
+				next;
+				mes "[アサシン・カイ]";
+				mes "ああ、分かってるさ。誰だって時には失敗するもんだ。お前の失敗を笑って悪かったな。";
+			}
+			else
+				mes "ふむ。その心意気は気に入った。シーフとしての誇りを忘れるなよ。お前の失敗を笑って悪かったな。次はきっとうまくいくさ。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "ヒントをやるわけにはいかないが、アサシンについてもう少し話してやろう……";
+			next;
+			mes "[アサシン・カイ]";
+			mes "何よりも、俺たちは誇りを重んじる。何しろ俺たちはアサシンだ、いずれ人々に必要とされる存在になる。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "お前に近しい人間には、この話は理解できないかもしれん。俺たちは生まれつき、独りでいる定めなんだ。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "考えてもみろ、恋人や友人がお前の手についた血を見たらどうなる。お前のそばにいてくれなくなるかもしれん。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "時には寂しくもなるが、そう悪いもんでもない。少なくとも俺は、自分のやりたいように、自分のやり方でやれるんだからな。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "まあ、今話せるのはこれくらいだ。アサシンになるってのは";
+			mes "気が滅入る話に聞こえたか？";
+			close;
+		case 3:
+			mes "[アサシン・カイ]";
+			mes "……ふん。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "そうだ、その意気だ。誰にも見下されるな、";
+			mes "俺たちはアサシンなんだからな……";
+			next;
+			mes "[アサシン・カイ]";
+			mes "さっき笑ったことは謝る。アサシンとしての誇りと威厳、それを忘れずにいてほしい。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "誇りを持ち続けると同時に、";
+			mes "カタールやダガーを染めるかもしれない血にも、敬意を払ってほしい。";
+			next;
+			if (select("……分かった。:……よく分からない。") == 1) {
+				mes "[アサシン・カイ]";
+				mes "よし、これでお前を信用できる。大事なコツを教えてやろう。";
+				next;
+				switch(rand(1,3)) {
+				case 1:
+					mes "[アサシン・カイ]";
+					mes "まず、グリムトゥースは……カタール専用のスキルだ。だからダガー系の武器に関するスキルは一切必要ない。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "ダブルアタック……使ったことないのか？一度に敵を2回攻撃できるスキルだ。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "レッドブラッドは属性石だが、ブルージェムストーンはアサシンの仕事とは何の関係もないぞ！";
+					next;
+					mes "[アサシン・カイ]";
+					mes "マジシャンがコールドボルトでエルダーウィローを狩ってるのを見たことあるか？水は火に打ち勝つ。水は火を制し、風は水を制するんだ。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "壁際なんかの陰にぴったり張り付いていれば、クローキングは完璧にお前を隠してくれる！ただし、どこぞの野郎が特定の探知スキルを使わない限りはな。";
+					next;
+					break;
+				case 2:
+					mes "[アサシン・カイ]";
+					mes "「グールの尖った足骨」はアンデッド属性を持っている。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "これまでどんな武器を使ってきた？ダマスカス？グラディウス？スティレット？それともマインゴーシュか？今持ってるのは何だ？";
+					next;
+					mes "[アサシン・カイ]";
+					mes "デザートウルフからはスロット付きのカタールが手に入ることがある。まあ、覚えておけ。いつか役に立つ情報だ。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "地下の暗くてジメジメした場所に住んでる奴から、スロット付きのジュルが手に入る。なんでそんな武器を持ってるのかは知らんが……穴でも掘るのに使うのか？";
+					next;
+					mes "[アサシン・カイ]";
+					mes "それから……";
+					mes "俺はずっとカエルをペットにしたかったんだが、無理な話なんだよな！";
+					next;
+					mes "[アサシン・カイ]";
+					mes "俺の知る限り、ハンマーを持ったゴブリンは地属性だ。火は地属性に打ち勝つ、覚えておけ。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "属性武器は知ってるか？大抵はそれを作ったブラックスミスの名前が刻まれてるもんだ……";
+					next;
+					break;
+				case 3:
+					mes "[アサシン・カイ]";
+					mes "エルダーウィローカードはさっさとマジシャンに売っちまえ。なぜだか知らんが奴らはあのカードに夢中だ。INTでも上がるんだったか……？";
+					next;
+					mes "[アサシン・カイ]";
+					mes "俺たちにとっては防御より回避と攻撃が大事だ。ヘルムを被ろうなんて考えるなよ。重いし窮屈だし、視界まで遮る。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "「回避増加」はスキルレベル1につき回避率が+3％になる。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "何度も言ってるだろう、カタール系の武器（ジャマダハル、ジュル、カタールなど）は両手武器だ！";
+					next;
+					mes "[アサシン・カイ]";
+					mes "砂漠の街……故郷モロクが恋しいな。もう長いこと帰ってない。シーフになったのがつい数日前みたいに感じるよ。時が経つのは早いもんだ……";
+					next;
+					mes "[アサシン・カイ]";
+					mes "ハッ。シーフのクエストを思い出すな。キノコを盗みに農場へ忍び込んだ時は、死ぬほど緊張したもんだ……";
+					next;
+					mes "[アサシン・カイ]";
+					mes "虫系はハイディングやクローキングを見破る。あの触角は獲物を見逃さない。";
+					next;
+					mes "[アサシン・カイ]";
+					mes "バフォメットJr．カードはAGIが+3、クリティカルが+1されるって聞いたことがある……";
+					next;
+					mes "[アサシン・カイ]";
+					mes "そうだ、俺たちアサシンはAGIを鍛えるのが専門でな。ジョブレベルを極める前でも、AGIボーナスを10ポイントまで得られる。問題は、それ以上は上がらないってことだ。";
+					next;
+				}
+				mes "[アサシン・カイ]";
+				mes "^666666（ふう）^000000話せるのはこれで全部だが、それでもかなりのヒントになったはずだ。ほとんど全部教えたようなもんだからな。";
+				next;
+				mes "[アサシン・カイ]";
+				mes "それじゃ、「名もなき者」にもう一度試験を受けたいと頼んでこい。";
+				close2;
+				warp "in_moc_16",19,144;
+				end;
+			}
+			mes "[アサシン・カイ]";
+			mes "^666666（はぁ……）^000000";
+			mes "威厳ってものが分からないのか？さっき自分でそれを見せたばかりだろうが！";
+			next;
+			mes "[アサシン・カイ]";
+			mes "ああ、分かったぞ。お前が見せてたのは誇りなんかじゃない、ただの生意気なだけだったんだな！";
+			next;
+			mes "[アサシン・カイ]";
+			mes "グルルル……";
+			mes "ワープポータル発動！";
+			close2;
+			warp "c_tower4",64,76;
+			end;
+		}
+	}
+	else {
+		mes "[アサシン・カイ]";
+		mes "お前はアサシン見習いだな。アサシンになりに";
+		mes "来たんだろう？";
+		next;
+		if (select("ああ、そうだ。:……いや、違う。") == 1) {
+			mes "[アサシン・カイ]";
+			mes "よし、いいだろう。では申込書に記入してもらう。名前とジョブレベルを記入しろ。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "ええと。";
+			mes "お前の名前は";
+			mes ""+ strcharinfo(0) +"……";
+			mes "ジョブレベル"+ JobLevel +"……";
+			next;
+			if (JobLevel > 48) {
+				mes "[アサシン・カイ]";
+				mes "待てよ、ジョブレベル"+ JobLevel +"だと！？かなり厳しい訓練を積んできたようだな！上の連中も気に入るだろうよ～";
+				next;
+				mes "[アサシン・カイ]";
+				mes "記入は終わったか？よし、それをよこせ。少し待ってろ、試験会場へ転送してやる。";
+				next;
+				mes "[アサシン・カイ]";
+				mes "それじゃあな、";
+				mes "幸運を祈るぜ！";
+				close2;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 1;
+				ASSIN_Q = 1;
+				changequest 8001,8002;
+				warp "in_moc_16",19,144;
+				end;
+			}
+			else if (JobLevel < 49) {
+				mes "[アサシン・カイ]";
+				mes "よし、条件は";
+				mes "満たしてるな。";
+				mes "悪くない。";
+				next;
+				mes "[アサシン・カイ]";
+				mes "記入が";
+				mes "終わったら";
+				mes "その申込書をよこせ。";
+				mes "よし、頼んだぞ。";
+				next;
+				mes "[アサシン・カイ]";
+				mes "試験会場へ";
+				mes "転送してやる。";
+				mes "幸運を祈るぜ～";
+				close2;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 2;
+				ASSIN_Q = 1;
+				changequest 8001,8002;
+				warp "in_moc_16",19,144;
+				end;
+			}
+			else {
+				mes "[アサシン・カイ]";
+				mes "お前、";
+				mes "何様のつもりだ？";
+				mes "……衛兵！";
+				close2;
+				warp "moc_fild16",206,229;
+				end;
+			}
+		}
+		else {
+			mes "[アサシン・カイ]";
+			mes "はぁ……？";
+			mes "何だ、俺を騙そうとでもしてるのか？アサシンになりたくないのか？";
+			next;
+			if (select("いや、なりたくない。:いや、アサシンになりたい。") == 1) {
+				mes "[アサシン・カイ]";
+				mes "ええい、出てけ。";
+				mes "俺の時間を無駄にするな……";
+				close2;
+				ASSIN_Q = 0;
+				ASSIN_Q2 = 0;
+				erasequest 8001;
+				warp "moc_fild16",206,229;
+				end;
+			}
+			mes "[アサシン・カイ]";
+			mes "……";
+			mes "一体何なんだ？";
+			mes "分かった、それじゃあ。";
+			next;
+			mes "[アサシン・カイ]";
+			mes "申込書に名前とジョブレベルを記入しろ。";
+			next;
+			mes "[アサシン・カイ]";
+			mes ""+ strcharinfo(0) +"？";
+			mes "それがお前の名前か？";
+			mes "妙な響きだな。";
+			mes "ええと……ジョブレベル"+ JobLevel +"……";
+			next;
+			if (JobLevel > 48) {
+				mes "[アサシン・カイ]";
+				mes "ほう？ジョブレベル"+ JobLevel +"だと！？かなり厳しい訓練を積んできたに違いない。上の連中も気に入るだろうよ……";
+				next;
+				mes "[アサシン・カイ]";
+				mes "申込書の記入は終わったか？よし、それをよこせ、試験会場へ送ってやる。幸運を祈るぜ～";
+				next;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 1;
+				ASSIN_Q = 1;
+				changequest 8001,8002;
+				warp "in_moc_16",19,144;
+				end;
+			}
+			else if (JobLevel < 49) {
+				mes "[アサシン・カイ]";
+				mes "悪くない。条件は満たしてるな。悪くないぞ。それで、申込書の記入はもう終わったか？";
+				next;
+				mes "[アサシン・カイ]";
+				mes "それなら申込書をよこせ、試験会場へ送ってやろう、いいな？";
+				mes "幸運を祈るぜ……";
+				next;
+				if (ASSIN_Q3 < 3)
+					ASSIN_Q3 = 2;
+				ASSIN_Q = 1;
+				changequest 8001,8002;
+				warp "in_moc_16",19,144;
+				end;
+			}
+			else {
+				mes "[アサシン・カイ]";
+				mes "一体どうやって";
+				mes "ここに入り込んだんだ？";
+				mes "出てけ！";
+				close2;
+				warp "moc_fild16",206,229;
+				end;
+			}
+		}
+	}
+}
+
+in_moc_16,19,154,0	script	nameless_one	-1,8,2,{
+OnTouch_:
+	if (ASSIN_Q2 < 5) {
+		if (ASSIN_Q2 < 3) {
+			mes "[名もなき者]";
+			mes "ようこそ、客人よ。";
+			mes "ムハハ、無駄なことだ";
+			mes "私を見つけよう、見ようとしても……";
+			next;
+			mes "[名もなき者]";
+			mes "私は完璧に身を隠している！";
+			mes "気配を完全に消せるのは、最も優れたアサシンだけだ！";
+			next;
+			mes "[名もなき者]";
+			mes "私が見えないことが怖くはないか？お前を殺すことなど、いつでも造作もないというのに……";
+			next;
+			if (select("ちびりそうだ！:口だけだろう。かかってこい！") == 1) {
+				mes "[名もなき者]";
+				mes "なるほど、";
+				mes "お前はただの";
+				mes "臆病者に過ぎんようだな。";
+				next;
+				mes "[名もなき者]";
+				mes "ブワーッハッハッハッハ！";
+				mes "怯えて縮こまるのはやめろ！";
+				mes "笑わせてくれるじゃないか！";
+				close;
+			}
+			mes "[名もなき者]";
+			mes "そうか……";
+			mes "お前は";
+			mes "挑戦を望むのか？";
+			mes "この私に！？";
+			next;
+			mes "[名もなき者]";
+			mes "私の歩みの跡には血の川ができる。私に名はいらぬ、私の刃の痛みさえ知れば、それで十分なのだからな。";
+			next;
+			mes "[名もなき者]";
+			mes "私はお前の知識、そして非情になれる素質を試すためにここにいる。どちらもアサシンになるには欠かせないものだ。";
+			next;
+			mes "[名もなき者]";
+			mes "試練を乗り越えるには、";
+			mes "私の問いに正しく答えねばならん。アサシンにしか答えられぬほど難しい問いだ。";
+			next;
+			mes "[名もなき者]";
+			mes "私は非情な者だが、";
+			mes "残酷とは限らない。先に進む前に、何か聞いておきたいことはあるか？";
+			next;
+			ASSIN_Q2 = 0;
+			while(ASSIN_Q2 < 3) {
+				switch(select("……スキルについて？:……ステータスについて？:フン、全部知っている。")) {
+				case 1:
+					mes "[名もなき者]";
+					mes "スキル……？";
+					mes "スキルには状況に応じた使い方もあるが、まずは基本的な概念を教えてやろう。";
+					next;
+					mes "[名もなき者]";
+					mes "まず、^3355FFカタールマスタリー^000000。このスキルはカタール系武器のダメージを上げる。スキルレベルが高いほど、ダメージ増加量も大きくなる。";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FF左手マスタリー^000000と^3355FF右手マスタリー^000000。アサシンはダガー系武器を使う際、左右の手に別々の武器を装備できる。";
+					next;
+					mes "[名もなき者]";
+					mes "だが当然、一本より二本の武器を同時に扱う方が難しい。左手マスタリーと右手マスタリーは、ダガーを二刀流で使う際のダメージを上げてくれる。";
+					next;
+					mes "[名もなき者]";
+					mes "もっとも、ダガーを二刀流で使うつもりがないならこのスキルは不要だ。「右手マスタリー」がレベル2に達すると、「左手マスタリー」の効果が分かるようになる。";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FFソニックブロー^000000は、一度に敵を8回攻撃できる。必要な速度の関係上、このスキルはカタール系武器でしか使えない。";
+					next;
+					mes "[名もなき者]";
+					mes "もちろん、ダメージはSTRと武器攻撃力の影響を受ける。カタールマスタリーがレベル4に達すれば、このスキルの仕組みが分かるはずだ。";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FFグリムトゥース^000000は、地中に身を潜めたまま敵を攻撃できるスキルだ。熟練すれば、離れた場所からでも敵を攻撃できるようになる。";
+					next;
+					mes "[名もなき者]";
+					mes "遠距離攻撃なので、敵に囲まれた時には非常に役立つ。";
+					next;
+					mes "[名もなき者]";
+					mes "このスキルを使うには完全に姿を隠す必要があるため、グリムトゥースを習得する前に、まずクローキングをレベル2まで習得しなければならない。";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FFクローキング^000000を習得するには、ハイディングをレベル2まで習得しなければならない。そうすれば、壁際にいる時に隠れたまま移動できるようになる。";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FFエンチャントポイズン^000000スキルは、使用中の武器に毒を付与できる。これにより武器は一時的に毒属性を帯びる。";
+					next;
+					mes "[名もなき者]";
+					mes "また、一定確率で攻撃した敵を毒状態にできる。パーティメンバーの武器にこのスキルをかけてやることもできる……";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FFポイズンリアクト^000000は、使用者を毒属性の攻撃から守るスキルで、他人にかけることもできる。ただし、先にエンチャントポイズンをレベル3まで習得する必要がある。";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FFベノムダスト^000000は、レッドジェムストーンを消費して一帯を毒で汚染する。汚染の持続時間はスキルレベルとともに長くなる。";
+					next;
+					mes "[名もなき者]";
+					mes "ベノムダストは、エンチャントポイズンをレベル5まで習得した後に覚えられるようになる。";
+					next;
+					mes "[名もなき者]";
+					mes "^3355FFベノムスプラッシャー^000000は、対象に使用してから3秒後、HPが一定量を下回っていると爆発するスキルだ。";
+					next;
+					mes "[名もなき者]";
+					mes "対象が爆発すると、周囲の敵にもダメージが及ぶ。アサシンには欠かせないスキルだ。習得にはポイズンリアクトとベノムダストをそれぞれレベル5まで習得しておく必要がある。";
+					next;
+					mes "[名もなき者]";
+					mes "さて……";
+					mes "アサシンのスキルについて";
+					mes "話せるのはこれで全部だ。";
+					ASSIN_Q2 = 1;
+					next;
+					break;
+				case 2:
+					mes "[名もなき者]";
+					mes "ふむ、ステータスか……";
+					mes "アサシンにとって、敏捷性――つまりAGIが最も重要なステータスだ。";
+					next;
+					mes "[名もなき者]";
+					mes "暗殺のためには、STRがおそらく次に重要なステータスだろう。もっとも、これは私の個人的な見解に過ぎんがな。";
+					next;
+					mes "[名もなき者]";
+					mes "ステータスについて、これ以上の助言はできん。自分にどのステータスが合うか自分で研究し、どんなアサシンになりたいか自分で決めるがいい。";
+					ASSIN_Q2 = 2;
+					next;
+					break;
+				case 3:
+					if (ASSIN_Q2 == 0) {
+						mes "[名もなき者]";
+						mes "全部知っているだと！？";
+						mes "それを判断するのは私だ！";
+						next;
+					}
+					ASSIN_Q2 = 3;
+					break;
+				}
+			}
+			mes "[名もなき者]";
+			mes "フン。では知識を試す時間だ。間違いは1問までしか許されない。";
+			next;
+			mes "[名もなき者]";
+			mes "つまり、この試験に合格するには10問中9問に正解しなければならない。どの答えを間違えたかは教えてやらんぞ……";
+			next;
+			mes "[名もなき者]";
+			mes "準備はいいか？";
+			mes "覚悟しておけ！";
+		}
+		else if (ASSIN_Q2 < 5) {
+			mes "[名もなき者]";
+			mes "そんな簡単な試験にも";
+			mes "合格できず苦労しているのか？";
+			mes "もっとちゃんと";
+			mes "分かっていたはずだろうに。";
+			next;
+			if (select("助けてくれ、どうすれば合格できる？:もう一度挑戦する！") == 1) {
+				mes "[名もなき者]";
+				mes "ふむ、いい質問だ。だがお前はもうアサシンギルドから追放された身、私の知ったことではない……";
+				close2;
+				warp "moc_fild16",206,151;
+				end;
+			}
+			mes "[名もなき者]";
+			mes "そうか……";
+			mes "では行け、だが恐れることはない。お前が己の選択の結末を知る時、私はそばで見届けているとしよう……";
+			next;
+			mes "[名もなき者]";
+			mes "さあ、もう一度お前を試すとしよう！忘れるな、10問中9問正解しなければならない。これはお前への温情だということを覚えておけ……";
+			next;
+			mes "[名もなき者]";
+			mes "10問中9問正解しなければならない。2問以上間違えれば、お前は決してアサシンにはなれん。";
+			next;
+			mes "[名もなき者]";
+			mes "よし、";
+			mes "準備はいいか？";
+			mes "幸運を祈る。";
+		}
+		next;
+		switch(rand(1,3)) {
+		case 1:
+			mes "[名もなき者]";
+			mes "1．グリムトゥース習得に必要ないスキルを選べ。";
+			next;
+			if (select("クローキングLv2:ソニックブローLv5:カタールマスタリーLv4:右手マスタリーLv2") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "2．エンチャントポイズンが持つ属性は？";
+			next;
+			if (select("毒:地:火:風") == 1)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "3．右手マスタリーLv4の効果は？";
+			next;
+			if (select("ダメージ減少の80%を回復:ダメージ減少の90%を回復:ダメージを90%増加:ダメージを108%増加") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "4．ベノムダストの使用に必要なアイテムは？";
+			next;
+			if (select("レッドブラッド:ブルージェムストーン:イエロージェムストーン:レッドジェムストーン") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "5．エンチャントポイズンLv5に達すると習得できるスキルは？";
+			next;
+			if (select("エンヴェノム:ソニックブロー:ベノムスプラッシャー:ベノムダスト") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "6．次のスキルのうち、姿を隠したまま移動できるものは？";
+			next;
+			if (select("ハイディング:バックスライド:クローキング:サンドアタック") == 3)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "7．ベノムスプラッシャーと関係ない条件を選べ。";
+			next;
+			if (select("対象が毒状態。:レッドジェムストーン。:対象の残りHP。") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "8．バドンカード（火属性モンスターへのダメージ+20%）を付けた武器が弱点となるモンスターは？";
+			next;
+			if (select("スチールチョンチョン:デビルチ:エルダーウィロー:バフォメット") == 3)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "9．ダブルアタックの";
+			mes "必要SPは？";
+			next;
+			if (select("15:パッシブスキルなのでSP消費は0。:パッシブスキルなのでSP消費は10。:54") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "10．イズルードダンジョンでの狩りに最適な属性のマインゴーシュは？";
+			next;
+			if (select("風のマインゴーシュ:氷のマインゴーシュ:地のマインゴーシュ:火のマインゴーシュ") == 1)
+				.@assassin_t += 10;
+			break;
+		case 2:
+			mes "[名もなき者]";
+			mes "1．スロット付きのカタールを";
+			mes "ドロップするモンスターは？";
+			next;
+			if (select("シーフバグ:ペコペコ:デザートウルフ:ハンマーコボルド") == 3)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "2．スロット付きのジュルを";
+			mes "ドロップするモンスターは？";
+			next;
+			if (select("マーティン:デザートウルフ:マリオネット:ミスト") == 1)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "3．属性武器を作れる職業は？";
+			next;
+			if (select("商人:ブラックスミス:シーフ:プリースト") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "4．カタール系に属さない武器を選べ。";
+			next;
+			if (select("ジャマダハル:ジュル:カタール:グラディウス") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "5．イズルードダンジョンのモンスターが持つ属性は？";
+			next;
+			if (select("水:火:風:地") == 1)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "6．キュートペットに";
+			mes "できないモンスターは？";
+			next;
+			if (select("ポポリン:ロダフロッグ:スモーキー:ポイズンスポア") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "7．火属性のダガーが最も効果的なモンスターを選べ。";
+			next;
+			if (select("ダガーゴブリン:メイスゴブリン:モーニングスターゴブリン:ハンマーゴブリン") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "8．以下から無属性のカタールを選べ。";
+			next;
+			if (select("燃え盛るカタール:埃まみれの荊のカタール:グールの尖った足骨:インフィルトレイター") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "9．珍しいモンスターはどれか？";
+			next;
+			if (select("ポリン:マスタリング:ゴーストリング:スポア") == 3)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "10．アンデッドでない";
+			mes "モンスターを選べ。";
+			next;
+			if (select("ドレイク:メガロドン:スポア:カリッツバーグ") == 3)
+				.@assassin_t += 10;
+			break;
+		case 3:
+			mes "[名もなき者]";
+			mes "1．「回避増加」スキルがレベル10の時の最大回避率上昇量を選べ。";
+			next;
+			if (select("30:40:160:20") == 1)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "2．ハイディングやクローキング中のシーフ・アサシンを見破るモンスターを選べ。";
+			next;
+			if (select("ワームテイル:アンドレ:マミー:ソルジャースケルトン") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "3．アサシンが同時に使えない武器の組み合わせを選べ。";
+			next;
+			if (select("マインゴーシュ＋グラディウス:スティレット＋マインゴーシュ:カタール＋マインゴーシュ:ハンマー＋スティレット") == 3)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "4．シーフが転職できる町を選べ。";
+			next;
+			if (select("プロンテラ:ルティエ:アルベルタ:モロク") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "5．AGIステータスに影響しないカードを選べ。";
+			next;
+			if (select("バフォメットJr．カード:ウィスパーカード:雌シーフバグカード:雄シーフバグカード") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "6．アサシンの特技として正しいものを選べ。";
+			next;
+			if (select("優れた歌唱の才:優れた読書の才:優れた舞踏の才:優れた回避能力") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "7．ジョブレベル50時にアサシンが得られる最大AGIボーナスを選べ。";
+			next;
+			if (select("7:8:9:10") == 4)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "8．アサシンが装備できないアイテムを選べ。";
+			next;
+			if (select("ダガー:ヘルム:ブーツ:ブローチ") == 2)
+				.@assassin_t += 10;
+			mes "[名もなき者]";
+			mes "9．シーフの転職アイテムを選べ。";
+			next;
+			switch(select("オレンジぬめり茸:レッドぬめり茸:オレンジ網茸:オレンジヘアー茸")) {
+			case 1:
+			case 3:
+				.@assassin_t += 10;
+				break;
+			default:
+				break;
+			}
+			mes "[名もなき者]";
+			mes "10．アサシンにとって最も恩恵が少ないカードを選べ。";
+			next;
+			if (select("ウィスパーカード:エルダーウィローカード:ソルジャースケルトンカード:コボルドカード") == 2)
+				.@assassin_t += 10;
+			break;
+		}
+		if (ASSIN_Q2 == 3) {
+			next;
+			mes "[名もなき者]";
+			mes "フン。";
+			mes "どういうわけか";
+			mes "お前はなかなかの";
+			mes "努力を見せてくれたな。";
+			next;
+			mes "[名もなき者]";
+			mes "そうだな……";
+			mes "お前の得点は";
+			mes ""+ .@assassin_t +"パーセントだ……";
+			if (.@assassin_t > 80) {
+				ASSIN_Q2 = 5;
+				changequest 8002,8003;
+				mes "よくやった。";
+				mes "合格だ。";
+				next;
+				mes "[名もなき者]";
+				mes "だが、まだ別の試験が待っている。次の区画に入れば、指示が与えられるだろう……";
+				close;
+			}
+			else {
+				ASSIN_Q2 = 4;
+				mes "つまり不合格だ！";
+				next;
+				mes "[名もなき者]";
+				mes "この程度の点数でアサシンになれると思っていたのか？修行を積んで、準備ができたらまた来い。";
+				next;
+				mes "[名もなき者]";
+				mes "お前の申込書を処理した「カイ」に助言を求めるといい。";
+				next;
+				mes "[名もなき者]";
+				mes "この言葉も使うといい。^880000iro.ragnarokonline.com^000000。なぜだか知らんが、この言葉は途方もない異界の知識と結びついているようだ……";
+				close2;
+				warp "in_moc_16",19,76;
+				end;
+			}
+		}
+		else if (ASSIN_Q2 == 4) {
+			next;
+			mes "[名もなき者]";
+			mes "お前はなかなかの";
+			mes "努力を見せてくれた……";
+			next;
+			mes "[名もなき者]";
+			mes "そうだな……";
+			mes "お前の得点は";
+			mes ""+ .@assassin_t +"点だ……";
+			if (.@assassin_t > 80) {
+				ASSIN_Q2 = 5;
+				changequest 8002,8003;
+				next;
+				mes "[名もなき者]";
+				mes "今回は不合格ではなかったな！だがまだ終わりではない。次の試験が待っている。先へ進めば、次の試練について知らされるだろう。";
+				close;
+			}
+			else {
+				ASSIN_Q2 = 4;
+				mes "不合格だ！";
+				next;
+				mes "[名もなき者]";
+				mes "お前にはまるで資質が足りん。それでよくアサシンになろうなどと思えたものだ！？";
+				next;
+				mes "[名もなき者]";
+				mes "よくシーフになれたものだと驚くくらいだ。一旦下がって、自分が何をしているのか分かるようになったら戻ってこい。";
+				next;
+				mes "[名もなき者]";
+				mes "フン、本当に何も分からないというなら、少しだけ助言してやろう。";
+				next;
+				mes "[名もなき者]";
+				mes "お前の受験申込を担当した「カイ」に聞きに行け、力になってくれるかもしれん。";
+				next;
+				mes "[名もなき者]";
+				mes "この古の言葉、^3355FFiro.ragnarokonline.com^000000を活用するのもいいだろう。伝えられるところでは、この言葉は途方もない異界の知識と結びついているという……";
+				close2;
+				warp "in_moc_16",19,76;
+				end;
+			}
+		}
+	}
+	else {
+		mes "[名もなき者]";
+		mes "……お前を見張り続けるとしよう。";
+		close;
+	}
+}
+
+in_moc_16,21,165,2	script	待機室#ASNTEST::Standby Room#ASNTEST	725,{
+	end;
+
+OnInit:
+	//disablenpc "Standby Room#ASNTEST";
+	hideonnpc "Standby Room#ASNTEST";
+	waitingroom "待機室",10,"Standby Room#ASNTEST::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+
+OnStartArena:
+	warpwaitingpc "in_moc_16", 66, 151;
+	attachrid($@warpwaitingpc[0]);
+	if (ASSIN_Q2 < 5) {
+		warpchar "in_moc_16",20,145,getcharid(0);
+		end;
+	}
+	donpcevent "Beholder#ASNTEST::OnEnable";
+	donpcevent "Keeper of the Door#ASN::OnDisable";
+	set getvariableofnpc(.DisableTraps,"Beholder#ASNTEST"),0;
+	disablewaitingroomevent;
+	end;
+
+OnStart:
+	enablewaitingroomevent;
+	end;
+}
+
+in_moc_16,21,165,2	script	試験案内係#ASN::Test Guide#ASN	725,4,4,{
+	end;
+
+OnTouch_:
+	if (ASSIN_Q2 < 5) {
+		mes "[バーカディ]";
+		mes "筆記試験に合格しないと次の試練には進めない。名もなき者に話しかけてくるんだな……";
+		close2;
+		warp "in_moc_16",19,76;
+		end;
+	}
+	if (ASSIN_Q == 1 && ASSIN_Q2 == 5) {
+		mes "[バーカディ]";
+		mes ""+ strcharinfo(0) +"……";
+		mes "試験に合格したのか……？";
+		next;
+		mes "[バーカディ]";
+		mes "正直言えば、他に条件など付けずに転職させてやりたいくらいだ。アサシンとしての基本的な知識すら持たない情けない奴が多すぎるんでな……";
+		next;
+		mes "[バーカディ]";
+		mes "俺たちはアサシンとしての誇りを保ち、真に偉大な存在でなければならん！残念ながら、誇りのかけらもない馬鹿者が多すぎるがな。";
+		next;
+		mes "[バーカディ]";
+		mes "全てのアサシンは、討ち取った敵に、流させた血に敬意を払い、何よりも誇りの感覚を保ち続けなければならん！";
+		next;
+		mes "[バーカディ]";
+		mes "よし。次の試練では、標的を素早く見つける能力を試す。";
+		next;
+		mes "[バーカディ]";
+		mes "アサシンになるつもりなら、瞬時に敵味方を見分けられるかどうかを見極める必要がある。";
+		next;
+		mes "[バーカディ]";
+		mes "この試験の主な目的は、^008800Job change target^000000という名前のモンスターをできるだけ多く見つけて倒すことだ。";
+		next;
+		mes "[バーカディ]";
+		mes "少なくとも6体の";
+		mes "^008800Job change target^000000を倒さねばならない。よく似たモンスターに紛れているから、注意が必要だぞ……";
+		next;
+		mes "[バーカディ]";
+		mes "失敗すればこの試験は最初からやり直しだ。上の部屋へ行けば";
+		mes "試験会場へ転送される。";
+		next;
+		mes "[バーカディ]";
+		mes "試験は一度に一人しか受けられない。誰かが受験中なら、その人が終わるまで待つ必要がある。";
+		close;
+	}
+	else {
+		mes "[バーカディ]";
+		mes "おい、あんまり";
+		mes "自分を責めるな。元気を出せ！";
+		next;
+		mes "[バーカディ]";
+		mes "ふむ、疲れているなら連れ戻してやってもいい。もちろん、ここを離れれば転職試験はまたやり直しだ。それでどうする？";
+		next;
+		if (select("続ける！:今は転職試験をやめておく。") == 1) {
+			mes "[バーカディ]";
+			mes "いい選択だ！";
+			mes "忘れるな、";
+			mes "6体の";
+			mes "^008800Job change target^000000を見つけて倒さねばならないぞ！";
+			mes "幸運を祈る！";
+			close;
+		}
+		mes "[バーカディ]";
+		mes "分かった……";
+		mes "少し";
+		mes "休みが必要なようだな……";
+		close2;
+		ASSIN_Q = 0;
+		ASSIN_Q2 = 0;
+		changequest 8003,8000;
+		warp "in_moc_16",19,13;
+		end;
+	}
+}
+
+in_moc_16,1,1,0	script	Beholder#ASNTEST	-1,{
+	end;
+
+OnEnable:
+	.MyMobs = 6;
+	// Target mobs
+	monster "in_moc_16",62,161,"Job change target",1002,1,"Beholder#ASNTEST::OnMyMobDead";
+	monster "in_moc_16",85,169,"Job change target",1063,1,"Beholder#ASNTEST::OnMyMobDead";
+	monster "in_moc_16",88,152,"Job change target",1002,1,"Beholder#ASNTEST::OnMyMobDead";
+	monster "in_moc_16",90,143,"Job change target",1113,1,"Beholder#ASNTEST::OnMyMobDead";
+	monster "in_moc_16",74,167,"Job change target",1031,1,"Beholder#ASNTEST::OnMyMobDead";
+	monster "in_moc_16",77,173,"Job change target",1002,1,"Beholder#ASNTEST::OnMyMobDead";
+	// Decoy mobs
+	monster "in_moc_16",62,161,"Job change creature",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",85,169,"Job change creature",1031,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",79,174,"Job change creature",1113,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",85,156,"Job change creature",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",74,171,"Job change monster",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",68,173,"Job change dummy",1113,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",65,158,"Battle test target",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",60,158,"Warrior test target",1113,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",64,169,"Job change targets",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",71,173,"Jobs change target",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",77,172,"Please don't hit me",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",76,172,"Job change sample",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",75,172,"Not me",1113,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",67,167,"I got yours right here",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",86,170,"Job changes target",1031,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",86,171,"Job quest target",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",85,170,"Job target change",1113,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",89,171,"Hit me",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",85,170,"Battle Monster",1031,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",89,156,"Bouncer",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",89,156,"Mungamorp",1113,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",89,156,"Battle test target",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",89,156,"Dew of the Battle field",1113,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",89,156,"Tear of test",1031,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",83,169,"Evil Druid",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",63,158,"Doppelganger",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",63,157,"Job change dummy",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",64,159,"Job ready dummy",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",63,159,"Job change ready",1063,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",63,159,"Archer test target",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",63,159,"Swordman test target",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",83,148,"Thief test target",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",82,148,"Acolyte test target",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	monster "in_moc_16",84,148,"Merchant test target",1002,1,"Beholder#ASNTEST::OnMyMobDead2";
+	initnpctimer;
+	end;
+
+OnReset:
+	killmonster "in_moc_16","Beholder#ASNTEST::OnMyMobDead";
+	killmonster "in_moc_16","Beholder#ASNTEST::OnMyMobDead2";
+	stopnpctimer;
+	donpcevent "Standby Room#ASNTEST::OnStart";
+	end;
+
+OnResetmob:
+	killmonster "in_moc_16","Beholder#ASNTEST::OnMyMobDead";
+	killmonster "in_moc_16","Beholder#ASNTEST::OnMyMobDead2";
+	stopnpctimer;
+	end;
+
+OnMyMobDead:
+	.MyMobs--;
+	if (.MyMobs < 1) {
+		mapannounce "in_moc_16","なかなかいい調子だな。その調子で続けろ！",bc_map;
+		ASSIN_Q = 3;
+		changequest 8003,8004;
+		donpcevent "timestopper#1::OnEnable";
+		donpcevent "Keeper of the Door#ASN::OnEnable";
+		donpcevent "Beholder#ASNTEST::OnResetmob";
+		.DisableTraps = 1;
+		stopnpctimer;
+	}
+	else {
+		mapannounce "in_moc_16","よし、いい感じだ！もう少しだ、頑張れ！",bc_map;
+	}
+	end;
+
+OnMyMobDead2:
+	mapannounce "in_moc_16",strcharinfo(0) + "！間違えたな！連れ戻すぞ！",bc_map;
+	ASSIN_Q = 2;
+	warp "in_moc_16",19,161;
+	donpcevent "Beholder#ASNTEST::OnReset";
+	end;
+
+OnTimer1000:
+	mapannounce "in_moc_16"," よし、試験を開始する！",bc_map;
+	end;
+
+OnTimer2000:
+	mapannounce "in_moc_16","前にも言った通り、「Job change target」という名前のモンスターだけを見つけて倒せ！",bc_map;
+	end;
+
+OnTimer3000:
+	mapannounce "in_moc_16","この試験の目的は、敵とそれ以外を素早く見分ける能力を調べることだ！",bc_map;
+	end;
+
+OnTimer4000:
+	mapannounce "in_moc_16","試験時間は3分だ！1分経過するごとに知らせてやる。",bc_map;
+	end;
+
+OnTimer5000:
+	mapannounce "in_moc_16","よし、ちょうど3分間だ。動け！動け！",bc_map;
+	end;
+
+OnTimer65000:
+	mapannounce "in_moc_16","残り2分。言った通り、「Job change target」のモンスターを仕留めろ！",bc_map;
+	end;
+
+OnTimer125000:
+	mapannounce "in_moc_16","残り1分。",bc_map;
+	end;
+
+OnTimer180000:
+	mapannounce "in_moc_16","残り5秒……",bc_map;
+	end;
+
+OnTimer181000:
+	mapannounce "in_moc_16","残り4秒……",bc_map;
+	end;
+
+OnTimer182000:
+	mapannounce "in_moc_16","残り3秒……",bc_map;
+	end;
+
+OnTimer183000:
+	mapannounce "in_moc_16","残り2秒……",bc_map;
+	end;
+
+OnTimer184000:
+	mapannounce "in_moc_16","残り1秒。",bc_map;
+	end;
+
+OnTimer185000:
+	mapannounce "in_moc_16","時間切れだ！",bc_map;
+	mapannounce "in_moc_16","ふん、ご苦労なことだ……時間を無駄にしたいならそれでいい。もう一度挑戦するんだな！",bc_map;
+	//ASSIN_Q = 2;
+	end;
+
+OnTimer186000:
+	areawarp "in_moc_16",60,136,93,177,"in_moc_16",19,161;
+	end;
+
+OnTimer187000:
+	donpcevent "Beholder#ASNTEST::OnReset";
+	end;
+}
+
+in_moc_16,68,158,0	script	01_1::SinTrap	-1,0,0,{
+OnTouch_:
+	if (getvariableofnpc(.DisableTraps,"Beholder#ASNTEST")  < 1) {
+		mapannounce "in_moc_16",strcharinfo(0) + "、罠にかかったな。送り返してやる。",bc_map;
+		ASSIN_Q = 2;
+		warp "in_moc_16",19,161;
+		donpcevent "Beholder#ASNTEST::OnResetmob";
+		donpcevent "Standby Room#ASNTEST::OnStart";
+	}
+	end;
+}
+
+in_moc_16,69,158,0	duplicate(SinTrap)	01_2	-1,0,0
+in_moc_16,68,159,0	duplicate(SinTrap)	01_3	-1,0,0
+in_moc_16,69,159,0	duplicate(SinTrap)	01_4	-1,0,0
+in_moc_16,64,162,0	duplicate(SinTrap)	02_1	-1,0,0
+in_moc_16,65,162,0	duplicate(SinTrap)	02_2	-1,0,0
+in_moc_16,64,163,0	duplicate(SinTrap)	02_3	-1,0,0
+in_moc_16,65,163,0	duplicate(SinTrap)	02_4	-1,0,0
+in_moc_16,62,168,0	duplicate(SinTrap)	03_1	-1,0,0
+in_moc_16,63,168,0	duplicate(SinTrap)	03_2	-1,0,0
+in_moc_16,62,169,0	duplicate(SinTrap)	03_3	-1,0,0
+in_moc_16,63,169,0	duplicate(SinTrap)	03_4	-1,0,0
+in_moc_16,66,170,0	duplicate(SinTrap)	04_1	-1,0,0
+in_moc_16,67,170,0	duplicate(SinTrap)	04_2	-1,0,0
+in_moc_16,66,171,0	duplicate(SinTrap)	04_3	-1,0,0
+in_moc_16,67,171,0	duplicate(SinTrap)	04_4	-1,0,0
+in_moc_16,64,174,0	duplicate(SinTrap)	05_1	-1,0,0
+in_moc_16,64,175,0	duplicate(SinTrap)	05_2	-1,0,0
+in_moc_16,65,174,0	duplicate(SinTrap)	05_3	-1,0,0
+in_moc_16,65,175,0	duplicate(SinTrap)	05_4	-1,0,0
+in_moc_16,72,174,0	duplicate(SinTrap)	06_1	-1,0,0
+in_moc_16,72,175,0	duplicate(SinTrap)	06_2	-1,0,0
+in_moc_16,73,174,0	duplicate(SinTrap)	06_3	-1,0,0
+in_moc_16,73,175,0	duplicate(SinTrap)	06_4	-1,0,0
+in_moc_16,72,166,0	duplicate(SinTrap)	07_1	-1,0,0
+in_moc_16,72,167,0	duplicate(SinTrap)	07_2	-1,0,0
+in_moc_16,73,166,0	duplicate(SinTrap)	07_3	-1,0,0
+in_moc_16,73,167,0	duplicate(SinTrap)	07_4	-1,0,0
+in_moc_16,72,168,0	duplicate(SinTrap)	08_1	-1,0,0
+in_moc_16,72,169,0	duplicate(SinTrap)	08_2	-1,0,0
+in_moc_16,73,168,0	duplicate(SinTrap)	08_3	-1,0,0
+in_moc_16,73,169,0	duplicate(SinTrap)	08_4	-1,0,0
+in_moc_16,78,168,0	duplicate(SinTrap)	09_1	-1,0,0
+in_moc_16,78,169,0	duplicate(SinTrap)	09_2	-1,0,0
+in_moc_16,79,168,0	duplicate(SinTrap)	09_3	-1,0,0
+in_moc_16,79,169,0	duplicate(SinTrap)	09_4	-1,0,0
+in_moc_16,80,172,0	duplicate(SinTrap)	10_1	-1,0,0
+in_moc_16,81,172,0	duplicate(SinTrap)	10_2	-1,0,0
+in_moc_16,82,172,0	duplicate(SinTrap)	10_3	-1,0,0
+in_moc_16,83,172,0	duplicate(SinTrap)	10_4	-1,0,0
+in_moc_16,80,173,0	duplicate(SinTrap)	10_5	-1,0,0
+in_moc_16,81,173,0	duplicate(SinTrap)	10_6	-1,0,0
+in_moc_16,82,173,0	duplicate(SinTrap)	10_7	-1,0,0
+in_moc_16,83,173,0	duplicate(SinTrap)	10_8	-1,0,0
+in_moc_16,88,174,0	duplicate(SinTrap)	11_1	-1,0,0
+in_moc_16,88,175,0	duplicate(SinTrap)	11_2	-1,0,0
+in_moc_16,89,174,0	duplicate(SinTrap)	11_3	-1,0,0
+in_moc_16,89,175,0	duplicate(SinTrap)	11_4	-1,0,0
+in_moc_16,86,166,0	duplicate(SinTrap)	12_1	-1,0,0
+in_moc_16,86,167,0	duplicate(SinTrap)	12_2	-1,0,0
+in_moc_16,87,166,0	duplicate(SinTrap)	12_3	-1,0,0
+in_moc_16,87,167,0	duplicate(SinTrap)	12_4	-1,0,0
+in_moc_16,90,164,0	duplicate(SinTrap)	13_1	-1,0,0
+in_moc_16,90,165,0	duplicate(SinTrap)	13_2	-1,0,0
+in_moc_16,91,164,0	duplicate(SinTrap)	13_3	-1,0,0
+in_moc_16,91,165,0	duplicate(SinTrap)	13_4	-1,0,0
+in_moc_16,84,160,0	duplicate(SinTrap)	14_1	-1,0,0
+in_moc_16,85,160,0	duplicate(SinTrap)	14_2	-1,0,0
+in_moc_16,86,160,0	duplicate(SinTrap)	14_3	-1,0,0
+in_moc_16,87,160,0	duplicate(SinTrap)	14_4	-1,0,0
+in_moc_16,88,160,0	duplicate(SinTrap)	14_5	-1,0,0
+in_moc_16,89,160,0	duplicate(SinTrap)	14_6	-1,0,0
+in_moc_16,84,161,0	duplicate(SinTrap)	14_7	-1,0,0
+in_moc_16,85,161,0	duplicate(SinTrap)	14_8	-1,0,0
+in_moc_16,86,161,0	duplicate(SinTrap)	14_9	-1,0,0
+in_moc_16,87,161,0	duplicate(SinTrap)	14_10	-1,0,0
+in_moc_16,88,161,0	duplicate(SinTrap)	14_11	-1,0,0
+in_moc_16,89,161,0	duplicate(SinTrap)	14_12	-1,0,0
+in_moc_16,86,154,0	duplicate(SinTrap)	15_1	-1,0,0
+in_moc_16,86,155,0	duplicate(SinTrap)	15_2	-1,0,0
+in_moc_16,87,154,0	duplicate(SinTrap)	15_3	-1,0,0
+in_moc_16,87,155,0	duplicate(SinTrap)	15_4	-1,0,0
+in_moc_16,84,150,0	duplicate(SinTrap)	16_1	-1,0,0
+in_moc_16,84,151,0	duplicate(SinTrap)	16_2	-1,0,0
+in_moc_16,85,150,0	duplicate(SinTrap)	16_3	-1,0,0
+in_moc_16,85,151,0	duplicate(SinTrap)	16_4	-1,0,0
+in_moc_16,90,150,0	duplicate(SinTrap)	17_1	-1,0,0
+in_moc_16,90,151,0	duplicate(SinTrap)	17_2	-1,0,0
+in_moc_16,91,150,0	duplicate(SinTrap)	17_3	-1,0,0
+in_moc_16,91,151,0	duplicate(SinTrap)	17_4	-1,0,0
+in_moc_16,86,146,0	duplicate(SinTrap)	18_1	-1,0,0
+in_moc_16,86,147,0	duplicate(SinTrap)	18_2	-1,0,0
+in_moc_16,87,146,0	duplicate(SinTrap)	18_3	-1,0,0
+in_moc_16,87,147,0	duplicate(SinTrap)	18_4	-1,0,0
+
+in_moc_16,87,137,0	script	Keeper of the Door#ASN	45,2,1,{
+OnInit:
+	disablenpc "Keeper of the Door#ASN";
+	end;
+
+OnTouch_:
+	donpcevent "Thomas#ASNTEST::OnDisable";
+	if (ASSIN_Q == 3)
+		ASSIN_Q = 3;
+	else
+		ASSIN_Q = 4;
+	warp "in_moc_16",87,102;
+	savepoint "in_moc_16",16,13,1,1;
+	end;
+
+OnEnable:
+	mapannounce "in_moc_16","座標87 137、次の部屋への扉が開いた。",bc_map;
+	enablenpc "Keeper of the Door#ASN";
+	end;
+
+OnDisable:
+	disablenpc "Keeper of the Door#ASN";
+	end;
+}
+
+in_moc_16,3,3,0	script	timestopper#1	-1,{
+OnEnable:
+	initnpctimer;
+	end;
+
+OnTimer187000:
+	donpcevent "Thomas#ASNTEST::OnDisable";
+	stopnpctimer;
+	end;
+
+OnDisable:
+	stopnpctimer;
+	end;
+
+OnMyMobDead:
+	mapannounce "in_moc_16","おい、今のは一体何だ！？モンスターを殺すなと言ったはずだぞ！",bc_map;
+	mapannounce "in_moc_16","連れ戻してやる……（はぁ……）",bc_map;
+	ASSIN_Q = 3;
+	warp "in_moc_16",87,102;
+	killmonster "in_moc_16","timestopper#1::OnMyMobDead";
+	end;
+}
+
+in_moc_16,89,98,1	script	トーマス#ASNTEST::Thomas#ASNTEST	118,5,1,{
+	end;
+
+OnTouch_:
+	if (ASSIN_Q == 4) {
+		mes "[トーマス]";
+		mes "くそ……！ひどく苦しそうな顔をしてるな。^666666（はぁ）^000000ちょっと待て、HPとSPを回復させてやろう……";
+		percentheal 100,100;
+		next;
+		mes "[トーマス]";
+		mes "苦戦してるみたいだな。力みすぎか、それとも";
+		mes "頑張りが足りないか、どっちかだ、坊主。";
+		next;
+		switch(select("もう一度挑戦する！:や……やめる！")) {
+		case 1:
+			mes "[トーマス]";
+			mes "ふむ。まあ、いいだろう。";
+			mes "せいぜい頑張れよ。";
+			close;
+		case 2:
+			mes "[トーマス]";
+			mes "ほう……";
+			mes "試験をやめるのか。まあ、これ以上俺たちの時間を無駄にしたくないってことだろうな。";
+			next;
+			mes "[トーマス]";
+			mes "ああ、そうだ、町でリスポーン地点をセーブし忘れるなよ。";
+			close2;
+			mapannounce "in_moc_16",strcharinfo(0) + "は怖気づいて試験を放棄した……次は誰だ！？",bc_map;
+			ASSIN_Q = 0;
+			ASSIN_Q2 = 0;
+			changequest 8004,8000;
+			savepoint "in_moc_16",18,14,1,1;
+			warp "in_moc_16",18,14;
+			donpcevent "Standby Room#ASNTEST::OnStart";
+			end;
+		}
+	}
+
+	mes "[トーマス]";
+	mes "よう、俺はトーマスだ。お前のハイディングスキルの使い方を試す係だ。やれると思うか？";
+	next;
+	mes "[トーマス]";
+	mes "よく聞け。この試験ではモンスターを一切殺してはいけない。目標はこの部屋の反対側にいる「バーカディ」のところへたどり着くことだ。";
+	next;
+	mes "[トーマス]";
+	mes "つまり、モンスターを一匹も殺さずにこの部屋の反対側まで行き、「バーカディ」に会うんだ。分かったか？";
+	next;
+	mes "[トーマス]";
+	mes "逃げ出したり、鼻血を出して気絶したりでもしたら、不合格にするからな。話はここまでだ。お前の実力とやらを見せてもらおうか。";
+	close2;
+	ASSIN_Q = 4;
+
+	monster "in_moc_16",81,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",82,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",83,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",84,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",85,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",86,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",88,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",89,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",90,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",77,77,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",78,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",79,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",80,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",81,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",91,55,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",92,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",93,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",94,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",95,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",96,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",97,56,"Mummy",1041,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",76,62,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",79,62,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",79,65,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",76,65,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",96,62,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",96,65,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",99,62,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	monster "in_moc_16",99,65,"Hydra",1068,1,"timestopper#1::OnMyMobDead";
+	end;
+
+OnDisable:
+	donpcevent "Standby Room#ASNTEST::OnStart";
+	killmonster "in_moc_16","timestopper#1::OnMyMobDead";
+	end;
+}
+
+in_moc_16,87,48,2	script	バーカディ#ASN::Barcardi#ASN	725,2,2,{
+	end;
+OnTouch_:
+	donpcevent "timestopper#1::OnDisable";
+	donpcevent "Thomas#ASNTEST::OnDisable";
+	mes "[バーカディ]";
+	mes "おお！おめでとう！";
+	mes "ギルドマスターの部屋へ進んでいいぞ。幸運を祈る！！";
+	close2;
+	ASSIN_Q = 5;
+	changequest 8004,8005;
+	warp "in_moc_16",181,183;
+	end;
+}
+
+in_moc_16,182,169,0	script	Maze Assistant	45,1,1,{
+OnTouch_:
+	if (ASSIN_Q == 5 || ASSIN_Q == 6) {
+		warp "in_moc_16",181,183;
+		ASSIN_Q++;
+		if (!isbegin_quest(8006))
+			changequest 8005,8006;
+	}
+	else {
+		mapannounce "in_moc_16",strcharinfo(0)+"が「ギルドマスターの部屋」に入った。",bc_map;
+		savepoint "in_moc_16",181,183,1,1;
+		donpcevent "Guildmaster#ASN1::OnCast";
+		warp "in_moc_16",167,113;
+		end;
+	}
+}
+
+in_moc_16,167,110,0	script	Guildmaster#ASN1	-1,3,1,{
+OnTouch_:
+	savepoint "in_moc_16",167,110,1,1;
+	mes "[ギルドマスター]";
+	mes "ようこそ。";
+	mes "ここは「ギルドマスターの部屋」、アサシンギルドの最深部だ。";
+	next;
+	mes "[ギルドマスター]";
+	mes "簡単な試験を出そう。この迷路を抜けて私のところまで来るがいい。この迷路こそが、侵入者からギルドを守っているのだ。";
+	next;
+	mes "[ギルドマスター]";
+	mes "迷路の先で";
+	mes "お前に会えるのを";
+	mes "楽しみにしているぞ。";
+	close;
+
+OnCast:
+	mapannounce "in_moc_16","……次の志願者よ、入るがいい。",bc_map;
+	end;
+}
+
+in_moc_16,149,80,4	script	ギルドマスター#ASN2::Guildmaster#ASN2	106,1,1,{
+	end;
+OnTouch_:
+	if (checkre(0))
+		savepoint "morocc",100,100,1,1;
+	else
+		savepoint "moc_ruins",79,99,1,1;
+	if (ASSIN_Q == 7 && BaseJob == Job_Thief) {
+		ASSIN_Q = 8;
+		mes "[ギルドマスター]";
+		mes "よく来た。";
+		mes "迷路を歩かせて";
+		mes "しまったこと、";
+		mes "すまなかったな。";
+		next;
+		mes "[ギルドマスター]";
+		mes "先ほどお前の経歴を見せてもらった。肝の据わったシーフとして知られているそうだな。お前ほどの器のアサシン候補は滅多に来ない。";
+		next;
+		mes "[ギルドマスター]";
+		mes "よければいくつか質問させてもらいたい。緊張する必要はない。ただ、嘘をつけば殺す、それだけは覚えておけ。";
+		next;
+		mes "[ギルドマスター]";
+		mes "まず、アサシンにとって最も大切なものは何だと思う？";
+		next;
+		switch(select("より大きな力。:アサシンとしての誇り。:絶え間ない鍛錬。")) {
+		case 1:
+			mes "[ギルドマスター]";
+			mes "より大きな力か……";
+			mes "確かに、シーフより";
+			mes "アサシンの方が";
+			mes "遥かに強いと思うかもしれん。";
+			next;
+			mes "[ギルドマスター]";
+			mes "だが、何のために力を求める？見せびらかすためか？私怨を晴らすためか？その力を何のために使うつもりだ？";
+			next;
+			mes "[ギルドマスター]";
+			mes "なぜ";
+			mes "今よりも";
+			mes "強くなりたいのだ？";
+			next;
+			switch(select("復讐だ……！:金だ～:旅をしたい。")) {
+			case 1:
+				mes "[ギルドマスター]";
+				mes "復讐……？";
+				mes "ああ、分かる。誰しもいずれは、誰かに恨みを抱くものだ。";
+				next;
+				mes "[ギルドマスター]";
+				mes "だが、私情に囚われることは許されないと心得ておけ。任務は疑問を持たず遂行する。それが我々のやり方だ。";
+				next;
+				mes "[ギルドマスター]";
+				mes "アサシンであるとは、";
+				mes "己を捨てることだ。";
+				next;
+				break;
+			case 2:
+				ASSIN_Q = 9;
+				mes "[ギルドマスター]";
+				mes "金銭的な理由か……？生きるのに金が要ることは否定しない。だがアサシンであるとは、もっと高い目的のために生きることだ。";
+				next;
+				mes "[ギルドマスター]";
+				mes "アサシンであるとは、";
+				mes "そうした俗世の";
+				mes "執着を捨てることだ……";
+				next;
+				break;
+			case 3:
+				ASSIN_Q = 10;
+				mes "[ギルドマスター]";
+				mes "いい考えだ。世界を旅すれば、経験を広げることができる。";
+				next;
+				mes "[ギルドマスター]";
+				mes "我々の多くは群れることを避けるものだが、お前もすでに気づいているだろう？";
+				next;
+				mes "[ギルドマスター]";
+				mes "ある意味、アサシンであるとは、孤独に生きることだ……";
+				next;
+				break;
+			}
+			break;
+		case 2:
+			mes "[ギルドマスター]";
+			mes "アサシンとしての誇りか……";
+			mes "他のアサシンにそう言われたのか……？";
+			next;
+			mes "[ギルドマスター]";
+			mes "誇りは確かに大切だ。だが実力が伴わなければ、誇りなど何の価値もない。";
+			next;
+			mes "[ギルドマスター]";
+			mes "私に会う前にお前が出会ったアサシンたちの多くは、共に幾多の苦難を乗り越えてきた同胞だ。";
+			next;
+			mes "[ギルドマスター]";
+			mes "彼らが誇りと威厳をあれほど大切にする理由も分かる。さて、お前はなぜアサシンになりたいのだ？";
+			next;
+			switch(select("孤独が好きだ。:アサシンとして稼ぎたい。:ただ面白そうに見えたから。")) {
+			case 1:
+				ASSIN_Q = 11;
+				mes "[ギルドマスター]";
+				mes "分かっているようだな……";
+				mes "我々は孤独だ。仲間同士でいる時でさえ、常に独りなのだ……";
+				next;
+				mes "[ギルドマスター]";
+				mes "ある意味、";
+				mes "アサシンであるとは";
+				mes "無に等しいと言えよう。";
+				next;
+				mes "[ギルドマスター]";
+				mes "だが、前にも言った通り、我々には仲間がいる。任務の際は、少なくとも一人は自分を支えてくれる仲間を持つことを勧める。";
+				next;
+				break;
+			case 2:
+				ASSIN_Q = 12;
+				mes "[ギルドマスター]";
+				mes "まあ、生活のために金が必要なのは否定しない。だが、金よりもっと大切な何かを追い求めるべきだとは思わないか？";
+				next;
+				break;
+			case 3:
+				ASSIN_Q = 13;
+				mes "[ギルドマスター]";
+				mes "見た目や格好は所詮うわべに過ぎん。多くの者がそう考えているとは、嘆かわしいことだ……";
+				next;
+				mes "[ギルドマスター]";
+				mes "本質を見失った、そのような恥知らずなアサシンは、我々自身の手で始末することになる……";
+				next;
+				mes "[ギルドマスター]";
+				mes "忘れるな……";
+				mes "アサシンは遊びではない。我々は見た目や流行を追うような者たちではないし、これからもそうなることはない。";
+				next;
+				break;
+			}
+			break;
+		case 3:
+			mes "[ギルドマスター]";
+			mes "絶え間ない鍛錬か……";
+			mes "お前には素質があると思う。アサシンになりたい理由はあるのか？";
+			next;
+			mes "[ギルドマスター]";
+			mes "シーフとは違い、アサシンという職業に甘えは許されない。";
+			mes "お前が絶え間なく鍛錬を積む理由を教えろ。";
+			next;
+			switch(select("技を磨くためだ。:自分の目標だからだ。:精神修養のためだ。")) {
+			case 1:
+				ASSIN_Q = 14;
+				mes "[ギルドマスター]";
+				mes "スキルの習得は、アサシンという職業についていれば自然と身につくものだ。だが、鍛錬の価値をスキルだけに見出すな。";
+				next;
+				mes "[ギルドマスター]";
+				mes "そう考えているうちは、アサシンになっても満たされることはないだろう……";
+				next;
+				break;
+			case 2:
+				ASSIN_Q = 15;
+				mes "[ギルドマスター]";
+				mes "自分の目標か。まあ、目標というものは持つべきなのだろうな……";
+				next;
+				mes "[ギルドマスター]";
+				mes "かつて目標を持った男を知っていた。昔、任務先で出会った男でな、レベル54のナイトになるまでは死にたくないと言っていた。";
+				next;
+				mes "[ギルドマスター]";
+				mes "残念ながら、奴がレベル52になる前に殺す羽目になったがな……^666666（はぁ）^000000まあ、仕方あるまい。";
+				next;
+				mes "お前のことが少々心配だ。一度アサシンになれば、もう後戻りはできないと分かっているだろうな……";
+				next;
+				break;
+			case 3:
+				ASSIN_Q = 16;
+				mes "[ギルドマスター]";
+				mes "いい心がけだ……";
+				mes "自分を高める良い方法だ。肉体を鍛える術は知っていても、精神の在り方を知らぬ者を数多く見てきた。";
+				next;
+				mes "[ギルドマスター]";
+				mes "偽善者でないことを願う。精神の修練こそが、生き延びるための最良の道だ。";
+				next;
+				break;
+			}
+			break;
+		}
+		mes "[ギルドマスター]";
+		mes "悲しいことに、何も分かっていないくせにアサシンになりたがる間抜けもいる……";
+		next;
+		mes "[ギルドマスター]";
+		mes "そういう連中は問題を起こし、我々に恥をかかせる。その行いはしばしば悲惨な結末を招く。";
+		next;
+		mes "[ギルドマスター]";
+		mes "アサシンになった暁には、その一人にならぬよう気をつけるのだな。責任はすべてお前自身の肩にかかっている……";
+		next;
+		mes "[ギルドマスター]";
+		mes "では、今すぐアサシンになれるとしたら、お前はまず何をする？";
+		next;
+		switch(select("すぐに狩りに出る。:待っている人がいる。:アサシンとして何ができるか確かめる。")) {
+		case 1:
+			mes "[ギルドマスター]";
+			mes "狩りか……";
+			mes "それだけか……？";
+			next;
+			switch(select("早くレベルを上げたい。:アサシンのスキルを試したい。:シーフでは行けなかった場所へ行く。")) {
+			case 1:
+				.@assassin_sangdam += 10;
+				mes "[ギルドマスター]";
+				mes "無茶な真似はするな……";
+				mes "アサシンになったからといって、別人になれるわけではない。運を頼りにするな。";
+				next;
+				break;
+			case 2:
+				.@assassin_sangdam += 5;
+				mes "[ギルドマスター]";
+				mes "己を見つめ直すのはいいことだ。能力の大きな変化に胸が高鳴るのは理解できる。";
+				next;
+				mes "[ギルドマスター]";
+				mes "だがその間も、アサシンとしての心構えを忘れないでほしい。";
+				next;
+				break;
+			case 3:
+				mes "[ギルドマスター]";
+				mes "よかろう……";
+				mes "見たことのない場所を探索するか。だが、アサシンになったからといって別人になれるわけではないと知っておけ。";
+				next;
+				mes "[ギルドマスター]";
+				mes "無理をしすぎるな。";
+				mes "時間をかけて、賢く旅をするのだ。";
+				next;
+				break;
+			}
+			break;
+		case 2:
+			mes "[ギルドマスター]";
+			mes "お前を待っているのは";
+			mes "一体誰なのか、聞いてもいいか？";
+			next;
+			switch(select("友人だ。:ギルドの仲間だ。:恋人だ。")) {
+			case 1:
+				.@assassin_sangdam += 5;
+				mes "[ギルドマスター]";
+				mes "そうか……";
+				mes "独りでいる時でさえお前を気にかけてくれる、そのことに感謝するのだな。";
+				next;
+				break;
+			case 2:
+				.@assassin_sangdam += 5;
+				mes "[ギルドマスター]";
+				mes "いいことだ……";
+				mes "命を懸けられる仲間か……";
+				next;
+				mes "[ギルドマスター]";
+				mes "アサシンとしてなら、彼らに知られぬまま、彼らのためにできる仕事を見つけるといい……";
+				next;
+				break;
+			case 3:
+				mes "[ギルドマスター]";
+				mes "ハハ、体の求めるものは時に無視しがたいものだ。それも人としての性、受け入れるのが一番だろう。";
+				next;
+				mes "[ギルドマスター]";
+				if (Sex == SEX_MALE)
+					mes "だが、お前がアサシンであることは、何があろうと彼女には決して明かしてはならんぞ。";
+				else
+					mes "だが、お前がアサシンであることは、何があろうと彼には決して明かしてはならんぞ。";
+				next;
+				mes "[ギルドマスター]";
+				mes "たとえ堂々とは示せなくとも、愛する者を永遠に愛し続けるのだ。真実の愛は、一生に一度しか巡り合えないこともあるのだからな。";
+				next;
+				break;
+			}
+			break;
+		case 3:
+			mes "[ギルドマスター]";
+			mes "実に立派な心がけだ。私に何か聞いておきたいことはあるか？";
+			next;
+			switch(select("アサシンがレベルを上げられる場所……:アサシンとしての主な目標。:お金の相談。")) {
+			case 1:
+				.@assassin_sangdam += 5;
+				mes "[ギルドマスター]";
+				mes "すべてはお前の心次第だ。心の在り方によって、どんな場所も最良の修行場になり得る。";
+				next;
+				mes "[ギルドマスター]";
+				mes "どんな状況でも";
+				mes "生き延びる術を知らねばならん。";
+				next;
+				break;
+			case 2:
+				mes "[ギルドマスター]";
+				mes "アサシンは世に大勢いる。彼らを師と仰ぎ、意見を求めるがいい。";
+				next;
+				mes "[ギルドマスター]";
+				mes "優れたアサシンになってくれることを願っている。そして一定の域に達したら、お前もかつての師がそうしたように、新人を導かねばならん。";
+				next;
+				break;
+			case 3:
+				.@assassin_sangdam += 10;
+				mes "[ギルドマスター]";
+				mes "なんてことだ……";
+				mes "金を稼ぐためにアサシンになろうというのか？";
+				next;
+				mes "[ギルドマスター]";
+				mes "そのような性根の者は歓迎されん。それが目的なら、転職先を考え直した方がいいかもしれんぞ……";
+				next;
+				break;
+			}
+			break;
+		}
+		mes "[ギルドマスター]";
+		mes "会えてよかった。昔のことを思い出させてくれたよ。";
+		next;
+		mes "[ギルドマスター]";
+		mes "少し";
+		mes "待ってくれ……";
+		next;
+		mapannounce "in_moc_16","" + strcharinfo(0) + "の試験に関わった者たちよ、私の前に集まれ。",bc_map;
+		mes "[ギルドマスター]";
+		mes ""+ strcharinfo(0) +"の試験に関わった者たちよ、私の前に集まれ。";
+		next;
+		mes "[ギルドマスター]";
+		mes "すぐに";
+		mes "ここへ来るだろう。";
+		next;
+		enablenpc "[Huey]";
+		enablenpc "[Khai]";
+		enablenpc "[The Anonymous One]";
+		enablenpc "[Barcardi]";
+		enablenpc "[Beholder]";
+		enablenpc "[Thomas]";
+		enablenpc "[Gayle Maroubitz]";
+		mes "[名もなき者]";
+		mes "ここにいる。";
+		next;
+		mes "[ギルドマスター]";
+		mes ""+ strcharinfo(0) +"の転職試験について、お前の意見を聞かせてもらいたい。";
+		next;
+		mes "[名もなき者]";
+		mes "ああ、そうだな……";
+		mes "私が思うに、";
+		mes ""+ strcharinfo(0) +"";
+		mes "はなかなかのものだ。";
+		next;
+		mes "[ギルドマスター]";
+		mes "そうか……";
+		mes "名もなき者が";
+		mes "太鼓判を押すか。";
+		mes "ヒューイ、お前はどうだ？";
+		next;
+		if (ASSIN_Q3 == 1) { // player Job Level was above 48
+			mes "[熟練アサシン・ヒューイ]";
+			mes "珍しいものだ。";
+			mes "ジョブレベルを見れば";
+			mes "分かる。";
+			next;
+			mes "[熟練アサシン・ヒューイ]";
+			mes "私も";
+			mes "名もなき者に同意する。";
+		}
+		else { // player Job Level was below 48
+			mes "[熟練アサシン・ヒューイ]";
+			mes ""+ strcharinfo(0) +"は猫みたいに大人しくて優しそうに見えるが、"+ strcharinfo(0) +"には素質がある。";
+			next;
+			mes "[熟練アサシン・ヒューイ]";
+			mes "よろしければ、私は仕事に戻らせてもらいたい。";
+			next;
+			mes "[ギルドマスター]";
+			mes "ああ……";
+			mes "もういいぞ、ヒューイ。";
+		}
+		next;
+		mes "[ギルドマスター]";
+		mes "では……";
+		mes "「ビホルダー」、";
+		mes "お前の意見はどうだ？";
+		next;
+		disablenpc "[Huey]";
+		mes "[ビホルダー]";
+		mes "まあ、試験の得点自体は気に入らないが、なんだかんだで全課程は突破している。私はこいつで構わない。";
+		next;
+		mes "[ギルドマスター]";
+		mes "ふむ……";
+		mes "皆の意見が一致したようだな。よし。私も"+ strcharinfo(0) +"に異存はない……";
+		next;
+		switch(ASSIN_Q) {
+		case 8:
+			mes "[ギルドマスター]";
+			mes "私怨に突き動かされているとはいえ、修行を積むうちにそれが消えていくことを願っている……";
+			next;
+			break;
+		case 9:
+			mes "[ギルドマスター]";
+			mes "今は金持ちになることが一番の関心事だとしても、いずれもっと大きな何かを追い求めるようになるはずだ……";
+			next;
+			break;
+		case 10:
+			mes "[ギルドマスター]";
+			mes "世界中を旅することに意欲的なようだが、その旅の中で本当の自分自身が見つかることを願っている……";
+			next;
+			break;
+		case 11:
+			mes "[ギルドマスター]";
+			mes "お前はアサシンについてよく分かっているようだな。独りでいることの苛立ちも、お前には大した問題にはならないだろう……";
+			next;
+			break;
+		case 12:
+			mes "[ギルドマスター]";
+			mes "金に対しては愚かなところがあるが、お前ならそれを乗り越えられると信じている。";
+			next;
+			mes "[ギルドマスター]";
+			mes "今のところお前を信用してはいないが、機会は与えてやろう……";
+			next;
+			break;
+		case 13:
+			mes "[ギルドマスター]";
+			mes "うわべだけでアサシンに憧れているようだが、遅かれ早かれアサシンという仕事の本当の価値に気づくだろうと信じている。";
+			next;
+			break;
+		case 14:
+			mes "[ギルドマスター]";
+			mes "より優れた技を求める稀有な者として、遅かれ早かれ精神修養の大切さに気づいてくれることを願っている。";
+			next;
+			break;
+		case 15:
+			mes "[ギルドマスター]";
+			mes "遅かれ早かれ、お前は身を捧げられる新たな目標を見つけることだろう……";
+			next;
+			break;
+		case 16:
+			mes "[ギルドマスター]";
+			mes "肉体の鍛錬にしか関心のない者もいるが、";
+			mes "その中でもお前は際立っていると信じている……";
+			next;
+		}
+		switch(ASSIN_Q3) {
+		case 1: // player Job Level was above 48
+			mes "[ギルドマスター]";
+			mes "さて、話しすぎたな。贈り物として武器を選ぶといい。";
+			next;
+			mes "[ギルドマスター]";
+			mes "ジュル、カタール、マインゴーシュ、グラディウスから選べる。師としては、どれも愛着があるものばかりだ。";
+			next;
+			switch(select("ジュル:カタール:マインゴーシュ:グラディウス")) {
+			case 1:
+				mes "[ギルドマスター]";
+				mes "ジュルか……";
+				mes "いい選択だ。ほら、受け取れ。役に立ってくれることを願っている。";
+				getitem 1251,1; //Jur_
+				break;
+			case 2:
+				mes "[ギルドマスター]";
+				mes "カタールか……";
+				mes "ほら、受け取れ。";
+				mes "使い古しではあるが、";
+				mes "きっとお前の";
+				mes "役に立ってくれるはずだ。";
+				getitem 1253,1; //Katar_
+				break;
+			case 3:
+				mes "[ギルドマスター]";
+				mes "なるほど、両手を使いたいのだな。ほら、マインゴーシュを受け取れ。";
+				getitem 1208,1; //Main_Gauche_
+				break;
+			case 4:
+				mes "[ギルドマスター]";
+				mes "グラディウスか……";
+				mes "かつてアサシンの武器市場を席巻したものだ。私のグラディウスを、大切にしてくれ。";
+				getitem 1220,1; //Gladius_
+			}
+			ASSIN_Q3 = 3;
+			next;
+			break;
+		case 2: // player Job Level was below 48
+			mes "[ギルドマスター]";
+			mes "さて、話しすぎたな。";
+			mes "まずはこれを受け取れ。";
+			next;
+			switch(rand(1,5)) {
+			case 1:
+				getitem 1207,1; //Main_Gauche
+				break;
+			case 2:
+				getitem 1250,1; //Jur
+				break;
+			case 3:
+				getitem 1216,1; //Stiletto
+				break;
+			case 4:
+				getitem 1201,1; //Knife
+				break;
+			case 5:
+				getitem 1252,1; //Katar
+			}
+			ASSIN_Q3 = 3;
+		}
+		mes "[ギルドマスター]";
+		mes "さて、証となる品を渡そう。入り口にいる、凶暴な見た目の熟練アサシン、ヒューイのところへ戻るがいい。";
+		next;
+		mes "[ギルドマスター]";
+		mes "この証を受け取れば、ヒューイがお前をアサシンへと昇格させてくれるだろう。";
+		next;
+		mes "[ギルドマスター]";
+		mes ""+ strcharinfo(0) +"よ、お前はアサシンとして生きる道を選んだ。我々のやり方を学び、他の者たちの誇れる手本となってくれることを願っている。";
+		if (checkre(0))
+			savepoint "morocc",100,100,1,1;
+		else
+			savepoint "moc_ruins",79,99,1,1;
+		getitem 1008,1; //Frozen_Heart
+		ASSIN_Q = 17;
+		changequest 8006,8007;
+		next;
+		mes "[ギルドマスター]";
+		mes "よし、皆それぞれの持ち場に戻ってくれ。お前も入り口へ送ってやろう。では行くとしよう……";
+		disablenpc "[Huey]";
+		disablenpc "[Khai]";
+		disablenpc "[The Anonymous One]";
+		disablenpc "[Barcardi]";
+		disablenpc "[Beholder]";
+		disablenpc "[Thomas]";
+		disablenpc "[Gayle Maroubitz]";
+		close2;
+		warp "in_moc_16",17,19;
+		end;
+	}
+	else if (ASSIN_Q == 17) {
+		mes "[ギルドマスター]";
+		mes "むっ……？";
+		mes "なぜここにいる……？";
+		next;
+		mes "[ギルドマスター]";
+		mes "お前はもう試験を終えている。転職できるよう、^006699忘却の首飾り^000000を取りに行ったらどうだ？";
+		close2;
+		warp "in_moc_16",17,19;
+		end;
+	}
+	else if (ASSIN_Q > 7 && ASSIN_Q < 17) {
+		ASSIN_Q = 7;
+		mes "[ギルドマスター]";
+		mes "一体何だ？手続きの途中で「キャンセル」を押したな。転職する気があるのかないのか、どっちだ？";
+		next;
+		mes "[ギルドマスター]";
+		mes "^666666（はぁ……）^000000";
+		mes "よし、もう一度最初からだ。今度話を聞かなければ、この部屋から生きては出られんと思え。分かったな？";
+		close;
+	}
+	else {
+		mes "[ギルドマスター]";
+		mes "むっ？なぜここにいる？";
+		next;
+		mes "[ギルドマスター]";
+		mes "お前はもう試験を終えている、転職できるよう^006699忘却の首飾り^000000を凶暴そうな男に渡してこい！";
+		close2;
+		warp "in_moc_16",17,19;
+		end;
+	}
+}
+
+in_moc_16,186,81,1	script	助手::Master Assist	55,1,1,{
+	mes "[助手ゲイル・マルビッツ]";
+	mes "悪いが、私は転職の担当ではない。言われた通り、ギルドマスターのところへ行くんだな。";
+	close;
+}
+
+in_moc_16,170,90,0	script	info 1	-1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "ふむ。";
+	mes "そちらの道は塞がっているぞ。反対側を確認してみるといい。";
+	close;
+}
+
+in_moc_16,153,85,0	script	info 2	-1,1,1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "だんだん近づいてきたな。もう少しだ。ちょっとだけ向きを変えてみろ。";
+	close;
+}
+
+in_moc_16,160,85,0	script	info 3	-1,1,1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "ふむ。";
+	mes "そこは";
+	mes "塞がっているぞ。";
+	close;
+}
+
+in_moc_16,175,89,0	script	info 4	-1,1,1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "むっ……";
+	mes "私の助手の方へ向かっているな。まだ彼に用があるのか？";
+	close;
+}
+
+in_moc_16,164,88,0	script	info 5	-1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "よくやった……";
+	mes "お前の足音が近くに聞こえるぞ。";
+	close;
+}
+
+in_moc_16,149,95,0	script	info 6	-1,1,1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "ん？悪くないな。もうすぐそこだ。";
+	close;
+}
+
+in_moc_16,180,101,0	script	info 7	-1,1,1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "その道は合っていないと思うぞ。";
+	close;
+}
+
+in_moc_16,186,107,0	script	info 8	-1,1,1,{
+OnTouch_:
+	mes "[ギルドマスター]";
+	mes "方向音痴なのか？";
+	close;
+}
+
+-	script	#moc_assin_dup	-1,{
+	end;
+
+OnInit:
+	disablenpc();
+	end;
+}
+in_moc_16,156,87,1	duplicate(#moc_assin_dup)	[ヒューイ]::[Huey]	55
+in_moc_16,156,85,1	duplicate(#moc_assin_dup)	[カイ]::[Khai]	730
+in_moc_16,156,83,1	duplicate(#moc_assin_dup)	[名もなき者]::[The Anonymous One]	106
+in_moc_16,156,81,2	duplicate(#moc_assin_dup)	[バーカディ]::[Barcardi]	725
+in_moc_16,156,79,1	duplicate(#moc_assin_dup)	[ビホルダー]::[Beholder]	118
+in_moc_16,156,77,1	duplicate(#moc_assin_dup)	[トーマス]::[Thomas]	118
+in_moc_16,156,75,1	duplicate(#moc_assin_dup)	[ゲイル・マルビッツ]::[Gayle Maroubitz]	55

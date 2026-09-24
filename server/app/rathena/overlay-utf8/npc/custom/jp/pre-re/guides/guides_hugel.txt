@@ -1,0 +1,156 @@
+//===== rAthena Script =======================================
+//= Hugel Guides
+//===== By: ==================================================
+//= erKURITA; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official COnversion]
+//= Guides for the City of Hugel.
+//===== Additional Comments: =================================
+//= 1.0 Started the script. [erKURITA]
+//= 1.1 Removed Duplicates [Silent]
+//= 1.2 Rescripted to official 10.3 standards. [L0ne_W0lf]
+//============================================================
+
+hugel,98,56,3	script	フィゲル案内係ばあさん#huge::Hugel Guide Granny#huge	863,0,0,{
+	mes "[フィゲル案内係ばあさん]";
+	mes "あらあら、元気な冒険者さんだねぇ。";
+	mes "フィゲルへようこそ。この美しい村をご案内できて光栄だよ。";
+	mes "案内を使うのが初めてなら、まず「お知らせ」メニューを見てみるといいよ。";
+	while(1) {
+		next;
+		switch(select("街の案内:ミニマップの印を消す:お知らせ:キャンセル")) {
+		case 1:
+			mes "[フィゲル案内係ばあさん]";
+			mes "フィゲルの中の建物なら、どこでも教えてあげられるよ。";
+			mes "さて、どこに行きたいんだい？";
+			if (.@compass_check == 0) {
+				mes "ミニマップに";
+				mes "目的地の印を";
+				mes "つけようか？";
+				next;
+				if (select("はい:いいえ") == 1) set .@compass_check,1;
+			}
+			set .@loop,1;
+			while(.@loop) {
+				if (.@wait_button_chk == 0) set .@wait_button_chk,1;
+				else next;
+				switch(select("教会:宿屋:酒場:飛行場:武器屋:道具屋:パーティ用品店:^3131FFハンター転職所^000000:^3131FF聖堂遠征隊の宿舎^000000:モンスターレースの闘技場:ビンゴゲーム場:キャンセル")) {
+				case 1:
+					mes "[フィゲル案内係ばあさん]";
+					mes "まあ、この教会は、わたしみたいな年寄りのための場所ってところかねぇ…";
+					if (.@compass_check)
+						viewpoint 1,156,116,2,0xFF0000;
+					break;
+				case 2:
+					mes "[フィゲル案内係ばあさん]";
+					mes "褒め言葉よりプリンの方がいいもんさね。";
+					mes "村を見て回る前に、まず荷物を置いてきた方がいいよ。";
+					mes "わたしのすぐ隣の建物さ。";
+					if (.@compass_check)
+						viewpoint 1,104,79,3,0xFF00FF;
+					break;
+				case 3:
+					mes "[フィゲル案内係ばあさん]";
+					mes "そうそう、旅をするなら酒場に寄って新しい友達を作らなきゃね。";
+					mes "ここから東へ行けば酒場に着くよ。";
+					if (.@compass_check)
+						viewpoint 1,129,66,4,0x99FFFF;
+					break;
+				case 4:
+					mes "[フィゲル案内係ばあさん]";
+					mes "少し前によそ者たちが村に来て、あの変な飛行場みたいなものを建てたんだよ…";
+					mes "何て呼ぶんだったかね？飛行船？";
+					if (.@compass_check)
+						viewpoint 1,178,146,5,0x0000FF;
+					break;
+				case 5:
+					mes "[フィゲル案内係ばあさん]";
+					mes "村の中心に武器屋があるよ。";
+					mes "あんたの役に立つ武器があるかは知らないけどねぇ。";
+					if (.@compass_check)
+						viewpoint 1,70,158,6,0x00FF00;
+					break;
+				case 6:
+					mes "[フィゲル案内係ばあさん]";
+					mes "そうそう、フィゲル製の赤ポーションはお気に入りだよ。他所の赤ポーションはまだ試したことがないけどね…ほほほ。";
+					mes "道具屋は村の中心にあるよ。";
+					if (.@compass_check)
+						viewpoint 1,93,167,7,0x00FF00;
+					break;
+				case 7:
+					mes "[フィゲル案内係ばあさん]";
+					mes "パーティ用品店も村の中心あたりにあるよ。";
+					mes "他の人の近くで爆竹なんかを使っちゃだめだよ、危ないからね？";
+					if (.@compass_check)
+						viewpoint 1,91,105,8,0xFF99FF;
+					break;
+				case 8:
+					mes "[フィゲル案内係ばあさん]";
+					mes "おや、ハンターを目指してるのかい？";
+					mes "それなら海岸沿いに北東へ進めば、ハンターの転職所が見つかるよ。";
+					if (.@compass_check)
+						viewpoint 1,206,228,9,0xFF9900;
+					break;
+				case 9:
+					mes "[フィゲル案内係ばあさん]";
+					mes "聖堂遠征隊は西の家に泊まっているって聞いたよ。";
+					mes "村の真ん中に看板を出してるから、何か人を集めてるんだろうねぇ…";
+					mes "一体何をしてるんだか…うーん。";
+					if (.@compass_check)
+						viewpoint 1,52,91,10,0xFFFFFF;
+					break;
+				case 10:
+					mes "[フィゲル案内係ばあさん]";
+					mes "モンスターレースも好きなんだよ。なかなか面白いもんさ。";
+					mes "おや、まだやったことないのかい？そりゃだめだよ、試してごらん。気に入るはずさ。";
+					if (.@compass_check)
+						viewpoint 1,58,72,11,0xFF9900;
+					break;
+				case 11:
+					mes "[フィゲル案内係ばあさん]";
+					mes "ビンゴは好きかい？好きなら、ユークランのビンゴゲーム場に行ってごらん。";
+					if (.@compass_check)
+						viewpoint 1,55,209,12,0x66FFFF;
+					break;
+				case 12:
+					mes "[フィゲル案内係ばあさん]";
+					mes "ミニマップの印を全部消したくなったら、";
+					mes "また声をかけて「ミニマップの印を消す」を選んでおくれ。";
+					set .@loop,0;
+				}
+			}
+			break;
+		case 2:
+			viewpoint 2,156,116,2,0xFF0000;
+			viewpoint 2,104,79,3,0xFF00FF;
+			viewpoint 2,129,66,4,0x99FFFF;
+			viewpoint 2,178,146,5,0x0000FF;
+			viewpoint 2,70,158,6,0x00FF00;
+			viewpoint 2,93,167,7,0x00FF00;
+			viewpoint 2,91,105,8,0xFF99FF;
+			viewpoint 2,206,228,9,0xFF9900;
+			viewpoint 2,52,91,10,0xFFFFFF;
+			viewpoint 2,58,72,11,0xFF9900;
+			viewpoint 2,55,209,12,0x66FFFF;
+			set .@compass_check,0;
+			mes "[フィゲル案内係ばあさん]";
+			mes "はいよ、これで印は消えたよ。まだ聞きたい場所があれば、いつでも言っておくれ。";
+			break;
+		case 3:
+			mes "[フィゲル案内係ばあさん]";
+			mes "「街の案内」メニューを使うと、";
+			mes "画面右上のミニマップに建物の場所が印されるようになるよ。";
+			mes "ミニマップが見当たらないときは、ショートカットキー「Ctrl+Tab」を押すか、基本情報ウィンドウの「Map」ボタンを押しておくれ、いいかい？";
+			mes "それと、村全体が見えないときは「－」ボタンでミニマップを縮小することもできるよ。";
+			break;
+		case 4:
+			mes "[フィゲル案内係ばあさん]";
+			mes "この案内の仕事は、なかなか楽しいもんさね。ほほほ～";
+			close;
+		}
+	}
+}

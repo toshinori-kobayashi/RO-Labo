@@ -1,0 +1,738 @@
+//===== rAthena Script ======================================= 
+//= Dancer Skills Quests
+//===== By: ================================================== 
+//= Lupus, Reddozen
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests for skills: Charming Wink
+//===== Additional Comments: ================================= 
+//= 1.4 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.4a Changed NPC location [Yommy]
+//= 1.5 Replaced effect numerics with constants. [L0ne_W0lf]
+//============================================================
+
+comodo,204,172,5	script	キャネル#qsk_dan01::Canell#qsk_dan01	724,{
+	if (BaseJob == Job_Dancer && JobLevel > 39) {
+		if (DANCER_SK == 0) {
+			mes "[キャネル]";
+			mes "踊りを見る者を魅了するには、";
+			mes "美しくあらねばならない。";
+			mes "それは誰もが知っていること。けれど";
+			mes "見た目の美しさだけに";
+			mes "頼るのは、踊り手としての";
+			mes "才能を無駄にする、実に嘆かわしいことだわ。";
+			next;
+			mes "[キャネル]";
+			mes "ええ、あなたは";
+			mes "まだ分かっていないようね";
+			mes "正しい心構えこそが";
+			mes "真の美しさに欠かせない";
+			mes "要素だということを。さあ、教えて。あなたは";
+			mes "自分の踊りに自信があるの……？";
+			next;
+			if (select("もちろんです、ばあさん！:わ……私には分かりません……") == 1) {
+				mes "[キャネル]";
+				mes "ホホ～あなたは";
+				mes "自信と";
+				mes "傲慢を取り違えているようね！未熟な者には";
+				mes "その二つの間にある重要な違いが分からないものよ。";
+				mes "さあ……お仕置きの時間よ！";
+				next;
+				mes "["+ strcharinfo(0) +"]";
+				mes "痛っ……！";
+				mes "そ、その鞭！";
+				mes "い、痛いですぅぅ！";
+				specialeffect2 EF_HIT2;
+				percentheal -5,0;
+				close;
+			}
+			mes "[キャネル]";
+			mes "自分の欠点や";
+			mes "至らない点に気づくことこそ";
+			mes "成長への最初の大切な一歩よ。";
+			mes "なのにあなたは";
+			mes "自分の踊りの才能を";
+			mes "明らかに怠っている……お仕置きの理由だわ！";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "な、何……？痛っ！";
+			mes "や、やめ、鞭で";
+			mes "叩かないで！い、痛いですぅ！";
+			specialeffect2 EF_HIT2;
+			percentheal -10,0;
+			next;
+			mes "[キャネル]";
+			mes "ホホ～！幸い";
+			mes "あなたには";
+			mes "今の限界を超えるために";
+			mes "必要なことを教えてあげる。";
+			mes "仕込みが終わる頃には、天使も悪魔もあなたの魅力には逆らえなくなっているわ～";
+			next;
+			if (select("いやです、教わりません！:分かりました、学べるだけ学んでみます。") == 1) {
+				mes "[キャネル]";
+				mes "あら……まだ";
+				mes "魅力と謙虚さを";
+				mes "兼ね備える技を身につけていないのね！";
+				mes "この職業への";
+				mes "明らかな侮辱には";
+				mes "報いがなければ！覚悟なさい！";
+				next;
+				mes "["+ strcharinfo(0) +"]";
+				mes "いやぁぁぁ――！";
+				mes "また";
+				mes "その鞭！うぐっ、それは――";
+				mes "すごく痛いです！";
+				specialeffect2 EF_HIT2;
+				percentheal -10,0;
+				close;
+			}
+			mes "[キャネル]";
+			mes "ホホ～学ぶべきことが";
+			mes "まだたくさんあると";
+			mes "分かっているようね。さあ、";
+			mes "時間を無駄にせず始めましょう。最初のレッスンはイメージトレーニングと";
+			mes "自己を思い描くこと。そのためには……";
+			next;
+			mes "[キャネル]";
+			mes "……持ってきなさい";
+			mes "^FF00001 クリスタルミラー^000000を！";
+			mes "この道具は";
+			mes "レッスンに欠かせないもの。だから取ってきて";
+			mes "さっさと持ってきなさい！";
+			set DANCER_SK,1;
+			close;
+		}
+		else if (DANCER_SK == 1) {
+			if (countitem(747) > 0) {
+				mes "[キャネル]";
+				mes "やっと";
+				mes "鏡を持ってきたのね。さあ、";
+				mes "しっかりと見つめて";
+				mes "自分の姿を映しなさい。";
+				mes "あらもシミも、そして";
+				mes "魅力的な特徴も、じっくり見るのよ。";
+				next;
+				mes "[キャネル]";
+				mes "完璧な顔なんてないけれど、";
+				mes "あなたの顔はあなただけのもの。";
+				mes "それが他の誰にも";
+				mes "真似できない美しさを与えてくれる。さあ、";
+				mes "私について繰り返しなさい……";
+				next;
+				mes "[キャネル]";
+				mes "『私は美しい……";
+				mes "私には誰も逆らえない……』";
+				next;
+				mes "["+ strcharinfo(0) +"]";
+				mes "私は美しい……";
+				mes "私には誰も逆らえない……";
+				next;
+				mes "[酔いしれるキャネル]";
+				mes "もっと大きな声で！";
+				mes "もっと感情を込めて！";
+				mes "『私は美しい！";
+				mes "私には誰も逆らえない！";
+				mes "私はこの世で一番";
+				mes "魅力的な女なのだから！』";
+				next;
+				mes "["+ strcharinfo(0) +"]";
+				mes "私は美しい！";
+				mes "私には誰も逆らえない！";
+				mes "私はこの世で一番";
+				mes "この世で一番魅力的な女なのだから！";
+				specialeffect2 EF_FLASHER;
+				next;
+				mes "^3355FF自尊心が一気に";
+				mes "高まった。幸い、";
+				mes "お高くとまった";
+				mes "プリマドンナになるのは免れたようだ。^000000";
+				delitem 747,1; //Crystal_Mirror
+				set DANCER_SK,2;
+				close;
+			}
+			else {
+				mes "[苛立つキャネル]";
+				mes "私が言ったでしょう、";
+				mes "戻ってくるなら";
+				mes "^FF00001 クリスタルミラー^000000を持ってきなさいと！？さあ、行って";
+				mes "取ってきなさい、さもないと";
+				mes "罰を与える理由を見つけてしまいますよ！";
+				specialeffect EF_CLAYMORE;
+				close;
+			}
+		}
+		else if (DANCER_SK == 2) {
+			mes "[キャネル]";
+			mes "ええ、美しくなるための";
+			mes "最初で最も大切な一歩は、";
+			mes "自分の";
+			mes "美しさを認めて受け入れること。";
+			mes "自信が先、美しさは後からついてくる。";
+			mes "決してその逆じゃないのよ。";
+			next;
+			mes "[キャネル]";
+			mes "さあ、美しさについての";
+			mes "正しい心構えができたところで、";
+			mes "今度はもう少し";
+			mes "高度な技を学ぶ番よ。";
+			mes "魅了する技、とでも言おうかしら。私は";
+			mes "ぜひおすすめしたい達人を知っているわ。";
+			next;
+			mes "[キャネル]";
+			mes "プロンテラ教会にいる";
+			mes "私の妹を訪ねなさい。";
+			mes "私の名前を出せば、";
+			mes "きっと喜んで";
+			mes "教えてくれるはずよ。私が直接教えたいところだけど、新しいクリスタルミラーを楽しまなくちゃね～";
+			next;
+			mes "^3355FFやっぱり、あの人は";
+			mes "鏡を独り占めするのね。^000000";
+			emotion ET_ANGER, playerattached();
+			set DANCER_SK,3;
+			close;
+		}
+		else if (DANCER_SK > 2 && DANCER_SK < 7) {
+			mes "[キャネル]";
+			mes "ああ、なんて華やかな";
+			mes "顔と姿。私の";
+			mes "美しさは比類な――";
+			mes "あら！あなたね。それで、";
+			mes "プロンテラ教会の妹は";
+			mes "もう何か教えてくれたかしら？";
+			emotion ET_GO;
+			close;
+		}
+		else if (DANCER_SK == 7) {
+			mes "[キャネル]";
+			mes "ああ、それで";
+			mes "アエルは見つかった？";
+			mes "彼女から何か";
+			mes "学ぶことはできた？";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "実は、ウインクについて";
+			mes "教わっただけで、";
+			mes "やり方まではあまり。";
+			mes "彼女……酔っ払ってしまって";
+			mes "それ以上教えてもらえませんでした。";
+			next;
+			mes "[キャネル]";
+			mes "ああ、こうなることは";
+			mes "分かっていたはずなのに。ああ、";
+			mes "でももう";
+			mes "どうしようもないわね。でも";
+			mes "私の妹を";
+			mes "酔わせるなんて……罰に値することよ。";
+			next;
+			mes "[キャネル]";
+			mes "バシッ！";
+			specialeffect2 EF_HIT2;
+			percentheal -5,0;
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "！？";
+			mes "一体";
+			mes "何なんですか、今のは？";
+			next;
+			mes "[キャネル]";
+			mes "さて、真のダンサーなら";
+			mes "ウインクの秘訣くらい";
+			mes "自分で見つけ出せるはず。";
+			mes "でも私はとても";
+			mes "優しい女だから、";
+			mes "教えてあげましょう。ホホ～";
+			next;
+			mes "^3355FF優しい女性……？";
+			mes "でもさっき叩かれたじゃない！";
+			mes "もちろん軽くだけど、";
+			mes "それでも叩かれたことに変わりはない。^000000";
+			set DANCER_SK,8;
+			close;
+		}
+		else if (DANCER_SK == 8) {
+			mes "[キャネル]";
+			mes "いいこと、";
+			mes "正しいウインクの秘訣は";
+			mes "まぶたを艶っぽく";
+			mes "自然なリズムで動かすことよ。";
+			mes "一瞬目を閉じて、この数え方でゆっくり開くの。";
+			next;
+			mes "[キャネル]";
+			mes "アン、ドゥ、トロワ～";
+			mes "私を見て、";
+			mes "こうやるのよ。アン、ドゥ、トロワ～";
+			mes "さあ、やってみせて。";
+			emotion ET_BEST;
+			next;
+			switch(select("アンドゥトロワ～－:アン、ドゥー、トロワ～:アン、ドゥ、トロワ～")) {
+			default:
+				mes "[キャネル]";
+				mes "だめ、だめ！";
+				mes "それは違うわ、";
+				mes "全然違う！";
+				mes "ちゃんとできないの！？";
+				next;
+				mes "["+ strcharinfo(0) +"]";
+				mes "い、痛い！";
+				mes "お、お願い……！";
+				mes "また鞭は勘弁してください！";
+				specialeffect2 EF_HIT2;
+				percentheal -5,0;
+				close;
+			case 3:
+				mes "["+ strcharinfo(0) +"]";
+				mes "アン、ドゥ、トロワ～";
+				emotion ET_BEST, playerattached();
+				specialeffect2 EF_FLASHER;
+				next;
+				mes "[キャネル]";
+				mes "いいわ、まさに";
+				mes "そうやるのよ。さあ、";
+				mes "忘れないで、リズムと";
+				mes "自然さという要素こそ";
+				mes "この魅了の技には";
+				mes "絶対に欠かせないものなの。";
+				emotion ET_CHUP;
+				next;
+				mes "[キャネル]";
+				mes "ウインクの技を";
+				mes "身につけた今、";
+				mes "自分より";
+				mes "ずっと強い相手を";
+				mes "魅了することはできないと知っておいて。だから";
+				mes "あなたのウインクは誰にでも効くわけじゃないの。";
+				next;
+				mes "[キャネル]";
+				mes "もちろん、私のウインクには";
+				mes "そんな欠点はないけどね。ホホ～";
+				mes "さて、そろそろお別れの時間ね。あなたがこれから";
+				mes "もっと華やかで魅力的なダンサーになれることを願っているわ。";
+				emotion ET_SMILE;
+				next;
+				mes "^3355FFついに";
+				mes "チャーミングウィンクを習得した。^000000";
+				set DANCER_SK,9;
+				specialeffect2 EF_ABSORBSPIRITS;
+				skill "DC_WINKCHARM",1,SKILL_PERM;
+				close;
+			}
+		}
+		else if (DANCER_SK > 8 && getskilllv("DC_WINKCHARM")) {
+			mes "[キャネル]";
+			mes "ん……？";
+			mes "何か他に";
+			mes "聞きたいことでも";
+			mes "あるのかしら？ああ、きっと";
+			mes "私の美しさに";
+			mes "うっとりしているのね？";
+			emotion ET_HNG;
+			next;
+			mes "[キャネル]";
+			mes "ああ、こんなに美しいのは";
+			mes "罪深いことね！私も";
+			mes "プロンテラ教会で";
+			mes "妹のように";
+			mes "許しを請うべきかしら～";
+			close;
+		}
+
+		else if (DANCER_SK == 9 && getskilllv("DC_WINKCHARM") == 0) {
+			mes "[キャネル]";
+			mes "あら？あなたのこと覚えているわ！";
+			mes "今はジプシーなのね～その";
+			mes "姿、よく似合っているわ。さて、";
+			mes "転生してから";
+			mes "いくつか忘れてしまったんじゃない？";
+			mes "違うかしら？このウインクをよく見て……";
+			next;
+			mes "[キャネル]";
+			mes "思い出した？すべては";
+			mes "まぶたの自然で艶っぽく";
+			mes "リズミカルな";
+			mes "動きにあるのよ。その";
+			mes "チャーミングウィンクで";
+			mes "あなたの内なる美しさを輝かせてね～";
+			next;
+			mes "^3355FFチャーミングウィンクを";
+			mes "習得した。^000000";
+			specialeffect2 EF_ABSORBSPIRITS;
+			skill "DC_WINKCHARM",1,SKILL_PERM;
+			close;
+		}
+	}
+	else if (BaseJob == Job_Dancer && JobLevel < 40) {
+		mes "[キャネル]";
+		mes "あら、なんて";
+		mes "可愛らしい女の子なの！ああ、";
+		mes "ごめんなさいね、でも";
+		mes "ジョブレベル40くらいで";
+		mes "一人前の女性になったら、";
+		mes "何か教えてあげられるわ～";
+		close;
+	}
+
+	else if (BaseJob != Job_Dancer) {
+		if (Sex == SEX_FEMALE) {
+			mes "[キャネル]";
+			mes "あら、なんて";
+			mes "可愛い子なの～！こんなに";
+			mes "ぽっちゃりしたお腹、";
+			mes "とってもかわいいわぁ～";
+			close;
+		}
+		else {
+			mes "[キャネル]";
+			mes "あら、";
+			mes "素敵ね～";
+			mes "^333333*ウインク～*^000000";
+			emotion ET_CHUP;
+			specialeffect2 EF_VALLENTINE2;
+			next;
+			mes "^3355FF不思議なことに、";
+			mes "彼女のウインクに";
+			mes "胸が高鳴ってしまった。^000000";
+			close;
+		}
+	}
+}
+
+prontera,183,333,1	script	アエル#qsk_dan02::Aelle#qsk_dan02	79,{
+	if (BaseJob == Job_Dancer) {
+		if (DANCER_SK == 3) {
+			mes "[アエル]";
+			mes "ちょっと、ねえ！";
+			mes "ちょっとやばいけど安く";
+			mes "済むワープがあるのよ、オーク";
+			mes "ダンジョンとグラストヘイムと";
+			mes "デッドピットへの。それで";
+			mes "どう、興味ある？";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "ええと、実は";
+			mes "人を探しに来たんです。";
+			mes "あなた、";
+			mes "キャネルさんの";
+			mes "妹さんをご存じないですか？";
+			next;
+			mes "[アエル]";
+			mes "ああ、あの高慢な";
+			mes "姉さんに送られてきたのね？";
+			mes "分かってたわ、";
+			mes "その格好を見ればね。";
+			mes "つまりもっと";
+			mes "魅力的な踊り手になりたいってわけ？";
+			next;
+			mes "[アエル]";
+			mes "あらら……";
+			mes "それは残念。";
+			mes "つまり……";
+			mes "このワープを買いに来たんじゃないのね？";
+			mes "本当にいらないの？";
+			set DANCER_SK,4;
+			close;
+		}
+		else if (DANCER_SK == 4) {
+			mes "[アエル]";
+			mes "はいはい……";
+			mes "私に";
+			mes "魅了の技を";
+			mes "教えてほしいってわけね？";
+			mes "ふぅん。でも私のレッスンって";
+			mes "長くて複雑なのよね。";
+			next;
+			mes "[アエル]";
+			mes "細かいところまで全部";
+			mes "話して説明していたら";
+			mes "喉がカラカラに";
+			mes "なっちゃうわ。だからまず、";
+			mes "さっぱりする飲み物を";
+			mes "持ってきてから始めましょう……";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "ああ……分かりました。";
+			mes "そうですね、";
+			mes "ポーションの一つや";
+			mes "二つくらいなら、それか";
+			mes "ジュースを一本持って――";
+			next;
+			mes "[アエル]";
+			mes "ちょっとちょっと、";
+			mes "そんなものはダメよ！";
+			mes "ちゃんとしたお酒が欲しいの。";
+			mes "つまり、もっと";
+			mes "^FF0000アルコール^000000度の高いのがいいわ。";
+			next;
+			mes "[アエル]";
+			mes "それと、";
+			mes "教えるのに必要な";
+			mes "エネルギーを保つおやつもね！";
+			mes "お皿に乗った美味しい果物と";
+			mes "クッキーもよろしく！";
+			next;
+			mes "[アエル]";
+			mes "そうね、食べたいのは";
+			mes "^FF00001 リンゴ^000000と^FF00003 バナナ^000000、";
+			mes "^FF00005 よく焼けたクッキー^000000ね。あ、";
+			mes "^FF0000お皿^000000も忘れずに持ってきて";
+			mes "盛り付け用にね、それと";
+			mes "^FF0000アルコール^000000も忘れないでよ？";
+			next;
+			mes "[アエル]";
+			mes "それと最後に一つ……！";
+			mes "ここの誰にも";
+			mes "私たちが何をしているか";
+			mes "知られないでね。";
+			mes "あんまり面倒なことにはなりたくないの！";
+			set DANCER_SK,5;
+			close;
+		}
+		else if (DANCER_SK == 5) {
+			if (countitem(970) > 0 && countitem(512) > 0 && countitem(513) > 2 && countitem(538) > 4 && countitem(736) > 0) {
+				mes "[アエル]";
+				mes "よかった、";
+				mes "食べ物を持ってきてくれたのね！";
+				mes "ちょうどお腹ぺこぺこだったの、";
+				mes "全部平らげてあげるわ！";
+				next;
+				mes "^3355FFアエルは飢えた";
+				mes "獣のように、";
+				mes "あまりに長く";
+				mes "飢えていたかのように、貪るように料理を平らげていった。^000000";
+				next;
+				mes "[アエル]";
+				mes "ああ、本当に美味しかった！";
+				mes "こんなに食べたのは";
+				mes "久しぶりだわ！それに";
+				mes "教会の中じゃ";
+				mes "あまり食べ過ぎる機会もないしね。";
+				mes "ああ、そうだ、レッスンね！";
+				next;
+				mes "[アエル]";
+				mes "さて、一番簡単で";
+				mes "さりげなくて";
+				mes "一番魅力的な仕草といえば";
+				mes "^FF0000ウインク^000000よ。私も何度も";
+				mes "ピンチを救われてきたし、";
+				mes "これを極めれば魅力も増すわ。";
+				next;
+				mes "[アエル]";
+				mes "素人目には、";
+				mes "ウインクなんて";
+				mes "ただの単純な動きに見えるでしょう？";
+				mes "片目を閉じて、";
+				mes "また開くだけ。でも";
+				mes "正しくやれば……もしあなたが……";
+				next;
+				mes "[アエル]";
+				mes "ああ、久しぶりに";
+				mes "こんなに";
+				mes "飲んだわ！うっ、な、なんか";
+				mes "ふらふら――とにかく、目を閉じて";
+				mes "それで――^333333*ゲップ*^000000ウインクは";
+				mes "すっごくすっごく簡単なのよぉ～";
+				next;
+				mes "[酔ったアエル]";
+				mes "やってみて！私の";
+				mes "真似をして！ウインク、こ、こう";
+				mes "やるのよ、ね？分かる？";
+				mes "^333333*ウィ～～～～～～ンク*^000000";
+				emotion ET_BEST;
+				next;
+				mes "["+ strcharinfo(0) +"]";
+				mes "う、うわぁ……";
+				mes "あれは……";
+				mes "すごく綺麗です！";
+				mes "それもたった";
+				mes "一回のウインクだけで！";
+				next;
+				mes "[べろべろに酔ったアエル]";
+				mes "そ、そうよ……その……";
+				mes "秘訣はねぇ……";
+				mes "＊ヒック＊それはねぇ――";
+				mes "ブワハハハハハハ！";
+				mes "ぐるぐる回ってる～！";
+				emotion ET_SMILE;
+				next;
+				mes "^3355FF酔いつぶれたアエルは";
+				mes "拳で";
+				mes "お前を叩きながら";
+				mes "一人で狂ったように笑っている。^000000";
+				percentheal -10,0;
+				specialeffect2 EF_HIT2;
+				emotion ET_THINK, playerattached();
+				delitem 970,1; //Alchol
+				delitem 512,1; //Apple
+				delitem 513,3; //Banana
+				delitem 538,5; //Well_Baked_Cookie
+				delitem 736,1; //White_Platter
+				set DANCER_SK,6;
+				close;
+			}
+			else {
+				mes "[アエル]";
+				mes "私がレッスンの途中で";
+				mes "倒れてしまったら";
+				mes "どうやって";
+				mes "教えろって言うのよ？そうだわ、";
+				mes "栄養があって";
+				mes "美味しいおやつが必要ね～";
+				next;
+				mes "[アエル]";
+				mes "そうね、食べたいのは";
+				mes "^FF00001 リンゴ^000000と^FF00003 バナナ^000000、";
+				mes "^FF00005 よく焼けたクッキー^000000ね。あ、";
+				mes "^FF0000お皿^000000も忘れずに持ってきて";
+				mes "盛り付け用にね、それと";
+				mes "^FF0000アルコール^000000も忘れないでよ？";
+				close;
+			}
+		}
+		else if (DANCER_SK == 6) {
+			mes "["+ strcharinfo(0) +"]";
+			mes "あなたはまだ";
+			mes "単純なウインクに";
+			mes "あんなに扇情的な魅力を";
+			mes "持たせる秘訣を教えてくれていません。";
+			mes "どうしても知りたくて――";
+			next;
+			mes "[泥酔したアエル]";
+			mes "スピー…スピー…あら？";
+			mes "そうよぉ、分かってるわぁ、私は……";
+			mes "て、てんさいなんだからぁ……";
+			mes "……スピーッ…スピーッ……";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "お、起きてください！";
+			mes "こんなに";
+			mes "苦労までして";
+			mes "この技を学びに来たんです！";
+			next;
+			mes "[苛立つアエル]";
+			mes "うるしゃーい！";
+			mes "ねむいんだからぁ！";
+			mes "あ、あっちいって。";
+			mes "姉さんの、キャネルに聞いて……";
+			mes "……スピー…グー……";
+			set DANCER_SK,7;
+			close2;
+			warp "prontera",156,272;
+			end;
+		}
+		else if (DANCER_SK > 6 && DANCER_SK < 8) {
+			mes "["+ strcharinfo(0) +"]";
+			mes "アエル、どうしても";
+			mes "残りのことを";
+			mes "全部";
+			mes "教えてもらわないと";
+			mes "ウインクについて――";
+			next;
+			mes "[アエル]";
+			mes "^333333*しゃっくり*^000000スピー――なに？";
+			mes "あんたに";
+			mes "あっち行ってって";
+			mes "教えなきゃ。もう疲れたの。";
+			mes "ほっといてよ、あんた！";
+			close2;
+			warp "prontera",156,272;
+			end;
+		}
+		else if (DANCER_SK > 8) {
+			mes "[素面に戻ったアエル]";
+			mes "うぅん……";
+			mes "あ、頭が痛い……";
+			emotion ET_FRET;
+			next;
+			mes "[アエル]";
+			mes "あら、まあ、見違えたわね！";
+			mes "あなたが";
+			mes "ずっと";
+			mes "綺麗になったのが分かるわ。そう、";
+			mes "前よりずっと上品で";
+			mes "洗練されているもの。";
+			next;
+			mes "[アエル]";
+			mes "いつも自分の";
+			mes "美しさを信じて、魅力を";
+			mes "武器のように使いなさい……そうすれば";
+			mes "この世界であなたが望むものは";
+			mes "何でも手に入るわ！ブワハハハハハハ！";
+			close;
+		}
+		else {
+			mes "[アエル]";
+			mes "ちょっと、ねえ！";
+			mes "ちょっとやばいけど安く";
+			mes "済むワープがあるのよ、オーク";
+			mes "ダンジョンとグラストヘイムと";
+			mes "デッドピットへの。それで";
+			mes "どう、興味ある？";
+			next;
+			mes "[？？？？？？]";
+			mes "シスター・アエル……";
+			mes "まだ懲りずに";
+			mes "違法なワープを";
+			mes "売ろうとしているのですか？シスター・アエル？";
+			next;
+			mes "[アエル]";
+			mes "しまった、神父様よ！";
+			mes "しー、もし誰かに聞かれても、";
+			mes "何もしてなかったって言ってね！";
+			emotion ET_HUK;
+			next;
+			mes "[アエル]";
+			mes "ありがとう、あなた……";
+			mes "あなたなら";
+			mes "私のヤバい商売のこと";
+			mes "秘密にしてくれるって信じてるわ。^333333*ウインク*^000000";
+			emotion ET_BEST;
+			close;
+		}
+	}
+	else {
+		mes "[アエル]";
+		mes "ちょっと、ねえ！";
+		mes "ちょっとやばいけど安く";
+		mes "済むワープがあるのよ、オーク";
+		mes "ダンジョンとグラストヘイムと";
+		mes "デッドピットへの。それで";
+		mes "どう、興味ある？";
+		next;
+		mes "[？？？？？？]";
+		mes "シスター・アエル……";
+		mes "まだ懲りずに";
+		mes "違法なワープを";
+		mes "売ろうとしているのですか？シスター・アエル？";
+		next;
+		mes "[アエル]";
+		mes "しまった、神父様よ！";
+		mes "しー、もし誰かに聞かれても、";
+		mes "何もしてなかったって言ってね！";
+		emotion ET_HUK;
+		next;
+		mes "[アエル]";
+		mes "ありがとう、あなた……";
+		mes "あなたなら";
+		mes "私のヤバい商売のこと";
+		mes "秘密にしてくれるって信じてるわ。^333333*ウインク*^000000";
+		emotion ET_BEST;
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//= Somehow eA engine doesn't let you keep learn't skill V_V'
+//= 1.2 Added to correct locations, correct NPC's, fixed
+//= some of the items required and made them into real
+//= quests. [Reddozen] 
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a fixed an item ID typo, thx 2Spiritual Kid
+//= 1.3b Splitted into different files [DracoRPG]
+//============================================================
