@@ -128,6 +128,8 @@ tools/
 
 ## 起動手順
 
+> サーバは 2026-09-24 に撤去済みです。再構築（[../server/README.md](../server/README.md)）後、`Config.local.js` の `address` と glue の `--allow` を新しい IP に合わせてから起動してください。
+
 サーバは稼働中の前提です。`client/ro-glue/` で glue を起動します（Windows 作業コピーの例では `<repo>` は `C:\RO-Lab` です）。
 
 ```powershell

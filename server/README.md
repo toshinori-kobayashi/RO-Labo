@@ -9,7 +9,9 @@ rAthena（GPL-3.0）を使った Ragnarok Online **Pre-Renewal** モードの検
 | 最終更新 | 2026-09-24 |
 | rAthena commit | `e985006171d2eb320ee512a653f4c83aea3d81b6`（master、2026-08-21） |
 | PACKETVER | `20211103`（kRO 2021-11-03 RagexeRE 系） |
-| Public IP（EIP） | `54.65.172.5` |
+| Public IP（EIP） | `54.65.172.5`（撤去済み。再構築すると変わる） |
+
+**現在の状態（2026-09-24）**: 検証を終えたため `terraform destroy` で全 40 リソースを撤去し、DLM スナップショットも削除しました。Terraform state は空です。撤去直前の最終バックアップ（`mariadb-dump` と MariaDB データディレクトリの tar）は運用者の Mac の `server/backups/final-20260924/`（Git 管理外）にあります。再構築は「構築手順」のとおり `apply` → `scripts/create-account.sh` でアカウント作成、DB を戻す場合は `app/scripts/restore-db.sh` を使います。
 
 設定値・数値まで具体的な現行仕様は `docs/SPEC.md` を参照してください。
 

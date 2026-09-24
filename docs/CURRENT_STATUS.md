@@ -3,6 +3,8 @@
 作成日: 2026-09-24
 対象読者: 初見の SRE / 開発者、後続の別 AI。
 
+> **2026-09-24 に AWS 環境を撤去済み。** サーバ側の行はいずれも撤去直前の最終状態の記録です。再構築（[../server/README.md](../server/README.md)）後に再検証してください。
+
 ## 凡例
 
 状態:
@@ -24,7 +26,7 @@
 
 | 項目 | 状態 | 根拠 | 根拠の強さ | 最終確認日 |
 |---|---|---|---|---|
-| Infrastructure（Terraform、SSM デプロイ、DLM、CloudWatch） | PASS | [server/docs/SPEC.md](../server/docs/SPEC.md) §4、CHANGELOG（最終デプロイ 2026-09-24 14:56 JST） | 強 | 2026-09-24 |
+| Infrastructure（Terraform、SSM デプロイ、DLM、CloudWatch） | 撤去済み（2026-09-24。撤去前は PASS） | [server/docs/SPEC.md](../server/docs/SPEC.md) §4、CHANGELOG（最終デプロイ 2026-09-24 14:56 JST） | 強 | 2026-09-24 |
 | rAthena Pre-Renewal（e985006 / PACKETVER 20211103） | PASS | `app/config.env`、起動ログ「Done loading '13043' NPCs」 | 強 | 2026-09-24 |
 | Login（Chrome → glue → login/char/map） | PASS | クライアント E2E 2026-09-23、EC2 内 probe 2026-09-24、実クライアント 2026-09-24 | 強 | 2026-09-24 |
 | Character Create（日本語名） | PASS | 「ユンヌ」作成 2026-09-23。「シアレス」は文字コード修正前の作成で UTF-8 保存のため試験対象外。日本語名の可否・文字数制限はサーバ側設定による（[server/docs/SPEC.md](../server/docs/SPEC.md) 参照） | 強 | 2026-09-23 |

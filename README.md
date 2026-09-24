@@ -40,6 +40,8 @@ Windows / Chrome
 
 ## 5. 現在の完成状況
 
+> **2026-09-24 に AWS 上のサーバ環境は撤去済み**（`terraform destroy`、DLM スナップショットも削除）。以下はその時点の到達状況で、再構築すれば同じ状態に戻せます（手順は [server/README.md](server/README.md)）。
+
 - サーバインフラ、rAthena 起動、ログイン、キャラクター作成 / 削除、ネットワーク文字コードは PASS（実装 + 日付入り検証記録あり）。
 - NPC 台詞、Mob 名の日本語化は PARTIAL（対応ファイル数は docs/CURRENT_STATUS.md 参照）。
 - 内蔵 UI の日本語化、Guild / Party 名、Electron 化、data.grf 自動検出は TODO。
@@ -47,6 +49,8 @@ Windows / Chrome
 - 詳細・根拠・確認日は [docs/CURRENT_STATUS.md](docs/CURRENT_STATUS.md) を参照してください。
 
 ## 6. 起動方法
+
+> サーバは撤去済みのため、現在は接続できません。先に [server/README.md](server/README.md)「構築手順」で再構築し、`client/robrowser/Config.local.js` の接続先を新しい IP に合わせてください。
 
 サーバは稼働中であることを前提とします。クライアントの起動手順（glue の起動コマンド、アクセス URL）は [client/README.md](client/README.md) を参照してください。サーバ運用の入口は [server/README.md](server/README.md) です。
 
