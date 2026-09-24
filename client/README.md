@@ -2,7 +2,7 @@
 
 `client/` の SoT（Single Source of Truth）です。「いま動いているクライアントは何か」を、後続の作業者や引き継ぎ先の AI に渡すための現行仕様をまとめています。
 
-過去の調査・作業記録は `notes/`（HISTORICAL。各ファイル先頭に注記があります）にあります。サーバ構築・Terraform・rAthena の運用手順はここには書きません（`server/docs/`、統合予定パス）。全体のアーキテクチャ図・責務境界は [`../docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md)、現在の完成状況は [`../docs/CURRENT_STATUS.md`](../docs/CURRENT_STATUS.md) を参照してください。
+過去の調査・作業記録は `notes/`（HISTORICAL。各ファイル先頭に注記があります）にあります。サーバ構築・Terraform・rAthena の運用手順はここには書きません（`server/docs/`）。全体のアーキテクチャ図・責務境界は [`../docs/ARCHITECTURE.md`](../docs/ARCHITECTURE.md)、現在の完成状況は [`../docs/CURRENT_STATUS.md`](../docs/CURRENT_STATUS.md) を参照してください。
 
 ---
 
@@ -15,25 +15,25 @@ Windows 上の Chrome で動く、rAthena Pre-Renewal 向けブラウザクラ�
 ## roBrowserLegacy
 
 - 上流: `MrAntares/roBrowserLegacy`（GPL-3.0）。基準コミットは `../README.md`「外部依存」を参照。
-- ソースの正本は `tools/roBrowserLegacy-src/src/`（Phase 2 で `client/roBrowserLegacy-src/` へ移動予定）。上流との差分は 8 ファイルだけで、目的・要点は [`docs/PATCHES.md`](docs/PATCHES.md) が正本です。
+- ソースの正本は `client/roBrowserLegacy-src/src/`。上流との差分は 8 ファイルだけで、目的・要点は [`docs/PATCHES.md`](docs/PATCHES.md) が正本です。
 - 実行コピーは `client/robrowser/`。ゲーム起動に必要なのは `Online.js`、`ThreadEventHandler.js`、`PathFindingWorker.js`、`api.html`、`api.js`、`Config.js`、`Config.local.js` の 7 つです。同ディレクトリにある `EffectViewer.js` などのビューア 7 本（各 12MB）はゲーム起動に不要です（削除は Phase 2 以降）。
 - 再ビルド手順は [`docs/BUILD.md`](docs/BUILD.md)。
 
 ## ro-glue
 
-静的配信・GRF/loose 資産配信・WebSocket→TCP 中継を行う自作 Node です（`tools/ro-glue/server.mjs`、Phase 2 で `client/ro-glue/` へ移動予定）。**パケットの改変・文字コード変換は一切しません**（バイト列透過）。`remoteClient` はローカル glue に固定してあり、既定の `https://grf.robrowser.com/` へは行きません。CLI 全オプション、エンドポイント、GRF 実装要点、セキュリティ上の前提は [`docs/GLUE.md`](docs/GLUE.md) が正本です。起動コマンドの例は本書の「起動手順」にあります。
+静的配信・GRF/loose 資産配信・WebSocket→TCP 中継を行う自作 Node です（`client/ro-glue/server.mjs`）。**パケットの改変・文字コード変換は一切しません**（バイト列透過）。`remoteClient` はローカル glue に固定してあり、既定の `https://grf.robrowser.com/` へは行きません。CLI 全オプション、エンドポイント、GRF 実装要点、セキュリティ上の前提は [`docs/GLUE.md`](docs/GLUE.md) が正本です。起動コマンドの例は本書の「起動手順」にあります。
 
 ## jRO data.grf と使わないもの
 
 - ユーザー所有の jRO 公式インストール `C:\Gravity\Ragnarok\data.grf`（読み取り専用）を資産元として使います。リポジトリには含めず、127.0.0.1 以外へは出しません。
 - `Ragexe.exe` は使いません。Themida/WinLicense と GameGuard 付きで、プロトコル系列もこのサーバとは別です。
-- `client/data/clientinfo.xml` と `sclientinfo.xml` はネイティブ exe 用に作った遺物です。roBrowser はこれらを読みません。
+- ネイティブ exe 用の `clientinfo.xml` / `sclientinfo.xml` は [`../notes/archive/native-exe/`](../notes/archive/native-exe/) に退避してあります。roBrowser はこれらを読みません。
 
 ## clientdata（loose）
 
 資産の解決順は `client/clientdata/` → `C:\Gravity\Ragnarok`（`System/` `BGM/` 等）→ GRF です。
 
-`client/clientdata/data/texture/유저인터페이스/login_interface/` に、jRO の `data.grf` には無い kRO 新ログイン UI のうち自作した 7 ファイル（`bg_login.tga`、`bt_start_{normal,over,press}.bmp`、`bt_join_{normal,over,press}.bmp`）をコミットしています。生成スクリプトは `tools/scripts/make-login-overlay.ps1`（Phase 2 で `client/scripts/` へ移動予定）。手元の `bgi_temp.bmp` を分割した背景タイル `t_*.bmp` は jRO 由来のため `.gitignore` で除外してあり、未コミットです。
+`client/clientdata/data/texture/유저인터페이스/login_interface/` に、jRO の `data.grf` には無い kRO 新ログイン UI のうち自作した 7 ファイル（`bg_login.tga`、`bt_start_{normal,over,press}.bmp`、`bt_join_{normal,over,press}.bmp`）をコミットしています。生成スクリプトは `client/scripts/make-login-overlay.ps1`。手元の `bgi_temp.bmp` を分割した背景タイル `t_*.bmp` は jRO 由来のため `.gitignore` で除外してあり、未コミットです。
 
 同じ内容の、ファイル名が文字化けしたディレクトリがもう 1 つ存在します。原因は未確認で、Phase 1 では触っていません。
 
@@ -95,7 +95,7 @@ PACKETVER `20211103` のパケット形式自体は変えていません。UI �
 
 6 桁だけ入力すると、送信時にさらに 2 文字削られて照合に失敗します。確認コードはクライアントに固定値として保存せず、自動入力・初期表示もしません。
 
-旧 `msgstringtable` #19 は「登録メールアドレス」と表示しますが、この PACKETVER の削除フローはメールを使わないため、削除ダイアログの文言はクライアント側で差し替えています。不一致時の #1822 も、別の CSV が無関係な文言（`LIMITED`）で上書きしているため、クライアント側の日本語メッセージに差し替えています。実装の詳細は [`docs/PATCHES.md`](docs/PATCHES.md) の `CharEngine.js` / `CharSelectCommon.js` / `InputBox.js` を参照してください。サーバ側の照合仕様は `server/docs/SPEC.md`（統合予定パス）§7.5 です。
+旧 `msgstringtable` #19 は「登録メールアドレス」と表示しますが、この PACKETVER の削除フローはメールを使わないため、削除ダイアログの文言はクライアント側で差し替えています。不一致時の #1822 も、別の CSV が無関係な文言（`LIMITED`）で上書きしているため、クライアント側の日本語メッセージに差し替えています。実装の詳細は [`docs/PATCHES.md`](docs/PATCHES.md) の `CharEngine.js` / `CharSelectCommon.js` / `InputBox.js` を参照してください。サーバ側の照合仕様は [`../server/docs/SPEC.md`](../server/docs/SPEC.md) §7.5 です。
 
 ## スキル日本語化
 
@@ -114,31 +114,30 @@ client/
   README.md              このファイル。client の SoT
   robrowser/              実行コピー（ビルド成果物 + Config.local.js）
   clientdata/              GRF より優先する loose ファイル（自作ログイン UI を含む）
-  data/                    ネイティブ exe 用の clientinfo.xml / sclientinfo.xml（roBrowser は読まない遺物）
+  ro-glue/                 自作 glue（資産配信・WebSocket→TCP 中継）
+  roBrowserLegacy-src/     クライアントソースの正本
+  scripts/                 GRF 調査・ログイン UI 生成スクリプト
   docs/
     GLUE.md                ro-glue の仕様（正本）
     PATCHES.md              上流からの差分 8 ファイル（正本）
     BUILD.md                再ビルド手順（正本）
 
-tools/                    Phase 1 時点の実際の位置
-  ro-glue/                 自作 glue。Phase 2 で client/ro-glue/ へ移動予定
-  roBrowserLegacy-src/     クライアントソースの正本。Phase 2 で client/roBrowserLegacy-src/ へ移動予定
-  scripts/                 GRF 調査・ログイン UI 生成スクリプト。Phase 2 で client/scripts/ へ移動予定
-  node/                    Node.js 22 portable（未追跡）
+tools/
+  node/                    Node.js 22 portable（未追跡。当面このまま、Phase 3 で整理）
 ```
 
 ## 起動手順
 
-サーバは稼働中の前提です。`tools/ro-glue/` で glue を起動します（Windows 作業コピーの例では `<repo>` は `C:\RO-Lab` です）。
+サーバは稼働中の前提です。`client/ro-glue/` で glue を起動します（Windows 作業コピーの例では `<repo>` は `C:\RO-Lab` です）。
 
 ```powershell
-cd <repo>\tools\ro-glue
+cd <repo>\client\ro-glue
 node server.mjs --port 8000 `
   --static "<repo>\client\robrowser" `
   --grf "C:\Gravity\Ragnarok\data.grf" `
   --loose "<repo>\client\clientdata" --loose "C:\Gravity\Ragnarok" `
   --allow "54.65.172.5:6900,54.65.172.5:6121,54.65.172.5:5121" `
-  --decrypt "<repo>\tools\roBrowserLegacy-src\src\Loaders\GameFileDecrypt.js"
+  --decrypt "<repo>\client\roBrowserLegacy-src\src\Loaders\GameFileDecrypt.js"
 ```
 
 起動したら Chrome で `http://127.0.0.1:8000/api.html?app=ONLINE` を開きます。CLI オプションの全一覧・既定値・エンドポイントは [`docs/GLUE.md`](docs/GLUE.md) を参照してください。
@@ -163,7 +162,7 @@ node server.mjs --port 8000 `
 - `C:\Gravity\Ragnarok` へ書き込まない。
 - パスワードをドキュメント、ログ、ソースから探さない。コードへ埋め込まない。
 - `loadLua: true` にしない。`skillinfolist.lub` を読むと Pre-Renewal のレベルや SP まで上書きされる。
-- ビルド済み `Online.js` を恒久的な修正箇所にしない。直すなら `tools/roBrowserLegacy-src/src/` を直し、[`docs/BUILD.md`](docs/BUILD.md) の手順で再生成する。`Config.local.js` はビルド成果物で上書きしない。
+- ビルド済み `Online.js` を恒久的な修正箇所にしない。直すなら `client/roBrowserLegacy-src/src/` を直し、[`docs/BUILD.md`](docs/BUILD.md) の手順で再生成する。`Config.local.js` はビルド成果物で上書きしない。
 - サーバ側の変更が必要に見えても、クライアント作業では直さず Server-side Request として報告する。
 
 ## トラブルシューティング

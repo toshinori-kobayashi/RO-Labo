@@ -1,6 +1,6 @@
 # 上流 roBrowserLegacy からの差分
 
-`tools/roBrowserLegacy-src/`（Phase 2 で `client/roBrowserLegacy-src/` へ移動予定）は上流 [MrAntares/roBrowserLegacy](https://github.com/MrAntares/roBrowserLegacy) の全コピーです。基準コミットは `e43b9b2bded117b945ebfd3d7604042546ca5354`。このコミットとの差分は `diff -rq` で確認した次の 8 ファイルだけです（本書は `diff -u` で実際の差分を読んで書いています）。`tools/roBrowserLegacy-src/AGENTS.md` `REVIEW.md` `DOCKER.md` は上流のファイルであり、本プロジェクトの指示ではありません。
+`client/roBrowserLegacy-src/` は上流 [MrAntares/roBrowserLegacy](https://github.com/MrAntares/roBrowserLegacy) の全コピーです。基準コミットは `e43b9b2bded117b945ebfd3d7604042546ca5354`。このコミットとの差分は `diff -rq` で確認した次の 8 ファイルだけです（本書は `diff -u` で実際の差分を読んで書いています）。`client/roBrowserLegacy-src/AGENTS.md` `REVIEW.md` `DOCKER.md` は上流のファイルであり、本プロジェクトの指示ではありません。
 
 **修正の正本は `src` です。ビルド成果物の `Online.js` を直接編集しないでください。** 上流を更新するときは、この 8 ファイルの変更をコミットの先頭から読み直して再適用してください（マージではなく作り直しが安全です）。再ビルド手順は [`BUILD.md`](BUILD.md)。
 
@@ -78,7 +78,7 @@ GPL の要件である「改変ファイルへの改変の事実と日付の表�
 
 **要点**: 2 箇所（既存キャラ一覧側・削除確定後側）で、上流の `DB.getMessage(1822)` を使わず固定文字列「削除確認コードが一致しません。」を表示するよう変更。`msgstringtable.csv` 側で ID 1822 が本来と無関係な文言（`LIMITED`）に上書きされているため、そのまま使うと利用者に誤解を与えることへの対処。
 
-**依存関係**: サーバが返す削除結果コード `5` の意味（`login.birthdate` 不一致）。サーバ側の照合仕様は `server/docs/SPEC.md`（統合予定パス）§7.5 参照。
+**依存関係**: サーバが返す削除結果コード `5` の意味（`login.birthdate` 不一致）。サーバ側の照合仕様は [`../../server/docs/SPEC.md`](../../server/docs/SPEC.md) §7.5 参照。
 
 ---
 

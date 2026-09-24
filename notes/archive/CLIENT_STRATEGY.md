@@ -1,4 +1,4 @@
-> **HISTORICAL（2026-09-24）** — 2026-09-23 時点の方式比較と採用判断の記録です。判断（roBrowserLegacy + 手元 jRO data.grf、ネイティブ exe 不採用）は現在も有効ですが、§5〜§7 の構成・E2E 結果・Blocker は当時のものです。現行仕様は [client/README.md](../client/README.md)、現在地は [docs/CURRENT_STATUS.md](../docs/CURRENT_STATUS.md)。
+> **HISTORICAL（2026-09-24）** — 2026-09-23 時点の方式比較と採用判断の記録です。判断（roBrowserLegacy + 手元 jRO data.grf、ネイティブ exe 不採用）は現在も有効ですが、§5〜§7 の構成・E2E 結果・Blocker は当時のものです。現行仕様は [client/README.md](../../client/README.md)、現在地は [docs/CURRENT_STATUS.md](../../docs/CURRENT_STATUS.md)。
 
 # CLIENT_STRATEGY
 

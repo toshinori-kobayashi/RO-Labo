@@ -1,11 +1,11 @@
 # クライアントの再ビルド手順
 
-ソースの正本は `tools/roBrowserLegacy-src/src/`（Phase 2 で `client/roBrowserLegacy-src/` へ移動予定）です。上流との差分 8 ファイルは [`PATCHES.md`](PATCHES.md) を参照してください。**ビルド成果物の `Online.js` を直接編集しないでください。** 直すときは必ず `src` を直して、ここに書く手順で再生成します。
+ソースの正本は `client/roBrowserLegacy-src/src/` です。上流との差分 8 ファイルは [`PATCHES.md`](PATCHES.md) を参照してください。**ビルド成果物の `Online.js` を直接編集しないでください。** 直すときは必ず `src` を直して、ここに書く手順で再生成します。
 
 ## 前提
 
 - Windows x64。`roBrowserLegacy-src/package.json` の `engines.node` は `>=22`。
-- Node.js 22 portable を `tools/node/`（未追跡。`.gitignore` 対象）に置く。管理者権限もシステム PATH の変更も不要。
+- Node.js 22 portable を `tools/node/`（未追跡。`.gitignore` 対象。当面このまま、Phase 3 で整理）に置く。管理者権限もシステム PATH の変更も不要。
 - ビルド前にそのセッションの PATH の先頭へ通す（PowerShell）:
 
 ```powershell
@@ -16,10 +16,10 @@ Windows 作業コピーの例では `<repo>` は `C:\RO-Lab` です。
 
 ## 依存導入
 
-`tools/roBrowserLegacy-src/` に `package-lock.json` が無く、素の `npm install` は peer 依存の解決で失敗することがあります。`tools/roBrowserLegacy-src/` 直下で次の 2 コマンドを順に実行します。
+`client/roBrowserLegacy-src/` に `package-lock.json` が無く、素の `npm install` は peer 依存の解決で失敗することがあります。`client/roBrowserLegacy-src/` 直下で次の 2 コマンドを順に実行します。
 
 ```powershell
-cd <repo>\tools\roBrowserLegacy-src
+cd <repo>\client\roBrowserLegacy-src
 
 # 1) 主要な依存（electron 等ビルドに不要なものは入れない）
 npm install --no-save --legacy-peer-deps --ignore-scripts --omit=optional --no-audit --no-fund `
