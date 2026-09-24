@@ -82,6 +82,14 @@
 - **影響**: なし。
 - **関連ファイル**: `README.md`、`NOTICE.md`、`docs/ARCHITECTURE.md`、`docs/CURRENT_STATUS.md`、`client/README.md`、`client/docs/`、`notes/archive/`（RO-Labo リポジトリ側）、`server/README.md`、`server/docs/SPEC.md`、`server/docs/OPERATIONS.md`、`server/docs/TOOLS.md`、`server/docs/DESIGN.md`、`server/docs/JP_NPC_PLAN.md`、`server/docs/CHANGELOG.md`（本ファイル）
 
+## 2026-09-24 23:50 JST 頃 AWS 環境の撤去
+
+- **種別**: 撤去
+- **内容**: 検証を終えたため、`terraform -chdir=terraform destroy` で Terraform 管理の全 40 リソース（VPC / EC2 / EBS / EIP / SG / IAM / CloudWatch / S3 / SSM Association / DLM）を削除。Terraform 管理外だった DLM 作成のスナップショット 1 件（`snap-0375992fb386145ca`）も削除。撤去前に game server を停止して `mariadb-dump`（70 テーブル）と MariaDB データディレクトリの tar を取得し、運用者の Mac の `server/backups/final-20260924/`（Git 管理外）へ退避。撤去後の確認: インスタンス terminated、ボリューム / EIP / VPC / SG / ロググループ / アラーム / Association / DLM ポリシー / S3 バケット / IAM ロール / スナップショットいずれも 0 件、Terraform state 0 リソース。
+- **影響**: サーバは接続不可。EIP `54.65.172.5` は解放済み。再構築は `terraform apply`（約 12 分）で可能だが識別子は変わる。
+- **関連ファイル**: `terraform/`（定義は維持）、`docs/SPEC.md`（撤去前の最終状態の記録）、`README.md`
+- **備考**: Mac 側ラッパー `scripts/backup-db.sh` 経由の最終ダンプは「ダンプが不完全です（CREATE TABLE なし）」で失敗扱いになった（EC2 上で直接 `mariadb-dump` を実行すると正常）。チェック処理の不具合の疑いがあり未調査。
+
 ---
 
 ## 今後の予定・未対応

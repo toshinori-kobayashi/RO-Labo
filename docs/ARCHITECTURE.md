@@ -3,6 +3,8 @@
 作成日: 2026-09-24
 対象読者: 初見の SRE / 開発者、後続の別 AI。
 
+> サーバ側（AWS）は 2026-09-24 に撤去済みです。本書は構成の記録として維持し、再構築時もこの構成に戻します。
+
 全体像を 1 枚に集約した文書です。個別実装は [client/README.md](../client/README.md) と [client/docs/](../client/docs/) 配下、サーバ実装は [../server/docs/SPEC.md](../server/docs/SPEC.md) を参照してください。
 
 ## 1. 全体図
