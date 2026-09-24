@@ -1,0 +1,112 @@
+//===== rAthena Script =======================================
+//= 冒険者支援員（初心者修練場スキップ + 一次職即時転職 + プロンテラ転送）
+//===== Description: =========================================
+//= 検証サーバ独自の追加 NPC（上流の差し替えではない。MANIFEST では `-` 行）。
+//= 初心者修練場（new_1-1～new_5-1）の出現地点近くに置き、RO 経験者が修練場と
+//= 通常の一次職転職試験を飛ばして、すぐ通常プレイを始められるようにする。
+//=
+//= 転職処理は rAthena 標準の script 命令だけで行い、DB は直接触らない。
+//= 通常の一次職転職 NPC（npc/pre-re/jobs/1-1/*.txt）と同じ最終状態になるよう、
+//=   1. Basic Skill（NV_BASIC）を 9 にする（F_CanChangeJob と同じ条件を満たす。
+//=      未使用ポイントが 9 未満のままだと pc_calc_skilltree_normalize_job_sub により
+//=      一次職になってもスキルツリーがノービス扱いのまま固定される）
+//=   2. 未使用スキルポイントを 0 にする（通常転職は Job Lv 10 / Basic Skill 9 =
+//=      ポイント全消費の状態でしか行えないため、それに揃える）
+//=   3. F_ClearJobVar で転職クエスト変数を初期化
+//=   4. Job_Change（= jobchange <job>,Upper）。jobchange が JobLv 1 / JobExp 0 に戻す
+//=   5. HP/SP 全回復、状態異常解除、ノービスポーション 10 個
+//=   6. セーブポイントを修練場の職業案内と同じ prontera,117,72 にしてプロンテラ中央へ転送
+//= 利用できるのは Class == Job_Novice のみ（一次職以上・転生ノービス・養子は対象外）。
+//=
+//= 注意: 選択肢の文言に半角コロンを含めない。添字式 `[select(...)]` は使わない
+//=       （CP932 の 2 バイト目が [ ] になる文字と rAthena parse_variable の相性問題）。
+//============================================================
+
+-	script	冒険者支援員::TrainingSkipSupport	-1,{
+	mes "[冒険者支援員]";
+	mes "こんにちは、冒険者さん。";
+	mes "私は経験者向けの支援員です。";
+	next;
+	if (Class != Job_Novice) {
+		mes "[冒険者支援員]";
+		mes "すでに職業についているため、";
+		mes "このサービスは利用できません。";
+		mes "良い冒険を！";
+		close;
+	}
+	mes "[冒険者支援員]";
+	mes "初心者修練場をスキップして、";
+	mes "すぐに冒険を始めますか？";
+	mes "ご希望の一次職に転職し、";
+	mes "プロンテラへお送りします。";
+	next;
+	mes "[冒険者支援員]";
+	mes "転職後は Job Lv 1、Basic Skill Lv 9 の";
+	mes "状態になります（通常の転職と同じです）。";
+	mes "修練場の続きは受けられなくなります。";
+	next;
+	switch (select("剣士になる:アーチャーになる:マジシャンになる:アコライトになる:商人になる:シーフになる:まだ修練場を続ける")) {
+	case 1: set .@job, Job_Swordman; set .@jname$, "剣士"; break;
+	case 2: set .@job, Job_Archer;   set .@jname$, "アーチャー"; break;
+	case 3: set .@job, Job_Mage;     set .@jname$, "マジシャン"; break;
+	case 4: set .@job, Job_Acolyte;  set .@jname$, "アコライト"; break;
+	case 5: set .@job, Job_Merchant; set .@jname$, "商人"; break;
+	case 6: set .@job, Job_Thief;    set .@jname$, "シーフ"; break;
+	default:
+		mes "[冒険者支援員]";
+		mes "わかりました。";
+		mes "修練場を続けてください。";
+		mes "気が変わったらまた声をかけてくださいね。";
+		close;
+	}
+	mes "[冒険者支援員]";
+	mes .@jname$ + "に転職し、プロンテラへ移動します。";
+	mes "よろしいですか？";
+	next;
+	if (select("はい:いいえ") != 1) {
+		mes "[冒険者支援員]";
+		mes "わかりました。";
+		mes "またいつでもどうぞ。";
+		close;
+	}
+	// 会話中に状況が変わっていないか再確認（二重転職の防止）
+	if (Class != Job_Novice) {
+		mes "[冒険者支援員]";
+		mes "すでに職業についているため、";
+		mes "このサービスは利用できません。";
+		close;
+	}
+	// 1-2. 通常の一次職転職と同じ前提状態にそろえる
+	if (getskilllv("NV_BASIC") < 9) {
+		skill "NV_BASIC",9,SKILL_PERM;
+	}
+	if (SkillPoint > 0) {
+		set SkillPoint, 0;
+	}
+	// 3. 転職クエスト用の変数を初期化
+	callfunc "F_ClearJobVar";
+	// 4. 転職（標準の Job_Change = jobchange <job>,Upper）
+	callfunc "Job_Change", .@job;
+	// 5. 回復と最低限の消耗品
+	percentheal 100,100;
+	sc_end SC_ALL;
+	getitem 569,10; // Novice_Potion
+	mes "[冒険者支援員]";
+	mes "おめでとうございます！";
+	mes "あなたは " + .@jname$ + " になりました。";
+	mes "ノービスポーションを 10 個お渡しします。";
+	mes "それではプロンテラへお送りします。";
+	mes "良い冒険を！";
+	close2;
+	// 6. セーブポイントは修練場の職業案内と同じ場所。転送先は中央広場の南（既存 NPC と重ならない）
+	savepoint "prontera",117,72,1,1;
+	warp "prontera",150,180;
+	end;
+}
+
+// 修練場は 5 面あり（start_point_pre: new_1-1～new_5-1,53,111）、出現地点のすぐ東に配置する
+new_1-1,58,114,3	duplicate(TrainingSkipSupport)	冒険者支援員#nv1::TrainingSkipSupport1	4_M_JOB_KNIGHT1
+new_2-1,58,114,3	duplicate(TrainingSkipSupport)	冒険者支援員#nv2::TrainingSkipSupport2	4_M_JOB_KNIGHT1
+new_3-1,58,114,3	duplicate(TrainingSkipSupport)	冒険者支援員#nv3::TrainingSkipSupport3	4_M_JOB_KNIGHT1
+new_4-1,58,114,3	duplicate(TrainingSkipSupport)	冒険者支援員#nv4::TrainingSkipSupport4	4_M_JOB_KNIGHT1
+new_5-1,58,114,3	duplicate(TrainingSkipSupport)	冒険者支援員#nv5::TrainingSkipSupport5	4_M_JOB_KNIGHT1

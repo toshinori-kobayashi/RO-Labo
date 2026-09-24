@@ -1,0 +1,392 @@
+//===== rAthena Script =======================================
+//= Novice Goods Exchanger
+//===== By: ==================================================
+//= ???, rAthena Team
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Exchanges your Basic Monster drops for Red Potions.
+//===== Additional Comments: =================================
+//= 1.2 Rescripted to Aegis 10.standards. [L0ne_W0lf[
+//=     Made it easier to add new items to exhange list
+//=     meaning only the exchange is done in a function now.
+//= 1.3 Fixed dialog mix-up in function. [L0ne_W0lf]
+//= 1.4 Added checkweight, and input min/max values. [L0ne_W0lf]
+//============================================================
+
+prontera,123,102,5	script	商人#pron::Merchant#pron	85,{
+	if (MaxWeight - Weight < 6301 || checkweight(1201,1) == 0) {
+		mes "[商人]";
+		mes "はっはっは！";
+		mes "君、超人か何かかい？";
+		mes "ずいぶん荷物を抱えているねえ！";
+		mes "少しはカプラ倉庫に";
+		mes "預けておいたらどうだい～";
+		close;
+	}
+	mes "[商人]";
+	mes "こんにちは！";
+	mes "貝殻や綿毛みたいな";
+	mes "ものを集めていないかい？";
+	mes "それとジェロピーもだ。実は";
+	mes "ちょっと入り用でね。";
+	next;
+	mes "[商人]";
+	mes "もちろんタダでとは";
+	mes "言わないよ。貝殻5個、綿毛10個、";
+	mes "またはジェロピー10個で赤ポーション1個と交換するのはどうだい？";
+	next;
+	switch(select("やります！:ぼったくりだよ！:いや、やめておく")) {
+	case 1:
+		mes "[商人]";
+		mes "それで、";
+		mes "どれを持ってくるんだい？";
+		mes "貝殻、綿毛、それともジェロピーかい？";
+		next;
+		switch(select("貝殻:ジェロピー:綿毛:やめる")) {
+		case 1: callfunc "F_PotExchange",935,5;
+		case 2: callfunc "F_PotExchange",909,10;
+		case 3: callfunc "F_PotExchange",914,10;
+		case 4:
+			mes "[商人]";
+			mes "了解～";
+			mes "分かったよ。";
+			close;
+		}
+	case 2:
+		mes "[商人]";
+		mes "ぼったくりだって…？";
+		mes "取引している品物の";
+		mes "相場を調べてみれば、むしろ損をしているのは";
+		mes "こっちの方さ。";
+		close;
+	case 3:
+		mes "[商人]";
+		mes "そうかい、";
+		mes "分かったよ。";
+		mes "気が変わったら";
+		mes "また来ておくれ。";
+		close;
+	}
+}
+
+morocc,180,259,3	script	商人#Morocc::Merchant#Morocc	85,{
+	if (MaxWeight - Weight < 6301 || checkweight(1201,1) == 0) {
+		mes "[商人]";
+		mes "はっはっは！";
+		mes "君、超人か何かかい？";
+		mes "ずいぶん荷物を抱えているねえ！";
+		mes "少しはカプラ倉庫に";
+		mes "預けておいたらどうだい～";
+		close;
+	}
+	mes "[商人]";
+	mes "こんにちは！";
+	mes "貝殻や鳥の羽みたいな";
+	mes "ものを集めていないかい？";
+	mes "それとジェロピーもだ。実は";
+	mes "ちょっと入り用でね。";
+	next;
+	mes "[商人]";
+	mes "もちろんタダでとは";
+	mes "言わないよ。貝殻5個、鳥の羽7個、";
+	mes "またはジェロピー10個で赤ポーション1個と交換するのはどうだい？";
+	next;
+	switch(select("やります！:ぼったくりだよ！:いや、やめておく")) {
+	case 1:
+		mes "[商人]";
+		mes "それで、";
+		mes "どれを持ってくるんだい？";
+		mes "貝殻、鳥の羽、";
+		mes "それともジェロピーかい？";
+		next;
+		switch(select("貝殻:鳥の羽:ジェロピー:やめる")) {
+		case 1: callfunc "F_PotExchange",935,5;
+		case 2: callfunc "F_PotExchange",916,7;
+		case 3: callfunc "F_PotExchange",909,10;
+		case 4:
+			mes "[商人]";
+			mes "了解～";
+			mes "分かったよ。";
+			close;
+		}
+	case 2:
+		mes "[商人]";
+		mes "ぼったくりだって…？";
+		mes "取引している品物の";
+		mes "相場を調べてみれば、むしろ損をしているのは";
+		mes "こっちの方さ。";
+		close;
+	case 3:
+		mes "[商人]";
+		mes "そうかい、";
+		mes "分かったよ。";
+		mes "気が変わったら";
+		mes "また来ておくれ。";
+		close;
+	}
+}
+
+payon,200,134,5	script	商人#pay::Merchant#pay	85,{
+	if (MaxWeight - Weight < 6301 || checkweight(1201,1) == 0) {
+		mes "[商人]";
+		mes "はっはっは！";
+		mes "君、超人か何かかい？";
+		mes "ずいぶん荷物を抱えているねえ！";
+		mes "少しはカプラ倉庫に";
+		mes "預けておいたらどうだい～";
+		close;
+	}
+	mes "[商人]";
+	mes "こんにちは！";
+	mes "木の根っこみたいな";
+	mes "ものを集めていないかい？";
+	mes "それとジェロピーもだ。実は";
+	mes "ちょっと入り用でね。";
+	next;
+	mes "[商人]";
+	mes "もちろんタダでとは";
+	mes "言わないよ。木の根っこ6個、またはジェロピー10個で赤ポーション1個と交換するのはどうだい？";
+	next;
+	switch(select("やります！:ぼったくりだよ！:いや、やめておく")) {
+	case 1:
+		mes "[商人]";
+		mes "それで、";
+		mes "どれを持ってくるんだい？";
+		mes "木の根っこ、それともジェロピーかい？";
+		next;
+		switch(select("木の根っこ:ジェロピー:やめる")) {
+		case 1: callfunc "F_PotExchange",902,6;
+		case 2: callfunc "F_PotExchange",909,10;
+		case 3:
+			mes "[商人]";
+			mes "了解～";
+			mes "分かったよ。";
+			close;
+		}
+	case 2:
+		mes "[商人]";
+		mes "ぼったくりだって…？";
+		mes "取引している品物の";
+		mes "相場を調べてみれば、むしろ損をしているのは";
+		mes "こっちの方さ。";
+		close;
+	case 3:
+		mes "[商人]";
+		mes "そうかい、";
+		mes "分かったよ。";
+		mes "気が変わったら";
+		mes "また来ておくれ。";
+		close;
+	}
+}
+
+aldebaran,152,63,5	script	商人#alde::Merchant#alde	85,{
+	if (MaxWeight - Weight < 6301 || checkweight(1201,1) == 0) {
+		mes "[商人]";
+		mes "はっはっは！";
+		mes "君、超人か何かかい？";
+		mes "ずいぶん荷物を抱えているねえ！";
+		mes "少しはカプラ倉庫に";
+		mes "預けておいたらどうだい～";
+		close;
+	}
+	mes "[商人]";
+	mes "こんにちは！";
+	mes "ミミズの皮や鳥の羽みたいな";
+	mes "ものを集めていないかい？";
+	mes "それとジェロピーもだ。実は";
+	mes "ちょっと入り用でね。";
+	next;
+	mes "[商人]";
+	mes "もちろんタダでとは";
+	mes "言わないよ。ミミズの皮1個、鳥の羽7個、またはジェロピー10個で赤ポーション1個と交換するのはどうだい？";
+	next;
+	switch(select("やります！:ぼったくりだよ！:いや、やめておく")) {
+	case 1:
+		mes "[商人]";
+		mes "それで、";
+		mes "どれを持ってくるんだい？";
+		mes "鳥の羽かい？";
+		mes "ミミズの皮かい？";
+		mes "それともジェロピーかい？";
+		next;
+		switch(select("ミミズの皮:鳥の羽:ジェロピー:やめる")) {
+		case 1: callfunc "F_PotExchange",955,1;
+		case 2: callfunc "F_PotExchange",916,7;
+		case 3: callfunc "F_PotExchange",909,10;
+		case 4:
+			mes "[商人]";
+			mes "了解～";
+			mes "分かったよ。";
+			close;
+		}
+	case 2:
+		mes "[商人]";
+		mes "ぼったくりだって…？";
+		mes "取引している品物の";
+		mes "相場を調べてみれば、むしろ損をしているのは";
+		mes "こっちの方さ。";
+		close;
+	case 3:
+		mes "[商人]";
+		mes "そうかい、";
+		mes "分かったよ。";
+		mes "気が変わったら";
+		mes "また来ておくれ。";
+		close;
+	}
+}
+
+geffen,173,88,5	script	商人#geff::Merchant#geff	85,{
+	if (MaxWeight - Weight < 6301 || checkweight(1201,1) == 0) {
+		mes "[商人]";
+		mes "はっはっは！";
+		mes "君、超人か何かかい？";
+		mes "ずいぶん荷物を抱えているねえ！";
+		mes "少しはカプラ倉庫に";
+		mes "預けておいたらどうだい～";
+		close;
+	}
+	mes "[商人]";
+	mes "こんにちは！";
+	mes "貝殻やサナギみたいな";
+	mes "ものを集めていないかい？";
+	mes "それとジェロピーもだ。実は";
+	mes "ちょっと入り用でね。";
+	next;
+	mes "[商人]";
+	mes "もちろんタダでとは";
+	mes "言わないよ。貝殻5個かサナギ6個、またはジェロピー10個で赤ポーション1個と交換するのはどうだい？";
+	next;
+	switch(select("やります！:ぼったくりだよ！:いや、やめておく")) {
+	case 1:
+		mes "[商人]";
+		mes "それで、";
+		mes "どれを持ってくるんだい？";
+		mes "貝殻、サナギ、それともジェロピーかい？";
+		next;
+		switch(select("貝殻:サナギ:ジェロピー:やめる")) {
+		case 1: callfunc "F_PotExchange",935,5;
+		case 2: callfunc "F_PotExchange",915,6;
+		case 3: callfunc "F_PotExchange",909,10;
+		case 4:
+			mes "[商人]";
+			mes "了解～";
+			mes "分かったよ。";
+			close;
+		}
+	case 2:
+		mes "[商人]";
+		mes "ぼったくりだって…？";
+		mes "取引している品物の";
+		mes "相場を調べてみれば、むしろ損をしているのは";
+		mes "こっちの方さ。";
+		close;
+	case 3:
+		mes "[商人]";
+		mes "そうかい、";
+		mes "分かったよ。";
+		mes "気が変わったら";
+		mes "また来ておくれ。";
+		close;
+	}
+}
+
+function	script	F_PotExchange	{
+	.@item_req = getarg(0);
+	.@req_amount = getarg(1);
+
+	if (countitem(.@item_req) < .@req_amount) {
+		mes "[商人]";
+		mes "おや、約束してくれた";
+		mes ""+ getitemname(.@item_req) +"は";
+		mes "どこにあるんだい？";
+		mes ""+ getitemname(.@item_req) +"を持ってきておくれ！";
+		close;
+	}
+	else {
+		mes "[商人]";
+		mes "よし、確認させて";
+		mes ""+ getitemname(.@item_req) +"をいくつ";
+		mes "持っているか…ふむ…";
+		next;
+		mes "[商人]";
+		mes "君は";
+		mes "合計"+ countitem(.@item_req) +"個の"+ getitemname(.@item_req) +"を持っているね。";
+		mes "それなら合計で";
+		mes ""+ (countitem(.@item_req)/.@req_amount) +"個の赤ポーションと交換できるよ。";
+		next;
+		mes "[商人]";
+		mes "どうだい？";
+		mes "取引成立かな？";
+		next;
+		if (select("取引成立:取引しない") == 1) {
+			mes "[商人]";
+			mes "欲しい赤ポーションの";
+			mes "正確な数は";
+			mes "もう決まっているんだろう？";
+			mes ""+ getitemname(.@item_req) +"と交換するんだったね？";
+			next;
+			mes "[商人]";
+			mes "そうだな、一度に";
+			mes "最低1個から";
+			mes "最大100個まで";
+			mes "赤ポーションと交換できるよ。もし";
+			mes "やめたくなったら「0」と入力してくれ。";
+			next;
+			while(1) {
+				input .@input,0,101;
+				if (.@input == 0) {
+					mes "[商人]";
+					mes "何だって…？";
+					mes "それならどうして";
+					mes "話しかけてきたんだい？";
+					mes "ずいぶん優柔不断なんだねえ。";
+					close;
+				}
+				else if (.@input > 100) {
+					mes "[商人]";
+					mes "一度に100個より";
+					mes "多くは渡せないよ。";
+					mes "もう一度";
+					mes "やり直しておくれ。";
+					next;
+				}
+				else {
+					break;
+				}
+			}
+			.@put_out_item = .@input * .@req_amount;
+			if (countitem(.@item_req) < .@put_out_item) {
+				mes "[商人]";
+				mes "おっと、入力した数がおかしいようだね。交換できる赤ポーションの数をもう一度確認してみておくれ。";
+				close;
+			}
+			mes "[商人]";
+			mes "はい、どうぞ！";
+			mes "渡した赤ポーションの数を";
+			mes "確認してみておくれ。ありがとう、いい取引だったよ～";
+			delitem .@item_req,.@put_out_item; //Shell
+			getitem 501,.@input; //Red_Potion
+			close;
+		}
+		mes "[商人]";
+		mes "ふうん～";
+		mes "分かったよ。";
+		mes "でも君みたいな";
+		mes "冒険者には";
+		mes "赤ポーションの方が役に立つと思うけどねえ？";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.1 Made it as a function. U can add your own Merchs [Lupus]
+//= 1.1a Fixed item select [KarLaeda]
+//============================================================ 

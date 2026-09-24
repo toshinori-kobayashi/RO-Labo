@@ -1,0 +1,126 @@
+//===== rAthena Script =======================================
+//= Global Functions（日本語オーバーレイ）
+//===== Description: =========================================
+//= 上流 npc/other/Global_Functions.txt は delnpc せずにそのまま先に読み込ませ、
+//= プレイヤーに表示される名称を返す 3 関数だけをここで同名で上書きする
+//= （npc_parse_function: Overwriting user function）。
+//= 上流の定義を残す理由: F_getpositionname() のような直接呼び出し構文は
+//= パース時に関数が既知である必要があり、後ろに移すと script error になるため。
+//= 変更しているのは return の文字列だけ。ロジック・他の関数は上流のまま。
+//============================================================
+
+//////////////////////////////////////////////////////////////////////////////////
+// Returns weapon type, based on view.
+// -- callfunc "F_GetWeaponType",<weapon ID>
+//
+// Returns equipment type, based on equip location.
+// -- callfunc "F_GetArmorType",<item ID>
+//////////////////////////////////////////////////////////////////////////////////
+function	script	F_GetWeaponType	{
+	switch(getiteminfo(getarg(0), ITEMINFO_VIEW)) {
+		case 1: return "短剣"; break;
+		case 2: return "片手剣"; break;
+		case 3: return "両手剣"; break;
+		case 4: return "片手槍"; break;
+		case 5: return "両手槍"; break;
+		case 6: return "片手斧"; break;
+		case 7: return "両手斧"; break;
+		case 8: return "メイス"; break;
+		//case 9: return "Unused"; break;
+		case 10: return "杖"; break;
+		case 11: return "弓"; break;
+		case 12: return "ナックル"; break;
+		case 13: return "楽器"; break;
+		case 14: return "鞭"; break;
+		case 15: return "本"; break;
+		case 16: return "カタル"; break;
+		case 17: return "リボルバ"; break;
+		case 18: return "ライフル"; break;
+		case 19: return "ガトリングガン"; break;
+		case 20: return "ショットガン"; break;
+		case 21: return "榴弾発射器"; break;
+		case 22: return "手裏剣"; break;
+		default: return "不明な武器"; break;
+	}
+	end;
+}
+
+function	script	F_GetArmorType	{
+	switch(getiteminfo(getarg(0), ITEMINFO_LOCATIONS)) {
+		case EQP_HEAD_LOW:
+			return "下段防具";
+		case EQP_HAND_R:
+			return callfunc("F_GetWeaponType",getarg(0));
+		case EQP_GARMENT:
+			return "マント";
+		case EQP_ACC_L:
+		case EQP_ACC_R:
+		case EQP_ACC_RL:
+			return "アクセサリ";
+		case EQP_ARMOR:
+			return "防具";
+		case EQP_HAND_L:
+			return "盾";
+		case EQP_SHOES:
+			return "靴";
+		case EQP_HEAD_TOP:
+			return "上段防具";
+		case EQP_HEAD_MID:
+			return "中段防具";
+		case EQP_COSTUME_HEAD_TOP:
+			return "衣装上段防具";
+		case EQP_COSTUME_HEAD_MID:
+			return "衣装中段防具";
+		case EQP_COSTUME_HEAD_LOW:
+			return "衣装下段防具";
+		case EQP_COSTUME_GARMENT:
+			return "衣装マント";
+		case EQP_AMMO:
+			return "弾薬";
+		case EQP_SHADOW_ARMOR:
+			return "シャドウ防具";
+		case EQP_SHADOW_WEAPON:
+			return "シャドウ武器";
+		case EQP_SHADOW_SHIELD:
+			return "シャドウ盾";
+		case EQP_SHADOW_SHOES:
+			return "シャドウ靴";
+		case EQP_SHADOW_ACC_R:
+		case EQP_SHADOW_ACC_L:
+		case EQP_SHADOW_ACC_RL:
+			return "シャドウアクセサリ";
+		default:
+			return "不明な装備";
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// Return the position name of the EQI_* equipment slot.
+//////////////////////////////////////////////////////////////////////////////////
+function	script	F_getpositionname	{
+	switch( getarg(0,999) ) {
+		case EQI_ACC_L:		return "アクセサリ1";
+		case EQI_ACC_R:		return "アクセサリ2";
+		case EQI_SHOES:		return "靴";
+		case EQI_GARMENT:	return "マント";
+		case EQI_HEAD_LOW:	return "頭3";
+		case EQI_HEAD_MID:	return "頭2";
+		case EQI_HEAD_TOP:	return "頭";
+		case EQI_ARMOR:		return "胴";
+		case EQI_HAND_L:	return "左手";
+		case EQI_HAND_R:	return "右手";
+		case EQI_COSTUME_HEAD_TOP:	return "衣装上段";
+		case EQI_COSTUME_HEAD_MID:	return "衣装中段";
+		case EQI_COSTUME_HEAD_LOW:	return "衣装下段";
+		case EQI_COSTUME_GARMENT:	return "衣装マント";
+		case EQI_AMMO:			return "矢/弾薬";
+		case EQI_SHADOW_ARMOR:	return "シャドウ防具";
+		case EQI_SHADOW_WEAPON:	return "シャドウ武器";
+		case EQI_SHADOW_SHIELD:	return "シャドウ盾";
+		case EQI_SHADOW_SHOES:	return "シャドウ靴";
+		case EQI_SHADOW_ACC_R:	return "シャドウアクセサリ2";
+		case EQI_SHADOW_ACC_L:	return "シャドウアクセサリ1";
+		default:
+			return "不明";
+	}
+}

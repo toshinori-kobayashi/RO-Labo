@@ -1,0 +1,1985 @@
+//===== rAthena Script ======================================= 
+//= Wizard Job Quest
+//===== By: ================================================== 
+//= (Aegis) Translated by yoshiki, converted by kobra_k88
+//= Further bugfixed and tested by Lupus
+//===== Current Version: ===================================== 
+//= 3.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job Change quest for Wizard class.
+//===== Additional Comments: ================================= 
+//= 2.4 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 2.5 Several bugfixes with the help of Barron-Monster. [L0ne_W0lf]
+//= 2.5a More bugfixes care of Barron-Monster. [L0ne_W0lf]
+//= 2.5b Fixed tests calling on a non-existant label in "Room of x#Failed" npcs. [L0ne_W0lf]
+//= 2.5c Bug fixes. Cleaned up some NPCs slightly. [L0ne_W0lf]
+//= 2.6 Fixed Water Room not warping on time-up. [L0ne_W0lf]
+//= 2.7 Now uses enable and disable waitingroomevent. [L0ne_W0lf]
+//=     Other minor fixes to various NPCs.
+//= 2.7a Added end; :D (bugreport:2038) [Yommy]
+//= 2.8 Fixed donpcevent to doevent. (bugreport:2311) [SoulBlaker]
+//= 2.9 Reverted the change of donpcevent to doevent. [L0ne_W0lf]
+//=     Was probably cuased by a warp BEFORE a percentheal
+//= 3.0 Added Quest Log commands. [Kisuka]
+//= 3.1 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 3.2 Modified the quest to renewal. [Vali] (Thanks to Muad_Dib for the necessary info).
+//= 3.3 Fixed waitingroom bug. [Euphy]
+//============================================================ 
+
+gef_tower,111,37,4	script	ウィザードギルド職員::Wizard Guildsman	70,{
+	if (Upper == 1) {
+		mes "[キャサリン]";
+		mes "？失礼、以前どこかでお会いしませんでしたか…？";
+		mes "あら～ずいぶん変わりましたね！一体何があったんですか？";
+		next;
+		mes "[キャサリン]";
+		mes "とても力強くなられた気がします。";
+		mes "おめでとうございます、これからの人生にも幸運を！";
+		close;
+	}
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Wizard) {
+			mes "[キャサリン]";
+			mes "もうウィザードになられたのですから、私にご用はないでしょう…？";
+			mes "それでは、失礼します。";
+			next;
+			mes "[キャサリン]";
+			if (Sex == SEX_MALE)
+				mes "そうですね、もしデートに誘ってくださるおつもりなら…嬉しいですけど…ほほほ。";
+			else
+				mes "そうですね、もし素敵な殿方を紹介してくれるなら…嬉しいですけど…ほほほ！。";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "[ウィザードギルド職員]";
+			mes "あらまあ、ノービスさんね～かわいらしいこと。";
+			mes "ところでハニー、ここはウィザードのための場所よ。";
+			next;
+			mes "[ウィザードギルド職員]";
+			mes "魔法に興味があるなら、";
+			mes "^0000FFマジシャン^000000ギルドを訪ねてね。";
+		}
+		else {
+			mes "[ウィザードギルド職員]";
+			mes "あら？こんな高い場所まで何のご用かしら…？";
+			mes "特に用がないなら、今すぐお引き取りください。";
+			mes "ここはウィザードのための場所ですのよ？";
+		}
+		next;
+		mes "[ウィザードギルド職員]";
+		mes "それでは、また。";
+		close;
+	}
+	if (WIZ_Q == 0) {
+		mes "[ウィザードギルド職員]";
+		mes "あら？こんな高い所で何をしているの…？";
+		mes "それで、どんなご用かしら？";
+		next;
+		if (select("ウィザードになりたいのです。:…いえ、何でもありません。") == 1) {
+			mes "[ウィザードギルド職員]";
+			mes "そうですか…まあ、そうでなければこんなにたくさんの階段を上ってきませんものね。";
+			mes "とにかく、歓迎します。ウィザードになるお手伝いをしましょう。";
+			next;
+			mes "[ウィザードギルド職員]";
+			mes "私の名前はキャサリン・メディチ。ここだけの話、私も最近ウィザードになったばかりなんです！";
+			mes "よかったらキャシーと呼んでください。ふふふ～";
+			next;
+			mes "[キャサリン]";
+			mes "ウィザードになりたいと願う人は多いですが、忍耐強く粘り強い人だけが目標を成し遂げられます。";
+			mes "ウィザードになるには、困難な試練を乗り越えなければなりません。";
+			next;
+			mes "[キャサリン]";
+			mes "それに、ジョブレベル40以上に達したマジシャンだけがこの試験を受けられます。";
+			mes "レベルの低いマジシャンは、まだ魔法の経験が足りずウィザードにはなれません…";
+			next;
+			mes "[キャサリン]";
+			mes "そうですね、申請していただければ詳しい情報をお伝えします。";
+			mes "それで！今すぐ申請しますか？";
+			next;
+			if (select("はい、お願いします。:やっぱり、少し考えさせてください。") == 1) {
+				if (JobLevel < 40) {
+					mes "[キャサリン]";
+					mes "あらあら、私の話を聞いていませんでした？";
+					mes "試験を申し込むには、少なくともジョブレベル40が必要だとお伝えしたはずですが…";
+					next;
+					mes "[キャサリン]";
+					mes "急ぐ必要はありません、もっと経験を積んで魔法の世界についてじっくり考えてみてください。";
+					mes "あなたが十分だと私が判断したら、申請を受け付けます。";
+					close;
+				}
+				if (SkillPoint) {
+					mes "[キャサリン]";
+					mes "うーん…十分な資格はあるようですが、未使用のスキルポイントが残っていますね。";
+					mes "もう一度申請する前に、もっとスキルを習得しておいた方がいいですよ。";
+					close;
+				}
+				mes "[キャサリン]";
+				mes "それでは、あなたの申請を受け付けます。";
+				mes "お名前は…" + strcharinfo(0) + "様でしたね？正しく発音できているといいのですが？";
+				next;
+				mes "[キャサリン]";
+				mes "ウィザード転職試験は3つの部分に分かれています。";
+				mes "第1部、魔法アイテムの収集。";
+				mes "第2部、筆記試験。";
+				mes "最後の部分は実技魔法試験です。";
+				next;
+				mes "[キャサリン]";
+				mes "これらの試験のうち、ジョブレベル50に達している方は一つを免除されます。";
+				mes "すでにそこまで学んだマジシャンには、ウィザードになるためにかけた努力の証明として、それで十分なのです。";
+				next;
+				if (JobLevel == 50) {
+					mes "[キャサリン]";
+					mes "あら、そういえば、あなたはジョブレベル50じゃありませんか！？";
+					mes "本当によく頑張られたのですね。とても強力なウィザードになれると感じます。";
+					next;
+					mes "[キャサリン]";
+					mes "はい。あなたはもう第1試験に合格したことになります。";
+					mes "気を抜きすぎないでくださいね、まだ2つの試験が残っていますから。";
+					next;
+					mes "[キャサリン]";
+					mes "隅にいる男性のところへ行って、残りの試験を受けてください。";
+					mes "お気をつけて。試験の難しさのせいで、これまで多くのマジシャンを失っていますから。";
+					set WIZ_Q,3;
+					setquest 9015;
+					close;
+				}
+				mes "[キャサリン]";
+				mes "それでは、申請書と必要なものは揃いましたので、第1試験についての情報をお伝えします。";
+				mes "覚えても書き留めても構いませんが、必ず覚えておいてくださいね。";
+				next;
+				mes "[キャサリン]";
+				mes "第1試験は魔法アイテムの収集です。";
+				mes "重要なのは、これらのアイテムを自分自身の手で集めなければならないということです。";
+				next;
+				set wizard_m1,rand(1,2);
+				mes "[キャサリン]";
+				mes "集めるべきアイテムは…";
+				if (rand(2)) {
+					set WIZ_Q,1;
+					setquest 9013;
+					mes "^3355FF赤いジェムストーン^000000 各10個、";
+					mes "^3355FF青いジェムストーン^000000 各10個、";
+					mes "^3355FF黄色いジェムストーン^000000 各10個、";
+				}
+				else {
+					set WIZ_Q,2;
+					setquest 9014;
+					mes "^3355FFクリスタルブルー^000000 各5個、";
+					mes "^3355FFグリーンライブ^000000 各5個、";
+					mes "^3355FFレッドブラッド^000000 各5個、";
+					mes "^3355FFウィンドオブヴァーデュア^000000 各5個、";
+				}
+				mes "…難しすぎますか？いいえ、ウィザードになろうという者なら、少なくともこれくらいのアイテムは集められるはずです。";
+				next;
+				mes "[キャサリン]";
+				mes "それでは、頑張ってくださいね。";
+				mes "楽しみにお待ちしています。～ふふ。";
+				close;
+			}
+			mes "[キャサリン]";
+			mes "あら、それでは、ごゆっくり。";
+			mes "私はいつでもここにいますから、申請はいつでも受け付けています…*ため息*…とにかく！ ～ふふふふ。";
+			close;
+		}
+		mes "[ウィザードギルド職員]";
+		mes "まったく、つまらない人ですこと。";
+		mes "私に用はないようですね、悪く思わないでくださいね、それでは失礼！";
+		close;
+	}
+	else if (WIZ_Q == 1) {
+		mes "[キャサリン]";
+		mes "そうですね、アイテムは全部集めてきましたか？";
+		mes "それでは確認しましょう…";
+		next;
+		if (countitem(716) > 9 && countitem(717) > 9 && countitem(715) > 9) {
+			mes "[キャサリン]";
+			mes "完璧です！全部揃っていますね。気に入りました！～";
+			mes "これらのアイテムはギルドで大いに役立てますね。～へへへ。";
+			next;
+			delitem 716,10; //Red_Gemstone
+			delitem 717,10; //Blue_Gemstone
+			delitem 715,10; //Yellow_Gemstone
+			set WIZ_Q,3;
+			changequest 9013,9015;
+			mes "[キャサリン]";
+			mes "よくやりました！第1試験に合格です。";
+			mes "でもまだ2つ残っていますから、気を抜かないでくださいね。";
+			next;
+			mes "[キャサリン]";
+			mes "残りの試験のために、隅にいる男性に話しかけてください。";
+			mes "少し難しいかもしれないので気をつけて。これまでの試験にやってきたマジシャンの多くが、あんな結末を迎えるのは見たくないですから…哀れな魂たちに安らぎがありますように。～へへへ。";
+			close;
+		}
+		mes "[キャサリン]";
+		mes "あら、これは何でしょう？うーん…全部揃っていないみたいですね！";
+		next;
+		mes "[キャサリン]";
+		mes "この高さまで登ってくるのは大変だったでしょうけど、戻ってアイテムを集めてきてください。";
+		mes "人生は短いのですから、時間を無駄にせず、前にお伝えしたアイテムを集めてきてください。";
+		next;
+		mes "[キャサリン]";
+		mes "^3355FF赤いジェムストーン^000000 各10個、";
+		mes "^3355FF青いジェムストーン^000000 各10個、";
+		mes "^3355FF黄色いジェムストーン^000000 各10個、";
+		mes "今度は忘れずに、全部持ってきてくださいね…？";
+		close;
+	}
+	else if (WIZ_Q == 2) {
+		mes "[キャサリン]";
+		mes "アイテムは全部集めましたか？";
+		mes "見てみましょう…正しいものはありますか？…";
+		next;
+		if (countitem(991) > 4 && countitem(993) > 4 && countitem(990) > 4 && countitem(992) > 4) {
+			mes "[キャサリン]";
+			mes "完璧です！よくやりました…満足です！～へへ";
+			mes "私たちのギルドはこれらのアイテムに大変感謝し、有効に使わせていただきます。";
+			next;
+			delitem 991,5; //Crystal_Blue
+			delitem 993,5; //Yellow_Live
+			delitem 990,5; //Boody_Red
+			delitem 992,5; //Wind_Of_Verdure
+			set WIZ_Q,3;
+			changequest 9014,9015;
+			mes "[キャサリン]";
+			mes "よろしい。これで第1試験に合格しましたね。";
+			mes "でもまだ2つの試験が残っていますから、気を抜かないでください、ここから先はもっと大変になりますから。～へへへ";
+			next;
+			mes "[キャサリン]";
+			mes "残りの試験を受けるため、隅にいるあの男性に話しかけてください。";
+			mes "少し難しいかもしれないので気をつけて。これまでの試験にやってきたマジシャンの多くが、あんな結末を迎えるのは見たくないですから…哀れな魂たちに安らぎがありますように。～へへへ。";
+			close;
+		}
+		mes "[キャサリン]";
+		mes "あら、これは何でしょう？全部揃っていないようですけど？";
+		next;
+		mes "[キャサリン]";
+		mes "この高さまでわざわざ登ってきたのに残念ですが、正しいアイテムをもう一度集めてきてください。";
+		mes "時間を無駄にせず、最初にお願いしたアイテムを集めてください。まったく…これは試験の中でも一番簡単な部分なんですよ。";
+		next;
+		mes "[キャサリン]";
+		mes "^3355FFクリスタルブルー^000000 各5個、";
+		mes "^3355FFグリーンライブ^000000 各5個、";
+		mes "^3355FFレッドブラッド^000000 各5個、";
+		mes "^3355FFウィンドオブヴァーデュア^000000 各5個、";
+		mes "今度は忘れずに、正しいものを集めてくださいね？またお待ちしています…";
+		close;
+	}
+	else if (WIZ_Q == 3) {
+		mes "[キャサリン]";
+		mes "あら、どうしたのですか？隅にいる男性のところへ行っていないのですか？";
+		mes "お願いしたアイテムを持ってきただけではウィザードにはなれませんよ、いいえいいえ、それだけでは足りません…";
+		next;
+		mes "[キャサリン]";
+		mes "残る2つの試験を受けて初めて、ウィザードにふさわしい素質を証明できるのです。";
+		mes "お待ちしていますから、さあ行ってください。";
+		close;
+	}
+	else if (WIZ_Q == 4) {
+		mes "[キャサリン]";
+		mes "*ため息*…かわいそうに、なんて気の毒な。";
+		mes "そんな簡単な質問にも答えられないのに、どうやってウィザードになろうというのですか？";
+		next;
+		mes "[キャサリン]";
+		mes "そうですね…先輩として、少しヒントを差し上げましょうか？";
+		mes "でもちょっと喉が渇いたので、アップルジュースを1本ください、それで手を打ちましょう。～へへへ";
+		next;
+		switch(select("ヒントをください、お願いします。:自分の力でもう一度挑戦してみます！")) {
+		case 1:
+			if (countitem(531) > 0) {
+				delitem 531,1; //Apple_Juice
+				mes "[キャサリン]";
+				mes "うーん、アップルジュースは最高ですね…";
+				mes "ごくごくごく…はぁぁぁ…～へへ";
+				next;
+				mes "[キャサリン]";
+				mes "それでは、第2試験のヒントを差し上げます。";
+				next;
+				mes "[キャサリン]";
+				mes "彼は3種類の質問をします。";
+				mes "魔法について、モンスターについて…";
+				mes "それからマジシャン…つまりマジシャンについて、ですね。";
+				next;
+				mes "[キャサリン]";
+				mes "どの質問をするかは、彼次第です。";
+				mes "*ため息*…髪を切って髭を剃れば、もっと見栄えが良くなるでしょうに…";
+				mes "身だしなみに気を遣わないからいつもむさ苦しくて…*ため息*…惜しいですよね、彼、本当は女性にモテてもおかしくないのに。～てへへへ";
+				next;
+				mes "[キャサリン]";
+				mes "とにかく、魔法についての質問ですが…";
+				mes "だいたいあなたがこれまでに習得した呪文についてのものです。";
+				next;
+				mes "[キャサリン]";
+				mes "まだ習っていない、あるいは経験したことのない呪文の場合は…";
+				mes "とてもよくまとまった、参考になる場所があると聞いています。";
+				next;
+				mes "[キャサリン]";
+				mes "ただ呪文を唱えるだけでいいんです…大きな太字の「e」の記号みたいなものですよ。";
+				mes "魔法の言葉は…iro.ragnarokonline.com ～らしいですよ！";
+				mes "変な呪文だと思いません？私も自分では使い方が分からないんですけど。";
+				next;
+				mes "[キャサリン]";
+				mes "そしてモンスターについての質問ですが。";
+				mes "自分で戦って学ぶのが一番の近道です。";
+				next;
+				mes "[キャサリン]";
+				mes "でもご存知の通り、プロンテラには大きな図書館があります。";
+				mes "そこでほとんどのモンスターについての情報が得られますよ。";
+				mes "足を運んでもう少し勉強してみるのもいいでしょう。";
+				next;
+				mes "[キャサリン]";
+				mes "最後に、マジシャンについての質問ですが。";
+				mes "これはほとんど他の誰にも教えられないことです…";
+				mes "なぜなら、あなた自身がマジシャンだからです。";
+				next;
+				mes "[キャサリン]";
+				mes "自分自身のことすら分からないのに、他人のことを知るのは難しいですよね？";
+				mes "だから、この手の質問が出たら、じっくり考えてから答えてくださいね。";
+			}
+			else {
+				mes "[キャサリン]";
+				mes "言った通り、アップルジュースを1本もらえたら考えてあげます。";
+				mes "もらえないなら…まあ、自分で考えるしかありませんね。私がルールを決めているわけではないので、従うしかないんですよ！でもこれだけは譲れませんけどね。～てへへへ";
+			}
+			break;
+		case 2:
+			mes "[キャサリン]";
+			mes "そうですね、自分の力で解決したときが一番の達成感がありますものね。";
+			mes "その意気で残りの試験もやり遂げてください！";
+		}
+		next;
+		mes "[キャサリン]";
+		mes "それでは、また近いうちに！*指を交差させて祈っています*先輩たちのようにならないでくださいね…神が彼らの魂を安らかに導きますように…あら？いえ、何でもありません！～へへへへへ";
+		mes "急いで、彼が待っていますよ！";
+		close;
+	}
+	else if (WIZ_Q == 5) {
+		mes "[キャサリン]";
+		mes "てへへへ～実はずっと聞いていたんですよ。";
+		mes "あの質問すべてに答えられて、お見事でした。何か差し上げたいですね、プレゼントみたいなものを…";
+		next;
+		mes "[キャサリン]";
+		mes "まだ試験が一つ残っていますよね？";
+		mes "もう少しでウィザードの資格を得られますから、その時にプレゼントを差し上げますね。～へへ";
+		next;
+		mes "[キャサリン]";
+		mes "それでは、また会えるといいですね！";
+		mes "彼が待っていますよ！";
+		close;
+	}
+	else if (WIZ_Q == 6) {
+		mes "[キャサリン]";
+		mes "あら、試験の途中で抜け出してきたのですか？";
+		mes "あなたが…*ため息*…そんな不名誉なことをするとは思いませんでした。";
+		next;
+		mes "[キャサリン]";
+		if (Sex == SEX_MALE) {
+			mes "マジシャンとはいえ、男性なのにそんなに弱いなんてどうしてですか？！";
+			mes "まあ、少なくともまだ生きているのですから。戻ってもう一度頑張ってきてください。～てへへへ";
+		}
+		else {
+			mes "女性だからといって弱いふりをしないでください。私を見てください！私にできたのですから、あなたにもできます。同情なんて求めてはいけません。";
+			mes "こんなに遠くまでウィザードを目指してやってきたのでしょう！さあ、あなたならできますよ！！";
+			next;
+			mes "[キャサリン]";
+			mes "難しいのは分かりますが、諦めるほどのことではありません。";
+			mes "誰よりもあなたなら、この試験をやり遂げる強さと忍耐を見つけられるはずです！";
+		}
+		next;
+		mes "[キャサリン]";
+		mes "それでは、今度はもっと頑張ってくださいね…";
+		mes "彼が待っていますから！";
+		close;
+	}
+	else if (WIZ_Q == 7) {
+		if (JobLevel < 40) {
+			set WIZ_Q,0;
+			mes "[キャサリン]";
+			mes "あら、分かっていないんですか？";
+			mes "転職するには少なくともジョブレベル40が必要だと言いましたよね？";
+			next;
+			mes "[キャサリン]";
+			mes "急ぐことはありませんから、じっくり勉強する時間を取ってはいかがですか？";
+			mes "その時が来たら、両手を広げて歓迎しますから。";
+			close;
+		}
+		if (SkillPoint) {
+			mes "[キャサリン]";
+			mes "すべての試験は終わりましたか？あらまあ、まだスキルポイントが残っているようですね。";
+			mes "残ったポイントで他のスキルを習得してから、もう一度私に話しかけてください。";
+			close;
+		}
+		mes "[キャサリン]";
+		mes "わあああああああお…全部の試験を終えたのですか？！";
+		mes "おめでとう、おめでとう、おめでとうございます！わーいぴーい！～へへへへへへ";
+		next;
+		mes "[キャサリン]";
+		mes "それでは、お待たせしました、おめでとうございます。あなたをウィザードと認めます。";
+		next;
+		completequest 9018;
+		callfunc "Job_Change",Job_Wizard;
+		callfunc "F_ClearJobVar";		// clears all job variables for the current player
+		mes "[キャサリン]";
+		mes "もうウィザードになったのですから、ウィザードらしく振る舞ってくださいね、いいですか？";
+		mes "私たちウィザードは究極の魔力を持っているのですから、慎重にならなければいけません。";
+		next;
+		mes "[キャサリン]";
+		mes "理由もなく町中で呪文を唱えたり、他人の戦闘に呪文で口出ししたりしないでください。";
+		mes "ウィザードの魔法は、自分自身のモンスターとの戦いのためにあるのです。";
+		next;
+		mes "[キャサリン]";
+		mes "他の人たちとパーティを組んで、訓練を続けてください。";
+		mes "それと…ああ、待って、あなたにプレゼントを用意していたんです、少し待ってくださいね。";
+		next;
+		mes "[キャサリン]";
+		mes "ごそごそ…";
+		mes "がさごそ…";
+		next;
+		getitem 505,6; //Blue_Potion
+		mes "[キャサリン]";
+		mes "はい、どうぞ。必要な時に役立ててくださいね。～てへへ";
+		mes "プレゼントとして差し上げたので、売らないでくださいね。ご自分で使ってください、いいですか？";
+		next;
+		mes "[キャサリン]";
+		mes "それでは…*ため息*…ウィザードとして素晴らしい人生を、誰よりも強くなってくださいね！";
+		close;
+	}
+}
+
+gef_tower,102,24,2	script	ラウレル::Gloomy Wizard	735,{
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Wizard) {
+			mes "[ラウレル]";
+			mes "*ゴホッ**ゴホッ*何の用だ？";
+			mes "魔法を使う者なら、その知識をしっかり身につけておく必要があるぞ。";
+			next;
+			mes "[ラウレル]";
+			mes "不誠実に、あるいは無礼に生きるな。さもないと、ある日制御できない呪文に巻き込まれて、ドカンと、あの世行きだ！";
+			if (Sex == SEX_MALE) {
+				mes "そうなりたくないなら、正しい呪文の使い方を学ぶんだな！";
+				next;
+				mes "[ラウレル]";
+				mes "グレイターマジックへの執着に取りつかれれば、体が不自由になった人生を送ることになるかもしれんぞ。～はは";
+			}
+			else {
+				mes "だから正しい魔法の使い方を学べ、さもなければ魔法なんて諦めた方がましだ。";
+				next;
+				mes "[ラウレル]";
+				mes "それが嫌なら、どこかの男にでも言い寄っておけ！～ハハハハ";
+				mes "自分自身に気を配らなければ、いつか魔力に飲み込まれてしまうぞ…";
+			}
+			close;
+		}
+		else if (BaseJob == Job_Priest) {
+			mes "[ラウレル]";
+			mes "失せろ、教会に仕える者め！";
+			mes "魔法は聖なる力と反発するんだ、まったく…お前のせいでオーラが乱れる。";
+			next;
+			mes "[ラウレル]";
+			mes "それに、*ゴホッ**ゴホッ*、今は体調もあまり良くないんだ…";
+			mes "これ以上近づくな、さっさと立ち去れ！";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "[ラウレル]";
+			mes "お前みたいなひよっこが何しに来たんだ！？";
+			mes "失せろ！～ハハハハハハ";
+			close2;
+			warp "geffen",120,110;
+			end;
+		}
+		mes "[ラウレル]";
+		mes "*くしゃみ**ゴホッ*ああ…全身が痛い。まるで氷水の桶に閉じ込められているみたいだ！";
+		next;
+		mes "[ラウレル]";
+		mes "何の用だ？まったく…さっさと失せてくれないか？";
+		close;
+	}
+	if (WIZ_Q == 0) {
+		mes "[ラウレル]";
+		mes "*ゴホッ**ゴホッ**くしゃみ*お前が誰で、何をしに来たのか知らんが、俺には関係のないことだ。";
+		next;
+		mes "[ラウレル]";
+		mes "失せろ！さっさと行け！";
+		close;
+	}
+	else if (WIZ_Q == 1 || WIZ_Q  == 2) {
+		mes "[ラウレル]";
+		mes "ハハハハ～お前がウィザードになりたいっていう奴か？！";
+		next;
+		mes "[ラウレル]";
+		mes "*くしゃみ*そのまま普通に生きていれば、少し狩りをして楽な人生を送れたものを…";
+		next;
+		mes "[ラウレル]";
+		mes "*ゴホッ**ゴホッ*お前がウィザードとしてどこまでやれるか、見せてもらおうか。～ハハハハハハ";
+		close;
+	}
+	else if ((WIZ_Q == 3) || (WIZ_Q == 4)) {
+		if (WIZ_Q == 3) {
+			mes "[ラウレル]";
+			mes "*ゴホッ**ゴホッ*…第1試験に合格したようだな。";
+			mes "よし、俺がこれからのお前の試験を担当するウィザードだ。名は「ラウレル・アスパラガス」。";
+			next;
+			mes "[ラウレル]";
+			mes "*くしゃみ*まだ遅くはないぞ、むしろ町へ戻って平穏な暮らしを楽しんだ方がいいんじゃないか？";
+			next;
+			mes "[ラウレル]";
+			mes "ハハハハ～お前は分かっていない、グレイターマジックを扱うのがどれほど危険か。";
+			next;
+			if (select("普通のマジシャンとして生きたいです。:試験を続けたいです。") == 1) {
+				mes "[ラウレル]";
+				mes "ハハハ～*くしゃみ*いい選択だ…*ゴホッ**ゴホッ*～";
+				mes "ウィザードとしての人生など夢見ない方がいい。グレ…グレエ…*くしゃみ*グレイターマジックは元々人間が扱うものじゃないんだ！";
+				next;
+				mes "[ラウレル]";
+				mes "静かにこの塔の頂上を去って、二度と振り返るなよ。";
+				mes "今持っている力だけで、平穏に生きるんだな。";
+				close;
+			}
+			mes "[ラウレル]";
+			mes "*くしゃみ*ハハハハ～ここにもまた愚か者がいたか！";
+			mes "よし、それならどれほどのものか見せてもらおう。*ゴホッ*この目でしっかり確かめさせてもらうぞ！";
+			next;
+			mes "[ラウレル]";
+			mes "*くしゃみ*それでは試験を始めよう！";
+			mes "全部正しく答えられなければ不合格だ。ハハハハハハハハハハ～";
+			next;
+			mes "[ラウレル]";
+			mes "10問出すから、正しい答えをよこせ。";
+			mes "間違えても、正解は教えてやらんからな！";
+			if(checkquest(9016) == -1) {
+				changequest 9015,9016;
+			}
+			next;
+			mes "[ラウレル]";
+			mes "*ゴホッ**ゴホッ*それでは質問だ！";
+		}
+		else if (WIZ_Q == 4) {
+			mes "[ラウレル]";
+			mes "ハハハハ～そこまでして欲しいのか？*くしゃみ*まったく面倒な奴だな…";
+			next;
+			mes "[ラウレル]";
+			mes "安定した平穏な暮らしに満足できないようだから、もう一度チャンスをやろう…";
+			next;
+			mes "[ラウレル]";
+			mes "一問でも間違えたら、その時こそ諦めるんだな。ウィザードになる才能なんてないんだよ！～ハハハハハハ";
+			next;
+			if (select("お前のせいで、もう普通のマジシャンとして生きたいです。:試験を続けたいです。") == 1) {
+				mes "[ラウレル]";
+				mes "ハハハハ～驚いたな、お前からそんな賢明な選択が出てくるとは…*ゴホッ**ゴホッ*";
+				mes "俺だったら、二度とウィザードになる夢なんて見ないね。グレ…グレエ…*くしゃみ*グレイターマジックは人間の扱うものじゃないんだ。";
+				next;
+				mes "[ラウレル]";
+				mes "静かにこの塔の頂上を去って、二度と振り返るな。";
+				mes "今持っている力だけで、平穏に生きるがいい。";
+				close;
+			}
+			mes "[ラウレル]";
+			mes "ハハハハハハハハ～ここにもまた愚か者がいたか！";
+			mes "よし、それならどこまでできるか見せてもらおう！*くしゃみ*この目でしっかり確かめさせてもらうぞ。";
+			next;
+			mes "[ラウレル]";
+			mes "それでは試験を始めよう！";
+		}
+		next;
+		switch(rand(1,3)) {
+		case 1:
+			mes "[ラウレル]";
+			mes "1. ファイヤーウォールを習得するのに不要なものはどれか？";
+			next;
+			if (select("ファイヤーボルト Lv4:ファイヤーボール Lv5:サイト Lv1:ナパームビート Lv4") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "2. モンスターの元々の属性に関係なく、フロストダイバーを使うとその属性は何に変わるか？";
+			next;
+			if (select("水:地:火:風") == 1)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "3. ナパームビートを完全に熟練させたとき、その呪文によるMATKの増加倍率はどれくらいか？";
+			next;
+			if (select("1.6倍:1.7倍:2倍:20倍") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "4. ストーンカースを唱えるときに必要なアイテムはどれか？";
+			next;
+			if (select("レッドブラッド:青いジェムストーン:黄色いジェムストーン:赤いジェムストーン") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "5. セイフティウォールを熟練させるのに不要なものはどれか？";
+			next;
+			if (select("ナパームビート Lv4:ソウルストライク Lv5:SP回復増加 Lv6:セイフティウォール Lv7") == 3)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "6. INTボーナスを除き、SP回復増加Lv7を習得すると10秒ごとに回復するSP量はいくらか？";
+			next;
+			if (select("14:21:28:35") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "7. エナジーコートを使用中、SPが残り50%のとき、被弾時に消費されるSP量と軽減されるダメージ割合はどれか？";
+			next;
+			if (select("ダメージ18% SP1.5%:ダメージ18% SP2%:ダメージ24% SP1.5%:ダメージ24% SP2%") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "8. セイフティウォールLv6を使うと、消費SPと攻撃を回避できる回数はどれか？";
+			next;
+			if (select("SP40、6回:SP35、6回:SP40、7回:SP35、7回") == 3)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "9. Lv10のサンダーストームを使うのに必要なSPはいくらか？";
+			next;
+			if (select("84:74:64:54") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "10. ビョルン島ダンジョンでの修行に一番役立つスキルはどれか？";
+			next;
+			if (select("ライトニングボルト:ファイヤーボルト:コールドボルト:サイト") == 1)
+				set .@wizard_t,.@wizard_t+10;
+			break;
+		case 2:
+			mes "[ラウレル]";
+			mes "1. スロット付きのガードを落とすモンスターはどれか？";
+			next;
+			if (select("シーフバグ:ペコペコ:プパ:コボルド（ハンマー）") == 3)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "2. 低レベルのマジシャンが最も狩りやすいモンスターはどれか？";
+			next;
+			if (select("フローラ:ジーアース:ゴーレム:ミスト") == 1)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "3. ストーンカースの効かないモンスターはどれか？";
+			next;
+			if (select("エルダーウィロー:イビルドルイド:マグノリア:マーク") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "4. 風属性の武器でLv3の水属性モンスターを攻撃したとき、ダメージ倍率はどれくらいか？";
+			next;
+			if (select("125%:150%:175%:200%") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "5. ベビーデザートウルフとファミリアが戦ったら、どちらが勝つか？";
+			next;
+			if (select("ベビーデザートウルフ:ファミリア:どちらでもない:分かりません") == 1)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "6. 次のうち、ペットにできないものはどれか？";
+			next;
+			if (select("ポポリン:ロダフロッグ:スモーキー:ポイズンスポア") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "7. 火属性攻撃に弱いモンスターを選べ。";
+			next;
+			if (select("ダガーゴブリン:メイスゴブリン:モーニングスターゴブリン:ハンマーゴブリン") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "8. 次のうち防御力が最も高いのはどれか？";
+			next;
+			if (select("ホーン:チョンチョン:アンドレ:キャラメル") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "9. 種族が他と異なるモンスターを選べ。";
+			next;
+			if (select("ポリン:メタリング:ゴーストリング:スポア") == 3)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "10. 次のうち、アンデッドモンスターではないものはどれか？";
+			next;
+			if (select("ドレイク:メガロドン:デビエス:カリッツバーグ") == 3)
+				set .@wizard_t,.@wizard_t+10;
+			break;
+		case 3:
+			mes "[ラウレル]";
+			mes "1. マジシャンにとって最も重要なステータスはどれか？";
+			next;
+			if (select("INT:AGI:DEX:VIT") == 1)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "2. 「ボルト」系の攻撃を持たない属性はどれか？";
+			next;
+			if (select("水:地:火:風") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "3. マジシャンに関係ないものを選べ。";
+			next;
+			if (select("身体的な力が弱い。:遠距離から攻撃する。:物を売るのが得意。:魔法防御力が高い。") == 3)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "4. マジシャンの故郷はどの町か？";
+			next;
+			if (select("プロンテラ:モロク:アルベルタ:ゲフェン") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "5. 次のうち、INTと関係のないカードはどれか？";
+			next;
+			if (select("アンドレエッグカード:ソルジャーアンドレカード:ベビーデザートウルフカード:エルダーウィローカード") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "6. マジシャンが他の職業に比べて優れている点は何か？";
+			next;
+			if (select("歌唱力が抜群:演技力が抜群:ダンスの技術が抜群:魔法の技術が抜群") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "7. マジシャンのジョブレベル40でのINTボーナスはいくつか？";
+			next;
+			if (select("8:7:6:5") == 4)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "8. マジシャンが装備できないアイテムはどれか？";
+			next;
+			if (select("ナイフ:ボーイズキャップ:サンダル:アイオブドゥラハン") == 2)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "9. マジシャン試験溶液3を作るときの触媒となるものはどれか？";
+			next;
+			if (select("青いジェムストーン:赤いジェムストーン:黄色いジェムストーン:レッドブラッド") == 1)
+				set .@wizard_t,.@wizard_t+10;
+			mes "[ラウレル]";
+			mes "10. 魔法と無関係なカードはどれか？";
+			next;
+			if (select("マルドゥクカード:マグノリアカード:ウィローカード:マヤーカード") == 2)
+				set .@wizard_t,.@wizard_t+10;
+		}
+		mes "[ラウレル]";
+		if (WIZ_Q == 4) {
+			mes "よくやった、全問答え終えたな…Zenyがあるなら、ポーションでも買っておけ。ハハ…";
+			next;
+			mes "[ラウレル]";
+			mes "お前の得点は…" + .@wizard_t + "点だ…";
+			if (.@wizard_t == 100) {
+				set WIZ_Q,5;
+				changequest 9016,9017;
+				mes "ハハハハハハハ～よくやった、第2試験に合格だ。";
+				mes "俺のように一発合格とはいかなかったが、今回は大目に見てやろう…";
+				next;
+				mes "[ラウレル]";
+				mes "*くしゃみ*まだ油断するなよ、第3の、そして最後の試験が待っているからな。";
+				mes "最終試験の準備が整うまで少し休んでおくことを勧める。必要になるだろうからな。ハハハハハハ～";
+				close;
+			}
+			else if (.@wizard_t == 90) {
+				set WIZ_Q,5;
+				changequest 9016,9017;
+				mes "ハハハ～一問しか間違えなかったから、第2試験に合格ということにしよう。";
+				mes "俺のように一発合格とはいかなかったが、今回は大目に見てやろう…";
+				next;
+				mes "[ラウレル]";
+				mes "*くしゃみ*まだ油断するなよ、第3の、そして最後の試験が待っているからな。";
+				mes "最終試験の準備が整うまで少し休んでおくことを勧める。必要になるだろうからな。ハハハハハハ～";
+				close;
+			}
+			else if (.@wizard_t == 80) {
+				set WIZ_Q,5;
+				changequest 9016,9017;
+				mes "しーず…あまり出来は良くなかったが、第2試験は合格にしておこう。";
+				mes "俺のように一発合格とはいかなかったが、今回は大目に見てやろう…";
+				next;
+				mes "[ラウレル]";
+				mes "*くしゃみ*まだ油断するなよ、第3の、そして最後の試験が待っているからな。";
+				mes "最終試験の準備が整うまで少し休んでおくことを勧める。必要になるだろうからな。ハハハハハハ～";
+				close;
+			}
+			else {
+				mes "不合格だ。もっと勉強してこい！";
+				next;
+				mes "[ラウレル]";
+				mes "*ゴホッ**ゴホッ*そんな平凡なレベルでウィザードになれると本気で思っていたのか？";
+				mes "失せろ！もしお前が今ウィザードだったら、俺が戦うモンスターにあっという間に食われちまうぞ！";
+				close;
+			}
+		}
+		mes "ふむ…よくやった、全問答え終えたな。Zenyがあるなら、ポーションでも買っておけ。ハハハハハハハハ～";
+		next;
+		mes "[ラウレル]";
+		mes "お前の得点は…" + .@wizard_t + "点だ！";
+		if (.@wizard_t == 100) {
+			set WIZ_Q,5;
+			changequest 9016,9017;
+			mes "*ゴホッ**ゴホッ*よくやった、第2試験に合格だ。";
+			next;
+			mes "[ラウレル]";
+			mes "ハハハハ～まだ油断するなよ、第3の試験が待っているからな。";
+			mes "*くしゃみ*最終試験の準備が整うまで少し休んでおけ…ハハハハハ～";
+			close;
+		}
+		else if (.@wizard_t == 90) {
+			set WIZ_Q,5;
+			changequest 9016,9017;
+			mes "ハハハハ～一問しか間違えなかったから、今回は大目に見てやろう。第2試験に合格だ。";
+			next;
+			mes "[ラウレル]";
+			mes "ハハハハ～まだ油断するなよ、第3の試験が待っているからな。";
+			mes "*くしゃみ*最終試験の準備が整うまで少し休んでおけ…ハハハハハ～";
+			close;
+		}
+		else {
+			set WIZ_Q,4;
+			mes "不合格だ。もう一度受けさせてやろう…俺が聞いたような質問についてもっと学んでからな。";
+			next;
+			mes "[ラウレル]";
+			mes "チッ…足りん、まったく足りんな！そんなわずかな知識でウィザードになれると本気で思っていたのか？";
+			mes "失せろ！もしお前が今ウィザードだったら、俺が相手にしているモンスターにあっという間に食われちまうぞ！";
+			close;
+		}
+	}
+	else if (WIZ_Q == 5) {
+		mes "[ラウレル]";
+		mes "よし、たっぷり休めたと思うが。ハハハハハハ～";
+		mes "それでは最後の試験を始めよう。";
+		next;
+		mes "[ラウレル]";
+		mes "この最後の試験について少し説明しておこうか？難しいということは、隠さずに言っておく…";
+		next;
+		if (select("いえ、大丈夫です、準備はできています。:説明を聞きたいです。") == 1) {
+			mes "[ラウレル]";
+			mes "せっかちな奴だな。よく考えもせず戦いに飛び込むタイプか、プロンテラの騎士団にでも入ればいいものを、こんなところで何をしているんだ？まあいい！*ゴホッ*やってみろ。死んでも俺の知ったことじゃない。";
+			mes "自分をただのガラス大砲だとでも思っておくんだな…だってモンスターがお前を粉々に叩き割ってくれるだろうからな。ハハハハハハハハハハ～";
+			next;
+			set WIZ_Q,6;
+			savepoint "geffen",120,107,1,1;
+			mes "[ラウレル]";
+			mes "それでは、望み通りにしてやろう。今すぐそこへ送ってやる。";
+			mes "ああ、トンネルの先に白い光が見えたら、それはお前が不合格になって哀れな最期を迎えたということだからな！ハハハハハハハ～";
+			close2;
+			warp "job_wiz",57,154;
+			end;
+		}
+		mes "[ラウレル]";
+		mes "熱心な奴だな。よろしい、説明してやろう。";
+		mes "この最後の試験がどれほど難しく思えても、俺の言う通りにすれば早く簡単に終わらせられる。";
+		next;
+		mes "[ラウレル]";
+		mes "最終試験は全部で3つの部分からなる。";
+		mes "順番はウォータールーム、アースルーム、ファイアルームだ。それぞれの部屋には、その属性のモンスターがいる。";
+		next;
+		mes "[ラウレル]";
+		mes "入ってみればどんなモンスターがいるか分かるだろう。*くしゃみ*";
+		mes "正しい属性の攻撃を使えば、それほど難しくはないはずだ。ハハハ～";
+		next;
+		mes "[ラウレル]";
+		mes "どの部屋でも、制限時間内にモンスターを全て倒せば…";
+		mes "次の部屋へ進める。";
+		next;
+		mes "[ラウレル]";
+		mes "この3つの部屋をクリアすれば、試験は終わりだ。";
+		mes "お前はグレイターマジックの力に支配されるウィザードになる！覚えておけ…楽な生活に戻ることは二度とないぞ。";
+		next;
+		mes "[ラウレル]";
+		mes "ハハハ～怖じ気づいた顔だな。分かるだろ、今なら引き返して楽な人生を送るのも遅くはないぞ。";
+		mes "望むなら、今すぐ町へ送り返してやってもいい…どうする？";
+		next;
+		if (select("試験を続けます。:お腹の中がざわざわするので、戻りたいです。") == 1) {
+			set WIZ_Q,6;
+			savepoint "geffen",120,107,1,1;
+			mes "[ラウレル]";
+			mes "お前は本当に、実に覚悟が決まっているようだな。よし！ハハハハハハハハ～";
+			mes "*ゴホッ**ゴホッ*望み通り、それでは最後の試験を始めよう！";
+			close2;
+			warp "job_wiz",57,154;
+			end;
+		}
+		set WIZ_Q,6;
+		mes "[ラウレル]";
+		mes "賢明な考えだ。その方がお前には向いているだろう。ハハハハハハ～";
+		mes "戻って楽な人生を送るがいい、グレイターマジックはお前のようなタイプが扱うべき力じゃないからな。";
+		close2;
+		warp "geffen",120,110;
+		end;
+	}
+	else if (WIZ_Q == 6) {
+		if (WIZ_Q2 == 6) {
+			mes "[ラウレル]";
+			mes "ハハハハハハハハ～お前ほど…そのぉ…*くしゃみ*しつこい奴は見たことがないな。";
+			mes "それでまたやり直したいのか？前に散々失敗をあざ笑ってやったというのに？？";
+			next;
+			mes "[ラウレル]";
+			mes "よし、それなら提案がある。どうせもうヘトヘトだろうし、お前の目にグレイターマジックへの渇望がはっきり燃えているのが見て取れるからな…";
+			mes "ハハハハハハ～よし！^3355FF使い古された魔法の巻物^000000を一つ持ってこい。";
+			next;
+			set WIZ_Q2,WIZ_Q2+1;
+			mes "[ラウレル]";
+			mes "無理なら、もう一度試験を受け直すこともできるぞ…";
+			mes "よし、とりあえず試験を受けにやってくれ。ハハハハ～";
+			close2;
+			warp "job_wiz",57,154;
+			end;
+		}
+		else if (WIZ_Q2 > 6) {
+			mes "[ラウレル]";
+			mes "おお！戻ってきたのか？ハハハハハハ～";
+			mes "*ゴホッ*ゴホッ*試験をもう一度受けたいのか？それとも^3355FF使い古された魔法の巻物^000000は持ってきたのか？";
+			next;
+			if (select("試験を続けます。:使い古された魔法の巻物…") == 1) {
+				savepoint "geffen",120,107,1,1;
+				mes "[ラウレル]";
+				mes "ハハハ～よし、少なくとも根性はあるようだな。";
+				mes "もう一度送ってやろう、もう一度死んでみるといい、な？ハハハハハハハハハハ～";
+				close2;
+				warp "job_wiz",57,154;
+				end;
+			}
+			if (countitem(618) > 0) {
+				delitem 618,1; //Worn_Out_Scroll
+				mes "[ラウレル]";
+				mes "ハハハハハハハハハ～*ゴホッ**ゴホッ*本当に持ってきたのか、いい仕事だ…";
+				mes "これがあれば研究を続けられそうだ…";
+				next;
+				set WIZ_Q2,0;
+				set WIZ_Q,7;
+				mes "[ラウレル]";
+				mes "お前はグレードAのウィザード候補というわけじゃないが、グレイターマジックへの本気は伝わった。キャサリンにはお前が合格したと伝えておこう。ハハハハハハハハハ～";
+				mes "ここまでたくさんの苦労を重ねてきたな、それこそが俺たちがウィザードを選ぶ本当の目的だ。自らの意志で技を極めようとする者だけが、ウィザードになれる。頑張れよ。もっと強くなれ。ハハハハハハハ～";
+				close;
+			}
+		}
+		mes "[ラウレル]";
+		mes "*くしゃみ*何？もう一度試験を受けたいだと？";
+		mes "まったく…お前はもう戦闘試験に落ちてるんだぞ！ハハハハハハハハハハ～そんなに魔法が好きなのか？";
+		next;
+		mes "[ラウレル]";
+		mes "そんなに弱くてこの最終試験を自分の力で終えられないんだから…別の試験で助けてやる必要があるな。";
+		mes "*ゴホッ*戦闘試験に受からないなら、こっちの試験でしっかりやることだ。ハハハハハハハハ～";
+		next;
+		mes "[ラウレル]";
+		mes "さあ、ウィザードになりたいなら、これらの問題にちゃんと答えるんだな。ハハハハハハハハ～";
+		next;
+		mes "[ラウレル]";
+		mes "1. 他と属性の異なるモンスターを選べ。";
+		next;
+		if (select("マンティス:コルヌス:ジーアース:キャラメル") == 2)
+			set .@wizard_t,.@wizard_t+20;
+		mes "[ラウレル]";
+		mes "2. アイテムをドロップしないモンスターを選べ。";
+		next;
+		if (select("ヨーヨー:マグノリア:メタラー:ゼロム") == 4)
+			set .@wizard_t,.@wizard_t+20;
+		mes "[ラウレル]";
+		mes "3. 詠唱を認識しないモンスターはどれか？";
+		next;
+		if (select("マリナ:ビタタ:スコーピオン:ジーアース") == 1)
+			set .@wizard_t,.@wizard_t+20;
+		mes "[ラウレル]";
+		mes "4. マリンスフィアに効果的な呪文を選べ。";
+		next;
+		if (select("コールドボルト:ファイヤーボルト:ライトニングボルト:ストーンカース") == 3)
+			set .@wizard_t,.@wizard_t+20;
+		mes "[ラウレル]";
+		mes "5. 動くことができるモンスターを選べ。";
+		next;
+		if (select("ヒドラ:マンドラゴラ:グレイテストジェネラル:フリルドラ") == 4)
+			set .@wizard_t,.@wizard_t+20;
+		mes "[ラウレル]";
+		mes "*フッ*もう一度聞かなくて済むように、ちゃんとやれよ。";
+		next;
+		mes "[ラウレル]";
+		mes "お前の得点は" + .@wizard_t + "点だ。";
+		if (.@wizard_t == 100) {
+			mes "ハハハハハハハハ～*ゴホッ**ゴホッ*これだけ質問に正しく答えられるのに、どうして戦闘ではうまくいかないんだ？？";
+			next;
+		}
+		else if (.@wizard_t == 80) {
+			mes "ふむ、まあまあだな…";
+			mes "もう一度試験を受けさせてやろう。";
+			next;
+		}
+		else {
+			mes "不合格だ！もっと勉強してこい！";
+			next;
+			mes "[ラウレル]";
+			mes "お前には何かが足りない…*くしゃみ*…知性みたいなものがな。だからいつも失敗するんだ。ハハハハハハハハハハ～";
+			close;
+		}
+		if (select("試験を始めてください。:もう一度説明してもらえますか？") == 1) {
+			mes "[ラウレル]";
+			mes "誰もお前がウィザードになるのを手伝ってはくれないぞ。ハハハハハハハハハハ～";
+			mes "*ゴホッ**ゴホッ*死んでから泣いても遅いからな…";
+			next;
+			percentheal 100,100;
+			mes "[ラウレル]";
+			mes "それでは、望み通り送ってやろう。";
+			mes "おお！もし高くそびえる真珠色の門と、その奥から響く重々しい声が聞こえたら、それはお前が魔法において落第者だという証拠だからな。ハハハハハハハハハハハハ～";
+			close2;
+			warp "job_wiz",57,154;
+			end;
+		}
+		mes "[ラウレル]";
+		mes "*ゴホッ**ゴホッ*それでは説明してやろう。";
+		mes "試験は難しいかもしれないが、俺の言う通りにすれば問題ないはずだ。";
+		next;
+		mes "[ラウレル]";
+		mes "この最終試験には3つの部分がある。";
+		mes "順番は…*くしゃみ*…ウォータールーム、アースルーム、そしてファイアルームだ。それぞれの部屋には、その属性のモンスターがいる。";
+		next;
+		mes "[ラウレル]";
+		mes "入ってみればどんなモンスターか分かるだろう。";
+		mes "適切な呪文で攻撃すれば、それほど難しくはないはずだ。ハハハハハハハハハ～";
+		next;
+		mes "[ラウレル]";
+		mes "制限時間内にモンスターを全て倒せば…";
+		mes "次の部屋に送られる。";
+		next;
+		mes "[ラウレル]";
+		mes "それが終われば、試験は完了だ。";
+		mes "お前はグレイターマジックの力に支配されるウィザードになる！これまで知っていた楽な生活に戻ることは二度とない。";
+		next;
+		mes "[ラウレル]";
+		mes "ハハハハハハハ～怖じ気づいた顔だな。今ならまだ遅くはないぞ。";
+		mes "*ゴホッ**ゴホッ*諦めて町へ戻ることもできる！グレイターマジックのことは忘れて、普通の人生を送ればいい。どうする？";
+		next;
+		if (select("試験を続けます。:怖すぎるので、やめたいです。") == 1) {
+			percentheal 100,100;
+			mes "[ラウレル]";
+			mes "今度死んだら、泣いて戻ってくるんじゃないぞ。ハハハハハハハハハハハ～*ゴホッ*ゴホッ*";
+			mes "望み通り、最後の試験を始めよう！";
+			close2;
+			warp "job_wiz",57,154;
+			end;
+		}
+		mes "[ラウレル]";
+		mes "お前にしては、なかなか賢明な考えだな。その方がずっとお前には向いている。ハハハハハハハハハハハ～";
+		mes "戻って静かで平穏な人生を送るがいい！";
+		close2;
+		warp "geffen",120,110;
+		end;
+	}
+	else if (WIZ_Q == 7) {
+		mes "[ラウレル]";
+		mes "俺に用はもうないはずだが、まあいい。";
+		mes "しかしお前があまりにしつこいから、もう一度試験を受けさせてやろう。ハハハハハハハ～";
+		next;
+		mes "[ラウレル]";
+		mes "行け！行って、お前が本当になりたかったウィザードになるんだ。";
+		mes "そして気をつけろよ！グレイターマジックは常にお前を追い続けるからな…";
+		close;
+	}
+}
+
+job_wiz,50,165,4	script	試験会場アシスタント::Arena Assistant	700,{
+	mes "[試験会場アシスタント]";
+	mes "ウィザード転職試験会場へようこそ。";
+	mes "最終試験を受けたい方は、待合室にお入りください。";
+	next;
+	mes "[試験会場アシスタント]";
+	mes "既に他の方が試験を受けている場合は、しばらくお待ちください。";
+	mes "試験の状況は随時アナウンスされ、前の受験者が終わり次第すぐに始まります。";
+	next;
+	mes "[試験会場アシスタント]";
+	mes "お一人あたり、おおよそ5分から10分ほどかかります。";
+	mes "会場から離れたい場合は、いつでもログオフしていただいて構いません。";
+	close;
+
+OnInit:
+	waitingroom "待合室",20,"Arena Assistant::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+
+OnStartArena:
+	killmonsterall "job_wiz";
+	warpwaitingpc "job_wiz",114,169;
+	donpcevent "Room of Water::OnEnable";
+	disablewaitingroomevent;
+	end;
+
+OnStart:
+	enablewaitingroomevent;
+	end;
+}
+
+// Water Room (Test 2 part 1)
+//==========================================================
+job_wiz,1,1,1	script	水の間::Room of Water	66,{
+OnInit:
+	disablenpc "Room of Water";
+	end;
+
+OnEnable:
+	enablenpc "Room of Water";
+	if (!checkre(0)) {
+		set .MyMobs,8;
+		monster "job_wiz",129,170,"Obeaune",1044,1,"Room of Water::OnMyMobDead";
+	}
+	else
+		set .MyMobs,7;
+	monster "job_wiz",109,174,"Phen",1158,1,"Room of Water::OnMyMobDead";
+	monster "job_wiz",118,174,"Shellfish",1074,1,"Room of Water::OnMyMobDead";
+	monster "job_wiz",109,165,"Vadon",1066,1,"Room of Water::OnMyMobDead";
+	monster "job_wiz",118,165,"Cornutus",1067,1,"Room of Water::OnMyMobDead";
+	monster "job_wiz",101,157,"Marina",1141,1,"Room of Water::OnMyMobDead";
+	monster "job_wiz",126,157,"Marin",1242,1,"Room of Water::OnMyMobDead";
+	monster "job_wiz",98,170,"Magnolia",1138,1,"Room of Water::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonsterall "job_wiz";
+	disablenpc "Room of Water";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		set WIZ_Q2,WIZ_Q2+1;
+		mapannounce "job_wiz",strcharinfo(0)+"はモンスターの掃討に成功した。",bc_map;
+		donpcevent "Room of Water#Door::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_wiz","ウォータールーム。転職試験をこれより開始する。",bc_map;
+	end;
+
+OnTimer2000:
+	mapannounce "job_wiz","制限時間は3分。これより試験を開始する。",bc_map;
+	end;
+
+OnTimer3000:
+	mapannounce "job_wiz","制限時間内にモンスターを全て倒すこと。",bc_map;
+	end;
+
+OnTimer33000:
+	mapannounce "job_wiz","残り2分30秒。",bc_map;
+	end;
+
+OnTimer63000:
+	mapannounce "job_wiz","残り2分。",bc_map;
+	end;
+
+OnTimer93000:
+	mapannounce "job_wiz","残り1分30秒。",bc_map;
+	end;
+
+OnTimer123000:
+	mapannounce "job_wiz","残り1分。",bc_map;
+	end;
+
+OnTimer153000:
+	mapannounce "job_wiz","残り30秒。",bc_map;
+	end;
+
+OnTimer173000:
+	mapannounce "job_wiz","残り10秒。",bc_map;
+	end;
+
+OnTimer183000:
+	mapannounce "job_wiz","時間切れ。",bc_map;
+	donpcevent "Room of Water::OnDisable";
+	end;
+
+OnTimer184000:
+	enablenpc "Room of Water#Failed";
+	end;
+
+OnTimer185000:
+	mapannounce "job_wiz","次の候補者は入場してください。",bc_map;
+	end;
+
+OnTimer186000:
+	disablenpc "Room of Water#Failed";
+	donpcevent "Room of Water::OnDisable";
+	donpcevent "Arena Assistant::OnStart";
+	end;
+}
+
+job_wiz,1,2,1	script	水の間#Door::Room of Water#Door	66,{
+OnInit:
+	disablenpc "Room of Water#Door";
+	end;
+
+OnEnable:
+	enablenpc "Room of Water#Door";
+	donpcevent "Room of Water::OnDisable";
+	set .MyMobs,5;
+	monster "job_wiz",114,169,"Marine Sphere",1142,1,"Room of Water#Door::OnMyMobDead";
+	monster "job_wiz",112,169,"Hydra",1068,1,"Room of Water#Door::OnMyMobDead";
+	monster "job_wiz",116,169,"Hydra",1068,1,"Room of Water#Door::OnMyMobDead";
+	monster "job_wiz",114,171,"Hydra",1068,1,"Room of Water#Door::OnMyMobDead";
+	monster "job_wiz",114,167,"Hydra",1068,1,"Room of Water#Door::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonsterall "job_wiz";
+	disablenpc "Room of Water#Door";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_wiz",strcharinfo(0)+"はモンスターの掃討に成功した。",bc_map;
+		percentheal 100,100;
+		warp "job_wiz",116,97;
+		donpcevent "Room of Water#Door::OnDisable";
+		donpcevent "Room of Earth::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_wiz","門番モンスターが出現した。制限時間は1分。",bc_map;
+	end;
+
+OnTimer30000:
+	mapannounce "job_wiz","残り30秒。",bc_map;
+	end;
+
+OnTimer50000:
+	mapannounce "job_wiz","残り10秒。",bc_map;
+	end;
+
+OnTimer60000:
+	mapannounce "job_wiz","時間切れ。",bc_map;
+	donpcevent "Room of Water#Door::OnDisable";
+	end;
+
+OnTimer61000:
+	enablenpc "Room of Water#Failed";
+	end;
+
+OnTimer62000:
+	mapannounce "job_wiz","次の候補者は入場してください。",bc_map;
+	end;
+
+OnTimer63000:
+	disablenpc "Room of Water#Failed";
+	donpcevent "Room of Water#Door::OnDisable";
+	donpcevent "Arena Assistant::OnStart";
+	end;
+}
+
+job_wiz,114,169,0	script	Room of Water#Failed	-1,16,16,{
+OnInit:
+	disablenpc "Room of Water#Failed";
+	end;
+
+OnTouch_:
+	mapannounce "job_wiz",strcharinfo(0)+"は突破できなかった。",bc_map;
+	warp "geffen",120,110;
+	end;
+}
+
+// Earth Room (Test 2 part 2)
+//==========================================================
+job_wiz,1,3,1	script	土の間::Room of Earth	66,{
+OnInit:
+	disablenpc "Room of Earth";
+	end;
+
+OnEnable:
+	enablenpc "Room of Earth";
+	if (!checkre(0)) {
+		set .MyMobs,10;
+		monster "job_wiz",120,102,"Hode",1127,1,"Room of Earth::OnMyMobDead";
+		monster "job_wiz",111,93,"Savage",1166,1,"Room of Earth::OnMyMobDead";
+		monster "job_wiz",127,86,"Mantis",1139,1,"Room of Earth::OnMyMobDead";
+	}
+	else
+		set .MyMobs,7;
+	monster "job_wiz",111,102,"Yoyo",1057,1,"Room of Earth::OnMyMobDead";
+	monster "job_wiz",120,102,"Deniro",1105,1,"Room of Earth::OnMyMobDead";
+	monster "job_wiz",111,102,"Caramel",1103,1,"Room of Earth::OnMyMobDead";
+	monster "job_wiz",120,93,"Giearth",1121,1,"Room of Earth::OnMyMobDead";
+	monster "job_wiz",107,98,"Bigfoot",1060,1,"Room of Earth::OnMyMobDead";
+	monster "job_wiz",124,98,"Orc Warrior",1023,1,"Room of Earth::OnMyMobDead";
+	monster "job_wiz",104,86,"Vitata",1176,1,"Room of Earth::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonsterall "job_wiz";
+	disablenpc "Room of Earth";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_wiz",strcharinfo(0) + "はモンスターの掃討に成功した。",bc_map;
+		donpcevent "Room of Earth#Door::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_wiz","アースルーム。転職試験をこれより開始する。",bc_map;
+	end;
+
+OnTimer2000:
+	mapannounce "job_wiz","制限時間は3分。",bc_map;
+	end;
+
+OnTimer3000:
+	mapannounce "job_wiz","制限時間内にモンスターを全て倒すこと。",bc_map;
+	end;
+
+OnTimer33000:
+	mapannounce "job_wiz","残り2分30秒。",bc_map;
+	end;
+
+OnTimer63000:
+	mapannounce "job_wiz","残り2分。",bc_map;
+	end;
+
+OnTimer93000:
+	mapannounce "job_wiz","残り1分30秒。",bc_map;
+	end;
+
+OnTimer123000:
+	mapannounce "job_wiz","残り1分。",bc_map;
+	end;
+
+OnTimer153000:
+	mapannounce "job_wiz","残り30秒。",bc_map;
+	end;
+
+OnTimer173000:
+	mapannounce "job_wiz","残り10秒。",bc_map;
+	end;
+
+OnTimer183000:
+	mapannounce "job_wiz","時間切れ。",bc_map;
+	donpcevent "Room of Earth::OnDisable";
+	end;
+
+OnTimer184000:
+	enablenpc "Room of Earth#Failed";
+	end;
+
+OnTimer185000:
+	mapannounce "job_wiz","次の候補者は入場してください。",bc_map;
+	end;
+
+OnTimer186000:
+	disablenpc "Room of Earth#Failed";
+	donpcevent "Room of Earth::OnDisable";
+	donpcevent "Arena Assistant::OnStart";
+	end;
+}
+
+job_wiz,1,4,1	script	土の間#Door::Room of Earth#Door	66,{
+OnInit:
+	disablenpc "Room of Earth#Door";
+	end;
+
+OnEnable:
+	enablenpc "Room of Earth#Door";
+	donpcevent "Room of Earth::OnDisable";
+	if (!checkre(0)) {
+		set .MyMobs,7;
+		monster "job_wiz",116,97,"Flora",1118,1,"Room of Earth#Door::OnMyMobDead";
+	}
+	else
+		set .MyMobs,6;
+	monster "job_wiz",114,95,"Mandragora",1020,1,"Room of Earth#Door::OnMyMobDead";
+	monster "job_wiz",118,95,"Mandragora",1020,1,"Room of Earth#Door::OnMyMobDead";
+	monster "job_wiz",114,99,"Mandragora",1020,1,"Room of Earth#Door::OnMyMobDead";
+	monster "job_wiz",118,99,"Mandragora",1020,1,"Room of Earth#Door::OnMyMobDead";
+	monster "job_wiz",116,94,"Mandragora",1020,1,"Room of Earth#Door::OnMyMobDead";
+	monster "job_wiz",116,100,"Mandragora",1020,1,"Room of Earth#Door::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonsterall "job_wiz";
+	disablenpc "Room of Earth#Door";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_wiz",strcharinfo(0) + "はモンスターの掃討に成功した。",bc_map;
+		percentheal 100,100;
+		warp "job_wiz",46,99;
+		donpcevent "Room of Earth#Door::OnDisable";
+		donpcevent "Room of Fire::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_wiz","門番モンスターが出現した。制限時間は1分。",bc_map;
+	end;
+
+OnTimer30000:
+	mapannounce "job_wiz","残り30秒。",bc_map;
+	end;
+
+OnTimer50000:
+	mapannounce "job_wiz","残り10秒。",bc_map;
+	end;
+
+OnTimer60000:
+	mapannounce "job_wiz","終了。",bc_map;
+	donpcevent "Room of Earth#Door::OnDisable";
+	end;
+
+OnTimer61000:
+	enablenpc "Room of Earth#Failed";
+	end;
+
+OnTimer62000:
+	mapannounce "job_wiz","次の候補者は入場してください。",bc_map;
+	end;
+
+OnTimer63000:
+	disablenpc "Room of Earth#Failed";
+	donpcevent "Room of Earth#Door::OnDisable";
+	donpcevent "Arena Assistant::OnStart";
+	end;
+}
+
+job_wiz,116,97,0	script	Room of Earth#Failed	-1,16,16,{
+OnInit:
+	disablenpc "Room of Earth#Failed";
+	end;
+
+OnTouch_:
+	mapannounce "job_wiz",strcharinfo(0) + "は突破できなかった。",bc_map;
+	warp "geffen",120,110;
+	end;
+}
+
+// Fire Room (Test 2 part 3)
+//==========================================================
+job_wiz,1,5,1	script	火の間::Room of Fire	66,{
+OnInit:
+	disablenpc "Room of Fire";
+	end;
+
+OnEnable:
+	enablenpc "Room of Fire";
+	if (!checkre(0)) {
+		set .MyMobs,8;
+		monster "job_wiz",58,110,"Zerom",1178,1,"Room of Fire::OnMyMobDead";
+		monster "job_wiz",54,89,"Desert Wolf",1106,1,"Room of Fire::OnMyMobDead";
+	}
+	else
+		set .MyMobs,6;
+	monster "job_wiz",33,110,"Goblin",1123,1,"Room of Fire::OnMyMobDead";
+	monster "job_wiz",40,103,"Scorpion",1001,1,"Room of Fire::OnMyMobDead";
+	monster "job_wiz",51,103,"Frilldora",1119,1,"Room of Fire::OnMyMobDead";
+	monster "job_wiz",40,92,"PecoPeco",1019,1,"Room of Fire::OnMyMobDead";
+	monster "job_wiz",51,92,"Elder Willow",1033,1,"Room of Fire::OnMyMobDead";
+	monster "job_wiz",37,89,"Metaller",1058,1,"Room of Fire::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonsterall "job_wiz";
+	disablenpc "Room of Fire";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_wiz",strcharinfo(0) + "はモンスターの掃討に成功した。",bc_map;
+		donpcevent "Room of Fire#Door::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_wiz","ファイアルーム。転職試験をこれより開始する。",bc_map;
+	end;
+
+OnTimer2000:
+	mapannounce "job_wiz","制限時間は3分。これより試験を開始する。",bc_map;
+	end;
+
+OnTimer3000:
+	mapannounce "job_wiz","制限時間内にモンスターを全て倒すこと。",bc_map;
+	end;
+
+OnTimer33000:
+	mapannounce "job_wiz","残り2分30秒。",bc_map;
+	end;
+
+OnTimer63000:
+	mapannounce "job_wiz","残り2分。",bc_map;
+	end;
+
+OnTimer93000:
+	mapannounce "job_wiz","残り1分30秒。",bc_map;
+	end;
+
+OnTimer123000:
+	mapannounce "job_wiz","残り1分。",bc_map;
+	end;
+
+OnTimer153000:
+	mapannounce "job_wiz","残り30秒。",bc_map;
+	end;
+
+OnTimer173000:
+	mapannounce "job_wiz","残り10秒。",bc_map;
+	end;
+
+OnTimer183000:
+	mapannounce "job_wiz","時間切れ。",bc_map;
+	donpcevent "Room of Fire::OnDisable";
+	end;
+
+OnTimer184000:
+	enablenpc "Room of Fire#Failed";
+	end;
+
+OnTimer185000:
+	mapannounce "job_wiz","次の候補者は入場してください。",bc_map;
+	end;
+
+OnTimer186000:
+	disablenpc "Room of Fire#Failed";
+	donpcevent "Room of Fire::OnDisable";
+	donpcevent "Arena Assistant::OnStart";
+	end;
+}
+
+job_wiz,1,6,1	script	火の間#Door::Room of Fire#Door	66,{
+OnInit:
+	disablenpc "Room of Fire#Door";
+	end;
+
+OnEnable:
+	enablenpc "Room of Fire#Door";
+	donpcevent "Room of Fire::OnDisable";
+	set .MyMobs,3;
+	monster "job_wiz",44,99,"Greatest General",1277,1,"Room of Fire#Door::OnMyMobDead";
+	if (checkre(0)) {
+		monster "job_wiz",43,99,"Greatest General",1277,1,"Room of Fire#Door::OnMyMobDead";
+		monster "job_wiz",45,99,"Greatest General",1277,1,"Room of Fire#Door::OnMyMobDead";
+	}
+	else {
+		monster "job_wiz",43,99,"Horong",1129,1,"Room of Fire#Door::OnMyMobDead";
+		monster "job_wiz",45,99,"Horong",1129,1,"Room of Fire#Door::OnMyMobDead";
+	}
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonsterall "job_wiz";
+	disablenpc "Room of Fire#Door";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mapannounce "job_wiz","おめでとう、" + strcharinfo(0) + "。転職試験に合格した。",bc_map;
+		set WIZ_Q,7;
+		changequest 9017,9018;
+		donpcevent "Room of Fire#Door::OnDisable";
+		donpcevent "Test Helper#wiz::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer1000:
+	mapannounce "job_wiz","門番モンスターが出現した。制限時間は2分。",bc_map;
+	end;
+
+OnTimer30000:
+	mapannounce "job_wiz","残り1分30秒。",bc_map;
+	end;
+
+OnTimer60000:
+	mapannounce "job_wiz","残り1分。",bc_map;
+	end;
+
+OnTimer90000:
+	mapannounce "job_wiz","残り30秒。",bc_map;
+	end;
+
+OnTimer110000:
+	mapannounce "job_wiz","残り10秒。",bc_map;
+	end;
+
+OnTimer120000:
+	mapannounce "job_wiz","時間切れ。",bc_map;
+	donpcevent "Room of Fire#Door::OnDisable";
+	end;
+
+OnTimer121000:
+	enablenpc "Room of Fire#Failed";
+	end;
+
+OnTimer122000:
+	mapannounce "job_wiz","次の候補者は入場してください。",bc_map;
+	end;
+
+OnTimer123000:
+	disablenpc "Room of Fire#Failed";
+	donpcevent "Room of Fire#Door::OnDisable";
+	donpcevent "Arena Assistant::OnStart";
+}
+
+job_wiz,46,99,0	script	Room of Fire#Failed	-1,16,16,{
+OnInit:
+	disablenpc "Room of Fire#Failed";
+	end;
+
+OnTouch_:
+	warp "geffen",120,110;
+	end;
+}
+
+job_wiz,1,7,1	script	テストヘルパー#wiz::Test Helper#wiz	66,{
+	end;
+
+OnInit:
+	disablenpc "Test Helper#wiz";
+	end;
+
+OnEnable:
+	initnpctimer;
+	end;
+
+OnDisable:
+	disablenpc "Test Helper#wiz";
+	end;
+
+OnTimer2000:
+	mapannounce "job_wiz","戻って、残りの転職手続きを完了してください。",bc_map;
+	end;
+
+OnTimer4000:
+	mapannounce "job_wiz","これで試験は終了です。次の候補者はそのままお待ちください。",bc_map;
+	end;
+
+OnTimer5000:
+	areawarp "job_wiz",33,82,57,113,"gef_tower",110,30;
+	end;
+
+OnTimer7000:
+	mapannounce "job_wiz","次の候補者は入場してください。",bc_map;
+	end;
+
+OnTimer9000:
+	donpcevent "Test Helper#wiz::OnDisable";
+	donpcevent "Arena Assistant::OnStart";
+	stopnpctimer;
+	end;
+}
+
+gef_tower,107,36,4	script	白い犬#wiz::White Dog#wiz	81,{
+	if (BaseJob != Job_Mage) {
+		if (BaseJob == Job_Wizard) {
+			cutin "job_wizard_maria01",2;
+			mes "[マリア]";
+			mes "こんなところに突っ立っていないで、外に出て自分がどれだけ強くなったか試してきた方がいいんじゃない？";
+			next;
+			mes "[マリア]";
+			mes "ウィザードは日々成長して力をつけていくものだってこと、忘れないでね。";
+			close2;
+			cutin "job_wizard_maria01",255;
+			end;
+		}
+		else if (BaseClass == Job_Novice) {
+			cutin "job_wizard_maria01",2;
+			mes "[犬]";
+			mes "何？坊や！";
+			mes "犬がしゃべってるのがそんなに面白いの？";
+		}
+		else {
+			cutin "job_wizard_maria02",2;
+			mes "[犬]";
+			mes "はぁ…呪文の一つも唱えられない人が、何でこんなところまで登ってきたのかしら？";
+			mes "*フッ*そんなに退屈なら、外側からこの建物のてっぺんまで登って、着いたら曲芸でもして世界に貢献したら？";
+		}
+		next;
+		mes "[犬]";
+		mes "*ワン*さっさと失せて！";
+		mes "あなたみたいな人に構ってる暇はないの！";
+		close2;
+		cutin "job_wizard_maria02",255;
+		end;
+	}
+	if (WIZ_Q == 0) {
+		cutin "job_wizard_maria01",2;
+		mes "[犬]";
+		mes "ああ…あなたが何を言いたいか分かるわ。ウィザードに転職したいのよね？";
+		next;
+		mes "[犬]";
+		mes "キャサリンに話しかけて。彼女が手伝ってくれるわ。";
+		next;
+		mes "[犬]";
+		mes "それと、転職手続きについて何か知りたいことがあれば、説明してあげられるわよ。";
+		next;
+		switch(select(".......:犬が私に話しかけてる…")) {
+		case 1:
+			mes "[犬]";
+			mes "…*ワン*…？何？どうしてそんな目で見るの？！";
+			mes "犬がしゃべるのを見るのは初めて？";
+			next;
+			mes "[犬]";
+			mes "*ワン*犬がしゃべるのなんて、そう見かけるものじゃないでしょうね。わん～";
+			mes "…ええ、たしかに珍しい光景だと思うわ…*グルル*…いい加減、ジロジロ見るのはやめてちょうだい！";
+			next;
+			mes "[犬]";
+			mes "私の名前は『マリア・スプロドフスカ』。『マリア』って呼んでちょうだいな。";
+			mes "ウィザードになりたい候補者たちを手伝っているの。";
+			next;
+			cutin "job_wizard_maria03",2;
+			mes "[マリア]";
+			mes "*ワン*まあ、私が犬になった理由はね…彼氏が魔法学位の最終試験の準備で実験していたのを手伝ってたの。それで、*グルルル*彼がうっかり私を犬に変えちゃったのよ。";
+			mes "理論上は、数か月もすれば薬の効果が切れて元に戻るはずなんだけど。正確にいつになるかは、まったく分からないわ。";
+			next;
+			cutin "job_wizard_maria01",2;
+			mes "[マリア]";
+			mes "まあ…あなたには関係のないことよね。";
+			mes "さて、どこまで話したかしら。";
+			next;
+			break;
+		case 2:
+			cutin "job_wizard_maria02",2;
+			mes "[犬]";
+			mes "*ワン**ワン**ワン*分かりきったこと言わないでよ！ええ、私が犬だってことくらい知ってるわ！";
+			next;
+			cutin "job_wizard_maria01",2;
+			mes "[犬]";
+			mes "私の名前は『マリア・スプロドフスカ』。みんなは『マリア』って呼ぶわ。";
+			mes "あなたみたいなウィザードを目指す新米さんたちを手伝っているの。";
+			next;
+			cutin "job_wizard_maria03",2;
+			mes "[「マリア」と呼ばれる犬]";
+			mes "私が犬になった理由はね…魔法学位の準備で実験をしていた彼氏が、うっかり私を犬に変えちゃったの。";
+			mes "理論上は、数か月もすれば薬の効果が切れて元に戻るはずなんだけど。正確にいつになるかは、まったく分からないわ。";
+			next;
+			cutin "job_wizard_maria02",2;
+			mes "[「マリア」と呼ばれる犬]";
+			mes "私は『マリア』っていう『犬』じゃないの！！ちょっと！！ちゃんと聞いてよ！！";
+			next;
+			mes "[犬…「マリア」…]";
+			mes "..........";
+			next;
+			mes "[マリア]";
+			mes "…*ワン**ワン**ワン*…腹は立つけど、まあいいわ！！忙しそうだから、この話はここまでにしておく。";
+			next;
+			break;
+		}
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "さっきも言った通り、転職したいならキャサリンに話しかけて。";
+		mes "彼女も新米ウィザードなのよ。";
+		next;
+		mes "[マリア]";
+		mes "転職手続きについてもっと説明してあげられるけど、忙しい人を引き止めるわけにもいかないしね。";
+		mes "どう？ウィザードを目指すマジシャンに何が待っているか、少し説明しましょうか？";
+		next;
+		switch(select("はい、お願いします！ぜひ聞きたいです。:いいえ、大丈夫です。:しゃべる犬…")) {
+		case 1:
+			cutin "job_wizard_maria01",2;
+			mes "[マリア]";
+			mes "分かったわ、手続きについて説明してあげる。";
+			next;
+			mes "[マリア]";
+			mes "転職手続きには3つの試験があるの。";
+			mes "第1試験は魔法アイテムの収集。";
+			next;
+			mes "[マリア]";
+			mes "これはキャサリンに申請書を提出すると始まるわ。";
+			mes "彼女があなたに、あらゆる種類のジェムストーンを集めるか、属性のついた石を集めるか、どちらかを指示するはずよ。";
+			next;
+			mes "[マリア]";
+			mes "第2試験は魔法の筆記試験、";
+			mes "隅にいる陰気なラウレルがそれを担当しているわ。";
+			next;
+			mes "[マリア]";
+			mes "魔法について、モンスターについて、そしてマジシャンについての質問があるの。";
+			mes "10問のうち、全部正解しないと合格させてくれないのよ。つまり、不合格になるってこと…";
+			next;
+			mes "[マリア]";
+			mes "変な話だけど、彼が第3試験も担当しているの。";
+			mes "第3試験はモンスターの掃討よ。";
+			next;
+			mes "[マリア]";
+			mes "それぞれの部屋には、特定の属性のモンスターがいるわ。";
+			mes "適切な呪文で攻撃しなきゃいけないの。";
+			next;
+			mes "[マリア]";
+			mes "まあ、私から話せるのはこれくらいね。さあ、申請しに行きなさい。";
+			next;
+			mes "[マリア]";
+			mes "私の説明を聞くより、自分で試してみた方が早いわよ。";
+			close2;
+			cutin "job_wizard_maria01",255;
+			warp "gef_dun00",116,102;
+			end;
+		case 2:
+			mes "[マリア]";
+			mes "本当に？じゃあ、申請しに行って頑張ってね。";
+			close2;
+			cutin "job_wizard_maria01",255;
+			end;
+		case 3:
+			cutin "job_wizard_maria02",2;
+			mes "[マリア]";
+			mes "私は犬じゃないの！！ウオオオオオオオオオオン～";
+			next;
+			mes "[マリア]";
+			mes "もう！不合格になっちゃえ！！さっさと失せなさい！！";
+			close2;
+			cutin "job_wizard_maria01",255;
+			warp "gef_dun00",116,102;
+			end;
+		}
+	}
+	else if (WIZ_Q == 1) {
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "迷ってるみたいね…";
+		mes "申請は済んで、今はアイテムを探しているところでしょ？";
+		next;
+		mes "[マリア]";
+		mes "でもこれはまだ第1試験に過ぎないから、他人を頼っちゃだめよ。";
+		mes "自分の力でやり遂げなさい。それが一番の近道だから。";
+		next;
+		mes "[マリア]";
+		mes "聞いた話では、ジェムストーンを集めなきゃいけないのよね…";
+		mes "直接手伝ってはあげられないけど、アドバイスならできるわ。";
+		next;
+		mes "[マリア]";
+		mes "まず、赤いジェムストーンを手に入れるには、プロンテラの下水道へ行きなさい。";
+		mes "そこにたくさんいるシーフバグやシーフバグの卵から手に入るわ。";
+		next;
+		mes "[マリア]";
+		mes "黄色いジェムストーンは砂漠で簡単に見つかるわ。";
+		mes "コンドルやピッキー、時にはゴーレムみたいなモンスターも落とすことがあるの。";
+		next;
+		mes "[マリア]";
+		mes "それから…*ワフ*青いジェムストーンを手に入れるには、ビョルン島ダンジョンへ行ってみて。";
+		mes "コルヌス、バドン、マーズみたいなモンスターがそのジェムを落とすわ。";
+		next;
+		mes "[マリア]";
+		mes "もちろん、町の魔法店でも青いジェムストーンは買えるけど…";
+		mes "自分で見つけた方が、後の試験にとってずっと有意義よ。";
+		next;
+		mes "[マリア]";
+		mes "とにかく、頑張ってね。";
+		mes "それがウィザードの基本だから。";
+		close2;
+		cutin "job_wizard_maria01",255;
+		end;
+	}
+	else if (WIZ_Q == 2) {
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "迷ってるみたいね…";
+		mes "申請は済んで、今はアイテムを探しているところでしょ？";
+		next;
+		mes "[マリア]";
+		mes "でもこれはまだ第1試験に過ぎないから、人に頼っちゃだめよ。";
+		mes "自分の力でやり遂げなさい、それが一番の近道だから。";
+		next;
+		mes "[マリア]";
+		mes "聞いた話では、属性のついた石を集めなきゃいけないのよね…";
+		mes "直接手伝ってはあげられないけど、アドバイスならできるわ。";
+		next;
+		mes "[マリア]";
+		mes "そうね、クリスタルブルーはビョルン島ダンジョンで見つかるわ。";
+		mes "コルヌス、ククレ、マリナ、バドン…このあたりのモンスターがよく落とすの。";
+		next;
+		mes "[マリア]";
+		mes "グリーンライブは昆虫系のモンスターから手に入るわ。";
+		mes "ホーン、マンティス、ビタタあたりを狩ってみるといいわね。";
+		next;
+		mes "[マリア]";
+		mes "それから*ワフ*、レッドブラッド。あれはたくさん手に入るって聞いたわ…";
+		mes "エルダーウィローやメタラー、それに砂漠のスコーピオンからもよく取れるはずよ。";
+		next;
+		mes "[マリア]";
+		mes "ウィンドオブヴァーデュアなら。ホーネット、スタイナー、スチールチョンチョン。";
+		mes "少し頑張れば、案外簡単に集まるわよ。";
+		next;
+		mes "[マリア]";
+		mes "でもとにかく、いつも頑張ってね。";
+		mes "それがウィザードの基本だから。";
+		close2;
+		cutin "job_wizard_maria01",255;
+		end;
+	}
+	else if (WIZ_Q == 3) {
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "第1試験が終わったからって、安心しすぎないでね。";
+		mes "まだあと2つの試験が残っているんだから、頑張って。";
+		close2;
+		cutin "job_wizard_maria01",255;
+		end;
+	}
+	else if (WIZ_Q == 4) {
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "ズズーZzzzZzzz…";
+		next;
+		cutin "job_wizard_maria02",2;
+		mes "[マリア]";
+		mes "*クゥン*…ブリザドリス…あんたなんか大嫌い…Zzz…";
+		close2;
+		cutin "job_wizard_maria02",255;
+		end;
+	}
+	else if (WIZ_Q == 5) {
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "あら、順調にやってるじゃない？";
+		next;
+		mes "[マリア]";
+		mes "そうね、最後まで頑張ってね。";
+		mes "ラウレルが待ってるわ。";
+		close2;
+		cutin "job_wizard_maria01",255;
+		end;
+	}
+	else if (WIZ_Q == 6) {
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "*ワン*…諦めちゃったの？";
+		mes "*はぁ*…そんな弱い心でどうやってウィザードになるつもり？";
+		next;
+		mes "[マリア]";
+		mes "どの部屋にも同じ属性のモンスターがいるって知ってるでしょ…";
+		mes "魔法を扱う者なら、いろんな呪文について知っておく必要があるわ。";
+		next;
+		mes "[マリア]";
+		mes "それに、スキルを使ってくるモンスターへの対処法も覚えなきゃ。";
+		mes "自分を攻撃してくるモンスターを最優先で倒すのが一番よ。";
+		next;
+		mes "[マリア]";
+		mes "*グルル*とにかく、試験を続けなさい。";
+		mes "弱気にならずに、*ワフ*さあ戻りなさい！*ワン**ワン*今すぐに！*ワン*";
+		close2;
+		cutin "job_wizard_maria01",255;
+		end;
+	}
+	else if (WIZ_Q == 7) {
+		cutin "job_wizard_maria01",2;
+		mes "[マリア]";
+		mes "やっぱりね、あなたならできるって分かってたわ、匂いで分かったもの！*ワフ*";
+		mes "これでもうウィザードって呼べるわね。";
+		next;
+		mes "[マリア]";
+		mes "おめでとう。これからも、何事にも全力を尽くしてね。";
+		close2;
+		cutin "job_wizard_maria01",255;
+		end;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.1 Now using the initnpctimer command, donpcevent,
+//= and new waitingroom event commands.  No more addtimer spamming.
+//= No longer have to talk to the npc to take the test.  Just enter the chat room.
+//= 1.2 Changed global variable names to unique ones.
+//= 1.2a Rollback from the wrong Kashy's fix
+//= 1.2b Fixed issue with duplicating monsters thx to Bison.[kobra_k88]
+//= 1.2c changed one Horong to Frilldora (now 3rd room contains 1 agressive mob.)
+//= 1.2d more simplified fire room - removed agressive Desert Wolf [Lupus]
+//= 1.3 Added Baby Class support. 1.5 Fixed possible EXP abuse [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//= 2nd Job Quests again. It also guides adv classes where to go. [Lupus]
+//= 1.7 Replaced 2 Hodes with 2 Horong's (according to the official guide) [Lupus]
+//= 1.8 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 2.1 Changed numbers to constants. [Vicious]
+//= 2.2 Merged back JFunc [Lupus] 2.2a Removed extra MES, added missing NEXT
+//= 2.3 Bigfoot monster summon corrected [Zairik]

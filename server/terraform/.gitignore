@@ -1,0 +1,5 @@
+# tfstate はローカル保持の方針なので除外しない
+.terraform/
+.build/
+crash.log
+crash.*.log

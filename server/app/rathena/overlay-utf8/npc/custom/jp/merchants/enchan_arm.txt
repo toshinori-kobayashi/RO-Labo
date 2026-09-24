@@ -1,0 +1,151 @@
+//===== rAthena Script =======================================
+//= Armor Enchanter
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.3a
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Add a +1, +2, or +3 random stat to a specified armor.
+//===== Additional Comments: =================================
+//= 1.0 First version.
+//= 1.1 Corrected typo (Sit -> Suit) (bugreport:4586)
+//= 1.2 Optimized. [Euphy]
+//= 1.3 Fixed some typos and optimized a little more. [Daegaladh]
+//= 1.3a Added 'disable_items' command. [Euphy]
+//============================================================
+
+prontera,165,60,2	script	見習い職人::Apprentice Craftsman	73,{
+	disable_items;
+	mes "[見習い職人]";
+	if (Zeny >= 400000) {
+		mes "私は防具の性能を最大限に高める方法を研究してきた。";
+		next;
+		mes "[見習い職人]";
+		mes "エンチャントとは、防具に隠された特殊なソケットへ、不思議なステータス効果を付与するすごい技術だ。";
+		next;
+		mes "[見習い職人]";
+		mes "ただし気をつけてほしいのは、同じ種類の防具を2つ以上持っていると、所持品の並び順に従ってエンチャントが適用されてしまうということだ。";
+		next;
+		mes "[見習い職人]";
+		mes "その場合、意図しないアイテムにエンチャントされてしまうかもしれない。安全のため、エンチャントしたい防具は^5555ff1つだけ^000000持ってきてくれ…";
+		next;
+		mes "[見習い職人]";
+		mes "同じ種類の防具を複数持っていて何か起きても、俺は責任を負わないからな。";
+		next;
+		switch(select("スロットなしの防具。:スロットありの防具。:上級防具。:また今度にする。")) {
+		case 1:
+			setarray .@Items[0],2307,2309,2314,2316,2321,2325,2327,2328,2330,2332,2334,2335,2341,2344,2346,2348,2350,2337,2386,2394,2395,2396;
+			set .@j,50;
+			break;
+		case 2:
+			setarray .@Items[0],2311,2318,2319,2320,2308,2310,2315,2317,2322,2324,2326,2331,2333,2336,2342,2345,2347,2349,2351;
+			set .@j,55;
+			set .@k,1;
+			break;
+		case 3:
+			setarray .@Items[0],2364,2365,2391,2374,2375,2376,2377,2378,2379,2380,2381,2382,2387,2388,2389,2390;
+			set .@j,60;
+			break;
+		case 4:
+			mes "[見習い職人]";
+			mes "また防具のエンチャントに興味が出たら来てくれ。";
+			close;
+		}
+		set .@menu$,"";
+		for(set .@i,0; .@i<getarraysize(.@Items); set .@i,.@i+1)
+			set .@menu$, .@menu$+getitemname(.@Items[.@i])+((.@k)?" [1]":"")+":";
+		callsub S_EnchantArmor, .@Items[select(.@menu$)-1], .@j;
+		end;
+	}
+	mes "俺は防具エンチャントを担当している。簡単に言えば、防具を強化する方法を研究しているんだ。";
+	next;
+	mes "[見習い職人]";
+	mes "もし防具にエンチャントしたいなら、40万Zenyとエンチャントしたい防具を持ってきてくれ。それで準備は整うぞ。";
+	close;
+
+S_EnchantArmor:
+	set .@itemid,getarg(0);
+	set .@failrate,getarg(1);
+	mes "[見習い職人]";
+	if (countitem(.@itemid) == 1) {
+		mes "ソケットエンチャントには40万Zenyがかかる。ランダムなオプションが付与されるが、もちろん防具が壊れる可能性もある。";
+		next;
+		mes "[見習い職人]";
+		mes "まず、何より大事なことを言っておく。";
+		mes "^ff5555既存の防具の精錬値と";
+		mes "付いているカードは消えてしまう。^000000";
+		mes "それでもエンチャントを試すか？";
+		next;
+		if(select("うーん…少し考えさせてくれ。:やってくれ。") == 1) {
+			mes "[見習い職人]";
+			mes "まあ、責任は問わないさ。安全第一だろう？";
+			mes "それじゃあ、良い一日を。";
+			close;
+		}
+		mes "[見習い職人]";
+		mes "なかなかの冒険者だな？よし、やるか。";
+		close2;
+		specialeffect2 EF_MAPPILLAR;
+		if (Zeny < 400000) {
+			mes "[見習い職人]";
+			mes "すまないが、Zenyが足りないようだ。";
+			close;
+		}
+		progressbar "ffff00",7;
+		set Zeny, Zeny-400000;
+		delitem .@itemid,1;
+		switch (rand(1,.@failrate)) {
+			case 1: set .@addpart,4702;break;
+			case 2: set .@addpart,4712;break;
+			case 3: set .@addpart,4722;break;
+			case 4: set .@addpart,4732;break;
+			case 5: set .@addpart,4742;break;
+			case 6: set .@addpart,4752;break;
+			case 7:
+			case 8: set .@addpart,4701;break;
+			case 9:
+			case 10: set .@addpart,4711;break;
+			case 11:
+			case 12: set .@addpart,4721;break;
+			case 13:
+			case 14: set .@addpart,4731;break;
+			case 15:
+			case 16: set .@addpart,4741;break;
+			case 17:
+			case 18: set .@addpart,4751;break;
+			case 19:
+			case 20:
+			case 21: set .@addpart,4700;break;
+			case 22:
+			case 23:
+			case 24: set .@addpart,4710;break;
+			case 25:
+			case 26:
+			case 27: set .@addpart,4720;break;
+			case 28:
+			case 29:
+			case 30: set .@addpart,4730;break;
+			case 31:
+			case 32:
+			case 33: set .@addpart,4740;break;
+			case 34:
+			case 35:
+			case 36: set .@addpart,4750;break;
+			default:
+				specialeffect2 EF_PHARMACY_FAIL;
+				mes "[見習い職人]";
+				mes "残念だったな。";
+				mes "指定した装備へのエンチャントは失敗してしまった。";
+				close;
+		}
+		getitem2 .@itemid, 1, 1, 0, 0, 0, 0, 0, .@addpart;
+	}
+	else {
+		mes "ん？エンチャントする物がないじゃないか！";
+		mes "エンチャントしたい装備を、1つだけ持ってきてくれ。";
+		close;
+	}
+}

@@ -1,0 +1,21 @@
+[Unit]
+Description=rAthena Pre-Renewal server (Docker Compose)
+Documentation=file:///srv/ro-server/app/docker-compose.yml
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/srv/ro-server/app
+# 起動のたびに IMDSv2 から Public IP を取り直して .env に反映する
+# （EIP 付与前後や再アタッチで IP が変わってもクライアント向けの char_ip/map_ip がずれない）
+ExecStartPre=/srv/ro-server/app/scripts/update-public-ip.sh
+ExecStart=/usr/bin/docker compose up -d --remove-orphans
+ExecStop=/usr/bin/docker compose down
+# イメージ pull と map-server の起動待ちを見込んで長めに取る
+TimeoutStartSec=600
+
+[Install]
+WantedBy=multi-user.target

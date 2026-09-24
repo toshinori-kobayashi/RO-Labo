@@ -1,0 +1,1001 @@
+//===== rAthena Script ======================================= 
+//= Assassin Skills Quests
+//===== By: ================================================== 
+//= Lupus, Reddozen
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests for skills: Venom Knife, Sonic Acceleration
+//===== Additional Comments: ================================= 
+//= 1.4 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.5 Replaced effect numerics with constants. [L0ne_W0lf]
+//============================================================
+
+in_moc_16,14,27,5	script	アサシン#realman::Assassin#realman	884,{
+	if (BaseJob == Job_Assassin && ASSN_SK2 == 1) {
+		if (getskilllv("AS_VENOMKNIFE") == 0) {
+			mes "[キルティン]";
+			mes "ああ、そういうことか。";
+			mes "どうりで見覚えが";
+			mes "あると思ったぜ。お前は俺が";
+			mes "^990099ベノムナイフ^000000を教えてやった";
+			mes "１人だな。今日は何の用だ？";
+			next;
+			mes "[キルティン]";
+			mes "何だと……？";
+			mes "もう一度教えてほしい";
+			mes "だと？忘れちまったとは";
+			mes "情けねえが、仕方ねえ。";
+			mes "よしよし、教えてやるよ。";
+			next;
+			mes "[キルティン]";
+			mes "まず、ナイフ系の武器を";
+			mes "装備しろ。そしてそのナイフに";
+			mes "エンヴェノムをかける。";
+			mes "あとは手首のスナップだけで";
+			mes "投げられる。よく見て、";
+			mes "しっかり覚えておけ。";
+			next;
+			mes "[キルティン]";
+			mes "見たか？";
+			mes "フォームがしっかり";
+			mes "してなきゃ、完璧な技には";
+			mes "ならねえ。基本があっての";
+			mes "応用だ。さあ、";
+			mes "お前もやってみろ。";
+			specialeffect EF_INVENOM;
+			next;
+			mes "[キルティン]";
+			mes "よし……上出来だ……";
+			mes "完璧なフォームだな。";
+			mes "ふむ、本当に";
+			mes "忘れてたのか？";
+			mes "ちょっと思い出させて";
+			mes "やっただけって感じだな。";
+			specialeffect2 EF_INVENOM;
+			next;
+			mes "[キルティン]";
+			mes "よし、これでお前も";
+			mes "ベノムナイフを";
+			mes "ものにしたと言っていい";
+			mes "だろう。もう行っていいぞ。";
+			mes "アサシンギルドの";
+			mes "誇りにかけて戦え！";
+			skill "AS_VENOMKNIFE",1,SKILL_PERM;
+			close;
+		}
+		else {
+			mes "[キルティン]";
+			mes "どうだ、";
+			mes "^990099ベノムナイフ^000000の";
+			mes "調子は？";
+			mes "油断するなよ、獲物には";
+			mes "見合った報いを";
+			mes "与えてやるんだぞ！";
+			close;
+		}
+	}
+	else if (ASSN_SK2 == 1 && ASSN_SK == 7) {
+		mes "[キルティン]";
+		mes "アサシン専用スキルを";
+		mes "全部覚えたか。だが";
+		mes "調子に乗るなよ。";
+		mes "アサシンギルドの";
+		mes "誇りのため、";
+		mes "さらなる強さを求め続けろ。";
+		close;
+	}
+	else if (ASSN_SK2 == 1) {
+		mes "[キルティン]";
+		mes "どうだ、";
+		mes "^990099ベノムナイフ^000000の";
+		mes "調子は？";
+		mes "油断するなよ、獲物には";
+		mes "見合った報いを";
+		mes "与えてやるんだぞ！";
+		close;
+	}
+	else {
+		if (BaseJob == Job_Assassin) {
+			mes "[キルティン]";
+			mes "ん？おお、お前は";
+			mes "間違いなく";
+			mes "アサシンギルドの一員だな。";
+			mes "ちょうどいいところに来た。";
+			next;
+			mes "[キルティン]";
+			mes "ギルドマスターが最近、";
+			mes "アサシン用の新スキルを";
+			mes "２つ開発することに";
+			mes "成功してな。俺はギルドの";
+			mes "全員にその新スキルを";
+			mes "教える役目を任されてるんだ。";
+			next;
+			select("新しいスキルだと？");
+			mes "[キルティン]";
+			mes "そうだ、"+ strcharinfo(0) +"。";
+			mes "１つ目のスキルは";
+			mes "ソニックブローを強化するもの。";
+			mes "そして２つ目は";
+			mes "遠距離攻撃で、その名も";
+			mes "『^990099ベノムナイフ^000000』だ。";
+			next;
+			mes "[キルティン]";
+			mes "何か聞きたいことが";
+			mes "あれば、遠慮なく";
+			mes "この新スキルについて";
+			mes "尋ねてくれ。できる限り";
+			mes "教えてやるのが俺の仕事だ。";
+			next;
+			while(1) {
+				switch(select("^0000FFソニックブロー強化^000000:^990099ベノムナイフ^000000:会話を続ける")) {
+				case 1:
+					mes "[キルティン]";
+					mes "アサシンとして";
+					mes "長くやってるなら、";
+					mes "ソニックブローには";
+					mes "馴染みがあるだろう。";
+					mes "目にも留まらぬ速さで";
+					mes "敵に８連撃を叩き込むスキルだ。";
+					next;
+					mes "[キルティン]";
+					mes "だがあの速さゆえに、";
+					mes "ソニックブローは";
+					mes "そこまで命中率が高くない。";
+					mes "長年の試験と研究の末、";
+					mes "ギルドマスターがその";
+					mes "弱点を克服する方法を編み出した。";
+					next;
+					mes "[キルティン]";
+					mes "その名も";
+					mes "『ソニックアクセラレーション』。";
+					mes "アサシンが自分自身に";
+					mes "かけることで、敵の急所を";
+					mes "素早く見極め、";
+					mes "正確に突けるようになる。";
+					next;
+					mes "[キルティン]";
+					mes "早い話が、";
+					mes "ソニックアクセラレーションを";
+					mes "使えばソニックブローの";
+					mes "ダメージがほぼ倍になる。";
+					mes "よくソニックブローを使うなら、";
+					mes "かなり役立つスキルだ。";
+					next;
+					mes "[キルティン]";
+					mes "まずは俺から";
+					mes "ベノムナイフを";
+					mes "覚えるといい。それから、";
+					mes "すぐ隣にいる美しい";
+					mes "アサシンクロス、エスミルに話しかけろ。";
+					next;
+					break;
+				case 2:
+					mes "[キルティン]";
+					mes "知っての通り、";
+					mes "俺たちの職業は";
+					mes "遠距離攻撃が得意とは";
+					mes "言えない。弓も使えるし";
+					mes "遠距離スキルも多少はあるが、";
+					mes "正直、使い道は限られてる。";
+					next;
+					mes "[キルティン]";
+					mes "このベノムナイフは、";
+					mes "その弱点を補うために";
+					mes "開発されたスキルだ。ナイフに";
+					mes "エンヴェノムをかけて遠くの敵に投げ、毒を浴びせる。";
+					next;
+					break;
+				case 3:
+					mes "[キルティン]";
+					mes "さて、よければ";
+					mes "今すぐ^009900ベノムナイフ^000000を";
+					mes "教えてやろう。";
+					mes "そう時間もかからん。";
+					mes "どうだ、覚える気はあるか？";
+					next;
+					while(1) {
+						if (select("ベノムナイフを覚える:い、嫌だ、覚えたくない！") == 1) {
+							mes "[キルティン]";
+							mes "まず、ナイフ系の武器を";
+							mes "装備しろ。そしてそのナイフに";
+							mes "エンヴェノムをかける。";
+							mes "あとは手首のスナップだけで";
+							mes "投げられる。よく見て、";
+							mes "しっかり覚えておけ。";
+							next;
+							mes "[キルティン]";
+							mes "見たか？";
+							mes "フォームがしっかり";
+							mes "してなきゃ、完璧な技には";
+							mes "ならねえ。基本があっての";
+							mes "応用だ。さあ、";
+							mes "お前もやってみろ。";
+							specialeffect EF_INVENOM;
+							next;
+							mes "[キルティン]";
+							mes "おお、なかなか";
+							mes "いいじゃねえか。";
+							mes "飲み込みが早いな。";
+							mes "まあ、俺の教え方が";
+							mes "上手いってのも";
+							mes "あるがな。大したもんだ。";
+							next;
+							specialeffect2 EF_INVENOM;
+							next;
+							mes "[キルティン]";
+							mes "よし、もう少し";
+							mes "練習は必要かも";
+							mes "しれんが、これでもう";
+							mes "実戦でベノムナイフを";
+							mes "使えるはずだ。";
+							set ASSN_SK2,1;
+							set ASSN_SK,1;
+							skill "AS_VENOMKNIFE",1,SKILL_PERM;
+							next;
+							mes "[キルティン]";
+							mes "よし、俺が";
+							mes "教えられるのはここまでだ。";
+							mes "このスキルを使いこなし、";
+							mes "アサシンギルドの誇りにかけ";
+							mes "敵に災いをもたらせ！";
+							close;
+						}
+						if (.@teach ==1) {
+							mes "[キルティン]";
+							mes "い、嫌だと？";
+							mes "さっさとしろ！";
+							mes "このベノムナイフを";
+							mes "アサシンギルドの全員に教える";
+							mes "のが俺の仕事だ！^FFFFFFaaaaa^000000俺が言うまで帰さねえぞ！";
+							next;
+						}
+						else {
+							mes "[キルティン]";
+							mes "ギルドマスターの";
+							mes "命令は断れねえんだ……";
+							mes "好きだろうと嫌いだろうと、";
+							mes "このスキルはお前を";
+							mes "もっと強いアサシンにする。";
+							mes "信じて覚えると言ってくれ。";
+							next;
+						}
+					}
+				}
+			}
+		}
+		else if (BaseJob == Job_Thief) {
+			mes "[キルティン]";
+			mes "シーフか……？";
+			mes "なるほど、";
+			mes "立派な仕事だ。だがな、";
+			mes "俺に何か教えてほしいなら、";
+			mes "まずもっと";
+			mes "強くなることだな。";
+			close;
+		}
+		else {
+			mes "[アサシン]";
+			mes "...............................";
+			mes "さっさと行け。";
+			close;
+		}
+	}
+}
+
+in_moc_16,23,27,5	script	アサシン#realgirl::Assassin#realgirl	885,{
+	if (BaseJob == Job_Assassin && ASSN_SK == 7) {
+		if (getskilllv("AS_SONICACCEL") == 0) {
+			mes "[エスミル]";
+			mes "あら？ああ、あなたも";
+			mes "転生してアサシンクロスに";
+			mes "なったのね。新しい力を得るため";
+			mes "どれだけ苦労したか、よくわかるわ。";
+			next;
+			mes "[エスミル]";
+			mes "記憶の一部を失って、";
+			mes "ソニックアクセラレーションを";
+			mes "もう一度覚え直す";
+			mes "必要があるのでしょう。";
+			mes "本当に気の毒だけど、";
+			mes "また教えてあげるわ。";
+			next;
+			if (getskilllv("AS_SONICBLOW") == 0) {
+				mes "[エスミル]";
+				mes "まずはソニックブローを";
+				mes "覚えてらっしゃい。";
+				mes "あなたがソニックブローを";
+				mes "使えなければ、私が教える";
+				mes "スキルは意味がないもの。ここで待つわ。";
+				close;
+			}
+			mes "[エスミル]";
+			mes "いい？";
+			mes "ソニックブローを放つ直前は、";
+			mes "足をこんな風に構えるの。";
+			mes "それから、できるだけ";
+			mes "滑らかに、素早く";
+			mes "こちら側へ体重を移して。";
+			specialeffect EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "よく見て、";
+			mes "ここが一番大事な";
+			mes "ところよ。私の手の位置と、";
+			mes "腕の角度、見える？";
+			mes "これがあなたに";
+			mes "覚えてほしい型なの。";
+			specialeffect EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "よし、覚えることは";
+			mes "これで全部よ。";
+			mes "さあ、あなたの型を";
+			mes "見てあげるから、やってみて。";
+			next;
+			specialeffect2 EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "うーん、体重移動が";
+			mes "少しふらついてるわね。";
+			mes "重心をこんな風に";
+			mes "置くといいかも";
+			mes "しれないわ……";
+			next;
+			specialeffect2 EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "ああ、完璧まで";
+			mes "もうあと少しね。";
+			mes "構えから実際の動作への";
+			mes "移り変わりを、もっと";
+			mes "滑らかにすることに集中して。";
+			next;
+			mes "[エスミル]";
+			mes "そう、それよ……！";
+			mes "とても見事な動きだったわ。";
+			mes "よくやったわね、"+ strcharinfo(0) +"。";
+			skill "AS_SONICACCEL",1,SKILL_PERM;
+			set ASSN_SK,7;
+			next;
+			mes "[エスミル]";
+			mes "これでわかったかしら？";
+			mes "もうこのスキルを";
+			mes "忘れることはないでしょう。";
+			mes "私からもう教えられることは";
+			mes "ないわ。あとはあなたの";
+			mes "旅の幸運を祈るだけよ。";
+			close;
+		}
+		else {
+			mes "[エスミル]";
+			mes "戦いで";
+			mes "ソニックアクセラレーションを";
+			mes "使って、敵に対する";
+			mes "優位を得ていることでしょう。";
+			mes "アサシンギルドの誇りにかけ、";
+			mes "敵に素早い敗北をもたらして。";
+			close;
+		}
+	}
+	else if (ASSN_SK == 7) {
+		mes "[エスミル]";
+		mes "戦いで";
+		mes "ソニックアクセラレーションを";
+		mes "使って、敵に対する";
+		mes "優位を得ていることでしょう。";
+		mes "アサシンギルドの誇りにかけ、";
+		mes "敵に素早い敗北をもたらして。";
+		close;
+	}
+	else if (ASSN_SK == 6) {
+		mes "[エスミル]";
+		mes "訓練に集中してちょうだい……";
+		mes "何度も邪魔が入っていたら、";
+		mes "いつまで経っても";
+		mes "何も覚えられないわ。";
+		mes "さあ、よく聞いて。";
+		next;
+		mes "[エスミル]";
+		mes "いい？";
+		mes "ソニックブローを放つ直前は、";
+		mes "足をこんな風に構えるの。";
+		mes "それから、できるだけ";
+		mes "滑らかに、素早く";
+		mes "こちら側へ体重を移して。";
+		specialeffect EF_SONICBLOW;
+		next;
+		mes "[エスミル]";
+		mes "よく見て、";
+		mes "ここが一番大事な";
+		mes "ところよ。私の手の位置と、";
+		mes "腕の角度、見える？";
+		mes "これがあなたに";
+		mes "覚えてほしい型なの。";
+		specialeffect EF_SONICBLOW;
+		next;
+		mes "[エスミル]";
+		mes "よし、覚えることは";
+		mes "これで全部よ。";
+		mes "さあ、あなたの型を";
+		mes "見てあげるから、やってみて。";
+		next;
+		specialeffect2 EF_SONICBLOW;
+		next;
+		mes "[エスミル]";
+		mes "うーん、体重移動が";
+		mes "少しふらついてるわね。";
+		mes "重心をこんな風に";
+		mes "置くといいかも";
+		mes "しれないわ……";
+		next;
+		specialeffect2 EF_SONICBLOW;
+		next;
+		mes "[エスミル]";
+		mes "さっきより";
+		mes "少しよくなったわ。";
+		mes "敵の弱点を意識して、";
+		mes "突きの動作まで";
+		mes "しっかりやり切ってみて。";
+		next;
+		specialeffect2 EF_SONICBLOW;
+		next;
+		mes "[エスミル]";
+		mes "ああ、完璧まで";
+		mes "もうあと少しね。";
+		mes "構えから実際の動作への";
+		mes "移り変わりを、もっと";
+		mes "滑らかにすることに集中して。";
+		specialeffect2 EF_SONICBLOW;
+		next;
+		mes "[エスミル]";
+		mes "そう、それよ……！";
+		mes "とても見事な動きだったわ。";
+		mes "よくやったわね、"+ strcharinfo(0) +"。";
+		skill "AS_SONICACCEL",1,SKILL_PERM;
+		set ASSN_SK,7;
+		next;
+		mes "[エスミル]";
+		mes "これでわかったかしら？";
+		mes "もうこのスキルを";
+		mes "忘れることはないでしょう。";
+		mes "私からもう教えられることは";
+		mes "ないわ。あとはあなたの";
+		mes "旅の幸運を祈るだけよ。";
+		close;
+	}
+	else if (ASSN_SK == 5) {
+		mes "[エスミル]";
+		mes "それで、頼んでおいた";
+		mes "あの小さな任務は";
+		mes "どうなったかしら？";
+		mes "きちんとやり遂げてくれたと信じているわ。";
+		next;
+		if ((ASSN_SK == 5 && countitem(726) > 0) || (ASSN_SK == 5 && countitem(723) > 0) || (ASSN_SK == 5 && countitem(720) > 0)) {
+			select("これでどうだ、お宝は？");
+			mes "[エスミル]";
+			mes "あら、その宝石……！";
+			mes "なんて魅力的な";
+			mes "のかしら～こんなに";
+			mes "美しいものを見たのは";
+			mes "久しぶりよ。よくやったわね……";
+			next;
+			mes "[エスミル]";
+			mes "その宝石は";
+			mes "あなたにあげるわ。本当は";
+			mes "宝物なんて必要なくて、あなたの資質を確かめたかっただけ。";
+			mes "もうソニックアクセラレーションを教えてもいいみたいね。";
+			set ASSN_SK,6;
+			next;
+			mes "[エスミル]";
+			mes "いい？";
+			mes "ソニックブローを放つ直前は、";
+			mes "足をこんな風に構えるの。";
+			mes "それから、できるだけ";
+			mes "滑らかに、素早く";
+			mes "こちら側へ体重を移して。";
+			specialeffect EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "よく見て、";
+			mes "ここが一番大事な";
+			mes "ところよ。私の手の位置と、";
+			mes "腕の角度、見える？";
+			mes "これがあなたに";
+			mes "覚えてほしい型なの。";
+			specialeffect EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "よし、覚えることは";
+			mes "これで全部よ。";
+			mes "さあ、あなたの型を";
+			mes "見てあげるから、やってみて。";
+			next;
+			specialeffect2 EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "うーん、体重移動が";
+			mes "少しふらついてるわね。";
+			mes "重心をこんな風に";
+			mes "置くといいかも";
+			mes "しれないわ……";
+			next;
+			specialeffect2 EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "さっきより";
+			mes "少しよくなったわ。";
+			mes "敵の弱点を意識して、";
+			mes "突きの動作まで";
+			mes "しっかりやり切ってみて。";
+			next;
+			specialeffect2 EF_SONICBLOW;
+			next;
+			mes "[エスミル]";
+			mes "そう、それよ……！";
+			mes "とても見事な動きだったわ。";
+			mes "よくやったわね、"+ strcharinfo(0) +"。";
+			skill "AS_SONICACCEL",1,SKILL_PERM;
+			set ASSN_SK,7;
+			next;
+			mes "[エスミル]";
+			mes "これでわかったかしら？";
+			mes "もうこのスキルを";
+			mes "忘れることはないでしょう。";
+			mes "私からもう教えられることは";
+			mes "ないわ。あとはあなたの";
+			mes "旅の幸運を祈るだけよ。";
+			close;
+		}
+		else {
+			mes "[エスミル]";
+			mes "うーん……";
+			close;
+		}
+	}
+	else if (ASSN_SK == 2 || ASSN_SK == 3 || ASSN_SK == 4) {
+		mes "[エスミル]";
+		mes "それで、頼んだ";
+		mes "小さな任務の";
+		mes "進み具合はどう？";
+		mes "もし探すよう頼んだ場所を";
+		mes "忘れてしまったのなら、";
+		mes "簡単に思い出させてあげるわ。";
+		next;
+		mes "[エスミル]";
+		mes "何か価値のあるものを";
+		if (ASSN_SK == 2) {
+			mes "見つけてきてほしいの。";
+			mes "^FF0000スフィンクスの棺^000000を探して。";
+		}
+		else if (ASSN_SK == 3) {
+			mes "見つけてきてほしいの。";
+			mes "^FF0000スフィンクスの石像^000000を探して。";
+		}
+		else if (ASSN_SK == 4) {
+			mes "^FF0000ピラミッド最下層の";
+			mes "水没した地下墓地^000000で見つけてきて。";
+		}
+		mes "あそこは力ある者しか";
+		mes "探索できない場所だから、";
+		mes "これであなたの実力を証明できるはずよ。";
+		close;
+	}
+	else if (ASSN_SK == 1) {
+		mes "[エスミル]";
+		mes "あら。こんにちは、同志。";
+		mes "アサシンギルドの";
+		mes "最近の知らせは";
+		mes "聞いた？";
+		mes "ああ、キルティンと";
+		mes "話したのね。いいわ……";
+		next;
+		mes "[エスミル]";
+		mes "私は今、興味のある";
+		mes "アサシンに";
+		mes "ソニックアクセラレーションを教える役目を任されているの。";
+		mes "キルティンの説明が";
+		mes "足りなければ、もっと詳しく教えるわ。";
+		next;
+		while(1) {
+			switch(select("もっと詳しく教えて…:ソニックアクセラレーションを覚えたい！")) {
+			case 1:
+				mes "[エスミル]";
+				mes "ソニックアクセラレーションは";
+				mes "^FF0000ソニックブローと";
+				mes "組み合わせて使う補助スキル^000000よ。";
+				mes "アサシンはこのスキルを";
+				mes "自分自身にしか";
+				mes "かけられないの。";
+				next;
+				mes "[エスミル]";
+				mes "ソニックブローを";
+				mes "よく知っているなら、";
+				mes "あのスキルで致命的な";
+				mes "ダメージを与えるのが";
+				mes "難しいことも知っているはず。";
+				mes "速すぎて正確に狙えないの……";
+				next;
+				mes "[エスミル]";
+				mes "でも";
+				mes "ソニックアクセラレーションを";
+				mes "覚えれば、この命中率の";
+				mes "弱点を克服して、";
+				mes "ソニックブローの本来の";
+				mes "ダメージを引き出せるの。";
+				next;
+				mes "[エスミル]";
+				mes "このスキルは";
+				mes "本当に素晴らしいの。";
+				mes "そしてこれを発明した";
+				mes "ギルドマスターも……";
+				mes "男の中の男、って感じよね。";
+				emotion ET_THROB;
+				next;
+				break;
+			case 2:
+				mes "[エスミル]";
+				mes "あら、そんなに";
+				mes "意欲的に覚えたがって";
+				mes "くれて嬉しいわ。";
+				mes "でもまず、済ませておくべき";
+				mes "ことがあるの……";
+				next;
+				if (getskilllv("AS_SONICBLOW") == 0) {
+					mes "[エスミル]";
+					mes "まずはソニックブローを";
+					mes "覚えてらっしゃい。";
+					mes "あなたがソニックブローを";
+					mes "使えなければ、私が教える";
+					mes "スキルは意味がないもの。ここで待つわ。";
+					close;
+				}
+				mes "[エスミル]";
+				mes "あなたの任務は、";
+				switch(rand(1,3)) {
+				case 1:
+					mes "スフィンクスから";
+					mes "宝を持ち帰ること。";
+					mes "そこにある^FF0000棺^000000を調べて、";
+					mes "貴重な品を探して。";
+					mes "実力を試す試練だと思って。";
+					set ASSN_SK,2;
+					next;
+					mes "[エスミル]";
+					mes "この任務を";
+					mes "やり遂げられるか";
+					mes "どうかで、あなたに";
+					mes "ソニックアクセラレーションを";
+					mes "教える価値があるか判断するわ。";
+					mes "健闘を祈る、急いでね。";
+					close;
+				case 2:
+					mes "スフィンクスから";
+					mes "宝を持ち帰ること。";
+					mes "そこの^FF0000石像^000000を調べて、";
+					mes "貴重な品を探して。";
+					mes "実力を試す試練だと思って。";
+					set ASSN_SK,3;
+					next;
+					mes "[エスミル]";
+					mes "この任務を";
+					mes "やり遂げられるか";
+					mes "どうかで、あなたに";
+					mes "ソニックアクセラレーションを";
+					mes "教える価値があるか判断するわ。";
+					mes "健闘を祈る、急いでね。";
+					close;
+				case 3:
+					mes "ピラミッドから";
+					mes "宝を持ち帰ること。";
+					mes "^FF0000最下層の水没した地下墓地^000000で";
+					mes "貴重な品を探して。";
+					mes "実力を試す試練だと思って。";
+					set ASSN_SK,4;
+					next;
+					mes "[エスミル]";
+					mes "この任務を";
+					mes "やり遂げられるか";
+					mes "どうかで、あなたに";
+					mes "ソニックアクセラレーションを";
+					mes "教える価値があるか判断するわ。";
+					mes "健闘を祈る、急いでね。";
+					close;
+				}
+			}
+		}
+	}
+	else {
+		if (BaseJob == Job_Assassin) {
+			mes "[アサシン]";
+			mes "あら。こんにちは、同志。";
+			mes "アサシンギルドの";
+			mes "最近の知らせは";
+			mes "聞いた？";
+			emotion ET_SMILE;
+			next;
+			select("アサシンギルドの知らせ？");
+			mes "[アサシン]";
+			mes "ふうん、";
+			mes "まだ聞いてないのね。";
+			mes "もっと詳しく知りたいなら、";
+			mes "すぐ隣にいる";
+			mes "キルティンに話しかけて。";
+			mes "彼が全部説明してくれるわ。";
+			close;
+		}
+		mes "[アサシン]";
+		mes "ふうん。";
+		mes "アサシンの知り合いはいる？";
+		mes "まだなら、ここに来るよう";
+		mes "伝えておいて。";
+		close;
+	}
+}
+
+in_sphinx2,259,213,0	script	Old Coffin#qsk_as	-1,7,8,{
+OnTouch_:
+	if (ASSN_SK == 2) {
+		mes "^3355FF古びた棺だ。";
+		mes "蓋が壊れて";
+		mes "わずかに開いている。";
+		mes "中で何かが一瞬";
+		mes "きらりと光ったのが見えた。^000000";
+		specialeffect EF_CONE;
+		next;
+		while(1) {
+			switch(select("中に手を入れる:棺の隙間を覗く:蓋を持ち上げる:棺をひっくり返す:無視する")) {
+			case 1:
+				mes "^3355FF慎重に棺の中に";
+				mes "手を入れ、";
+				mes "さっき見えた";
+				mes "光る物を";
+				mes "取り出そうとする。";
+				mes "…………………………^000000";
+				next;
+				mes "^3355FF棺の中の";
+				mes "何かが、あなたの手に";
+				mes "強く噛みついた！^000000";
+				sc_start SC_Poison,30000,0;
+				sc_start SC_Bleeding,10000,0;
+				emotion ET_HUK, playerattached();
+				close;
+			case 2:
+				mes "^3355FF棺の縁と蓋の隙間から、";
+				mes "中を覗き込もうと";
+				mes "してみる。";
+				mes "………………";
+				mes "…………";
+				mes "……………………^000000";
+				next;
+				mes "^3355FFかろうじて、棺の中で";
+				mes "何かがうごめいているのが";
+				mes "分かる。だが暗すぎて、";
+				mes "それ以上は";
+				mes "何も見えない。^000000";
+				sc_start SC_Blind,30000,0;
+				next;
+				break;
+			case 3:
+				mes "^3355FFこんなに重い";
+				mes "棺の蓋を動かす";
+				mes "力は、あなたには";
+				mes "ない……^000000";
+				sc_start SC_Curse,30000,0;
+				next;
+				break;
+			case 4:
+				mes "^3355FFこの棺を";
+				mes "ひっくり返す力は、";
+				mes "あなたにはない。^000000";
+				next;
+				break;
+			case 5:
+				close;
+			}
+		}
+	}
+}
+
+in_sphinx2,212,267,0	script	Old Coffin#qsk_as2	-1,5,6,{
+OnTouch_:
+	if (ASSN_SK == 2) {
+		mes "^3355FF古びた棺だ。";
+		mes "蓋が壊れて";
+		mes "わずかに開いている。";
+		mes "中で何かが一瞬";
+		mes "きらりと光ったのが見えた。^000000";
+		specialeffect EF_CONE;
+		next;
+		while(1) {
+			switch(select("中に手を入れる:棺の隙間を覗く:蓋を持ち上げる:棺をひっくり返す:無視する")) {
+			case 1:
+				mes "^3355FF慎重に棺の中に";
+				mes "手を入れ、";
+				mes "さっき見えた";
+				mes "光る物を";
+				mes "取り出そうとする。";
+				mes "…………………………^000000";
+				next;
+				if (rand(1,3) != 3) {
+					mes "^3355FF慎重に棺の中に";
+					mes "手を入れ、";
+					mes "さっき見えた";
+					mes "光る物を";
+					mes "取り出そうとする。";
+					mes "…………………………^000000";
+					next;
+					mes "^3355FF棺の中の";
+					mes "何かが、あなたの手に";
+					mes "強く噛みついた！^000000";
+					sc_start SC_Poison,30000,0;
+					sc_start SC_Bleeding,10000,0;
+					emotion ET_HUK, playerattached();
+					close;
+				}
+				else {
+					mes "^3355FF指先が硬い物に触れ、";
+					mes "棺から引っ張り出す。";
+					mes "エスミルに渡す";
+					mes "サファイアを";
+					mes "手に入れた。^000000";
+					set ASSN_SK,5;
+					getitem 726,1; //Blue_Jewel
+					close;
+				}
+			case 2:
+				mes "^3355FF棺の縁と蓋の隙間から、";
+				mes "中を覗き込もうと";
+				mes "してみる。";
+				mes "………………";
+				mes "…………";
+				mes "……………………^000000";
+				next;
+				mes "^3355FFかろうじて、棺の中で";
+				mes "何かがうごめいているのが";
+				mes "分かる。だが暗すぎて、";
+				mes "それ以上は";
+				mes "何も見えない。^000000";
+				sc_start SC_Blind,30000,0;
+				next;
+				break;
+			case 3:
+				mes "^3355FFこんなに重い";
+				mes "棺の蓋を動かす";
+				mes "力は、あなたには";
+				mes "ない……^000000";
+				sc_start SC_Curse,30000,0;
+				next;
+				break;
+			case 4:
+				mes "^3355FFこの棺を";
+				mes "ひっくり返す力は、";
+				mes "あなたにはない。^000000";
+				next;
+				break;
+			case 5:
+				close;
+			}
+		}
+	}
+}
+
+in_sphinx2,13,163,0	script	Stone Statue#qsk_as	-1,7,7,{
+OnTouch_:
+	if (ASSN_SK == 3) {
+		specialeffect EF_CONE;
+		mes "^3355FFこの古い石像は";
+		mes "ひび割れだらけで、";
+		mes "今にも崩れそうだ。";
+		mes "足元の一つから、";
+		mes "光る物がきらりと覗いている。";
+		mes "地面は掘れそうなほど";
+		mes "柔らかいようだ……^000000";
+		specialeffect EF_CONE;
+		next;
+		if (select("掘って光る物を取り出す:無視する") == 1) {
+			mes "^3355FF柔らかい地面に";
+			mes "指を差し込むと、そこから^000000";
+			if (rand(1,3) != 3){
+				mes "^3355FF黄色いガスが";
+				mes "立ちのぼり、感覚を";
+				mes "鈍らせて意識を失った。^000000";
+				sc_start SC_Sleep,30000,0;
+				close;
+			}
+			mes "^3355FF黄色いガスが";
+			mes "立ちのぼった。だが息を止め、";
+			mes "肺の中の空気を";
+			mes "素早く吐き出して";
+			mes "効果を逃れた。エスミルに渡すルビーを手に入れた。^000000";
+			set ASSN_SK,5;
+			getitem 723,1; //Cardinal_Jewel
+		}
+		close;
+	}
+}
+
+in_sphinx2,13,146,0	script	Stone Statue#qsk_as2	-1,7,7,{
+OnTouch_:
+	if (ASSN_SK == 3) {
+		specialeffect EF_CONE;
+		mes "^3355FFこの古い石像は";
+		mes "ひび割れだらけで、";
+		mes "今にも崩れそうだ。";
+		mes "足元の一つから、";
+		mes "光る物がきらりと覗いている。";
+		mes "地面は掘れそうなほど";
+		mes "柔らかいようだ……^000000";
+		specialeffect EF_CONE;
+		next;
+		if (select("掘って光る物を取り出す:無視する") == 1) {
+			mes "^3355FF柔らかい地面に";
+			mes "指を差し込むと、そこから^000000";
+			if (rand(1,3) != 3) {
+				mes "^3355FF黄色いガスが";
+				mes "立ちのぼり、感覚を";
+				mes "鈍らせて意識を失った。^000000";
+				sc_start SC_Sleep,30000,0;
+				close;
+			}
+			mes "^3355FF黄色いガスが";
+			mes "立ちのぼった。だが息を止め、";
+			mes "肺の中の空気を";
+			mes "素早く吐き出して効果を逃れた。";
+			mes "残念ながら、見つかったのは割れたガラスだけだった。^000000";
+			emotion ET_HUK, playerattached();
+		}
+		close;
+	}
+}
+
+moc_pryd04,85,96,0	script	　#crypt	-1,3,3,{
+OnTouch_:
+	if (ASSN_SK == 4) {
+		specialeffect EF_CONE;
+		mes "^3355FF水面の下で";
+		mes "何かが";
+		mes "光っている……^000000";
+		next;
+		if (select("拾い上げる:無視する") == 1) {
+			mes "^3355FF水に手を浸した瞬間、";
+			mes "凍えるような冷たさが";
+			mes "腕を駆け上がる。";
+			mes "凍りつく前に";
+			mes "急いだ方がいい！^000000";
+			next;
+			if (rand(1,3) != 3) {
+				mes "^3355FFもう手遅れだ！";
+				mes "体はすっかり";
+				mes "凍りついてしまった。^000000";
+				sc_start SC_Freeze,10000,0;
+				close;
+			}
+			mes "^3355FF凍える前に";
+			mes "素早く光る物を";
+			mes "拾い上げた。";
+			mes "エスミルに渡す";
+			mes "アクアマリンを手に入れた。^000000";
+			set ASSN_SK,5;
+			getitem 720,1; //Skyblue_Jewel
+		}
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//= Somehow eA engine doesn't let you keep learn't skill V_V'
+//= 1.2 Added to correct locations, correct NPC's, fixed
+//= some of the items required and made them into real
+//= quests. [Reddozen] 
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a fixed an item ID typo, thx 2Spiritual Kid
+//= 1.3b Splitted into different files [DracoRPG]
+//============================================================

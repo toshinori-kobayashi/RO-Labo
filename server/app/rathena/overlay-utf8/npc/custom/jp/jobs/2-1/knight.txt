@@ -1,0 +1,2507 @@
+//===== rAthena Script ======================================= 
+//= Knight Job Quest
+//===== By: ================================================== 
+//= PGRO TEAM (Aegis).
+//= Converted by kobra_k88
+//= Further bugfixed and tested by Lupus
+//===== Current Version: ===================================== 
+//= 3.3
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job Change quest for Knight class.
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working.  Please comment out any pre-existing warps for the
+//= test rooms in any other files so that the ones specified here can work.
+//= 1.1 Fixed a major bug.  Now using the initnpctimer command,
+//= donpcevent, and new waitingroom event commands.  No more addtimer
+//= spamming.  No longer have to talk to the npc to take the test.  Just enter the chat room.
+//= 1.2 More bug fixes.  Changed global variable names to unique ones.
+//= Added second set of items to first test. Added Awake pots award for job change.
+//= 1.3 Added Baby Class support [Lupus]
+//= 1.5 Fixed possible EXP abuse [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//= 2nd Job Quests again. It also guides adv classes where
+//= to go. [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.1 Merged JFunc [Lupus]
+//= 2.2 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 2.3 Several bugfixes with the help of Barron-Monster. [L0ne_W0lf]
+//= 2.4 Minor fixes to timer#knt. [L0ne_W0lf]
+//= 2.5 Fixes a small bug with making claymores. [L0ne_W0lf]
+//=     Corrected usages of killmonster and killmonsterall.
+//= 2.6 Corrected an improper areawarp destination. [L0ne_W0lf]
+//= 2.7 Deleted unused variables. [Samuray22]
+//= 2.7a Corrected a Typo error ";;". [Samuray22]
+//= 2.8 Now uses enable and disable waitingroomevent. [L0ne_W0lf]
+//= 2.9 Added Quest Log commands. [Kisuka]
+//= 3.0 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 3.1 Modified the quest to renewal. [Vali] (Thanks to Muad_Dib for the necessary info).
+//= 3.2 More Renewal updates and some optimization. [Euphy]
+//= 3.3 Fixed missing changequest. [Joseph]
+//============================================================ 
+
+prt_in,88,101,4	script	騎士団長#knt::Chivalry Captain#knt	56,{
+	mes "[騎士団長ハーマン]";
+	if (Upper == 1) {
+		mes "ん？お前は…どうしたのだ？わしも長らく誇り高き騎士として生きてきたが、お前から感じるこの気配だけは、どうにも理解できぬ…";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "神がお前の魂と体を祝福されんことを、戦士よ。その勇気を示し、弱き者たちを守ってやってくれ。";
+		close;
+	}
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "おお、我が騎士団の一員か。";
+			mes "期待に応えてくれていることを願うぞ。我らは死が迫ろうとも、王国のために強くあることを誓った身…";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "ようこそ、";
+			mes "ここは";
+			mes "プロンテラ騎士団だ。";
+			mes "何用で参った？";
+			next;
+			switch(select("剣士に転職したい。:騎士に転職したい。:ただの見学だ。")) {
+			case 1:
+				mes "[騎士団長ハーマン]";
+				mes "ほう～";
+				mes "剣士に、とな？";
+				mes "すまぬが"+((Sex==SEX_MALE)?"若者":"娘")+"よ、";
+				mes "ここは場違いだぞ！";
+				next;
+				mes "[騎士団長ハーマン]";
+				mes "ここは剣士協会ではなく、プロンテラ騎士団だ！剣士になりたいのなら、イズルードにある剣士協会を訪ねるがいい。";
+				close;
+			case 2:
+				mes "[騎士団長ハーマン]";
+				mes "おお、大きな志だな。だが騎士になる前に、";
+				mes "まずは剣士にならねばならぬ。一歩ずつだ…";
+				next;
+				mes "[騎士団長ハーマン]";
+				mes "まずはイズルードの剣士協会を訪ねよ。経験を積んだ剣士となった後、再びここへ来るがいい。";
+				close;
+			case 3:
+				mes "[騎士団長ハーマン]";
+				mes "ふむ～";
+				mes "よほど暇と見える。当てもなくうろつくくらいなら、モンスターでも狩ってきてはどうだ？";
+				close;
+			}
+		}
+		else {
+			mes "ようこそ。我らプロンテラ騎士団は、王と国のためにこの命を捧げる誇り高き騎士だ！ごゆるりと過ごされよ。";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "ようこそ、ここは";
+		mes "プロンテラ騎士団だ。";
+		mes "何用で参った？";
+		next;
+		if (select("騎士に転職したい。:ただの見学だ。") == 1) {
+			mes "[騎士団長ハーマン]";
+			mes "おお…";
+			mes ""+((Sex==SEX_MALE)?"若者":"娘")+"が";
+			mes "騎士を志すか！";
+			mes "我らプロンテラ騎士団は";
+			mes "お前を歓迎しよう。";
+			next;
+			mes "[騎士団長ハーマン]";
+			mes "まずは名乗ろう。わしはプロンテラ騎士団長、ハーマン・フォン・エフェシルサスだ。騎士団を志す若者と出会えるのは嬉しいものだ。";
+			next;
+			mes "[騎士団長ハーマン]";
+			mes "我らが受け入れるのは";
+			mes "ジョブレベル40以上の剣士のみ。";
+			mes "騎士となるにはまだ経験が足りぬ者を、応募者として考慮することはできぬのだ。";
+			next;
+			mes "[騎士団長ハーマン]";
+			mes "応募があり、資格ありと";
+			mes "認められれば、転職の手続きを始めよう。";
+			mes "今、応募するか？";
+			next;
+			if (select("はい、応募します。:少し考えさせてください。") == 1) {
+				mes "[騎士団長ハーマン]";
+				if (JobLevel < 40) {
+					mes "ああ、お前はまだ騎士になる準備ができておらぬ！ジョブレベル40が条件だと、はっきり言ったはずだが？";
+					next;
+					mes "[騎士団長ハーマン]";
+					mes "むろん、お前の強い意志は理解しておる。だが今はその時ではない。もっとモンスターと戦ってくるがいい。ここで待っていよう。";
+					close;
+				}
+				if (SkillPoint) {
+					mes "ああ…！";
+					mes "スキルポイントが残っている限り、転職はできぬ。";
+					mes "全て使い切ってから、また来るがいい。";
+					close;
+				}
+				set KNIGHT_Q,1;
+				setquest 9000;
+				mes "ふむ…";
+				mes "お前の名は";
+				mes strcharinfo(0) + "だな…";
+				mes "間違いないか？";
+				next;
+				mes "[騎士団長ハーマン]";
+				mes "転職の手順を説明しよう。何人もの騎士を訪ね、";
+				mes "それぞれの試験に合格せねばならぬ。";
+				next;
+				mes "[騎士団長ハーマン]";
+				mes "全ての試験が終われば、お前を試した騎士たちが集まり、その働きについて話し合う。";
+				next;
+				mes "[騎士団長ハーマン]";
+				mes "騎士団に加わるには、全員一致の承認が要る。たった一人でも反対すれば、";
+				mes "最初からやり直しだ。";
+				next;
+				mes "[騎士団長ハーマン]";
+				mes "だが、誠実な心で挑み続ければ、騎士たちに認められ、やがて騎士団の一員として迎えられよう。";
+				next;
+				mes "[騎士団長ハーマン]";
+				mes "さあ、話はここまでだ！騎士たちに会い、試験を始めるがいい。全て終えたら、わしのもとへ戻ってこい。";
+				close;
+			}
+			mes "[騎士団長ハーマン]";
+			mes "おお…！";
+			mes "焦らせるつもりはない。ゆっくりと考えるがいい。";
+			mes "転職の覚悟が決まったら、また来るがいい。待っておる。";
+			close;
+		}
+		mes "[騎士団長ハーマン]";
+		mes "そういえば、お前は剣士ではないか。数多の戦いをくぐり抜けてきたようだな。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "騎士への転職を考えてみてはどうだ。興味があれば、わしに話しかけるがいい。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "ゆっくりと";
+		mes "見て回って";
+		mes "いくがいい。";
+		mes "では、良い一日を。";
+		close;
+	}
+	else if (KNIGHT_Q == 1) {
+		mes "うむ？";
+		mes strcharinfo(0) + "よ、";
+		mes "何か用か？";
+		mes "ああ、次に誰を";
+		mes "訪ねればいいか分からぬか？";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "試験を担当する騎士たちには、訪ねるべき順番があると聞いておる。その方が試験の流れも分かりやすいのだろう。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "まずは";
+		mes "アンドリュー卿を訪ねよ。緊張せずともよい、話しかければ全て説明してくれる。";
+		close;
+	}
+	else if (KNIGHT_Q == 2) callsub L_Mission,0;
+	else if (KNIGHT_Q == 3) callsub L_Mission,0;
+	else if (KNIGHT_Q == 4) {
+		callsub L_Mission,1;
+		mes "一つ試験を終えたようだな。さて、アンドリュー卿よ、この剣士は次に誰を訪ねればよいのだ？";
+		next;
+		mes "[アンドリュー卿]";
+		mes "シラキュース卿を";
+		mes "訪ねるよう言った。";
+		mes "おかしいな、";
+		mes "言い忘れておったか…？";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "聞いたか？";
+		mes "シラキュース卿のもとへ行き、試験を受けよ。終えたら、次に誰を訪ねるべきかも忘れぬようにな。";
+		close;
+	}
+	else if (KNIGHT_Q == 5) callsub L_Mission,0;
+	else if (KNIGHT_Q == 6) {
+		callsub L_Mission,1;
+		mes "さて…";
+		mes "試験を二つ終えたな。";
+		mes "シラキュース卿よ、この剣士は次に誰を訪ねればよいのだ？";
+		next;
+		mes "[シラキュース卿]";
+		mes "おお…！";
+		mes "えぇと、次は誰だったか…？";
+		mes "そうだ！ウィンザー卿だ！";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "次の試験のため、";
+		mes "ウィンザー・ベネディクト卿のもとへ向かえ。迷わぬよう、試験官の話はよく聞くのだぞ？";
+		close;
+	}
+	else if (KNIGHT_Q == 7) callsub L_Mission,0;
+	else if (KNIGHT_Q == 8) {
+		callsub L_Mission,1;
+		mes "ウィンザー卿…？";
+		mes "この剣士は次に";
+		mes "誰を訪ねれば";
+		mes "よいのだ？";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…";
+		mes "……";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…エイミー・ビアトリス。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "おお、次は";
+		mes "レディ・エイミーを訪ね、試験を受けるがいい。次に誰を訪ねるべきか、しっかり聞いておくのだぞ。";
+		close;
+	}
+	else if (KNIGHT_Q == 9) callsub L_Mission,0;
+	else if (KNIGHT_Q == 10) {
+		callsub L_Mission,1;
+		mes "さて…";
+		mes "レディ・エイミーよ、";
+		mes "この剣士は次に";
+		mes "誰を訪ねればよいのだ？";
+		next;
+		mes "[レディ・エイミー]";
+		mes "あら…";
+		mes "エドモンド卿を";
+		mes "訪ねるよう言ったわ！";
+		mes "うふふ～";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "では、";
+		mes "エドモンド卿と話すがいい。";
+		mes "彼が次の試験を";
+		mes "担当してくれる。";
+		close;
+	}
+	else if (KNIGHT_Q == 11) callsub L_Mission,0;
+	else if (KNIGHT_Q == 12) {
+		callsub L_Mission,1;
+		mes "残るはもう一人ではないか？最後の試験を";
+		mes "担当する騎士は";
+		mes "グレイ・プロスフェイロ卿だ。";
+		next;
+		mes "[エドモンド卿]";
+		mes "この世は";
+		mes "因果の理に従って動いている。";
+		mes "全ては最後に明らかになろう。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "気を引き締め、";
+		mes "全力を尽くすのだ。";
+		mes "これが最後の試験だ。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "最後の試験を";
+		mes "終えたら、";
+		mes "わしのもとへ";
+		mes "戻ってくるがいい。";
+		close;
+	}
+	else if (KNIGHT_Q == 13) {
+		mes "最後の試験を終えよ。";
+		mes "それが済めば、お前を試した騎士たちが皆で集まり、その働きを評価しよう。";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		if (SkillPoint) {
+			mes "おお…！";
+			mes "スキルポイントが残っている限り、転職はできぬ。全て振り分けてから戻るがいい。";
+			close;
+		}
+		mes "おお、全ての試験を終えたか？だが試験を終えた者が皆";
+		mes "騎士になれるわけではない。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "試験では忠誠、名誉、強さを見極める。礼儀正しさ、そして謙虚さと敬意の価値を知っているかも見ておる。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "この過程で、わしもお前の行動を見てきた。我ら七人の意見が全て、転職の判断に反映されよう。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "では…";
+		mes "皆の考えを";
+		mes "聞くとしよう！";
+		mes "アンドリュー、お前はどう思う？";
+		next;
+		mes "[アンドリュー卿]";
+		if (JobLevel == 50) {
+			mes "何を言うことがある？";
+			mes "賛成だ！";
+			mes "今まで剣士として";
+			mes "生きてきた";
+			mes "その事実だけで";
+			mes "十分だ。";
+		}
+		else {
+			mes "この者は";
+			mes "手に入れ難い";
+			mes "品々を";
+			mes "集めてきた。賛成だ！";
+			mes ""+((Sex==SEX_MALE)?"彼":"彼女")+"は、騎士となった後も忠誠を尽くし続けると信じている。";
+		}
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "ふむ。";
+		mes "良い評価だな。";
+		mes "シラキュース、お前の考えは？";
+		next;
+		mes "[シラキュース卿]";
+		mes "ふっ、まあ良い。";
+		mes "望んだ通りではないが、これから良くなっていくことを期待しよう。";
+		next;
+		mes "[シラキュース卿]";
+		mes "騎士となった後は、名誉によって良い評判を築かねばならぬぞ。ふむ…賛成だ。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "よし…";
+		mes "ウィンザー、";
+		mes "お前はどうだ？";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…";
+		mes "……";
+		next;
+		mes "[ウィンザー卿]";
+		mes "……賛成。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "反対では";
+		mes "なさそうだな。";
+		mes "では、";
+		mes "エイミーの意見を聞こう。";
+		next;
+		mes "[レディ・エイミー]";
+		if (Sex == SEX_MALE) {
+			mes "んー～礼儀正しいわね！";
+			mes "きっと素敵な騎士になるわ。それにこの可愛いほっぺ～うふふ！";
+		}
+		else {
+			mes "んー～きっと素晴らしいわ！";
+			mes "とても礼儀正しくて可愛いし、ちょっと加点ね！ふふ～";
+			mes "こんなこと言っちゃダメよね！";
+		}
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "うむ…";
+		mes "妙な評価だが、";
+		mes "賛成しているとみて";
+		mes "良いようだな。";
+		mes "エドモンド、";
+		mes "お前の考えを聞かせよ。";
+		next;
+		mes "[エドモンド卿]";
+		if (Sex == SEX_MALE) {
+			mes "やや粗削りではあるが、内に光るものがある。磨き上げれば、その真の価値が";
+			mes "太陽のごとく輝くだろう。";
+		}
+		else {
+			mes "見えにくくはあるが、内に精神の美しさがある。磨き上げれば、その真の価値が";
+			mes "月のごとく輝くだろう。";
+		}
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "最後に…";
+		mes "グレイよ、";
+		mes "お前の考えを聞きたい。";
+		next;
+		mes "[グレイ卿]";
+		mes "騎士になるという決意を持ってここへ来た"+((Sex==SEX_MALE)?"若者":"娘")+"だ。それだけで十分だろう…";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "全員が";
+		mes "賛成した。";
+		mes "反対する者はいない。";
+		mes "では";
+		mes "わしの考えを述べよう。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "わしの決定は…";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "賛成だ。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "全ての試験を完璧にこなしたわけではないだろうが、お前には";
+		mes "騎士となるに必要な資質が全て備わっている。";
+		next;
+		completequest 9012;
+		callfunc "Job_Change",Job_Knight;
+		callfunc "F_ClearJobVar"; // Clears all job variables for the current player
+		mes "[騎士団長ハーマン]";
+		mes "ここに";
+		mes "お前を";
+		mes "プロンテラ騎士団の一員と宣言する。";
+		mes "弱き者を守り、";
+		mes "名誉と共に生きよ。";
+		next;
+		getitem 656,7; //Awakening_Potion
+		mes "[騎士団長ハーマン]";
+		mes "おお…";
+		mes "転職を祝い、ささやかな贈り物を用意した。名誉のために他者を守る戦いの中で、役立ててくれ。";
+		next;
+		mes "[騎士団長ハーマン]";
+		mes "征け！";
+		mes "ルーンミッドガッツの";
+		mes "未来は";
+		mes "お前の双肩に";
+		mes "かかっている！";
+		close;
+	}
+L_Mission:
+	mes "うむ？";
+	mes "剣士 " + strcharinfo(0) + "よ。";
+	mes "試験の調子はどうだ？";
+	if (getarg(0)) {
+		mes "ああ～次に誰を";
+		mes "訪ねればよいか分からぬか？";
+		next;
+		mes "[騎士団長ハーマン]";
+		return;
+	} else {
+		mes "難しいだろうが、";
+		mes "全力を尽くすのだ。";
+		close;
+	}
+}
+
+prt_in,75,107,4	script	アンドリュー卿#knt::Sir Andrew#knt	65,{
+	mes "[アンドリュー卿]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "お前は";
+			mes "騎士団の";
+			mes "一員だな。";
+			mes "調子はどうだ？";
+			next;
+			mes "[アンドリュー卿]";
+			mes "食料を集め、装備を買うためにZenyを貯めるべく、地道に励むのだぞ。";
+			mes "戦いで手に入れた物は、小さなジェロピーでも大切にな。";
+			next;
+			mes "[アンドリュー卿]";
+			mes "だが欲張りすぎるのも";
+			mes "よくない。";
+			mes "何せ我らは騎士だからな。";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "やあ、";
+			mes "小さなノービスよ。";
+			mes "プロンテラ騎士団へ";
+			mes "ようこそ。";
+			next;
+			mes "[アンドリュー卿]";
+			mes "今は自分が";
+			mes "弱いと思うかもしれぬが、";
+			mes "いつか強くなれる。";
+			next;
+			mes "[アンドリュー卿]";
+			mes "輝かしい未来を夢見て、自ら選んだ道を前へと進むがいい。";
+			close;
+		}
+		else {
+			mes "我らプロンテラ騎士団は、";
+			mes "この世の平和を守るため、全力を尽くしている。";
+			next;
+			mes "[アンドリュー卿]";
+			mes "日々の戦いの中でも、我らは";
+			mes "訪れるべき輝かしい未来を夢見ている。";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "我らプロンテラ騎士団は、";
+		mes "この世の平和を守るため、全力を尽くしている。";
+		next;
+		mes "[アンドリュー卿]";
+		mes "日々の戦いの中でも、我らは";
+		mes "訪れるべき輝かしい未来を夢見ている。";
+		close;
+	}
+	else if (KNIGHT_Q == 1) {
+		mes "ご機嫌よう。";
+		mes "何か";
+		mes "手伝えることでも？";
+		next;
+		if (select("試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[アンドリュー卿]";
+			mes "ああ…";
+			mes "騎士になりたい";
+			mes "というわけだな。";
+			mes "お前の名は";
+			mes strcharinfo(0) + "、";
+			mes "間違いないか？";
+			next;
+			mes "[アンドリュー卿]";
+			mes "わしはプロンテラ騎士団の";
+			mes "騎士、";
+			mes "アンドリュー・シャイロックだ。";
+			mes "お前の最初の試験を";
+			mes "担当する。";
+			next;
+			mes "[アンドリュー卿]";
+			mes "この試験では忠誠心を測る。騎士たる者が備えるべき美徳だ。今回は戦場から";
+			mes "戦利品を集めてもらう。";
+			next;
+			if (JobLevel == 50) {
+				mes "[アンドリュー卿]";
+				mes "うむ…？";
+				mes "待て。";
+				mes "剣士として";
+				mes "極みに達した";
+				mes "ようだな。";
+				next;
+				mes "[アンドリュー卿]";
+				mes "見事だ…！";
+				mes "考え直したが、";
+				mes "お前の忠誠心を";
+				mes "試す必要は";
+				mes "なさそうだ。";
+				next;
+				mes "[アンドリュー卿]";
+				mes "我が同胞シラキュース卿のもとへ行くがいい、次の試験を授けてくれよう。剣士としての鍛錬、見事であった。";
+				set KNIGHT_Q,4;
+				changequest 9000,9003;
+				close;
+			}
+			mes "[アンドリュー卿]";
+			mes "前置きは";
+			mes "ここまでだ、";
+			mes "始めるとしよう！";
+			mes "以下の品を";
+			mes "集めてくるがいい…";
+			next;
+			mes "[アンドリュー卿]";
+			switch(rand(1,2)) {
+			//Elder_Pixie's_Beard, Wing_Of_Red_Bat, Orcish_Voucher, Moth_Dust, Reptile_Tongue, Wild_Boar's_Mane
+			case 1: setarray .@items[0], 1040,5, 7006,5, 931,5, 1057,5, 903,5, 1028,5, 2; break;
+			//Short_Leg, Heart_Of_Mermaid. Blossom_Of_Maneater, Flesh_Of_Clam, Old_Frying_Pan, Snail's_Shell
+			case 2: setarray .@items[0], 1042,5, 950,5, 1032,5, 966,5, 7031,5, 946,5, 3; break;
+			}
+			set KNIGHT_Q,.@items[12];
+			if (KNIGHT_Q == 2) changequest 9000,9001;
+			else changequest 9000,9002;
+			mes "^236B8E"+.@items[1]+" "+getitemname(.@items[0])+"^000000、";
+			mes "^236B8E"+.@items[3]+" "+getitemname(.@items[2])+"^000000、";
+			mes "^236B8E"+.@items[5]+" "+getitemname(.@items[4])+"^000000、";
+			mes "^236B8E"+.@items[7]+" "+getitemname(.@items[6])+"^000000、";
+			mes "^236B8E"+.@items[9]+" "+getitemname(.@items[8])+"^000000と";
+			mes "^236B8E"+.@items[11]+" "+getitemname(.@items[10])+"^000000、";
+			next;
+			mes "[アンドリュー卿]";
+			mes "ここで";
+			mes "待っていよう、";
+			mes "お前が";
+			mes "品々を持ち帰るまで。";
+			mes "また会おう～";
+			close;
+		}
+		else {
+			mes "[アンドリュー卿]";
+			mes "では、";
+			mes "良い一日を。";
+			close;
+		}
+	}
+	else if (KNIGHT_Q == 2 || KNIGHT_Q == 3) {
+		mes "おかえり～";
+		mes "品々は";
+		mes "全て揃えたか？";
+		mes "確かめてみよう…";
+		next;
+		switch(KNIGHT_Q) {
+		//Elder_Pixie's_Beard, Wing_Of_Red_Bat, Orcish_Voucher, Moth_Dust, Reptile_Tongue, Wild_Boar's_Mane
+		case 2: setarray .@items[0], 1040,5, 7006,5, 931,5, 1057,5, 903,5, 1028,5, 0; break;
+		//Short_Leg, Heart_Of_Mermaid. Blossom_Of_Maneater, Flesh_Of_Clam, Old_Frying_Pan, Snail's_Shell
+		case 3: setarray .@items[0], 1042,5, 950,5, 1032,5, 966,5, 7031,5, 946,5, 0; break;
+		}
+		if (countitem(.@items[0]) >= .@items[1] && countitem(.@items[2]) >= .@items[3] && countitem(.@items[4]) >= .@items[5] && countitem(.@items[6]) >= .@items[7] && countitem(.@items[8]) >= .@items[9] && countitem(.@items[10]) >= .@items[11]) {
+			mes "[アンドリュー卿]";
+			mes "完璧だ！これらを集めてくれたこと、感謝する。騎士団の財源として役立てよう。";
+			next;
+			delitem .@items[0],.@items[1];
+			delitem .@items[2],.@items[3];
+			delitem .@items[4],.@items[5];
+			delitem .@items[6],.@items[7];
+			delitem .@items[8],.@items[9];
+			delitem .@items[10],.@items[11];
+			if (KNIGHT_Q == 2) changequest 9001,9003;
+			else changequest 9002,9003;
+			set KNIGHT_Q,4;
+			mes "[アンドリュー卿]";
+			mes "我が同胞シラキュース卿のもとを訪ね、今日見せてくれた献身と忠誠のまま、試験を続けるがいい。";
+			close;
+		}
+		mes "[アンドリュー卿]";
+		mes "待て、待て…";
+		mes "まだ";
+		mes "いくつか";
+		mes "足りぬものがあるようだ。";
+		mes "忘れているといけないから、";
+		mes "確認しておこう…";
+		next;
+		mes "[アンドリュー卿]";
+		mes "^236B8E"+.@items[1]+" "+getitemname(.@items[0])+"^000000、";
+		mes "^236B8E"+.@items[3]+" "+getitemname(.@items[2])+"^000000、";
+		mes "^236B8E"+.@items[5]+" "+getitemname(.@items[4])+"^000000、";
+		mes "^236B8E"+.@items[7]+" "+getitemname(.@items[6])+"^000000、";
+		mes "^236B8E"+.@items[9]+" "+getitemname(.@items[8])+"^000000と";
+		mes "^236B8E"+.@items[11]+" "+getitemname(.@items[10])+"^000000、";
+		next;
+		mes "[アンドリュー卿]";
+		mes "今度こそ、真剣に、誠実にこの試験に臨むがいい。";
+		mes "ここで";
+		mes "待っていよう。";
+		close;
+	}
+	else if (KNIGHT_Q == 4) {
+		mes "何か聞きたいことでも？次の試験を受けに行くがいい。急げ、シラキュース卿が待っているぞ～";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "全ての試験を終えたのだな。よくやった！騎士団長のもとへ行き、皆で評価を伝えよう。";
+		close;
+	}
+	else {
+		mes "何か聞きたいことでも？次の試験を受けに行くがいい。頑張るのだぞ。";
+		mes "お前ならできる！";
+		close;
+	}
+}
+
+prt_in,71,91,0	script	シラキュース卿#knt::Sir Siracuse#knt	65,{
+	mes "[シラキュース卿]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "やあ！";
+			mes "調子はどうだ？";
+			mes "騎士団は";
+			mes "うまくいっている。";
+			next;
+			mes "[シラキュース卿]";
+			mes "新入りたちを";
+			mes "試験しているが、";
+			mes "皆がお前ほどの";
+			mes "見込みを";
+			mes "示すわけではない。";
+			next;
+			mes "[シラキュース卿]";
+			mes "新人たちが皆きちんと振る舞い、";
+			mes "騎士団の恥にならぬことを願うばかりだ。";
+			next;
+			mes "[シラキュース卿]";
+			mes "騎士にふさわしくない振る舞いをする新人を見かけたら、わしの代わりに叱っておいてくれぬか？";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "おや？";
+			mes "ノービスが";
+			mes "何をしにここへ？";
+			next;
+			mes "[シラキュース卿]";
+			mes "騎士に興味があるのか？ノービスから直接騎士に転職はできぬぞ。";
+			next;
+			mes "[シラキュース卿]";
+			mes "まずは";
+			mes "経験を積んだ";
+			mes "剣士に";
+			mes "ならねばならぬ、";
+			mes "騎士になる前にな。";
+			close;
+		}
+		else {
+			mes "攻撃と防御。";
+			mes "どちらも犠牲にせず両立させる術はあるだろうか？";
+			next;
+			mes "[シラキュース卿]";
+			mes "両手武器は";
+			mes "大きく攻撃力を高める代わりに防御力を下げる。この弱点を克服する術はあるだろうか？";
+			next;
+			mes "[シラキュース卿]";
+			mes "そのような武器か";
+			mes "技があれば、";
+			mes "騎士にとって大いに助けとなろう…";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "攻撃と防御。";
+		mes "どちらも犠牲にせず両立させる術はあるだろうか？";
+		next;
+		mes "[シラキュース卿]";
+		mes "両手武器は";
+		mes "大きく攻撃力を高める代わりに防御力を下げる。この弱点を克服する術はあるだろうか？";
+		next;
+		mes "[シラキュース卿]";
+		mes "そのような武器か";
+		mes "技があれば、";
+		mes "騎士にとって大いに助けとなろう…";
+		close;
+	}
+	else if (KNIGHT_Q == 1) {
+		mes "ん？";
+		mes "わしに";
+		mes "何か";
+		mes "聞きたいことでも？";
+		next;
+		if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[シラキュース卿]";
+			mes "おお、";
+			mes "騎士に？";
+			mes "そういえば";
+			mes "先ほど応募した"+((Sex==SEX_MALE)?"男":"娘")+"では";
+			mes "ないか？";
+			next;
+			mes "[シラキュース卿]";
+			mes "さて…";
+			mes "お前の名は";
+			mes strcharinfo(0) + "だったな。";
+			next;
+			mes "[シラキュース卿]";
+			mes "だが、わしのところへ来る前に、他の者を訪ねねばならぬ。";
+			mes "見たところ、お前はまだ基本を示せていない。だが";
+			mes "最初の試験に";
+			mes "合格したら考え直そう。";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "うーむ…？";
+		mes "よかろう。";
+		mes "何やら";
+		mes "そんな顔を";
+		mes "しているから";
+		mes "な。";
+		close;
+	}
+	else if (KNIGHT_Q == 2 || KNIGHT_Q == 3) {
+		mes "ん？";
+		mes "わしに";
+		mes "何か";
+		mes "聞きたいことでも？";
+		next;
+		if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[シラキュース卿]";
+			mes "はっはっは～！";
+			mes "アンドリューの試験を受けるべきではないのか？飛ばすことはできぬぞ！我らの試験はどれも大切なのだ。";
+			next;
+			mes "[シラキュース卿]";
+			mes "まずアンドリュー卿と話すがいい。";
+			mes "わしの試験は、彼の試験を終えてからだ。";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "うーむ…？";
+		mes "よかろう。";
+		mes "何やら";
+		mes "そんな顔を";
+		mes "しているから";
+		mes "な。";
+		close;
+	}
+	else if (KNIGHT_Q == 4 || KNIGHT_Q == 5) {
+		if (KNIGHT_Q == 4) {
+			mes "おや？";
+			mes "わしに";
+			mes "何か";
+			mes "聞きたいことでも？";
+			next;
+			if (select("アンドリュー卿に、あなたの試験を受けるよう言われました。:いえ、何でもありません。") == 1) {
+				mes "[シラキュース卿]";
+				mes "なるほど、最初の試験に合格したのだな。よろしい、時間を取ろう。自己紹介をしよう、わしの名はジェームズ・シラキュースだ。";
+				next;
+				mes "[シラキュース卿]";
+				mes "この試験では、お前が騎士道についてどれだけ知っているかを測る。何より、名誉についてのお前の考えを知りたい。";
+				next;
+				mes "[シラキュース卿]";
+				mes "緊張せずともよい、長くは引き止めぬ。手短な質問ばかりだ。それに、まだ他の者にも会わねばならぬだろう？";
+				next;
+				mes "[シラキュース卿]";
+				mes "それでは、";
+				mes "始めるとしよう。";
+				mes "手短に";
+				mes "答えるがいい。";
+				next;
+			}
+			else {
+				mes "[シラキュース卿]";
+				mes "うーむ…？";
+				mes "よかろう。";
+				mes "何やら";
+				mes "そんな顔を";
+				mes "しているから";
+				mes "な。";
+				close;
+			}
+		}
+		else if (KNIGHT_Q == 5) {
+			mes "何だ…";
+			mes "また来たのか？";
+			next;
+			if (select("もう一度試験を受けたいのです。:いえ、何でもありません。") == 1) {
+				mes "[シラキュース卿]";
+				mes "そうか？";
+				mes "今度は";
+				mes "準備できているのだろうな？";
+				next;
+				mes "[シラキュース卿]";
+				mes "よかろう、";
+				mes "もう一度やるとしよう…";
+				next;
+			}
+			else {
+				mes "[シラキュース卿]";
+				mes "うーむ…？";
+				mes "よかろう。";
+				mes "何やら";
+				mes "そんな顔を";
+				mes "しているから";
+				mes "な。";
+				close;
+			}
+		}
+		mes "[シラキュース卿]";
+		mes "騎士たる者、偉大な力、防御、速さ、そして両手剣を操る技を備えねばならぬ。次のうち、ツーハンドクイッケンの影響を受けない武器はどれか？";
+		next;
+		if (select("カタナ:スレイヤー:ブロードソード:フランベルジュ") != 4) {
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "違う！";
+			mes "それは両手剣だぞ！";
+			mes "本当に騎士になりたいのか？基本すら知らぬとは…";
+			next;
+			mes "[シラキュース卿]";
+			mes "分からぬことがあれば、街へ行きどの騎士にでも尋ねるがいい。転職を志願する前に、騎士についてもっと学ぶ必要があるぞ！";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "よろしい、では技についても聞こう。次のうち、ボウリングバッシュの習得に必要ないものはどれか？";
+		next;
+		if (select("両手剣熟練 Lv.5:マグナムブレイク Lv.3:プロボック Lv.10:バッシュ Lv.10") != 3) {
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "違う！";
+			mes "それはボウリングバッシュの習得に必要なのだ！転職を志願する前に、騎士についてもっと学ぶべきだぞ！";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "騎士は他の職業と違い槍も扱え、槍に関する技も持つ。次のうち、ブランディッシュスピアの習得に必要ない技はどれか？";
+		next;
+		if (select("ピアース Lv.5:スピアスタブ Lv.3:スピアブーメラン Lv.3:ペコペコライディング Lv.1") != 3) {
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "違う！それはブランディッシュスピアの習得に必要なのだ！騎士になりたいというのに、なぜ知らぬのだ？";
+			next;
+			mes "[シラキュース卿]";
+			mes "分からぬことがあれば、街へ行きどの騎士にでも";
+			mes "尋ねるがいい。もっと学んでから、また来るがいい。";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "槍の中には魔法のように属性を持つものもある。次のうち、ゴースト属性を持つナイトメアを攻撃できるのはどれか？";
+		next;
+		if (select("ゼフィルス:ランス:ビルガイサーム:クレセントシザー") != 1) {
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "違う！その槍では全くダメージを与えられぬぞ！もっと学んでから、また来るがいい！";
+			next;
+			mes "[シラキュース卿]";
+			mes "疑問があれば、街のどの騎士にでも聞くがいい。これは我らにとって基本の知識だ！";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "騎士になればペコペコに乗れるようになる。だが、ペコペコに騎乗すると攻撃速度が落ちる。";
+		next;
+		mes "[シラキュース卿]";
+		mes "だが、騎乗熟練を習得すればこの速度低下を補える。騎乗熟練Lv.3を習得した後、通常の攻撃速度の何%になるか？";
+		next;
+		if (select("通常の70%:通常の80%:通常の90%:通常の100%") != 2) {
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "違う！";
+			mes "騎乗熟練を知らぬなら、ペコペコに乗る資格もないぞ！";
+			next;
+			mes "[シラキュース卿]";
+			mes "騎士についてもう少し学んでから、また来るがいい！";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "よし、よし…";
+		mes "騎士についてはかなり詳しいようだな。では次に、騎士としての心構えについて聞くとしよう。";
+		next;
+		mes "[シラキュース卿]";
+		mes "街で助けを求めるノービスに出会ったら、どうする？";
+		next;
+		switch(select("適切な狩り場を教えてやる。:ノービスに戦わせ、自分がダメージを引き受ける。:大量のZenyとアイテムを与える。")) {
+		case 1:
+			mes "[シラキュース卿]";
+			mes "もちろんだ、ノービスとて自立する術を学ばねばならぬ。良き導きを与えることこそ、我らにできる最良のことの一つだ。";
+			next;
+			break;
+		case 2:
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "考えが違うぞ。それが本当にノービスのためになると思うのか？魚を与えれば一日食えるが、釣りを教えれば一生食える！";
+			close;
+		case 3:
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "それが本当に哀れなノービスのためになると思うのか？気前は良いが、自分で稼がねばZenyや品物の真の価値は分からぬものだ。";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "よろしい…";
+		mes "では、";
+		mes "パーティ内では";
+		mes "どう振る舞うべきか？";
+		next;
+		switch(select("前衛で皆を守る。:モンスターを集めて一気に倒す。:何としてでもアイテムを多く集める。")) {
+		case 1:
+			mes "[シラキュース卿]";
+			mes "その通り！パーティにおいては我らの強さと攻撃こそが要となる。全ての騎士がその心構えで戦うべきだ。";
+			next;
+			break;
+		case 2:
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "正気か？その考えの危うさが分からぬのか？大量のモンスターは制御できぬぞ。もし殺されたら？誰が無辜の者を守るのだ？";
+			close;
+		case 3:
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "その欲深さ、我らには受け入れられぬ！他者を本当に思いやってはいないようだな！";
+			mes "去れ！";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "最後に…";
+		mes "騎士にとって";
+		mes "最も大切な";
+		mes "価値観とは何か？";
+		next;
+		switch(select("名誉:富:地位")) {
+		case 1:
+			mes "[シラキュース卿]";
+			mes "その通り、何よりも騎士は名誉を重んじねばならぬ！我らは名誉のために生き、死ぬのだ！常に心に留めておくがいい。";
+			next;
+			break;
+		case 2:
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "恥知らずめ！私利のために騎士になろうというのか？去れ！そのような者を騎士団に受け入れるわけにはいかぬ！";
+			close;
+		case 3:
+			set KNIGHT_Q,5;
+			mes "[シラキュース卿]";
+			mes "騎士団を利用して名を上げようというのか？情けない。そのような者を騎士団に受け入れるわけにはいかぬ！";
+			close;
+		}
+		set KNIGHT_Q,6;
+		changequest 9003,9004;
+		mes "[シラキュース卿]";
+		mes "それでは、";
+		mes "これで";
+		mes "わしの試験は終わりだ。";
+		next;
+		mes "[シラキュース卿]";
+		mes "次の試験は、";
+		mes "ウィンザー卿を";
+		mes "訪ねるがいい。";
+		mes "とても無口だが、";
+		mes "それを気にせず";
+		mes "臨むがいい。";
+		close;
+	}
+	else if (KNIGHT_Q == 6) {
+		mes "おや？";
+		mes "わしに";
+		mes "何か";
+		mes "聞きたいことでも？";
+		next;
+		if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[シラキュース卿]";
+			mes "おい…";
+			mes "もうわしの試験は受けたではないか。ここでの用は済んでいる。今はウィンザー卿を訪ねるがいい…";
+			close;
+		}
+		mes "[シラキュース卿]";
+		mes "うーむ…？";
+		mes "よかろう。";
+		mes "何やら";
+		mes "そんな顔を";
+		mes "しているから";
+		mes "な。";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "うむ…？";
+		mes "他の皆の試験も";
+		mes "終えた";
+		mes "というのか？";
+		next;
+		mes "[シラキュース卿]";
+		mes "それでは、";
+		mes "騎士団長の";
+		mes "もとへ行くがいい。";
+		mes "皆でお前の";
+		mes "働きを評価しよう。";
+		close;
+	}
+	else {
+		mes "また来たか。";
+		mes "何か用か？";
+		mes "すまぬが、今は忙しい。残りの試験を終わらせに行くがいい。";
+		close;
+	}
+}
+
+prt_in,79,94,4	script	ウィンザー卿#knt::Sir Windsor#knt	733,{
+	mes "[ウィンザー卿]";
+	mes "…";
+	next;
+	mes "[ウィンザー卿]";
+	mes "…";
+	mes "……";
+	next;
+	mes "[ウィンザー卿]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) mes "守れ。";
+		else if (BaseClass == Job_Novice) {
+			mes "…遊んで";
+			mes "きなさい。";
+		}
+		else mes "…ふん。";
+		close;
+	}
+	if (KNIGHT_Q == 0) {
+		mes "…何だ。";
+		close;
+	}
+	else if (KNIGHT_Q >= 1 && KNIGHT_Q <= 5) {
+		mes "…何だ。";
+		next;
+		if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[ウィンザー卿]";
+			mes "…";
+			next;
+			mes "[ウィンザー卿]";
+			mes "…";
+			mes "……";
+			next;
+			mes "[ウィンザー卿]";
+			mes "…まだわしの番ではない。";
+			close;
+		}
+		mes "[ウィンザー卿]";
+		mes "…";
+		close;
+	}
+	else if (KNIGHT_Q == 6 || KNIGHT_Q == 7) {
+		if (KNIGHT_Q == 6) {
+			set .@mes$,"シラキュース卿に言われて来ました。:いえ、何でもありません。";
+			mes "……何だ。";
+			next;
+		}
+		else {
+			set .@mes$,"もう一度挑戦したいです！:…";
+			next;
+		}
+		if (select(.@mes$) == 1) {
+			mes "[ウィンザー卿]";
+			mes "…";
+			next;
+			set KNIGHT_Q,7;
+			if (checkquest(9004) != -1) {
+				changequest 9004,9005;
+			}
+			mes "[ウィンザー卿]";
+			mes "…";
+			mes "……";
+			next;
+			mes "[ウィンザー卿]";
+			if (KNIGHT_Q == 6) 
+				mes "…ついてこい。";
+			else {
+				mes "…よかろう。";
+				next;
+				mes "[ウィンザー卿]";
+				mes "…こちらだ。";
+			}
+			close2;
+			if(checkquest(9006) == -1) changequest 9005,9006;
+			warp "job_knt",89,101;
+			end;
+		}
+		mes "[ウィンザー卿]";
+		mes "…";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "…騎士団長に";
+		mes "話すがいい。";
+		close;
+	}
+	else {
+		mes "…お前の";
+		mes "用は済んだ。";
+		close;
+	}
+}
+
+// Test 2 part 1
+//==========================================================
+job_knt,89,106,4	script	ウィンザー卿#knt::Knight Windsor#knt	733,{
+	mes "[ウィンザー卿]";
+	mes "…";
+	next;
+	mes "[ウィンザー卿]";
+	mes "…";
+	mes "……";
+	next;
+	mes "[ウィンザー卿]";
+	mes "…質問は？";
+	next;
+	set .@i, select("これはどんな試験ですか？:どうやって受けるのですか？:帰りたいです。:いいえ。");
+	mes "[ウィンザー卿]";
+	mes "…";
+	if (.@i == 4) close;
+	next;
+	mes "[ウィンザー卿]";
+	mes "…";
+	mes "……";
+	switch(.@i) {
+	case 1:
+		next;
+		mes "[ウィンザー卿]";
+		mes "…モンスターと戦う。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…全て倒すのだ。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…三段階。";
+		mes "全て突破せよ。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "……3分だ、";
+		mes "各段階につき。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…………";
+		close;
+	case 2:
+		next;
+		mes "[ウィンザー卿]";
+		mes "…控え室に";
+		mes "入るのだ。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…それで";
+		mes "始まる。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…先客が";
+		mes "いれば待つのだ。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…その者の後に";
+		mes "入ればいい。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…";
+		close;
+	case 3:
+		close2;
+		warp "prt_in",80,100;
+		end;
+	}
+}
+
+job_knt,89,106,4	script	ウィンザー卿#knt::Windsor Benedict#knt	733,{
+	end;
+
+OnInit:
+	//disablenpc  "Windsor Benedict#knt";
+	hideonnpc "Windsor Benedict#knt";
+	waitingroom "待合室",20,"Windsor Benedict#knt::OnStartArena",1;
+	enablewaitingroomevent;
+	end;
+
+OnStartArena:
+	killmonster "job_knt", "Knight1::OnMyMobDead";
+	killmonster "job_knt", "Knight2::OnMyMobDead";
+	killmonster "job_knt", "Knight3::OnMyMobDead";
+	warpwaitingpc "job_knt",43,146;
+	donpcevent "Knight1::OnEnable";
+	disablewaitingroomevent;
+	end;
+
+OnStart:
+	enablewaitingroomevent;
+	end;
+}
+
+-	script	Knight1	-1,{
+OnInit:
+	disablenpc "Knight1";
+	end;
+
+OnEnable:
+	enablenpc "Knight1";
+	if (!checkre(0)) {
+		set .MyMobs,12;
+		monster "job_knt",39,150,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+		monster "job_knt",47,150,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+		monster "job_knt",39,142,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+		monster "job_knt",47,142,"Dustiness",1114,1,"Knight1::OnMyMobDead";
+	}
+	else
+		set .MyMobs,8;
+	monster "job_knt",43,137,"Piere",1160,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,137,"Andre",1095,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,137,"Deniro",1105,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,155,"Piere",1160,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,155,"Andre",1095,1,"Knight1::OnMyMobDead";
+	monster "job_knt",43,155,"Deniro",1105,1,"Knight1::OnMyMobDead";
+	monster "job_knt",35,146,"Argos",1100,1,"Knight1::OnMyMobDead";
+	monster "job_knt",52,146,"Argos",1100,1,"Knight1::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt", "Knight1::OnMyMobDead";
+	disablenpc "Knight1";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mes "[ウィンザー卿]";
+		mes "…";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…次の";
+		mes "段階へ。";
+		close2;
+		warp "job_knt",43,52;
+		donpcevent "Knight1::OnDisable";
+		donpcevent "Knight2::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer180000:
+	donpcevent "Knight1::OnDisable";
+	end;
+
+OnTimer181000:
+	areawarp "job_knt", 24, 126, 63, 165, "prt_in",80,100;
+	end;
+
+OnTimer182000:
+	stopnpctimer;
+	donpcevent "Knight1::OnDisable";
+	donpcevent "Windsor Benedict#knt::OnStart";
+	end;
+}
+
+// Test 2 part 2
+//==========================================================
+-	script	Knight2	-1,{
+OnInit:
+	disablenpc "Knight2";
+	end;
+
+OnEnable:
+	enablenpc "Knight2";
+	if (!checkre(0)) {
+		set .MyMobs,12;
+		monster "job_knt",43,42,"Desert Wolf",1106,1,"Knight2::OnMyMobDead";
+		monster "job_knt",43,62,"Desert Wolf",1106,1,"Knight2::OnMyMobDead";
+		monster "job_knt",60,68,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+		monster "job_knt",27,68,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+		monster "job_knt",60,35,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+		monster "job_knt",27,35,"Anacondaq",1030,1,"Knight2::OnMyMobDead";
+	}
+	else
+		set .MyMobs,6;
+	monster "job_knt",53,52,"Frilldora",1119,1,"Knight2::OnMyMobDead";
+	monster "job_knt",34,52,"Frilldora",1119,1,"Knight2::OnMyMobDead";
+	monster "job_knt",58,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	monster "job_knt",58,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	monster "job_knt",29,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	monster "job_knt",29,52,"Drainliar",1111,1,"Knight2::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt", "Knight2::OnMyMobDead";
+	disablenpc "Knight2";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mes "[ウィンザー卿]";
+		mes "…ふむ。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…残り一段階。";
+		close2;
+		warp "job_knt",143,152;
+		donpcevent "Knight2::OnDisable";
+		donpcevent "Knight3::OnEnable";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer180000:
+	donpcevent "Knight2::OnDisable";
+	end;
+
+OnTimer181000:
+	areawarp "job_knt", 24, 32, 63, 71, "prt_in",80,100;
+	end;
+
+OnTimer182000:
+	stopnpctimer;
+	donpcevent "Knight2::OnDisable";
+	donpcevent "Windsor Benedict#knt::OnStart";
+	end;
+}
+
+// Test 2 part 3
+//==========================================================
+-	script	Knight3	-1,{
+OnInit:
+	disablenpc "Knight3";
+	end;
+
+OnEnable:
+	enablenpc "Knight3";
+	if (!checkre(0)) {
+		set .MyMobs,7;
+		monster "job_knt",147,167,"Goblin Archer",1258,1,"Knight3::OnMyMobDead";
+		monster "job_knt",136,158,"Steam Goblin",1280,1,"Knight3::OnMyMobDead";
+	}
+	else
+		set .MyMobs,5;
+	monster "job_knt",136,152,"Goblin",1122,1,"Knight3::OnMyMobDead";
+	monster "job_knt",150,152,"Goblin",1123,1,"Knight3::OnMyMobDead";
+	monster "job_knt",143,145,"Goblin",1124,1,"Knight3::OnMyMobDead";
+	monster "job_knt",143,167,"Goblin",1125,1,"Knight3::OnMyMobDead";
+	monster "job_knt",139,167,"Goblin",1126,1,"Knight3::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt", "Knight3::OnMyMobDead";
+	disablenpc "Knight3";
+	end;
+
+OnMyMobDead:
+	set .MyMobs,.MyMobs-1;
+	if (.MyMobs < 1) {
+		mes "[ウィンザー卿]";
+		mes "…";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…上出来だ。";
+		next;
+		mes "[ウィンザー卿]";
+		mes "…エイミー・ビアトリスに";
+		mes "話しに行け。";
+		close2;
+		set KNIGHT_Q,8;
+		if(checkquest(9007) == -1) {
+			changequest 9006,9007;
+		}
+		warp "prt_in",80,100;
+		donpcevent "Knight3::OnDisable";
+		donpcevent "Windsor Benedict#knt::OnStart";
+		stopnpctimer;
+	}
+	end;
+
+OnTimer180000:
+	donpcevent "Knight3::OnDisable";
+	end;
+
+OnTimer181000:
+	areawarp "job_knt", 124, 132, 163, 171, "prt_in",80,100;
+	end;
+
+OnTimer182000:
+	stopnpctimer;
+	donpcevent "Knight3::OnDisable";
+	donpcevent "Windsor Benedict#knt::OnStart";
+	end;
+}
+
+// Test 3 (Manners)
+//==========================================================
+prt_in,69,107,6	script	レディ・エイミー#knt::Lady Amy#knt	728,{
+	mes "[レディ・エイミー]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "あら…！";
+			mes "どうして";
+			mes "私に会いに";
+			mes "来たのかしら？";
+			next;
+			mes "[レディ・エイミー]";
+			mes "騎士として";
+			mes "困っているわけ";
+			mes "じゃないわよね？";
+			mes "きっとうまくやっているわ～";
+			next;
+			mes "[レディ・エイミー]";
+			mes "だって～";
+			mes "あなたは";
+			mes "プロンテラ騎士団の一員ですもの～";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "あらあら～";
+			mes "なんて可愛い";
+			mes "小さなノービスなの！";
+			mes "本っ当に可愛いわ！";
+			next;
+			mes "[レディ・エイミー]";
+			mes "ふふ…";
+			mes "将来、騎士に";
+			mes "なることに";
+			mes "興味あるかしら？";
+			mes "きっと素敵な騎士になるわ～";
+			next;
+			mes "[レディ・エイミー]";
+			mes "覚えておいてね、";
+			mes "あなたは騎士になるのよ、";
+			mes "いいわね？約束よ？";
+			close;
+		}
+		else {
+			mes "ようこそ";
+			mes "プロンテラ騎士団へ～";
+			next;
+			mes "[レディ・エイミー]";
+			mes "騎士でしかないけれど、";
+			mes "ここでの滞在を";
+			mes "楽しんでいってね。";
+			mes "ふふ～";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "あら、";
+		mes "剣士さんね…？";
+		mes "もしかして";
+		mes "騎士に転職しに";
+		mes "来たのかしら？";
+		next;
+		mes "[レディ・エイミー]";
+		mes "応募するなら、";
+		mes "あそこにいる";
+		mes "騎士団長に";
+		mes "話しかけてね。うふふ～";
+		close;
+	}
+	else if (KNIGHT_Q >= 1 && KNIGHT_Q <= 7) {
+		mes "あら？";
+		mes "どうして";
+		mes "エイミーに会いに来たの？";
+		next;
+		if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[レディ・エイミー]";
+			mes "んー～";
+			mes "転職に応募したのね！いいわ！その意気ならすぐに騎士になれるわよ！";
+			next;
+			mes "[レディ・エイミー]";
+			mes "でも…";
+			mes "エイミーと話す前に、";
+			mes "他の騎士たちの";
+			mes "ところへ行かなくちゃ。";
+			next;
+			mes "[レディ・エイミー]";
+			mes "最初からあなたを";
+			mes "試験してあげたいけど、";
+			mes "許されていないの。";
+			mes "うふふ～";
+			close;
+		}
+		mes "[レディ・エイミー]";
+		mes "あらあら～";
+		mes "そう…";
+		close;
+	}
+	else if ((KNIGHT_Q == 8) || (KNIGHT_Q == 9)){
+		if (KNIGHT_Q == 8) {
+			mes "あら？";
+			mes "どうして";
+			mes "エイミーに会いに来たの？";
+			next;
+			if (select("ウィンザー卿に言われて――:いえ、何でもありません。") == 1) {
+				if(checkquest(9008) == -1) changequest 9007,9008;
+				mes "[レディ・エイミー]";
+				mes "あら！";
+				mes "それ以上";
+				mes "言わなくていいわ。";
+				mes "ようこそ！さあ";
+				mes "エイミーの試験の時間よ！";
+				next;
+				mes "[レディ・エイミー]";
+				mes "私の名前はエイミー・ビアトリス、";
+				mes "プロンテラ騎士団の誇り高きレディナイトよ。エイミーの試験では、騎士としての作法を見させてもらうわ～";
+				next;
+				mes "[レディ・エイミー]";
+				mes "お話をするから、質問するたびに";
+				mes "答えを選んでね。あなたの答えで作法を判断するわ。";
+				next;
+				mes "[レディ・エイミー]";
+				mes "だからよく聞いて、";
+				mes "もう騎士に";
+				mes "なったつもりで答えてね？";
+				next;
+				mes "[レディ・エイミー]";
+				mes "それじゃあ、";
+				mes "始めましょう！";
+				next;
+			}
+			else {
+				mes "[レディ・エイミー]";
+				mes "あら…";
+				mes "分かったわ～";
+				close;
+			}
+		}
+		else if (KNIGHT_Q == 9) {
+			mes "あら？";
+			mes "どうして";
+			mes "エイミーに会いに来たの？";
+			next;
+			if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+				mes "[レディ・エイミー]";
+				mes "んー～？";
+				mes "前回どこが";
+				mes "間違っていたか";
+				mes "分かったかしら？もし";
+				mes "また失敗したら、";
+				mes "怒っちゃうわよ！";
+				next;
+				mes "[レディ・エイミー]";
+				mes "だからよく聞いて、";
+				mes "騎士のつもりで";
+				mes "答えてね。";
+				mes "それじゃあ、";
+				mes "始めましょう！";
+				next;
+				mes "[レディ・エイミー]";
+				mes "あなたは騎士で、モロクでパーティを探しているの。";
+				mes "どうやって探す？";
+				next;
+			}
+			else {
+				mes "[レディ・エイミー]";
+				mes "あら…";
+				mes "分かったわ～";
+				close;
+			}
+		}
+		mes "あなたは騎士で、モロクでパーティを探しているの。";
+		mes "どうやって探す？";
+		next;
+		if (select("パーティ募集を大声で叫ぶ。:チャットルームを開いて待つ。:騎士を探している人を探す。") != 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "同じくらいのレベルのプレイヤーとパーティを組んだわ。プリースト、ウィザード、ハンター、アサシン、ブラックスミスがいて…";
+		next;
+		mes "[レディ・エイミー]";
+		mes "6人で狩りに行くことになって、ピラミッドへ向かうことにしたの。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "パーティで";
+		mes "ピラミッドの";
+		mes "4階に着いたわ。";
+		mes "どうする？";
+		next;
+		if (select("周囲を確認して先の計画を立てる。:パーティメンバーのためにモンスターを集める。:前衛でパーティをゆっくり先導する。") != 2)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "でも無礼なプレイヤーたちがモンスターの群れを連れてきて、逃げてしまったの！どうする？";
+		next;
+		if (select("モンスターがパーティに届かないよう食い止める。:防御しながらパーティを退却させる。:ペコペコに乗って逃げる。") != 3)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "幸い、皆その危機を生き延びたわ。でも歩いていると、パーティのメンバーではない人が地面に倒れているのを見つけたの。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "その人は丁寧に助けを求めているわ。どうする？";
+		next;
+		if (select("パーティのプリーストに助けを頼む。:Zenyをもらえたら助けると言う。:無視して先へ進む。") == 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "あなたは他の用事があって、パーティメンバーに別れを告げなくてはならないの。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "でも戦いの中で";
+		mes "レアアイテムを";
+		mes "見つけたわ。";
+		mes "どうする？";
+		next;
+		if(select("最もふさわしい人に譲る。:何事もなかったふりをして自分のものにする。:パーティで誰がもらうか話し合う。") != 2)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "結局あなたがそのアイテムを持ち、プロンテラへ売りに行くことにしたわ。たくさんの人が店やチャットルームを開いて品物を売っているの。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "アイテムを売るには";
+		mes "どうする？";
+		next;
+		if (select("皆に向かって大声で叫ぶ。:チャットルームを開いて待つ。:興味がある人がいないか尋ねて回る。") != 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "待っている間に、";
+		mes "誰かがやってきて";
+		mes "アイテムとZenyをせがんだの。";
+		mes "どうする？";
+		next;
+		if (select("Zenyとアイテムを分けてあげる。:単に無視する。:狩り場を提案してあげる。") == 3)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "今度は一人で隠された神殿へ行くことにしたわ。嬉しそうにペコペコに乗ってね。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "でも道に迷った";
+		mes "人に出会ったの。";
+		mes "どうする？";
+		next;
+		if(select("出口までの行き方を教える。:出口まで案内する。:蝶の羽を渡す。") != 3)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "しばらく狩りを続けていたら、HPが低くなってきたわ！";
+		mes "もう赤くて、とても危険な状態よ。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "そこへちょうど";
+		mes "プリーストが通りかかったの。";
+		mes "どうやって";
+		mes "ヒールをお願いする？";
+		next;
+		if (select("ヒールをかけていただけますか？:ヒールもらえる？:ヒールくれ！！") == 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "とても";
+		mes "疲れ果てて、";
+		mes "街へ戻る時間になったわ。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "その途中、";
+		mes "道端で";
+		mes "レアアイテムを";
+		mes "見つけたの。";
+		mes "どうする？";
+		next;
+		if (select("拾って自分のものにする。:持ち主を探して聞き回る。:そのまま通り過ぎる。") != 1)
+			set .@knight_t,.@knight_t+10;
+		mes "[レディ・エイミー]";
+		mes "さて、";
+		mes "これで";
+		mes "エイミーの試験は終わりよ！";
+		next;
+		mes "[レディ・エイミー]";
+		if (.@knight_t == 100) {
+			set KNIGHT_Q,10;
+			changequest 9008,9009;
+			mes "よくできたわ、その心構えこそ騎士に必要なものよ！次の試験は、エドモンド卿を訪ねてね～";
+			next;
+			mes "[レディ・エイミー]";
+			mes "騎士団長にはあなたのことを良く伝えておくわ。残りの試験も頑張ってね？";
+			close;
+		}
+		else if (.@knight_t == 90) {
+			set KNIGHT_Q,10;
+			changequest 9008,9009;
+			mes "完璧ではなかったけれど、";
+			mes "作法については";
+			mes "十分に分かっていると";
+			mes "思うわ、立派な騎士になるにはね。";
+			next;
+			mes "[レディ・エイミー]";
+			mes "さあ、次はエドモンド卿のところへ試験を受けに行く時間よ。残りの試験も頑張ってね。約束よ～";
+			close;
+		}
+		set KNIGHT_Q,9;
+		mes "んー…";
+		mes "正直に言うと、あなたの態度はまだ騎士になるには十分じゃないと思うわ。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "本当にそんな風に振る舞ったら、みんな騎士は無礼だと思ってしまうわ！自分の答え方をよく考えて、また来てね。";
+		next;
+		mes "[レディ・エイミー]";
+		mes "望むなら、";
+		mes "もう一度";
+		mes "試験を受けさせてあげるわ、いい？";
+		close;
+	}
+	else if (KNIGHT_Q == 10) {
+		mes "あら？";
+		mes "どうして";
+		mes "エイミーに会いに来たの？";
+		next;
+		mes "[レディ・エイミー]";
+		mes "次の試験は";
+		mes "エドモンド卿のところへ";
+		mes "行ってね、いい？";
+		close;
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "わあ～";
+		mes "いよいよ皆で";
+		mes "あなたの転職を";
+		mes "決める時間ね！";
+		next;
+		mes "[レディ・エイミー]";
+		mes "騎士団長のところへ";
+		mes "話しに行きましょう。";
+		mes "そんなに心配しないで、";
+		mes "大丈夫よ。";
+		close;
+	}
+	else {
+		mes "あら？";
+		mes "どうして";
+		mes "エイミーに会いに来たの？";
+		next;
+		mes "[レディ・エイミー]";
+		mes "まだ他にも";
+		mes "試験が残っているわ。";
+		mes "早く終わらせてね～";
+		close;
+	}
+}
+
+// Test 4 (patience)
+//==========================================================
+prt_in,70,99,6	script	エドモンド卿#knt::Sir Edmond#knt	734,{
+	mes "[エドモンド卿]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "己の心を";
+			mes "流れる水と";
+			mes "思うがいい。";
+			next;
+			mes "[エドモンド卿]";
+			mes "流れる水は";
+			mes "障害を避けながら、";
+			mes "己の道を進む…";
+			next;
+			mes "[エドモンド卿]";
+			mes "騎士たる者、";
+			mes "いかなる状況でも";
+			mes "穏やかな水のように";
+			mes "物事を受け流せねばならぬ。";
+			close;
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "深く根を張った木は風に揺らがぬ。強き技もまた、確かな基礎の上に築かれるべきという理は変わらぬ…";
+			next;
+			mes "[エドモンド卿]";
+			mes "お前の未来は";
+			mes "今この時";
+			mes "決まりつつある…";
+			close;
+		}
+		else {
+			mes "この世の全ては調和の中に存在する。その調和を乱さず生きることこそ、正しき道…";
+			close;
+		}
+	}
+	if (KNIGHT_Q == 0) {
+		mes "不吉な想いを抱く者は、そのような夢しか見られぬ。悲しみと絶望の夢を見るくらいなら、何も夢見ぬ方がよい。";
+		close;
+	}
+	else if (KNIGHT_Q >= 1 && KNIGHT_Q <= 9) {
+		mes "何用か…";
+		mes "さまよえる剣士よ。";
+		next;
+		if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[エドモンド卿]";
+			mes "種はまず";
+			mes "大地に抱かれねば芽吹かぬ。そして芽は葉を育て、つぼみとなり、やがて花を咲かせる…";
+			next;
+			mes "[エドモンド卿]";
+			mes "さもなくば…";
+			mes "その花は";
+			mes "未完のままだろう。";
+			next;
+			mes "[エドモンド卿]";
+			mes "まずは";
+			mes "他の者たちのもとへ行き、";
+			mes "己の道を見出すがいい…";
+			close;
+		}
+		mes "[エドモンド卿]";
+		mes "お前が望む";
+		mes "人生は間もなく";
+		mes "目の前に現れよう。";
+		mes "全ては";
+		mes "完璧な";
+		mes "順序で訪れる。";
+		close;
+	}
+	else if (KNIGHT_Q == 10) {
+		mes "何用か…";
+		mes "さまよえる剣士よ。";
+		next;
+		if (select("レディ・エイミーに言われて来ました。:いえ、何でもありません。") == 1) {
+			mes "[エドモンド卿]";
+			mes "では、わしの試験を受ける時が来たな。他の試験と同様、全力を尽くすがいい。";
+			next;
+			mes "[エドモンド卿]";
+			mes "わしの名は";
+			mes "エドモンド・グロスター。";
+			mes "プロンテラ騎士団の";
+			mes "一員だ。";
+			next;
+			mes "[エドモンド卿]";
+			mes "騎士とは、人が従うべき立場にある。ゆえに、謙虚にこの世の秩序を思い、その役割にふさわしい人格を備えねばならぬ。";
+			next;
+			mes "[エドモンド卿]";
+			mes "軽率な判断を下してはならぬ。時には葦のようにしなやかに、時には石のように固く、意志を持つがいい。";
+			next;
+			mes "[エドモンド卿]";
+			mes "理由なくモンスターを殺めてはならぬ、それを喜んではならぬ。しばしこのことを、静かに一人で考えるがいい…";
+			next;
+			mes "[エドモンド卿]";
+			mes "では、";
+			mes "試験を始めよう。";
+			mes "忘れるでない、";
+			mes "敬虔という";
+			mes "美徳を。";
+			close2;
+			set KNIGHT_Q,11;
+			changequest 9009,9010;
+			warp "job_knt",143,57;
+			end;
+		}
+		mes "[エドモンド卿]";
+		mes "お前が望む";
+		mes "人生は間もなく";
+		mes "目の前に現れよう。";
+		close;
+	}
+	else if (KNIGHT_Q == 11) {
+		mes "何用か…";
+		mes "さまよえる剣士よ。";
+		next;
+		if (select("申し訳ありません、そんなつもりでは…:いえ、何でもありません。") == 1) {
+			mes "[エドモンド卿]";
+			mes "先の試験では、あまりに軽率であった。騎士の剣は他者を守るためにあり、弱きモンスターを苦しめるためではない。";
+			next;
+			mes "[エドモンド卿]";
+			mes "全てが調和の中に在るこの世で、目的もなく破壊を続けることは許されぬ。この理は試験に限らず、現実の世界にも当てはまる。";
+			next;
+			mes "[エドモンド卿]";
+			mes "試験を";
+			mes "始めよう。";
+			mes "お前の忍耐を";
+			mes "見せるがいい…";
+			close2;
+			warp "job_knt",143,57;
+			end;
+		}
+		mes "[エドモンド卿]";
+		mes "お前が望む";
+		mes "人生は間もなく";
+		mes "目の前に現れよう。";
+		mes "全ては";
+		mes "完璧な";
+		mes "順序で訪れる。";
+		close;
+	}
+	else if (KNIGHT_Q == 12 || KNIGHT_Q == 13) {
+		mes "お前の人となりは、この目でよく見た。いよいよ最後の試験だ。行って";
+		mes "グレイ卿と話すがいい…";
+		close;
+	}
+	else {
+		mes "騎士団長と";
+		mes "話すがいい。";
+		mes "皆で";
+		mes "お前の働きを";
+		mes "評価する";
+		mes "時が来たのだ。";
+		close;
+	}
+}
+
+job_knt,1,1,1	script	Timer#knt	107,{
+OnTimer300000:
+	enablenpc "Warp#knt";
+	end;
+
+OnTimer300500:
+	donpcevent "Timer#knt::OnDisable";
+	disablenpc "Warp#knt";
+	end;
+
+OnTimer301500:
+	stopnpctimer;
+	donpcevent "Timer#knt::OnEnable";
+	end;
+
+OnInit:
+OnEnable:
+	enablenpc "Timer#knt";
+	monster "job_knt",141,57,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",145,57,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,55,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,59,"Poring",1002,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",141,55,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",141,59,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",145,55,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",145,59,"Lunatic",1063,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",139,57,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",147,57,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,53,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",143,61,"Chonchon",1011,1,"Timer#knt::OnMyMobDead";
+	//These monsters were out of bounds. Adjusted to put them in bounds.
+	monster "job_knt",165,54,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",165,57,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",122,54,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	monster "job_knt",122,57,"Mushroom",1182,1,"Timer#knt::OnMyMobDead";
+	initnpctimer;
+	end;
+
+OnDisable:
+	killmonster "job_knt","Timer#knt::OnMyMobDead";
+	disablenpc "Timer#knt";
+	disablenpc "Warp#knt";
+	end;
+
+OnMyMobDead:
+	warp "prt_fild05",353,251;
+	end;
+}
+
+job_knt,143,57,1	script	ワープ#knt::Warp#knt	107,22,22,{
+OnInit:
+	disablenpc "Warp#knt";
+	end;
+OnTouch_:
+	set KNIGHT_Q,12;
+	changequest 9010,9011;
+	warp "prt_in",80,100;
+	end;
+}
+
+// Test 5, and creates Claymores for knights
+//==========================================================
+prt_in,87,92,4	script	グレイ卿#knt::Sir Gray#knt	119,{
+	mes "[グレイ卿]";
+	if (BaseJob != Job_Swordman) {
+		if (BaseJob == Job_Knight) {
+			mes "この剣から放たれる";
+			mes "光の輝きは、言葉では言い表せぬ。これぞ全ての騎士が持つべき武器よ。";
+			next;
+			mes "[グレイ卿]";
+			mes "そう…";
+			mes "^3355FFクレイモア^000000！";
+			mes "全ての騎士が";
+			mes "欲しがるものだ！";
+			next;
+			switch(select("^3355FFクレイモア^000000について:クレイモアを買う:会話を終える")) {
+			case 1:
+				mes "[グレイ卿]";
+				mes "クレイモアは、ルーンミッドガッツのプロンテラで手に入る名剣の中でも屈指の一振り！！騎士にとって、その価値は計り知れぬ。";
+				next;
+				mes "[グレイ卿]";
+				mes "今、プロンテラ騎士団ではこの見事なクレイモアを作っておる。騎士であれば、^3355FF74,000^000000 Zenyで譲ろう。";
+				next;
+				mes "[グレイ卿]";
+				mes "それだけでなく、";
+				mes "クレイモアの特性上、^3355FF鋼鉄^000000が1つ要る。望むなら、わしが作ってやろう。プロンテラ騎士団の名誉にかけて！";
+				close;
+			case 2:
+				if (MaxWeight - Weight < 1800) {
+					mes "[グレイ卿]";
+					mes "こいつは…";
+					mes "荷物を持ちすぎているようだな。重いクレイモアを入れるだけの空きが、お前の所持品にない。";
+					next;
+					mes "[グレイ卿]";
+					mes "まずは";
+					mes "荷物を";
+					mes "整理してくるがいい。";
+					close;
+				}
+				else {
+					if ((Zeny > 73999) && (countitem(999) > 0) && (BaseJob == Job_Knight)) {
+						mes "[グレイ卿]";
+						mes "準備は万端だな！";
+						mes "クレイモアの";
+						mes "真の価値を";
+						mes "分かっているようだ！";
+						mes "今すぐ";
+						mes "作ってやろう！！";
+						next;
+						mes "[グレイ卿]";
+						mes "クレイモア作りの";
+						mes "基本は";
+						mes "簡単だ。見ておれ～！";
+						next;
+						mes "^3355FF＊カンカン＊^000000";
+						mes "^3355FF＊トンテンカン＊^000000";
+						next;
+						mes "[グレイ卿]";
+						mes "よし、できたぞ！";
+						mes "全ての騎士の誇り、";
+						mes "見事な^3355FFクレイモア^000000だ。";
+						mes "頼れる一振りを手に入れたな。";
+						mes "お前の冒険の良き相棒となるだろう。";
+						delitem 999,1; //Steel
+						set Zeny, Zeny - 74000;
+						getitem 1163,1; //Claymore
+						close;
+					}
+					mes "[グレイ卿]";
+					mes "クレイモアが欲しいのは分かるが、材料がなければ作れぬ。";
+					mes "^3355FF74,000 Zeny^000000と^3355FF鋼鉄1つ！^000000。";
+					next;
+					mes "[グレイ卿]";
+					mes "全て揃えたら";
+					mes "また";
+					mes "来るがいい。";
+					mes "待っておるぞ…";
+					close;
+				}
+			case 3:
+				mes "[グレイ卿]";
+				mes "騎士たる者、クレイモアを己の体の一部のごとく扱えねばならぬ。わしも昔は、戦場でクレイモアを振るうのが楽しみだったものだ…";
+				close;
+			}
+		}
+		else if (BaseClass == Job_Novice) {
+			mes "信じられぬ";
+			mes "かもしれぬが、わしも";
+			mes "かつてはノービス";
+			mes "だったのだ。";
+			next;
+			mes "[グレイ卿]";
+			mes "騎士になろうと決めていたわけではないが、強くなろうとは決めていた。旅を続けるうちに、いつの間にかプロンテラ騎士団に加わっていたのだ。ハハハ！";
+			close;
+		}
+		mes "若者よ、";
+		mes "時を";
+		mes "大切に使うがいい。";
+		next;
+		mes "[グレイ卿]";
+		mes "時が過ぎてから";
+		mes "悔やんでも";
+		mes "意味がない。";
+		close;
+	}
+	if (KNIGHT_Q == 0) {
+		mes "若者よ、";
+		mes "時を";
+		mes "大切に使うがいい。";
+		next;
+		mes "[グレイ卿]";
+		mes "時が過ぎてから";
+		mes "悔やんでも";
+		mes "意味がない。";
+		close;
+	}
+	else if ((KNIGHT_Q == 12) || (KNIGHT_Q == 13)) {
+		if (KNIGHT_Q == 12) {
+			mes "おお…";
+			mes "若き剣士よ。";
+			mes "して、";
+			mes "何用だ？";
+			next;
+			if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+				mes "[グレイ卿]";
+				mes "ほほう、なるほど。";
+				mes "他の者たちの";
+				mes "試験は";
+				mes "もう受けたのだな？";
+				next;
+				mes "[グレイ卿]";
+				mes "では";
+				mes "わしのを始めるか。";
+				mes "とはいえ、";
+				mes "試験というほどのものでもないがな。";
+				next;
+				mes "[グレイ卿]";
+				mes "気楽に";
+				mes "話そうでは";
+				mes "ないか？";
+				next;
+				mes "[グレイ卿]";
+				mes "まず…";
+				mes "なぜお前は";
+				mes "騎士になろうと";
+				mes "決めたのだ？";
+				next;
+			}
+			else {
+				mes "[グレイ卿]";
+				mes "達者でな！";
+				close;
+			}
+		}
+		else if (KNIGHT_Q == 13) {
+			mes "おお、また来たか。";
+			mes "何用で";
+			mes "参った？";
+			next;
+			if (select("色々と考えてきました。:いえ、何でもありません。") == 1) {
+				mes "[グレイ卿]";
+				mes "そうか…";
+				mes "本当に";
+				mes "考えたのだろうか…";
+				next;
+				mes "[グレイ卿]";
+				mes "それでは…";
+				mes "前回と同じように、";
+				mes "もう一度聞くとしよう…";
+				next;
+				mes "[グレイ卿]";
+				mes "まず…";
+				mes "なぜお前は";
+				mes "騎士になろうと";
+				mes "決めたのだ？";
+				next;
+			}
+			else {
+				mes "[グレイ卿]";
+				mes "達者でな！";
+				mes "健やかであることこそ";
+				mes "誰にとっても";
+				mes "何よりの宝だ！";
+				close;
+			}
+		}
+		switch(select("強くなるためです…:ギルドの役に立ちたいからです…:今の自分に満足していないからです…")) {
+		case 1:
+			mes "[グレイ卿]";
+			mes "強くなるため、とな？";
+			mes "確かに、騎士は強い。";
+			mes "だが、なぜ力を得たいのだ？";
+			next;
+			mes "[グレイ卿]";
+			mes "他人に見せびらかすためか？名声のためか？それとも別の理由があるのか？騎士として力を得ることの何が良いと思う？";
+			next;
+			switch(select("富と名声を得られる。:自分の身を守れる。:他者を守れる。")) {
+			case 1:
+				set .@knight_t,.@knight_t+10;
+				mes "[グレイ卿]";
+				mes "むろん、富や名声にもこの世で意味はある。だが我ら騎士は、より高き美徳のために生きねばならぬ。";
+				next;
+				break;
+			case 2:
+				mes "[グレイ卿]";
+				mes "良い考えだ。他者を守るには、まず己を守れねばならぬ。そのためには絶えず鍛錬し、怠惰に屈してはならぬ。";
+				next;
+				break;
+			case 3:
+				mes "[グレイ卿]";
+				mes "おお、素晴らしい考えだ。騎士の力は、弱き者を守り、正義を守るために使わねばならぬ。";
+				next;
+				mes "[グレイ卿]";
+				mes "悲しいことに、騎士道の基本たる理想を忘れ、我らの恥となる騎士も少なからずいる…";
+				next;
+				break;
+			}
+			break;
+		case 2:
+			mes "[グレイ卿]";
+			mes "おお、ギルドのため、あるいはパーティのためか。我らが賢明で慈悲深きトリスタム3世陛下は、こう黄金の言葉を残された…";
+			next;
+			mes "[グレイ卿]";
+			mes "^8B7500穏やかな川の先には、危険な滝がある。ゆえに、常に全てに備えておかねばならぬ…^000000";
+			next;
+			mes "[グレイ卿]";
+			mes "して、どのように";
+			mes "ギルドの";
+			mes "役に立てると思う？";
+			next;
+			switch(select("ギルドには私が必要です。:ギルドのために資金集めができます。:ギルドメンバーを守れます。")) {
+			case 1:
+				mes "[グレイ卿]";
+				mes "この世のどこであれ、誰であれ、";
+				mes "必要とされる場所がある。ギルドの仲間でなくとも、困っている者を見捨ててはならぬ。";
+				next;
+				break;
+			case 2:
+				set .@knight_t,.@knight_t+10;
+				mes "[グレイ卿]";
+				mes "むろん、富も大切だ。";
+				mes "だが我ら騎士は、より高き美徳のために生きねばならぬ。";
+				next;
+				break;
+			case 3:
+				mes "[グレイ卿]";
+				mes "おお、素晴らしい考えだ。騎士の力は、弱き者を守り、正義を守るために使わねばならぬ。";
+				next;
+				mes "[グレイ卿]";
+				mes "悲しいことに、騎士道の基本たる理想を忘れ、我らの恥となる騎士も少なからずいる…";
+				next;
+				break;
+			}
+			break;
+		case 3:
+			set .@knight_t,.@knight_t+5;
+			mes "[グレイ卿]";
+			mes "満足、とな。";
+			mes "お前は既に";
+			mes "立派な剣士のようだが。";
+			mes "騎士を志す特別な理由でもあるのか？";
+			next;
+			mes "[グレイ卿]";
+			mes "剣士のことは";
+			mes "分からぬが、騎士は自堕落を許さぬ。力を得ることに執着するあまり、己を制御できなくなる者もいる。";
+			next;
+			mes "[グレイ卿]";
+			mes "して…";
+			mes "お前は自分の";
+			mes "何に満足";
+			mes "していないのだ？";
+			next;
+			switch(select("技術。:目標。:外見。")) {
+			case 1:
+				set .@knight_t,.@knight_t+5;
+				mes "[グレイ卿]";
+				mes "技術とは、騎士としての経験と共に得られるもの。それを最終目標にしてはならぬ。さもなくば、騎士として決して満たされることはない。";
+				next;
+				break;
+			case 2:
+				set .@knight_t,.@knight_t-5;
+				mes "[グレイ卿]";
+				mes "なるほど…";
+				mes "常に目標を持つことは、とても大切だ。騎士になった時は考えに満ちているかもしれぬが、それも時と共に変わるだろう。";
+				next;
+				break;
+			case 3:
+				set .@knight_t,.@knight_t+5;
+				mes "[グレイ卿]";
+				mes "むう…";
+				mes "目に見えるものが全てではない。剣士が騎士より強いこともあれば、怠惰になった騎士が弱くなることもある。";
+				next;
+				break;
+			}
+			break;
+		}
+		mes "[グレイ卿]";
+		mes "お前の考えは分かった、";
+		mes "だが何も考えずに";
+		mes "騎士になろうとする者もいる。";
+		next;
+		mes "[グレイ卿]";
+		mes "そうした者こそ問題を引き起こし、騎士の名誉を汚し、取り返しのつかぬ結果を招くのだ。";
+		next;
+		mes "[グレイ卿]";
+		mes "お前とて同じこと。一度騎士になれば、二度と剣士には戻れぬ。騎士としての義務と責任は、常にお前と共にある。";
+		next;
+		mes "[グレイ卿]";
+		mes "すぐにでも騎士になれるとしたら、まず何をする？";
+		next;
+		switch(select("すぐに戦いへ向かいます。:私を待っている人がいます。:騎士についてもっと学びます。")) {
+		case 1:
+			mes "[グレイ卿]";
+			mes "戦い…？";
+			mes "それから？";
+			next;
+			switch(select("短期間で成長します。:騎士としての力を試したいです。:もっと厳しい場所へ行きたいです。")) {
+			case 1:
+				set .@knight_t,.@knight_t+10;
+				mes "[グレイ卿]";
+				mes "強くなることを焦りすぎるな。たとえ";
+				mes "騎士になろうとも、お前はお前のままだ。";
+				next;
+				break;
+			case 2:
+				mes "[グレイ卿]";
+				mes "己を試すのは良いことだ。変わっていく自分を喜ぶのもよいが、騎士としての真の資質を忘れてはならぬ。";
+				next;
+				break;
+			case 3:
+				mes "[グレイ卿]";
+				mes "騎士になろうとも、お前の内面が変わるわけではない。無理をする必要はない。";
+				mes "落ち着いて、一歩ずつ進むがいい。";
+				next;
+				break;
+			}
+			break;
+		case 2:
+			mes "[グレイ卿]";
+			mes "誰が";
+			mes "お前を待っているのだ？";
+			next;
+			switch(select("友人たちです。:ギルドメンバーです。:恋人です。")) {
+			case 1:
+				mes "[グレイ卿]";
+				mes "なるほど、彼らはお前の功績を共に喜ぶだろう。その優しい心を決して失わず、常に友を助けるがいい。";
+				next;
+				break;
+			case 2:
+				mes "[グレイ卿]";
+				mes "お前の幸せも苦難も共にする者たち。騎士として、彼らを常に守らねばならぬ。";
+				next;
+				break;
+			case 3:
+				mes "[グレイ卿]";
+				mes "ああ、若さよ！";
+				mes "愛する者のために";
+				mes "騎士になる、とはな！";
+				mes "常に"+((Sex==SEX_MALE)?"彼女":"彼")+"を守るがいい…";
+				mes "たとえ己の命を";
+				mes "犠牲にしてでも！";
+				next;
+				mes "[グレイ卿]";
+				mes "それから…";
+				mes "永遠に愛するのだ。";
+				mes "真心からの愛情は";
+				mes "得難いものだからな。";
+				next;
+				break;
+			}
+			break;
+		case 3:
+			mes "[グレイ卿]";
+			mes "良い心がけだ…";
+			mes "何を学ぶ";
+			mes "つもりだ？";
+			next;
+			switch(select("騎士が過ごしやすい場所…:騎士の様々な生き方…:騎士としてもっと稼ぐ方法…")) {
+			case 1:
+				set .@knight_t,.@knight_t+5;
+				mes "[グレイ卿]";
+				mes "この世には過ごしやすい場所も、そうでない場所も多くある。だが騎士たる者、";
+				mes "どこであろうと生き抜かねばならぬ。";
+				next;
+				break;
+			case 2:
+				mes "[グレイ卿]";
+				mes "この世には同じような騎士が数多くいる。彼らを先達と思い、多くを尋ねるがいい。";
+				next;
+				break;
+			case 3:
+				set .@knight_t,.@knight_t+15;
+				mes "[グレイ卿]";
+				mes "むう。騎士であることより富を優先するというのか？我らはそうあるべきではない。もっとよく考えてから、";
+				mes "また来るがいい…";
+				next;
+				break;
+			}
+			break;
+		}
+		mes "[グレイ卿]";
+		mes "むう、話しすぎた";
+		mes "ようだな…";
+		mes "長々と";
+		mes "引き止めてしまい";
+		mes "すまなかった。";
+		next;
+		if (.@knight_t == 0) {
+			set KNIGHT_Q,14;
+			changequest 9011,9012;
+			mes "[グレイ卿]";
+			mes "お前との話は楽しかった。若い頃の自分を思い出すな。では騎士団長のところへ行き、";
+			mes "転職を決めようか？";
+			next;
+			mes "[グレイ卿]";
+			mes "あまり";
+			mes "心配するな、";
+			mes "お前を高く買っているぞ。";
+			mes "さあ、行くがいい～";
+			close;
+		}
+		else if (.@knight_t == 5) {
+			set KNIGHT_Q,14;
+			changequest 9011,9012;
+			mes "[グレイ卿]";
+			mes "お前と話せて良かった。騎士道の理念については、騎士になってからもっと考えればよい。";
+			next;
+			mes "[グレイ卿]";
+			mes "では騎士団長のところへ行き、転職を決めようか？あまり心配するな。お前は騎士になるに十分な器だ！";
+			close;
+		}
+		else if (.@knight_t == 10) {
+			set KNIGHT_Q,14;
+			changequest 9011,9012;
+			mes "[グレイ卿]";
+			mes "お前との話は楽しかった。とはいえ、";
+			mes "少々気にかかる点もあったが…";
+			next;
+			mes "[グレイ卿]";
+			mes "騎士団長のところへ";
+			mes "行き、";
+			mes "転職を";
+			mes "決めるがいい。";
+			next;
+			mes "[グレイ卿]";
+			mes "あまり心配するな、わしの試験を受けに来たということは、他の者たちにも認められたということだ。";
+			mes "さあ、行くがいい…！";
+			close;
+		}
+		else {
+			set KNIGHT_Q,13;
+			mes "[グレイ卿]";
+			mes "若者と語らうのは";
+			mes "いつも";
+			mes "楽しいものだ…";
+			next;
+			mes "[グレイ卿]";
+			mes "だがお前の夢は他所にあるようだ、あるいは志が曖昧なようだ。もう少し剣士として過ごし、また";
+			mes "わしのところへ来るがいい。";
+			next;
+			mes "[グレイ卿]";
+			mes "本当に騎士になりたいのなら、まずは己の考えを改めねばならぬ。それから、また見てみようではないか。";
+			close;
+		}
+	}
+	else if (KNIGHT_Q == 14) {
+		mes "騎士団長のところへ";
+		mes "行くよう";
+		mes "言ったはずだ。";
+		next;
+		mes "[グレイ卿]";
+		mes "皆で";
+		mes "慎重に";
+		mes "判断するゆえ、";
+		mes "さあ行くがいい！";
+		close;
+	}
+	else {
+		mes "おお…";
+		mes "若き剣士よ。";
+		mes "何用だ？";
+		next;
+		if (select("転職の試験を受けたいのです。:いえ、何でもありません。") == 1) {
+			mes "[グレイ卿]";
+			mes "ほほう～";
+			mes "ここには";
+			mes "他にも若い";
+			mes "騎士が大勢いる。";
+			next;
+			mes "[グレイ卿]";
+			mes "皆と";
+			mes "話してくれば、";
+			mes "わしも";
+			mes "審査してやろう。";
+			close;
+		}
+		mes "[グレイ卿]";
+		mes "達者でな！";
+		mes "健やかであることこそ";
+		mes "誰にとっても";
+		mes "何よりの宝だ！";
+		close;
+	}
+}

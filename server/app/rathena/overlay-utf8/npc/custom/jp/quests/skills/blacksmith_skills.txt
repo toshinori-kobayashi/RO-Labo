@@ -1,0 +1,669 @@
+//===== rAthena Script ======================================= 
+//= Blacksmith Skills Quests
+//===== By: ================================================== 
+//= Lupus, Reddozen, Samuray22
+//===== Current Version: ===================================== 
+//= 1.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests for skills: Dubious Salesmanship, Greed
+//===== Additional Comments: ================================= 
+//= 1.6 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//============================================================
+
+geffen,178,72,3	script	アッキー#qsk_bs::Akkie#qsk_bs	726,{
+	if (BaseJob != Job_Blacksmith) {
+		mes "[アッキー]";
+		mes "ああ、今日はまさに";
+		mes "鍛冶にぴったりな日ね。";
+		mes "美しい滝の裏へ行って";
+		mes "上質な素材を集めながら";
+		mes "ただひたすら";
+		mes "ハンマーを振るいたい気分。";
+		close;
+	}
+	if (Upper == 1) {
+		if (BLACK_SK == 7) {
+			mes "[アッキー]";
+			mes "転生したのね、";
+			mes "前に会った時から。";
+			mes "あら…";
+			mes "わたしが教えたこと、";
+			mes "全部忘れちゃったでしょう。";
+			mes "よし、また教えてあげる～";
+			next;
+			mes "[アッキー]";
+			mes "そうだ、前に作った";
+			mes "この偽Zenyで";
+			mes "記憶を呼び覚ましましょう。";
+			mes "「アンフェアトリック」の使い方、";
+			mes "もう思い出せるはずよ…";
+			BLACK_SK = 8;
+			if (getskilllv("BS_UNFAIRLYTRICK") == 0)
+				skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+			close;
+		}
+		if (BLACK_SK == 8) {
+			mes "[アッキー]";
+			mes "また会えたね～";
+			mes "鍛冶の調子はどう？";
+			mes "とにかく";
+			mes "わざわざ立ち寄って";
+			mes "話しかけてくれて嬉しいな～";
+			next;
+			mes "[アッキー]";
+			mes "ブラックスミスとマスタースミスに";
+			mes "「アンフェアトリック」を教えるのは";
+			mes "ちょっと退屈だけど、ギルドの誰かが";
+			mes "やらなきゃいけない仕事だから。じゃあね、道中気をつけて！";
+			if (getskilllv("BS_UNFAIRLYTRICK") == 0)	// debug
+				skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+			close;
+		}
+	}
+	if (JobLevel < 30) {
+		mes "[アッキー]";
+		if (Upper == 1) {
+			mes "こんにちは、"+ strcharinfo(0) +"さん、";
+			mes "わたし、ブラックスミスギルドから";
+			mes "新しいスキルを教えに来たの。";
+			mes "でも、あなたのジョブレベルは";
+			mes "今はまだ少し低いみたいで";
+			mes "教えてあげられないんだ…";
+			next;
+			mes "[アッキー]";
+			mes "でも、もう少し";
+			mes "鍛冶の腕を磨いてね。";
+			mes "資格ができたら";
+			mes "必ずスキルを教えてあげるから！";
+			mes "じゃあね、頑張って～";
+		}
+		else {
+			mes "はじめまして、わたし";
+			mes "ブラックスミスギルドの";
+			mes "アッキーです。やる気のある";
+			mes "ブラックスミスとマスタースミスに";
+			mes "この新しいスキルを教えたいんだけど、";
+			mes "ジョブレベルが低いみたいね…";
+			next;
+			mes "[アッキー]";
+			mes "ごめんね、"+ strcharinfo(0) +"さん、";
+			mes "ジョブレベルを上げれば";
+			mes "わたしが教えるスキルの";
+			mes "資格が得られるはずだから、";
+			mes "それまでは";
+			mes "修行を頑張ってね？";
+		}
+		close;
+	}
+	if (BLACK_SK == 0) {
+		mes "[アッキー]";
+		mes "やっほー～";
+		mes "今日って";
+		mes "なんて素敵な日なのかしら？";
+		mes "狩りにぴったりね！";
+		next;
+		mes "[アッキー]";
+		mes "えっと、自己紹介するね。";
+		mes "わたしアッキー、";
+		mes "ブラックスミスギルドから";
+		mes "派遣されてきたの。";
+		mes "ブラックスミスとマスタースミスに";
+		mes "「アンフェアトリック」を教えてるんだ。";
+		next;
+		mes "[アッキー]";
+		mes "この二次職の追加スキルを覚えると";
+		mes "マモナイト使用時の";
+		mes "Zeny消費を10%減らせるの。";
+		mes "地味だけど役立つ";
+		mes "このパッシブスキルは、";
+		mes ""+ strcharinfo(0) +"の役に立つはずよ。";
+		next;
+		mes "[アッキー]";
+		mes "わたしまだ新人だけど、";
+		mes "「アンフェアトリック」を";
+		mes "教えてあげようか？";
+		mes "どうする？";
+		next;
+		if (select("教わる。:やめておく。") == 1) {
+			mes "["+ strcharinfo(0) +"]";
+			mes "うん、この新しいスキルを";
+			mes "覚えてみるよ。もしかしたら";
+			mes "すごく役立つかもしれないし。";
+			next;
+			mes "[アッキー]";
+			mes "やった、よかった！";
+			mes "後悔はさせないから！";
+			mes "それじゃ、このスキルの";
+			mes "仕組みを説明するね。えっと、";
+			mes "あれをどこに置いたっけ…あ、あった。";
+			mes "この手引きを読むね。";
+			next;
+			mes "[アッキー]";
+			mes "「アンフェアトリック」を使うと、";
+			mes "偽物のZenyを鍛造して";
+			mes "マモナイトに使うことで";
+			mes "消費Zenyを10%減らせるの。";
+			mes "相手はモンスターだから、";
+			mes "偽造も大目に見てもらえるってわけ。";
+			next;
+			mes "[アッキー]";
+			mes "それじゃ、偽Zenyの鍛造を";
+			mes "実演するために";
+			mes "材料を持ってきてほしいの。";
+			mes "鋼鉄1個、石炭5個、";
+			mes "鉄のハンマー1個、それと…";
+			mes "ええと…";
+			next;
+			mes "[アッキー]";
+			mes "ええと、ちょっと";
+			mes "確認する時間を";
+			mes "もらえる？";
+			mes "ご、ごめんね、この…";
+			mes "^333333（確かにマニュアルに";
+			mes "線を引いたはずなんだけど…どこ？）^000000";
+			next;
+			mes "[アッキー]";
+			mes "あ！あった、見つけた！";
+			mes "も、もう一回";
+			mes "最初からやり直すね。えっと…";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "……………………";
+			next;
+			mes "[アッキー]";
+			mes "^0000FF鋼鉄 1個^000000、";
+			mes "^0000FF石炭 5個^000000、";
+			mes "^0000FF鉄のハンマー 1個^000000、";
+			mes "^0000FF500 Zeny^000000、それと";
+			mes "^0000FF1 Detrimindexta^000000を";
+			mes "持ってきてくれる？";
+			next;
+			mes "["+ strcharinfo(0) +"]";
+			mes "うん、わかった。";
+			mes "でも本当に";
+			mes "このスキル、";
+			mes "教えてもらえるの…？";
+			next;
+			mes "[アッキー]";
+			mes "あ、あーもう、やっぱり";
+			mes "そう来ると思った！え、えっと、";
+			mes "だ、大丈夫だから！ここで働いて";
+			mes "もう3ヶ月に、な、なるし…";
+			mes "とにかく材料を持ってきてくれたら";
+			mes "す、すぐ覚えられるって証明するから！";
+			next;
+			mes "[アッキー]";
+			mes "わたしを信じて！";
+			mes "がっかりはさせないから、";
+			mes "約束する！このスキル、すっごく";
+			mes "便利なんだよ！だから早く";
+			mes "材料を持ってきてね？";
+			BLACK_SK = 1;
+			close;
+		}
+		mes "[アッキー]";
+		mes "え、ええっ！？どうして？";
+		mes "わ、わたしじゃ";
+		mes "物足りない？お願い、";
+		mes "精一杯教えるって約束するから。";
+		mes "それに、ギルドの";
+		mes "ノルマもあるし…";
+		close;
+	}
+	if (BLACK_SK == 1) {
+		if (countitem(999) < 1 || countitem(1003) < 5 || countitem(971) < 1 || countitem(613) < 1) {
+			mes "[アッキー]";
+			mes "あ、戻ってきたのね～";
+			mes "それじゃ、偽Zenyを作るのに";
+			mes "必要なものを";
+			mes "全部持ってきてくれたか";
+			mes "確認させてもらうね。";
+			mes "「アンフェアトリック」を教えるために。";
+			next;
+			mes "[アッキー]";
+			mes "うーん、まだ";
+			mes "いくつか足りないみたい。";
+			mes "すぐにスキルの";
+			mes "修行を始められるように、";
+			mes "必要なものを";
+			mes "もう一度伝えるね。";
+			next;
+			mes "[アッキー]";
+			mes "^0000FF鋼鉄 1個^000000、";
+			mes "^0000FF石炭 5個^000000、";
+			mes "^0000FF鉄のハンマー 1個^000000、";
+			mes "^0000FF500 Zeny^000000、それと";
+			mes "^0000FF1 Detrimindexta^000000。";
+			mes "忘れないでね？";
+			close;
+		}
+		if (Zeny < 500) {
+			mes "[アッキー]";
+			mes "うーん、鍛造の材料は";
+			mes "全部揃ってるけど、";
+			mes "あと500Zenyが要るの。";
+			mes "それを元に写し取らないと、";
+			mes "説得力のある偽Zenyを";
+			mes "作れないから。";
+			close;
+		}
+		mes "[アッキー]";
+		mes "あ、戻ってきたのね～";
+		mes "それじゃ、偽Zenyを作るのに";
+		mes "必要なものを";
+		mes "全部持ってきてくれたか";
+		mes "確認させてもらうね。";
+		mes "「アンフェアトリック」を教えるために。";
+		next;
+		mes "[アッキー]";
+		mes "よくやったね、";
+		mes "必要なもの、ちゃんと揃ってる。";
+		mes "それじゃ、材料を鍛造の";
+		mes "準備に使わせてもらうから";
+		mes "少し待っててね？";
+		delitem 1003,5; //Coal
+		delitem 999,1; //Steel
+		delitem 971,1; //Detrimindexta
+		delitem 613,1; //Iron_Hammer
+		Zeny -= 500;
+		BLACK_SK = 2;
+		close;
+	}
+	if (BLACK_SK == 2) {
+		mes "[アッキー]";
+		mes "あ、あぁ！思ってたより";
+		mes "早く戻ってきたのね。";
+		mes "えっと、うーん。";
+		mes "どう言えば";
+		mes "いいのかな…";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "…";
+		mes "……";
+		mes "………";
+		next;
+		mes "[アッキー]";
+		mes "ご、ごめんなさい！偽物の";
+		mes "サンプルを作ってるときに";
+		mes "失敗しちゃったの！";
+		mes "本当にごめんなさい、ど、どうか";
+		mes "ブラックスミスギルドには";
+		mes "言わないで！もう一度だけチャンスをちょうだい！";
+		next;
+		mes "[アッキー]";
+		mes "次は絶対失敗しないって";
+		mes "約束する！必要なのは";
+		mes "鋼鉄1個と、あと石炭3個だけ！";
+		mes "お願い、お、怒らないで、";
+		mes "ただの事故だったの！";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "わかった、わかったよ…";
+		mes "本当にそれだけ";
+		mes "持ってくればいいの？";
+		next;
+		mes "[アッキー]";
+		mes "うん、うん！ああ、そんなに";
+		mes "優しくしてくれてありがとう！";
+		mes "^FF0000鋼鉄 1個^000000と";
+		mes "^FF0000石炭 3個^000000を持ってきて、もう一度挑戦しよう！";
+		BLACK_SK = 3;
+		close;
+	}
+	if (BLACK_SK == 3) {
+		if (countitem(999) < 1 || countitem(1003) < 3) {
+			mes "[アッキー]";
+			mes "鋼鉄1個と";
+			mes "石炭3個を";
+			mes "持ってきてくれるだけでいいの。";
+			mes "そうしたら";
+			mes "「アンフェアトリック」を教えられるはず～";
+			close;
+		}
+		mes "[アッキー]";
+		mes "ああ、材料を持ってきて";
+		mes "くれて本当にありがとう。";
+		mes "よし、今度こそ絶対";
+		mes "成功させてみせるから。";
+		mes "準備する時間を";
+		mes "少しだけちょうだい…";
+		delitem 999,1; //Steel
+		delitem 1003,3; //Coal
+		BLACK_SK = 4;
+		close;
+	}
+	if (BLACK_SK == 4) {
+		mes "[アッキー]";
+		mes "……";
+		mes "………";
+		mes "……………………";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "…？";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "まさか…";
+		mes "も、もしかして…";
+		mes "何かあったの？";
+		next;
+		mes "[アッキー]";
+		mes "*グスッ*も、もらった";
+		mes "鉄のハンマーを";
+		mes "壊しちゃったの！これがないと";
+		mes "鍛造を終えられない！うわぁぁん～";
+		next;
+		mes "["+ strcharinfo(0) +"]";
+		mes "^333333（やっぱりわたしが";
+		mes "新しい";
+		mes "^FF0000鉄のハンマー^333333を持ってこなきゃ、";
+		mes "覚えられないよね！）^000000";
+		BLACK_SK = 5;
+		close;
+	}
+	if (BLACK_SK == 5) {
+		if (countitem(613) < 1) {
+			mes "[アッキー]";
+			mes "うわぁぁん～！信じられない、";
+			mes "鉄のハンマーを壊しちゃうなんて！";
+			mes "偽Zenyを完成させて";
+			mes "「アンフェアトリック」を教えられるように、";
+			mes "もう1個持ってきてもらえる？";
+			close;
+		}
+		mes "[アッキー]";
+		mes "^333333*グスッ*^000000 本当に";
+		mes "こ、この鉄のハンマーを";
+		mes "持ってきてくれたの？";
+		mes "わたしの失敗に";
+		mes "つ、付き合ってくれてありがとう…";
+		next;
+		mes "[アッキー]";
+		mes "それじゃ、少し";
+		mes "時間をもらえる？";
+		mes "もう一度";
+		mes "挑戦してみるから。";
+		delitem 613,1; //Iron_Hammer
+		BLACK_SK = 6;
+		close;
+	}
+	if (BLACK_SK == 6) {
+		mes "[アッキー]";
+		mes "あ、戻ってきたのね！";
+		mes "やったー、ついにできた！";
+		mes "偽Zenyのサンプルを";
+		mes "完成させて、";
+		mes "マモナイトで試してみたの！";
+		next;
+		mes "[アッキー]";
+		mes "あ、スキルを教える前に";
+		mes "伝えておかないと。";
+		mes "同僚のグッドマンが";
+		mes "「グリード」っていう別の追加スキルを教えられるから、";
+		mes "あとで探してみるといいよ。";
+		next;
+		mes "[アッキー]";
+		mes "それじゃ、「アンフェアトリック」を覚える";
+		mes "最初のステップは";
+		mes "この偽Zenyを作ること。よく見てね…";
+		mes "ね、簡単でしょ？もちろん戦闘中にしか使えなくて、";
+		mes "マモナイトのZeny消費を減らすためのものだけどね…";
+		if (Upper == 1)
+			BLACK_SK = 9;	// note: official script is using another variable when a transcendent character is doing the quest for the first time
+		else
+			BLACK_SK = 7;
+		skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+		next;
+		mes "[アッキー]";
+		mes "それと、マモナイトのコストの";
+		mes "90%は本物のZenyじゃないと";
+		mes "効果が薄れていっちゃうから";
+		mes "気をつけてね。さて、";
+		mes "これでレッスンはおしまい。もう「アンフェアトリック」が使えるよ！";
+		next;
+		mes "[アッキー]";
+		mes "わたしの失敗に付き合ってくれて";
+		mes "改めてありがとう、";
+		mes "きっとイライラしたよね。";
+		mes "とにかく、このスキルが";
+		mes "あなたの役に立つといいな。";
+		mes "また立ち寄ってね？";
+		close;
+	}
+	if (rand(1,2) == 1) {
+		mes "[アッキー]";
+		mes "そういえば、アインブロックの";
+		mes "グッドマンとはもう話した？";
+		mes "彼はブラックスミスギルドの";
+		mes "代表として";
+		mes "「グリード」を教えてるの。";
+		next;
+		mes "[アッキー]";
+		mes "本気で鍛冶の品作りを";
+		mes "やりたいなら、「グリード」は";
+		mes "すごく便利なスキルかもね。";
+		mes "でも、正直に言うと";
+		mes "あのスキル名はちょっと…えっと。";
+		mes "うーん…なんか印象悪いよね～";
+		if (getskilllv("BS_UNFAIRLYTRICK") == 0)	// debug
+			skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+		close;
+	}
+	mes "[アッキー]";
+	mes "また会えたね～";
+	mes "鍛冶の調子はどう？";
+	mes "とにかく";
+	mes "わざわざ立ち寄って";
+	mes "話しかけてくれて嬉しいな～";
+	next;
+	mes "[アッキー]";
+	mes "ブラックスミスやマスタースミス、";
+	mes "メカニックに「アンフェアトリック」を";
+	mes "教えるのはちょっと退屈だけど、ギルドの誰かが";
+	mes "やらなきゃいけない仕事だから。じゃあね、道中気をつけて！";
+	if (getskilllv("BS_UNFAIRLYTRICK") == 0)	// debug
+		skill "BS_UNFAIRLYTRICK",1,SKILL_PERM;
+	close;
+}
+
+geffen,172,52,1	script	グッドマン#qsk_bs::Goodman#qsk_bs	826,{
+	if (BaseJob != Job_Blacksmith) {
+		mes "[グッドマン]";
+		mes "珍しくて面白いアイテムを";
+		mes "探しに、山へ";
+		mes "出かけたい気分だな。";
+		mes "鍛造に使えるものをな。";
+		mes "それがブラックスミスとしての";
+		mes "最大の楽しみってやつだ。";
+		close;
+	}
+	if (Upper == 1) {
+		if (BLACK_SK2 == 2) {
+			mes "[グッドマン]";
+			mes "おお、転生したんだな。";
+			mes "腕を磨くために";
+			mes "ブラックスミスが";
+			mes "マスタースミスになる姿を見るのは";
+			mes "嬉しいもんだ。";
+			next;
+			mes "[グッドマン]";
+			mes "ん？「グリード」を";
+			mes "忘れちまったのか？もう";
+			mes "思い出せるはずだぞ。";
+			mes "俺の顔を見れば";
+			mes "また使うのに必要な記憶が";
+			mes "よみがえってくるはずだ～";
+			if (getskilllv("BS_GREED") == 0)
+				skill "BS_GREED",1,SKILL_PERM;
+			BLACK_SK2 = 3;
+			close;
+		}
+		if (BLACK_SK2 == 3) {
+			mes "[グッドマン]";
+			mes "鍛造の腕前は";
+			mes "どうだ？";
+			mes "仕事に行き詰まったときは";
+			mes "旅に出るのもいいもんだ。";
+			mes "気分転換に考え事をしたり、";
+			mes "素材を集めたりできるしな。";
+			if (getskilllv("BS_GREED") == 0)	// debug
+				skill "BS_GREED",1,SKILL_PERM;
+			close;
+		}
+	}
+	if (BLACK_SK2 == 0) {
+		mes "[グッドマン]";
+		mes "よう。俺はブラックスミスギルドから";
+		mes "派遣された";
+		mes "スキルマスターだ。みんなからは";
+		mes "グッドマンって呼ばれてる。あんたは";
+		if (Upper == 1)
+			mes "マスタースミスだろう？";
+		else
+			mes "ブラックスミスだろう？";
+		mes "ふっ、聞くまでもないか。";
+		next;
+		mes "[グッドマン]";
+		mes "いい知らせだ。俺は";
+		mes "ブラックスミスギルドと";
+		mes "商人ギルドが開発した";
+		mes "^FF0000グリード^000000ってスキルを教える";
+		mes "担当なんだ。覚えるかどうかは";
+		mes "あんた次第だが、覚えとくのをお勧めするぞ。";
+		next;
+		mes "[グッドマン]";
+		mes "望むなら、今すぐ";
+		mes "「グリード」を";
+		mes "教え始めてやってもいいぞ。";
+		mes "どうだ、坊主？";
+		next;
+		if (select("いいね！:また今度で～") == 1) {
+			mes "[グッドマン]";
+			mes "ふっ！いい選択だ。さて、";
+			mes "「グリード」は使用者を中心とした";
+			mes "5×5マスの範囲のアイテムを";
+			mes "自動で拾い集めるスキルだ。";
+			mes "モンスター討伐で散らばった品を拾うのに便利だぞ。";
+			next;
+			mes "[グッドマン]";
+			mes "まずは第一段階だ。あんたが";
+			mes "このスキルを覚える資格があるか";
+			mes "試させてもらう。所持品を隙間なく";
+			mes "アイテムで満たして、";
+			mes "重量500の品が入らないほどにしてこい。";
+			next;
+			mes "[グッドマン]";
+			mes "それが終わったら";
+			mes "戻ってきて";
+			mes "俺に話しかけろ。それじゃ";
+			mes "がんばれよ～";
+			BLACK_SK2 = 1;
+			close;
+		}
+		mes "[グッドマン]";
+		mes "そうか。他のことで";
+		mes "忙しいのもいいが、";
+		mes "時間ってのは貴重なもんだって";
+		mes "忘れるなよ。いつだって";
+		mes "一番価値のあることに";
+		mes "使うべきだ。わかったか？";
+		close;
+	}
+	if (BLACK_SK2 == 1) {
+		if (MaxWeight - Weight >= 5000) {
+			mes "[グッドマン]";
+			mes "ふむ。戻ってくるのが";
+			mes "早すぎるな。それに";
+			mes "俺が出した課題を";
+			mes "まだ終えてないだろう。よく聞け。";
+			next;
+			mes "[グッドマン]";
+			mes "所持品を何でもいいから";
+			mes "アイテムで満たして、";
+			mes "重量500の品が";
+			mes "入らないくらいいっぱいにしてこい。";
+			mes "それが終わったら";
+			mes "戻ってきて報告しろ。";
+			close;
+		}
+		mes "[グッドマン]";
+		mes "もう戻ってきたのか？";
+		mes "よし、持ち物を";
+		mes "確認させてもらうぞ。";
+		mes "ええと、所持品、所持品っと…";
+		next;
+		mes "[グッドマン]";
+		mes "よくやった、合格だ。";
+		mes "これらのアイテムを集めるのに";
+		mes "費やした時間と経験は、";
+		mes "Zenyの値段以上の価値があるって";
+		mes "わかっただろう？";
+		next;
+		mes "[グッドマン]";
+		if (Upper == 1)
+			mes "マスタースミスというのは";
+		else
+			mes "ブラックスミスというのは";
+		mes "何よりもまず職人であるべきだと";
+		mes "俺は思う。金持ちで有名になるのは";
+		mes "単なる副産物にすぎない。";
+		if (Upper == 1)
+			mes "誇り高きマスタースミスは、価値は職人技にこそあると知っている…";
+		else
+			mes "誇り高きブラックスミスは、価値は職人技にこそあると知っている…";
+		next;
+		if (Upper == 1) {
+			mes "[グッドマン]";
+			mes "アイテムのZeny価値ってやつに";
+			mes "あまりこだわらなければ、";
+			mes "もっと簡単に";
+			mes "手放せるようになる。";
+			mes "俺がやってみせよう。";
+			mes "ほら、これであんたにもできるはずだ。";
+			next;
+		}
+		mes "[グッドマン]";
+		mes "あんたが覚えたスキルは";
+		mes "「グリード（強欲）」って名前だが、";
+		mes "その名前とは違う使い方を";
+		mes "してくれたらと思う。";
+		mes "それを忘れずに、";
+		mes "本物の傑作を作り上げてくれ。";
+		skill "BS_GREED",1,SKILL_PERM;
+		if (Upper == 1)
+			BLACK_SK2 = 4;	// note: official script is using another variable when a transcendent character is doing the quest for the first time
+		else
+			BLACK_SK2 = 2;
+		close;
+	}
+	mes "[グッドマン]";
+	mes "「グリード」は";
+	mes "うまく使えてるか？";
+	mes "仲間たちのために";
+	mes "もっと質のいい品を";
+	mes "鍛造する助けに";
+	mes "なっていればいいんだがな。";
+	if (getskilllv("BS_GREED") == 0)	// debug
+		skill "BS_GREED",1,SKILL_PERM;
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//=     Somehow eA engine doesn't let you keep learn't skill V_V'
+//= 1.2 Added to correct locations, correct NPC's, fixed
+//=     some of the items required and made them into real
+//=     quests. [Reddozen] 
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a fixed an item ID typo, thx 2Spiritual Kid
+//= 1.3b Splitted into different files [DracoRPG]
+//= 1.3c Inverted the weight check for Greed [DracoRPG]
+//= 1.4 Updated to the official One [Samuray22]
+//= 1.5 replaced item "names" with item id. Fixed a bug with
+//=     item deletion [Lupus]
+//============================================================

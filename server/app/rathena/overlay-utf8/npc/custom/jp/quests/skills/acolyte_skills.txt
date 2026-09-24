@@ -1,0 +1,121 @@
+//===== rAthena Script =======================================
+//= Acolyte Skill Quest
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 1.8
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Quest for skills: Holy Light
+//===== Additional Comments: ================================= 
+//= 1.5 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.6 Fixed a typo in job check. (Bugreport:1531) [L0ne_W0lf]
+//= 1.7 Updated to latest available official file. [Masao]
+//= 1.8 Fixed JobLevel requirements. [Euphy]
+//============================================================
+
+prt_church,173,23,4	script	聖職者::Cleric	79,{
+	mes "[アコライト・クリフト]";
+	mes "ああ、兄弟よ！迷える子羊たちの";
+	mes "世話に、疲れを";
+	mes "感じてはいませんか？";
+	mes "私がお手伝いいたしましょう。";
+	next;
+	switch (select("^3355FF『アコライトの秘めた力』^000000について:^3355FF『ホーリーライト』^000000の修行:会話を終える")) {
+	case 1:
+		mes "[アコライト・クリフト]";
+		mes "私たち聖職者の仲間は、";
+		mes "経験を積むにつれて";
+		mes "自然とある力を";
+		mes "身につけていきます。";
+		mes "アコライトとして熟練する頃、この特別な力を得るのです。";
+		next;
+		mes "[アコライト・クリフト]";
+		mes "大いなる危険と";
+		mes "尽きぬ悪との戦いの中、";
+		mes "同胞たちは助けを必要としています。";
+		mes "^3355FF『ホーリーライト』^000000こそがその力です。";
+		mes "この力を自らのものとするには、";
+		mes "相応の努力が要ります。";
+		next;
+		mes "[アコライト・クリフト]";
+		mes "この力を得るには、次の品を見つけてこなければなりません。";
+		mes "^FF33551 オパール^000000";
+		mes "^FF33551 クリスタルブルー^000000";
+		mes "^FF33551 ロザリオ^000000 ";
+		next;
+		mes "[アコライト・クリフト]";
+		mes "この力を使いこなすには、";
+		mes "十分な経験も必要です。";
+		mes "^FF3355 ジョブレベル30^000000";
+		mes "が習得の条件となります。";
+		next;
+		mes "[アコライト・クリフト]";
+		mes "プリーストであれば、";
+		mes "すでに十分な経験を";
+		mes "積んでいるため、";
+		mes "ジョブレベルを問わずこの力を得られます。";
+		close;
+	case 2:
+		if (getskilllv("AL_HOLYLIGHT") == 1) {
+			mes "[アコライト・クリフト]";
+			mes "兄弟よ、あなたはすでに";
+			mes "『ホーリーライト』の力を身につけています。";
+			mes "すでに持つ力を、";
+			mes "重ねて得ることはできません。";
+			mes "どうか、その力を";
+			mes "善き行いのために使ってください。";
+			close;
+		}
+		if ((countitem(727) > 0) && (countitem(991) > 0) && (countitem(2608) > 0) && (JobLevel > 29 || (BaseJob == Job_Priest || BaseJob == Job_Monk)) && (BaseClass == Job_Acolyte)) {
+			mes "[アコライト・クリフト]";
+			mes "あなたの信仰は、";
+			mes "『ホーリーライト』の力を";
+			mes "得るにふさわしいと証明されました。";
+			mes "その力を使うだけの技量も十分です。";
+			mes "どうか賢明にお使いください。";
+			next;
+			delitem 727,1; //White_Jewel
+			delitem 991,1; //Crystal_Blue
+			delitem 2608,1; //Rosary
+			skill "AL_HOLYLIGHT",1,SKILL_PERM;
+			mes "[アコライト・クリフト]";
+			mes "これであなたは";
+			mes "『ホーリーライト』を習得しました。";
+			mes "どうか、正しき行いのためだけにこの力をお使いください……";
+			close;
+		}
+		mes "[アコライト・クリフト]";
+		mes "ああ、明らかなようです……";
+		mes "あなたはまだ";
+		mes "『ホーリーライト』の力を得る準備ができていません。";
+		next;
+		mes "[アコライト・クリフト]";
+		mes "この力に何が必要か、";
+		mes "よく耳を傾けてください。";
+		mes "注意深く聞けば、";
+		mes "自分に足りないものが";
+		mes "わかるはずです。";
+		close;
+	case 3:
+		mes "[アコライト・クリフト]";
+		mes "……";
+		mes "あなたの熱意はよく分かります。";
+		mes "修行を積み、";
+		mes "経験を重ねる時間は";
+		mes "まだたくさんあります。あなたに祝福を……";
+		close;
+	}
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.0a Now using functions found in "Global_Functions.txt"
+//=     for class checks.
+//= 1.2 Added Baby Class Support [Lupus]
+//= 1.3 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 1.4 Fixed an exploit [Lupus]
+//= 1.4a changed perm. variables to temp ones [Lupus]
+//============================================================

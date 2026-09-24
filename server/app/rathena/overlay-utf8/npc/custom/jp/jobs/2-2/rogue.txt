@@ -1,0 +1,2035 @@
+//===== rAthena Script ======================================= 
+//= Rogue Job Quest
+//===== By: ================================================== 
+//= kobra_k88
+//===== Current Version: ===================================== 
+//= 2.9
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Rogue classes
+//===== Additional Comments: ================================= 
+//= 2.4 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     No longer uses function "F_BlockHigh"
+//= 2.4a Deleted unused variables. [Samuray22]
+//= 2.4b Changed a Problem with JobLevel what made 
+//=     impossible get a Gladius [3]. (bugreport:481) [Samuray22]
+//= 2.4c Corrected a Typo error ";;" and a typo error with "rouge". (bugreport:909) [Samuray22]
+//= 2.5 Added dummy "OnMyMobDead" labels. (bugreport:1100) [L0ne_W0lf]
+//= 2.6 Fixed a few bugs in the Rogue Guildsman. [L0ne_W0lf]
+//= 2.7 Fixed a bug on Markie question 5, bugreport:1600 [Brainstorm]
+//= 2.8 Moved "Thug" to Morocc Ruins. [L0ne_W0lf]
+//= 2.9 Added Quest Log commands. [Kisuka]
+//============================================================ 
+
+moc_ruins,86,103,1	script	ならず者#rg::Thug#rg	118,{
+	mes "[ならず者]";
+	mes "*はぁ…*";
+	mes "人生って一体";
+	mes "何なんだろうな";
+	mes "金なんかあって何になる…くそ。";
+	mes "こんなくだらねえ人生、くそったれだ！";
+	next;
+	mes "[ならず者]";
+	mes "おい、坊主。";
+	mes "一体何を";
+	mes "見てんだ？";
+	next;
+	if (select("え？な、何でもない！:……") == 1) {
+		mes "[ならず者]";
+		mes "だったらとっとと";
+		mes "失せやがれ！";
+		mes "聞こえなかったのか？";
+		mes "消えろ！";
+		close;
+	}
+	mes "[ならず者]";
+	mes "ふーん…";
+	mes "^0000FFパロス灯台^000000の^0000FFローグギルド^000000にでも寄ってみるか…";
+	next;
+	mes "[ならず者]";
+	mes "俺の金が要る、";
+	mes "あいつら耳を揃えて払うんだな…";
+	close;
+}
+
+in_rogue,363,122,4	script	ローグギルド職員#rg::Rogue Guildsman#rg	747,{
+	if (Upper == 1) {
+		mes "[マーキー]";
+		mes "え？お前…お前は…？！";
+		mes "おい、前にどこかで会ったことあるよな？";
+		next;
+		mes "[マーキー]";
+		mes "……………";
+		mes "ありゃ、^FF0000すまん^000000！知り合いと勘違いしたみたいだ。";
+		next;
+		mes "[マーキー]";
+		mes "……";
+		mes "………おかしいな。うーむ。";
+		next;
+		mes "[マーキー]";
+		mes "俺が人を見間違えるなんて滅多にないんだが…まあいい、達者でな！";
+		close;
+	}
+	if (BaseJob == Job_Thief) {
+		if (SkillPoint) {
+			mes "[ローグギルドの男]";
+			mes "おい、何やってんだ？！";
+			mes "スキルポイントが余ってたら転職できねえぞ。全部使い切ってから出直してこい。自分のことは自分で気をつけるもんだぜ。";
+			close;
+		}
+		if (JobLevel > 39) {
+			if (ROGUE_Q == 0) {
+				mes "[ローグギルドの男]";
+				mes "こんなガキが";
+				mes "ここで何してんだ？";
+				if (Sex == SEX_MALE) {
+					mes "ああ、分かったぞ…";
+					mes "坊やは";
+				}
+				else {
+					mes "ああ、なるほど…";
+					mes "お嬢ちゃんは";
+				}
+				mes "^800000ローグ^000000になりたいんだな。";
+				next;
+				mes "[ローグギルドの男]";
+				mes "よろしくな。俺はマーキー、ローグギルドで働いてる。ここは博愛…おほん、^800000博愛団体(？)^000000ってやつだ。で、お前の名前は？";
+				next;
+				mes "[マーキー]";
+				mes "…" + strcharinfo(0) + "？";
+				mes "へへっ！いい名前じゃねえか。";
+				mes "ダサかったら";
+				mes "変えさせるとこだったが、";
+				mes "運が良かったな。";
+				next;
+				mes "[マーキー]";
+				mes "で、何でローグに入りたいんだ？本名を教えてくれたってことは、お前は正直者のローグになるってわけだ。そういうのは滅多にいねえがな、へへっ～";
+				next;
+				mes "[マーキー]";
+				mes "ローグの鉄則その1…";
+				mes "たいていの相手には本当の素性を明かすな。ちょっとした保険みたいなもんだ。";
+				next;
+				mes "[マーキー]";
+				mes "よし。正式にお前の申し込みを受理する。ただし試験を受けてもらうぞ。心配すんな、最初のは簡単なやつだ。";
+				next;
+				mes "[マーキー]";
+				mes "よし…";
+				mes "始めるぞ！";
+				next;
+			}
+			else if (ROGUE_Q == 1) {
+				mes "[マーキー]";
+				mes "また来たのか？";
+				mes "前は緊張しすぎて失敗したんだろう。今度は落ち着いて";
+				mes "合格してくれよな？";
+				next;
+			}
+			else if (ROGUE_Q == 2) {
+				mes "[マーキー]";
+				mes "スミスのところに行って話してこい。あいつの試験はちっと手強いかもな。借金の取り立てを担当してる男だから、まあ多少気難しいところがある。";
+				next;
+				mes "[マーキー]";
+				mes "ああ…";
+				mes "あいつは細かいやつだが、ギルドにはああいう男も必要なんだ。とにかく気をつけてな。幸運を祈るぜ。";
+				close;
+			}
+			else if (ROGUE_Q > 2 && ROGUE_Q < 16) {
+				mes "[マーキー]";
+				mes "よお…";
+				mes "頑張れよ。";
+				next;
+				mes "[マーキー]";
+				mes "へへっ…";
+				mes "新入りか。こいつは";
+				mes "楽勝だな…って、おっと！いや、お前のことじゃねえぞ！別の新入りの話だ～";
+				close;
+			}
+			else if (ROGUE_Q == 16 || ROGUE_Q == 17) {
+				changequest 2026,2027;
+				mes "[マーキー]";
+				if (ROGUE_Q == 16) {
+					mes "おお、お前か！";
+					mes "よくやったな。";
+					mes "よし、お前を";
+					mes "ローグに転職させてやる。当然の権利だ！";
+					next;
+					mes "[マーキー]";
+					mes "おめでとう～！";
+					mes "お前";
+					mes "めちゃくちゃイケてるぜ！";
+				}
+				else {
+					mes "おお！お前か！";
+					mes "あいつに耐えられたのか？大したもんだ！アイテム集めも大変だっただろ？";
+					next;
+					mes "[マーキー]";
+					mes "よぉ～";
+					mes "おめでとう！";
+					mes "本当に";
+					mes "よくやったな～";
+				}
+				set .@jlevel,JobLevel;
+				callfunc "Job_Change",Job_Rogue;
+				callfunc "F_ClearJobVar";
+				completequest 2027;
+				next;
+				mes "[マーキー]";
+				mes "さて…";
+				mes "そろそろ";
+				mes "一言言わせて";
+				mes "もらうぜ～ *コホン*";
+				next;
+				mes "[マーキー]";
+				mes "ローグとしての自由を満喫するんだな。ただし、自由には責任がつきものだってことを忘れるな。人にしてほしいことを人にもしてやれ、いいな？じゃ、またな。";
+				close2;
+				if (.@jlevel == 50) {
+					getitem 1220,1; //Gladius_
+				} else {
+					getitem 1219,1; //Gladius
+				}
+				end;
+			}
+			if (select("準備はできてる。:ちょっと待て、まだ準備できてない！") == 2) {
+				mes "[マーキー]";
+				mes "準備だと…？";
+				mes "分かった分かった。";
+				mes "ゆっくり";
+				mes "時間かけてくればいいさ。";
+				mes "だが早めに";
+				mes "戻ってこいよ、いいな？";
+				close;
+			}
+			next;
+			mes "[マーキー]";
+			mes "よく聞いて";
+			mes "正しい答えを選べよ。";
+			mes "分かったか？じゃあ";
+			mes "問題を読み上げるぞ…";
+			next;
+			switch(rand(1,3)) {
+			case 1:
+				mes "[マーキー]";
+				mes "1. ^880000ストーク^000000を習得するために必要なスキルを選べ。";
+				next;
+				if (select("^880000ハイディング^000000:^880000スティール^000000:^880000インクリースドッジ^000000:^880000バッシュ^000000") == 1)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "2. 商人のレベル10^880000ディスカウント^000000スキルと比べて、ローグのレベル10^880000ヘグル^000000スキルは値引き率が何パーセント多くなる？";
+				next;
+				if (select("3 %:2 %:1 %:0 %") == 3)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "3. ^880000マグ^000000というスキルの正しい説明はどれだ？";
+				next;
+				if (select("プレイヤーからアイテムを盗む:モンスターからアイテムを盗む:モンスターからZenyを盗む:プレイヤーからZenyを盗む") == 3)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "4. ^880000スライネス^000000というスキルを発動するには何人のローグが必要だ？";
+				next;
+				if (select("ローグ1人＋アサシン2人:シーフ1人＋ローグ2人:シーフ4人:ローグ2人") == 4)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "5. レベル5の^880000ディベストヘルム^000000を習得すると学べるスキルを選べ。";
+				next;
+				if (select("^880000エンヴェノム^000000:^880000ストリップティーズ^000000:^880000ベノムスプラッシャー^000000:^880000ディベストシールド^000000") == 4)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "6. ハイディング中でも移動できるようになるスキルを選べ。";
+				next;
+				if (select("^880000ハイディング^000000:^880000バックスライド^000000:^880000ストーク^000000:^880000サンドアタック^000000") == 3)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "7. 装備者の命中率を上げるカードを選べ。";
+				next;
+				if (select("アンドレカード:ファミリアカード:マミーカード:マリーナカード") == 3)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "8. ヴァドンカード（火属性攻撃力+20%）を挿した武器で攻撃すると、より大きなダメージを受けるモンスターを選べ。";
+				next;
+				if (select("ヴァドン:デビルチ:エルダーウィロー:バフォメット") == 3)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "9. ダガーで^880000ダブルアタック^000000スキルを使う場合、必要なSPはいくつだ？";
+				next;
+				if (select("15:パッシブスキルなのでSP不要。:パッシブスキルで、SP10。:54") == 2)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "10. ビョルン海底洞窟で最も効果的なダガーを選べ。";
+				next;
+				if (select("風のメインゴーシュ:氷のメインゴーシュ:地のメインゴーシュ:火のメインゴーシュ") == 1)
+					set .@assassin_t,.@assassin_t+10;
+				break;
+			case 2:
+				mes "[マーキー]";
+				mes "1. スロット付きのグラディウスをドロップするモンスターはどれだ？";
+				next;
+				if (select("シーフバグ:ペコペコ:デザートウルフ:コボルド") == 4)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "2. スロット付きのメインゴーシュをドロップするモンスターはどれだ？";
+				next;
+				if (select("ホーネット:デザートウルフ:マリオネット:ミスト") == 1)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "3. 特殊なポーションを作れる職業を選べ。";
+				next;
+				if (select("商人:アルケミスト:ブラックスミス:プリースト") == 2)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "4. ローグが装備できない武器を選べ。";
+				next;
+				if (select("ガクカン:クロスボウ:グラディウス:カタール") == 4)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "5. モンスター「ホーディ」の属性を選べ。";
+				next;
+				if (select("水:火:風:地") == 4)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "6. ペットとして懐かせることができないモンスターを選べ。";
+				next;
+				if (select("ポポリン:クリーミー:オーク:ポイズンスポア") == 2)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "7. 火属性のダガーでより大きなダメージを受けるモンスターを選べ。";
+				next;
+				if (select("ダガーゴブリン:メイスゴブリン:モーニングスターゴブリン:ハンマーゴブリン") == 4)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "8. ギルドの城がない街を選べ。";
+				next;
+				if (select("プロンテラ:アルデバラン:アルベルタ:フェイヨン") == 3)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "9. 青ハーブをドロップする植物を選べ。";
+				next;
+				switch(select("グリーンプラント:イエロープラント:ブループラント:シャイニングプラント")) {
+				default:
+					break;
+				case 3:
+					set .@assassin_t,.@assassin_t+10;
+					break;
+				case 4:
+					set .@assassin_t,.@assassin_t+10;
+					break;
+				}
+				mes "[マーキー]";
+				mes "10. アンデッド属性を持たないモンスターを選べ。";
+				next;
+				if (select("ゾンビ:メガロドン:ファミリア:カリッツバーグ") == 3)
+					set .@assassin_t,.@assassin_t+10;
+				break;
+			case 3:
+				mes "[マーキー]";
+				mes "1. シーフが^880000インクリースドッジ^000000を極めると、回避率は何パーセント上昇する？";
+				next;
+				if (select("30:40:160:20") == 1)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "2. ハイディングやクローキングを使ったキャラクターを見破るモンスターを選べ。";
+				next;
+				if (select("ワームテイル:アルゴス:マミー:ソルジャースケルトン") == 2)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "3. シーフがローグに転職できる場所を選べ。";
+				next;
+				if (select("コモド:ココモビーチ:パロス灯台:モロク") == 3)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "4. ノービスがシーフに転職できる街はどこだ？";
+				next;
+				if (select("コモド:ルティエ:アルベルタ:モロク") == 4)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "5. DEXに影響しないカードを選べ。";
+				next;
+				if (select("ロッカーカード:マミーカード:ゼロムカード:ドロップスカード") == 2)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "6. で、ローグの何がイケてるんだ？";
+				next;
+				select("最高にイカしてるところ。:服装やスタイル。:他人を「お前」呼ばわりできるところ。:優れた攻撃力。");
+				set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "7. シーフからローグへ転職できるのはいつだ？";
+				next;
+				switch(select("ジョブレベル30で:ジョブレベル35で:ジョブレベル40で:ジョブレベル50で")) {
+				default:
+					break;
+				case 3:
+					set .@assassin_t,.@assassin_t+10;
+					break;
+				case 4:
+					set .@assassin_t,.@assassin_t+10;
+					break;
+				}
+				mes "[マーキー]";
+				mes "8. 髪を青く染めたい。どの街の、どの方角（12時方向を北とする）に行けばいい？";
+				next;
+				if (select("モロク、7時方向:プロンテラ、7時方向:モロク、5時方向:プロンテラ、1時方向") == 2)
+					set .@assassin_t,.@assassin_t+10;
+
+				mes "[マーキー]";
+				mes "9. シーフ転職クエストで必要になるキノコを選べ。";
+				next;
+				switch(select("オレンジぬめり茸:赤い毛キノコ:オレンジ網茸:オレンジねばねばキノコ")) {
+				default:
+					break;
+				case 1:
+				case 3:
+					set .@assassin_t,.@assassin_t+10;
+					break;
+				}
+				mes "[マーキー]";
+				mes "10. ローグにとって最も役に立たないカードを選べ。";
+				next;
+				if (select("ウィスパーカード:エルダーウィローカード:ゼロムカード:マーターカード") == 2)
+					set .@assassin_t,.@assassin_t+10;
+			}
+			mes "[マーキー]";
+			mes "*ふぅ～*";
+			mes "やっと";
+			mes "終わったな。";
+			next;
+			mes "[マーキー]";
+			mes "見てみるか。";
+			mes "お前の点数は…";
+			mes "" + .@assassin_t + "点だ。";
+			if (.@assassin_t > 80) {
+				set ROGUE_Q,2;
+				setquest 2017;
+				mes "よし。合格だ。";
+				mes "もうこの試験は";
+				mes "受けなくていいぞ。";
+				next;
+				mes "[マーキー]";
+				mes "だが気を抜くなよ、まだ試験は続くからな。次はスミスのところだ。";
+				next;
+				mes "[マーキー]";
+				mes "じゃあ…";
+				mes "スミスを探して試験を済ませてこい。ただし気をつけろよ、あいつは結構細かいやつだからな。";
+				close;
+			}
+			else {
+				set ROGUE_Q,1;
+				mes "うわ、最悪…不合格だ！";
+				next;
+				mes "[マーキー]";
+				mes "ちゃんと勉強しとくべきだったな。時間の無駄だったぜ、ありがとよ。";
+				next;
+				mes "[マーキー]";
+				mes "*はぁ…* アドバイスしてやるよ。^990000iro.ragnarokonline.com^000000ってサイトを見れば、必要な知識が身につくらしいぜ。";
+				next;
+				mes "[マーキー]";
+				mes "まあ俺には何のことだかさっぱりだが、お前が理解できるなら、きっと役に立つはずだ。";
+				close;
+			}
+		}
+		else if (JobLevel < 40) {
+			mes "[ローグギルドの男]";
+			mes "おっと、待てよ新入り。ジョブレベル40以上のシーフしか受け入れてねえんだ。準備もできてないやつを入れて危ない橋は渡らねえぞ。分かったか？";
+			close;
+		}
+	}
+	else if (BaseJob == Job_Assassin) {
+		mes "[ローグギルドの男]";
+		mes "あん…？";
+		mes "アサシンがここで何してんだ？まさかローグギルドの誰かを殺れって依頼でも受けてるんじゃねえだろうな？";
+		next;
+		mes "[ローグギルドの男]";
+		mes "とにかく俺たちに手を出すな！捕まえられるもんなら捕まえてみろ…俺は華麗な犯罪者だぜ！";
+		next;
+		mes "[ローグギルドの男]";
+		mes "分からねえか？ヒューイによく言ってた台詞なんだがな。アサシンギルドにいるなら会ったことあるだろ…";
+		close;
+	}
+	else if (BaseJob == Job_Rogue) {
+		mes "[マーキー]";
+		mes "よぉ～";
+		mes "久しぶりだな。";
+		mes "今のところ";
+		mes "ギルドから";
+		mes "お前への依頼は無い。";
+		mes "また今度来てくれ。";
+		close;
+	}
+	else {
+		mes "[ローグギルドの男]";
+		mes "おい、お前…";
+		mes "そのみっともねえ";
+		mes "顔をここから消せ、";
+		mes "でねえとその面を";
+		mes "作り直してやるぞ！";
+		close;
+	}
+}
+
+in_rogue,376,23,1	script	スミス#rg::Mr. Smith#rg	57,{
+	if (ROGUE_Q == 2) {
+		mes "[スミス]";
+		mes "ローグギルドへ";
+		mes "ようこそ。";
+		mes "ここから先は俺が";
+		mes "お前の資格を審査する。";
+		next;
+		mes "[スミス]";
+		mes "始める前に";
+		mes "知っておいて";
+		mes "もらいたいことがある…";
+		next;
+		mes "[スミス]";
+		mes "新人ローグは全員申込金を払う決まりだ。まずそっちを済ませてもらうぞ。";
+		next;
+		mes "[スミス]";
+		mes "分かっておいてほしいんだが、ローグギルドは色々な商売をやっててな、^666666時には違法なやつも^000000ある。資金がいるんだよ。";
+		next;
+		set .@item_need,rand(1,15);
+		if (.@item_need > 0 && .@item_need < 6) callsub S_Req,"10 スケルボーン","6 青ハーブ","10 腐った爪","10 恐ろしい口",3;
+		else if (.@item_need > 5 && .@item_need < 11) callsub S_Req,"10 緑ハーブ","10 カニの甲羅","10 蛇の鱗","10 ガーレット",4;
+		else if (.@item_need > 10 && .@item_need < 15) callsub S_Req,"10 黄ハーブ","10 貝殻","10 バッタの足","10 熊の足の皮",5;
+		else if (.@item_need == 15) {
+			mes "[スミス]";
+			mes "追って知らせる…";
+			set ROGUE_Q,6;
+			changequest 2017,2021;
+			next;
+			mes "[スミス]";
+			mes "追って知らせる……";
+			next;
+			mes "[スミス]";
+			mes "追って知らせる………";
+			mes "ところで……";
+			next;
+			mes "[スミス]";
+			mes "ああもう…";
+			mes "これは…";
+			mes "くそ…";
+			mes "イライラする！";
+			next;
+			mes "[スミス]";
+			mes "…";
+			next;
+			mes "[スミス]";
+			mes "…";
+			mes "………";
+			next;
+			mes "[スミス]";
+			mes "…";
+			mes "………";
+			mes "…………";
+			next;
+			mes "[スミス]";
+			mes "今日は虫の居所が悪いんだ、なんでか分かるか？！借金の取り立てが一件もできてねえんだよ！まったく！間抜けなシーフどもが次から次へとローグになりたいってやって来やがる！";
+			next;
+			mes "[スミス]";
+			mes "まったく！ボスが『客対応の仕事は最悪だ』って言ってた理由がよく分かるぜ。";
+			next;
+			mes "[スミス]";
+			mes "あのクソギルドマスターが俺にこんなクソ仕事を押し付けやがった。こんな仕事、俺にはもったいねえんだよ！";
+			mapannounce "in_rogue","あのクソギルドマスターが俺にこんなクソ仕事を押し付けやがった！あの野郎！",bc_map;
+			mes "あの野郎、地獄に落ちればいいんだ。とっちめてやる！ち○しょう ち○しょう ち○しょう！！！";
+			mapannounce "in_rogue","あの野郎、地獄に落ちればいいんだ。とっちめてやる！ち○しょう ち○しょう ち○しょう！！！",bc_map;
+			next;
+			mes "[スミス]";
+			mes "さっきお前の前に転職しようとしてたマヌケ野郎だが…";
+			mapannounce "in_rogue","さっきお前の前に転職しようとしてたマヌケ野郎だが…",bc_map;
+			mes "あいつが俺に何を言ったと思う？！";
+			mapannounce "in_rogue","あいつが俺に何を言ったと思う？！",bc_map;
+			mes "F#$@%#$*#$%@#$!!";
+			mapannounce "in_rogue","F#$@%#$*#$%@#$!!",bc_map;
+			next;
+			mes "[スミス]";
+			mes "何だ―？！このチャットフィルターは何なんだ？！＃＊！＠＄しやがって！このクソ＃＄％＊が！しゃべらせろ！！！";
+			mapannounce "in_rogue","何だ―？！このチャットフィルターは何なんだ？！＃＊！＠＄しやがって！このクソ＃＄％＊が！しゃべらせろ！！！",bc_map;
+			next;
+			mes "[スミス]";
+			mes "何見てんだ…？ " + strcharinfo(0) + "？それがお前の名前か！？";
+			mapannounce "in_rogue","何見てんだ…？ " + strcharinfo(0) + "？それがお前の名前か！？",bc_map;
+			mes " ";
+			mes "[" + strcharinfo(0) + "]";
+			mes "あの…";
+			mes "すみません…？";
+			mes "怒らせるつもりはなかったんです。ただローグになりたくて来ただけで。";
+			next;
+			mes "[スミス]";
+			mes "うおおクソが、俺は一体何の話をしてたんだ、このマヌケが！";
+			mapannounce "in_rogue","うおおクソが、俺は一体何の話をしてたんだ、このマヌケが！",bc_map;
+			next;
+			mes "[スミス]";
+			mes "放っておいてくれ！放っておいてくれ！放っておいてくれ！";
+			mapannounce "in_rogue","放っておいてくれ！放っておいてくれ！放っておいてくれ！",bc_map;
+			next;
+			mes "[スミス]";
+			mes "好きにしろ、な？もう勝手にしやがれ…！！";
+			mapannounce "in_rogue","好きにしろ、な？もう勝手にしやがれ…！！",bc_map;
+			next;
+			mes "[スミス]";
+			mes "申込金は…^FF000010,000 Zeny^000000だ！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 サナギ^000000！";
+			mes "^FF00005 空き瓶^000000！";
+			mes "^FF00005 鉄鉱石^000000！";
+			mes "^FF00005 石の心臓^000000！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 赤ハーブ^000000！";
+			mes "^FF00005 動物の皮^000000！！";
+			mes "^FF00005 黄色いジェムストーン^000000！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 コウモリの牙^000000！";
+			mes "^FF00005 サソリの尻尾^000000！！";
+			mes "^FF00005 ヨーヨーテイル^000000！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 モンスターの餌^000000！";
+			mes "^FF00005 綿毛^000000！！";
+			mes "^FF00005 クローバー^000000！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 鳥の羽^000000！";
+			mes "^FF00005 タロン^000000！！";
+			mes "^FF00005 スポーン^000000！！";
+			next;
+			mes "[スミス]";
+			mes "全部揃えるまで戻ってくるなんて考えるなよ、じゃねえとその場で殺してやるからな。";
+			next;
+			mes "[スミス]";
+			mes "何だと？俺がうっとうしいとでも言ったか？黙れ、この恩知らずが！";
+			next;
+			mes "[スミス]";
+			mes "リストに^FF000010 タヌキの葉^000000を追加しといたぞ。ちゃんと持ってこいよ！";
+			next;
+			mes "[スミス]";
+			mes "クソがァァァ！NPCがどれだけ大変か考えたことあるのか！？！";
+			mapannounce "in_rogue","クソがァァァ！NPCがどれだけ大変か考えたことあるのか！？！",bc_map;
+			close;
+		}
+	}
+	else if (ROGUE_Q < 2) {
+		mes "[スミス]";
+		mes "3272…3273…3274…";
+		next;
+		mes "[スミス]";
+		mes "うう…";
+		mes "頭が痛え…";
+		mes "Zenyの数が";
+		mes "多すぎて数えきれん。";
+		next;
+		mes "[スミス]";
+		mes "あん…？";
+		mes "ここで何してる？転職の話なら先にあっちのやつと話してこい。";
+		next;
+		mes "[スミス]";
+		mes "…しまった！";
+		mes "数え直しだ！";
+		close;
+	}
+	else if (ROGUE_Q > 2) {
+		if (ROGUE_Q == 3) callsub S_CheckItems,510,6,932,10,957,10,958,10;
+		else if (ROGUE_Q == 4) callsub S_CheckItems,511,10,910,10,926,10,964,10;
+		else if (ROGUE_Q == 5) callsub S_CheckItems,508,10,948,10,935,10,940,10;
+		else if (ROGUE_Q == 6) {
+			if (Zeny > 9999 && countitem(915) > 4 && countitem(713) > 4 && countitem(1002) > 4 &&
+			countitem(953) > 4 && countitem(507) > 4 && countitem(919) > 4 && countitem(715) > 4 &&
+			countitem(913) > 4 && countitem(904) > 4 && countitem(942) > 4 && countitem(528) > 4 &&
+			countitem(914) > 4 && countitem(705) > 4 && countitem(916) > 4 && countitem(917) > 4 &&
+			countitem(908) > 4 && countitem(945) > 4) {
+				mes "[スミス]";
+				mes "うーん…見せてみろ…";
+				set Zeny, Zeny-10000;
+				delitem 915,5; //Chrysalis
+				delitem 713,5; //Empty_Bottle
+				delitem 1002,5; //Iron_Ore
+				delitem 953,5; //Stone_Heart
+				delitem 507,5; //Red_Herb
+				delitem 919,5; //Animal's_Skin
+				delitem 715,5; //Yellow_Gemstone
+				delitem 913,5; //Tooth_Of_Bat
+				delitem 904,5; //Scorpion's_Tail
+				delitem 942,5; //Yoyo_Tail
+				delitem 528,5; //Monster's_Feed
+				delitem 914,5; //Fluff
+				delitem 705,5; //Clover
+				delitem 916,5; //Feather_Of_Birds
+				delitem 917,5; //Talon
+				delitem 908,5; //Spawn
+				delitem 945,5; //Raccoon_Leaf
+				set ROGUE_Q,8;
+				next;
+				mes "[スミス]";
+				mes "おお、頼んだもの全部持ってきたのか。よくやった…お前に敬意を表するぜ。";
+				next;
+				mes "^CCCCCC－中指を立てる－^000000";
+				mes "*ニヤリ*";
+				set ROGUE_Q,8;
+				changequest 2021,2025;
+				next;
+				mes "[スミス]";
+				mes "そこまで頑張ったんだ、推薦状を書いてやるよ。滅多にやらねえことだけどな。";
+				next;
+				mes "[スミス]";
+				mes "だがお前はきっとローグギルドの貴重な戦力になるはずだ。うーん、今手元に白紙がねえな、代わりにこれを受け取っとけ…";
+				getitem 1097,1; //Worn_Out_Page
+				next;
+				mes "[スミス]";
+				mes "*はぁ…*";
+				mes "分かってる、分かってるさ。職場では自分を抑えなきゃな。キレやすいのは悪い癖だ…";
+				next;
+				mes "[スミス]";
+				mes "*ぶつぶつ…*";
+				mes "どうだったか… *ぶつぶつ…*";
+				mes "どうやって…思い出した…";
+				mes "*はぁ* 全部俺の短気のせいだ！";
+				next;
+				mes "[スミス]";
+				mes "うわあぁぁ…！！！";
+				next;
+				mes "^3355FFまた後で";
+				mes "出直した方が良さそうだ。^000000";
+				close;
+			}
+			mes "[スミス]";
+			mes "今度こそ聞け！";
+			mes "申込金は：";
+			mes "^FF000010000 Zeny^000000、";
+			mes "^FF00005 サナギ^000000！";
+			mes "^FF00005 空き瓶^000000！";
+			mes "^FF00005 鉄鉱石^000000！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 石の心臓^000000！！";
+			mes "^FF00005 赤ハーブ^000000！";
+			mes "^FF00005 動物の皮^000000！！";
+			mes "^FF00005 黄色いジェムストーン^000000！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 コウモリの牙^000000！";
+			mes "^FF00005 サソリの尻尾^000000！！";
+			mes "^FF00005 ヨーヨーテイル^000000！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 モンスターの餌^000000！";
+			mes "^FF00005 綿毛^000000！！";
+			mes "^FF00005 クローバー^000000！！";
+			next;
+			mes "[スミス]";
+			mes "^FF00005 鳥の羽^000000！";
+			mes "^FF00005 タロン^000000！！";
+			mes "^FF00005 スポーン^000000！！";
+			mes "^FF000010 タヌキの葉^000000！！";
+			next;
+			mes "[スミス]";
+			mes "揃えずに";
+			mes "戻ってくるなんて";
+			mes "考えるなよ！";
+			close;
+		}
+		else if (ROGUE_Q == 7) {
+			mes "[スミス]";
+			mes "そうだな…";
+			mes "誰のところに";
+			mes "送ってやろうか…？";
+			switch(rand(1,3)) {
+			case 1:
+				set ROGUE_Q,9;
+				if(checkquest(2018) != -1) {
+					changequest 2018,2022;
+				}
+				else if(checkquest(2019) != -1) {
+					changequest 2019,2022;
+				}
+				else {
+					changequest 2020,2022;
+				}
+				next;
+				mes "[スミス]";
+				mes "よし！ちょうど";
+				mes "いい奴がいるぜ～！";
+				next;
+				mes "[スミス]";
+				mes "サンダルマン要塞の南に住んでるアラガム・ジュニアを訪ねろ。ここから東のフィールドにあるところだ。";
+				next;
+				mes "[スミス]";
+				mes "結構いい奴だぜ。よく働くし、借金の取り立てもうまい。";
+				next;
+				mes "[スミス]";
+				mes "ローグギルドに入る前、親父が昔やらかしたことのせいで命を狙われててな。それで逃亡者になったんだ。";
+				next;
+				mes "[スミス]";
+				mes "まあそんなわけで俺たちのところにいる。敵から匿ってやってるんだ。";
+				next;
+				mes "[スミス]";
+				mes "ああ、あいつに会うにはパスワードを覚えとけよ。パスワード無しじゃ誰も家に入れないからな。";
+				next;
+				mes "[スミス]";
+				mes "パスワードは^0000FFアラガムは精錬したアイテムを一度も独り占めしなかった^000000だ。";
+				next;
+				mes "[スミス]";
+				mes "じゃあ、幸運を祈ってるぜ。あいつの家はここからそう遠くない、なるべく早く戻ってこい。素早さ…それがローグの精神だ。";
+				close;
+			case 2:
+				set ROGUE_Q,10;
+				if(checkquest(2018) != -1) {
+					changequest 2018,2023;
+				}
+				else if(checkquest(2019) != -1) {
+					changequest 2019,2023;
+				}
+				else {
+					changequest 2020,2023;
+				}
+				next;
+				mes "[スミス]";
+				mes "うーむ…";
+				mes "こいつは";
+				mes "お前向きかもしれんが…";
+				mes "ちょっと危険な奴だ。";
+				next;
+				mes "[スミス]";
+				mes "アントニオ一世の息子、アントニオ・ジュニアに会ってこい。何やら親父が昔やったことのせいで、命を狙われてるらしい。";
+				next;
+				mes "[スミス]";
+				mes "フェイヨンで育ったが、今はココモビーチ近くの空き家に身を潜めてる。";
+				next;
+				mes "[スミス]";
+				mes "最近じゃ、家の外の物音にやたらと文句を言ってるらしい。暗殺を恐れてるんだとよ。まあとにかく…";
+				next;
+				mes "[スミス]";
+				mes "神経質になってて、家に近づく奴にはダガーを投げつけてくる。気性が荒いんだ。";
+				next;
+				mes "[スミス]";
+				mes "だが商売の腕は見事なもんだ。それにギャンブル好きでもある。一度打ち解ければ、お前のローグとしての修行をしっかり面倒見てくれるはずだ。";
+				next;
+				mes "[スミス]";
+				mes "ああ、直接会うにはパスワードを覚えとけよ。パスワードは^0000FFアントニオは精錬したアイテムを壊すことを楽しんでいない^000000だ。";
+				close;
+			case 3:
+				set ROGUE_Q,11;
+				if(checkquest(2018) != -1) {
+					changequest 2018,2024;
+				}
+				else if(checkquest(2019) != -1) {
+					changequest 2019,2024;
+				}
+				else {
+					changequest 2020,2024;
+				}
+				next;
+				mes "[スミス]";
+				mes "うーむ…";
+				mes "こいつは";
+				mes "お前向きかもしれんが…";
+				mes "ちょっと危険な奴だ。";
+				next;
+				mes "[スミス]";
+				mes "名前は";
+				mes "ホルグレヘン・ジュニア、";
+				mes "策略の天才だ。";
+				next;
+				mes "[スミス]";
+				mes "だが、親父が昔やったことのせいで命を狙われててな。そのせいで神経過敏になってて、信用してない相手にはダガーを投げつけてくる。";
+				next;
+				mes "[スミス]";
+				mes "ボスがどうにか奴をギルドに引き入れてな、その優れた頭脳は俺たちの貴重な戦力だ。一度打ち解ければ、お前のローグとしての修行をしっかり面倒見てくれるはずだ。";
+				next;
+				mes "[スミス]";
+				mes "ああ、直接会うにはパスワードを覚えとけよ。パスワードは^0000FF俺の父は精錬したアイテムを一度も独り占めしなかった^000000だ。";
+				close;
+			}
+		}
+		else if (ROGUE_Q == 8) {
+			mes "[スミス]";
+			mes "よし…落ち着いたから次の行き先を教えてやる。*ふぅ*";
+			next;
+			mes "[スミス]";
+			mes "モロクとコモドの境にある^0000FFパロス灯台の検問所^000000近くに住んでるハーマンソーン・ジュニアを探してこい。";
+			next;
+			mes "[スミス]";
+			mes "ああ…忘れるところだった、精錬の話は絶対に口にするなよ。これは重要なことだ。";
+			close;
+		}
+		else if (ROGUE_Q == 9) {
+			mes "[スミス]";
+			mes "何だと…？";
+			mes "行き先を";
+			mes "忘れたって";
+			mes "言うのか？";
+			next;
+			mes "[スミス]";
+			mes "東に一つ進んだフィールドの、サンダルマン要塞の南にある建物に入ればアラガム・ジュニアに会える。";
+			next;
+			mes "[スミス]";
+			mes "パスワードは^0000FFアラガムは精錬したアイテムを一度も独り占めしなかった^000000だ。";
+			close;
+		}
+		else if (ROGUE_Q == 10) {
+			mes "[スミス]";
+			mes "何だと…？";
+			mes "行き先を";
+			mes "忘れたって";
+			mes "言うのか？";
+			next;
+			mes "[スミス]";
+			mes "コモドへ向かう";
+			mes "途中にある";
+			mes "ココモビーチの";
+			mes "建物に行けば";
+			mes "アントニオ・ジュニアに会える。";
+			next;
+			mes "[スミス]";
+			mes "パスワードは^0000FF「アントニオは精錬したアイテムを壊すことを楽しんでいない」^000000だ。";
+			close;
+		}
+		else if (ROGUE_Q == 11) {
+			mes "[スミス]";
+			mes "何だと…？";
+			mes "行き先を";
+			mes "忘れたって";
+			mes "言うのか？";
+			next;
+			mes "[スミス]";
+			mes "ここからモロクへ向かう途中、サンダルマン要塞の南にあるフィールドに行けばホルグレヘン・ジュニアに会える。";
+			next;
+			mes "[スミス]";
+			mes "パスワードは^0000FF俺の父は精錬したアイテムを一度も独り占めしなかった^000000だ。";
+			close;
+		}
+		else if (ROGUE_Q > 11) {
+			mes "[スミス]";
+			mes "うーむ…？";
+			mes "まだ他に";
+			mes "行くところが";
+			mes "あるんじゃないのか、";
+			mes "ローグ修行を終えるには？";
+			close;
+		}
+	}
+
+
+S_Req:
+	mes "[スミス]";
+	mes "まず、";
+	mes "申込金：";
+	mes "^FF000010,000 Zeny^000000。";
+	next;
+	mes "[スミス]";
+	mes "他にも";
+	mes "持ってきてもらう必要がある、";
+	mes "^FF0000"+getarg(0)+"^000000,";
+	mes "^FF0000"+getarg(1)+"^000000,";
+	mes "^FF0000"+getarg(2)+"^000000、";
+	mes "^FF0000"+getarg(3)+"^000000.";
+	.@var = getarg(4);
+	ROGUE_Q = .@var;
+	if (.@var == 3) {
+		changequest 2017,2018;
+	}
+	else if (.@var == 4) {
+		changequest 2017,2019;
+	}
+	else {
+		changequest 2017,2020;
+	}
+	next;
+	mes "[スミス]";
+	mes "うーむ…？";
+	mes "何だって？";
+	mes "ギルドにもっと";
+	mes "寄付してくれるって";
+	mes "言うのか？";
+	next;
+	mes "[スミス]";
+	mes "そりゃ嬉しいね、";
+	mes "感謝するぜ。";
+	mes "だが準備ができたら";
+	mes "出直してこい。";
+	close;
+
+
+S_CheckItems:
+	setarray .@item_req[0], getarg(0), getarg(2), getarg(4), getarg(6);
+	setarray .@amount[0], getarg(1), getarg(3), getarg(5), getarg(7);
+
+	if (Zeny > 9999 && countitem(.@item_req[0]) >= .@amount[0] && countitem(.@item_req[1]) >= .@amount[1] && countitem(.@item_req[2]) >= .@amount[2] && countitem(.@item_req[3]) >= .@amount[3]) {
+		mes "[スミス]";
+		mes "よし、申込金の^FF000010,000 Zeny^000000、"+ .@amount[0] +" "+ getitemname(.@item_req[0]) +"、"+ .@amount[1] +" "+ getitemname(.@item_req[1]) +"、"+ .@amount[2] +" "+ getitemname(.@item_req[2]) +"、"+ .@amount[3] +" "+ getitemname(.@item_req[3]) +"…";
+		set Zeny, Zeny-10000;
+		delitem .@item_req[0],.@amount[0];
+		delitem .@item_req[1],.@amount[1];
+		delitem .@item_req[2],.@amount[2];
+		delitem .@item_req[3],.@amount[3];
+		set ROGUE_Q,7;
+		next;
+		mes "[スミス]";
+		mes "よしよし…";
+		mes "全部";
+		mes "持ってきたみたいだな。";
+		set ROGUE_Q,7;
+		next;
+		mes "[スミス]";
+		mes "よし、ちょっと待ってろ、";
+		mes "準備するからな。さて…次の試験は…";
+		close;
+	}
+	mes "[スミス]";
+	mes "何だそれは！？必要なアイテムを全部持ってこなかったのか？！もう一回条件を確認しろって言うのか！？";
+	next;
+	mes "[スミス]";
+	mes "今度こそ聞け…！";
+	mes "^FF000010,000 Zeny^000000を持ってきて、";
+	mes "以下のアイテムもだ…";
+	next;
+	mes "[スミス]";
+	mes "^FF0000 "+ .@amount[0] +" "+ getitemname(.@item_req[0]) +"^000000,";
+	mes "^FF0000 "+ .@amount[1] +" "+ getitemname(.@item_req[1]) +"^000000,";
+	mes "^FF0000 "+ .@amount[2] +" "+ getitemname(.@item_req[2]) +"^000000,";
+	mes "^FF0000 "+ .@amount[3] +" "+ getitemname(.@item_req[3]) +"^000000,";
+	mes "今度は分かったな？";
+	close;
+}
+
+cmd_fild09,106,195,0	script	Warp#1	45,1,1,{
+OnTouch_:
+	mes "[???]";
+	mes "誰だ！？";
+	mes "俺の縄張りに";
+	mes "踏み込む奴は誰だ？";
+	next;
+	switch(select("俺の父:アラガム:アラゴン:レゴラス")) {
+	case 1:
+		mes "[" + strcharinfo(0) + "]";
+		mes "俺の父";
+		break;
+	case 2:
+		mes "[" + strcharinfo(0) + "]";
+		mes "アラガム";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 3:
+		mes "[" + strcharinfo(0) + "]";
+		mes "アラゴン";
+		break;
+	case 4:
+		mes "[" + strcharinfo(0) + "]";
+		mes "レゴラス";
+		break;
+	}
+	switch(select("しなかった:してない:一度もしなかった:したことがある")) {
+	case 1: mes "しなかった"; break;
+	case 2: mes "してない"; break;
+	case 3:
+		mes "一度もしなかった";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 4: mes "したことがある"; break;
+	}
+	switch(select("独り占めする:独り占めした:隠した:持ち去った:持ち去る")) {
+	case 1: mes "独り占めする"; break;
+	case 2:
+		mes "独り占めした";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 3: mes "隠した"; break;
+	case 4: mes "持ち去った"; break;
+	case 5: mes "持ち去る"; break;
+	}
+	switch(select("精錬したアイテムを。:鍛造したアイテムを。:精錬中のアイテムを。:精錬済みのアイテムを。")) {
+	case 1:
+		mes "精錬したアイテムを。";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 2: mes "鍛造したアイテムを。"; break;
+	case 3: mes "精錬中のアイテムを。"; break;
+	case 4: mes "精錬済みのアイテムを。"; break;
+	}
+	next;
+	if (.@rogue_t > 30) {
+		mes "^3355FF*ギィィ…*";
+		mes "扉がゆっくりと開いた。^000000";
+		close2;
+		warp "in_rogue",246,25;
+		end;
+	}
+	else {
+		mes "[???]";
+		mes "何だ…？";
+		mes "消えろ！";
+		close;
+	}
+}
+
+cmd_fild09,335,143,0	script	Warp#2	45,1,1,{
+OnTouch_:
+	mes "[???]";
+	mes "誰だ！？";
+	mes "俺の縄張りに";
+	mes "踏み込む奴は誰だ？";
+	next;
+	switch(select("俺の父:アラガム:アラゴン:レゴラス")) {
+	case 1:
+		mes "[" + strcharinfo(0) + "]";
+		mes "俺の父";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 2:
+		mes "[" + strcharinfo(0) + "]";
+		mes "アラガム";
+		break;
+	case 3:
+		mes "[" + strcharinfo(0) + "]";
+		mes "アラゴン";
+		break;
+	case 4:
+		mes "[" + strcharinfo(0) + "]";
+		mes "レゴラス";
+		break;
+	}
+	switch(select("しなかった:してない:一度もしなかった:したことがある")) {
+	case 1: mes "しなかった"; break;
+	case 2: mes "してない"; break;
+	case 3:
+		mes "一度もしなかった";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 4: mes "したことがある"; break;
+	}
+	switch(select("独り占めする:持ち去る:隠す:持ち去った:独り占めした")) {
+	case 1: mes "独り占めする"; break;
+	case 2: mes "持ち去る"; break;
+	case 3: mes "隠す"; break;
+	case 4: mes "持ち去った"; break;
+	case 5:
+		mes "独り占めした";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	}
+	switch(select("精錬したアイテムを。:鍛造したアイテムを。:精錬中のアイテムを。:精錬済みのアイテムを。")) {
+	case 1:
+		mes "精錬したアイテムを。";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 2: mes "鍛造したアイテムを。"; break;
+	case 3: mes "精錬中のアイテムを。"; break;
+	case 4: mes "精錬済みのアイテムを。"; break;
+	}
+	next;
+	if (.@rogue_t > 30) {
+		mes "^3355FF*ギィィ…*";
+		mes "扉がゆっくりと開いた。^000000";
+		close2;
+		warp "in_rogue",169,34;
+		end;
+	}
+	else {
+		mes "[???]";
+		mes "何だ…？";
+		mes "消えろ！";
+		close;
+	}
+}
+
+cmd_fild04,304,180,0	script	Warp#3	45,1,1,{
+OnTouch_:
+	mes "[???]";
+	mes "誰だ！？";
+	mes "俺の縄張りに";
+	mes "踏み込む奴は誰だ？";
+	next;
+	switch(select("アンントニオ:アラガム:アントニオ:ホルグレヘン")) {
+	case 1:
+		mes "[" + strcharinfo(0) + "]";
+		mes "アンントニオ";
+		break;
+	case 2:
+		mes "[" + strcharinfo(0) + "]";
+		mes "アラガム";
+		break;
+	case 3:
+		mes "[" + strcharinfo(0) + "]";
+		mes "アントニオ";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 4:
+		mes "[" + strcharinfo(0) + "]";
+		mes "ホルグレヘン"; 
+		break;
+	}
+	switch(select("楽しんでいる:楽しんでいない:好んでいる:好んでいない")) {
+	case 1: mes "楽しんでいる"; break;
+	case 2:
+		mes "楽しんでいない";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 3: mes "好んでいる"; break;
+	case 4: mes "好んでいない"; break;
+	}
+	switch(select("傷つけること:壊すこと:直すこと:鍛えること")) {
+	case 1: mes "傷つけること"; break;
+	case 2:
+		mes "壊すこと";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 3: mes "直すこと"; break;
+	case 4: mes "鍛えること"; break;
+	}
+	switch(select("鍛造中のアイテムを。:精錬中のアイテムたちを。:精錬したアイテムを。:精錬済みのアイテムたちを。:アップグレード済みのアイテムを。:鍛造済みのアイテムを。")) {
+	case 1: mes "鍛造中のアイテムを。"; break;
+	case 2: mes "精錬中のアイテムたちを。"; break;
+	case 3:
+		mes "精錬したアイテムを。";
+		set .@rogue_t,.@rogue_t+10;
+		break;
+	case 4: mes "精錬済みのアイテムたちを。"; break;
+	case 5: mes "アップグレード済みのアイテムを。"; break;
+	case 6: mes "鍛造済みのアイテムを。"; break;
+	}
+	next;
+	if (.@rogue_t > 30) {
+		mes "^3355FF*ギィィ…*";
+		mes "扉がゆっくりと開いた。^000000";
+		close2;
+		warp "in_rogue",164,106;
+		end;
+	}
+	else {
+		mes "[???]";
+		mes "……失せろ！";
+		close;
+	}
+}
+
+in_rogue,272,135,1	script	ハーマンソーン・ジュニア#rg::Hermanthorn Jr#rg	85,{
+	if (ROGUE_Q == 8) {
+		mes "[ハーマンソーン・ジュニア]";
+		mes "なるほど…";
+		mes "お前は";
+		mes "ローグギルドの奴だな。";
+		mes "スミスが";
+		mes "あまり気に入らなかった";
+		mes "類の奴だろう…";
+		next;
+		mes "[ハーマンソーン・ジュニア]";
+		mes "あいつが癇癪を起こして、頼まれたアイテムを全部持ってきたんだろう？ふむ、まだまだ世間知らずのようだな。ハハハ～";
+		next;
+		mes "[ハーマンソーン・ジュニア]";
+		mes "あいつにうまく丸め込まれてアイテムを集めさせられ、俺のところに回されてきたってわけか。哀れなもんだ。";
+		next;
+		mes "[ハーマンソーン・ジュニア]";
+		mes "まあ、あいつにいじめられたんだろうから、特別に優しくしてやろう。俺の試験は簡単だ、実に簡単さ。";
+		next;
+		mes "[ハーマンソーン・ジュニア]";
+		mes "やることは地下トンネルを通り抜けて、ローグギルドまで歩いて戻るだけだ。";
+		next;
+		mes "[ハーマンソーン・ジュニア]";
+		mes "ただ一つ言っておくことがある。中では気をつけた方がいいぞ、いいな？";
+		next;
+		mes "[ハーマンソーン・ジュニア]";
+		mes "どこかの馬鹿どもが枯れ木の枝をばら撒いたり、ホーカスポーカスを唱えまくったりしてるんだ…";
+		next;
+		mes "[ハーマンソーン・ジュニア]";
+		mes "まあ…";
+		mes "とにかく生きてローグギルドまで戻ってこい。それだけでいい！";
+		set ROGUE_Q,12;
+		changequest 2025,2026;
+		close;
+	}
+	else if (ROGUE_Q == 12) {
+		mes "[ハーマンソーン・ジュニア]";
+		mes "ああそうだ。これは重要なことだが、トンネルに入るにはパスワードが要る。扉を開けるための4桁の番号は^0000FF3019^000000だ。";
+		close;
+	}
+	else {
+		mes "[ハーマンソーン・ジュニア]";
+		mes "あん…？";
+		mes "一体何を";
+		mes "してるんだ、ここで。";
+		mes "とっとと失せろ。";
+		close;
+	}
+}
+
+in_rogue,270,130,0	script	he_to_rogue#rg	45,1,1,{
+OnTouch_:
+	mes "^3355FFこの扉は施錠されている。開けるには4桁の番号を入力する必要がある。^000000";
+	next;
+	input .@input;
+	if (.@input < 1 || .@input > 10000) {
+		if (ROGUE_Q == 12)
+			mes "^3355FFうまくいかなかった。4桁の番号を再入力してくれ。^000000";
+		else 
+			mes "^3355FF4桁の番号を入力してくれ。^000000";
+		close;
+	}
+	else if (.@input == 3019) {
+		if (ROGUE_Q == 12) {
+			mes "^3355FF扉が";
+			mes "開いた。^000000";
+			close2;
+			warp "in_rogue",10,21;
+			set ROGUE_Q,12;
+			end;
+		}
+		else {
+			mes "[ハーマンソーン・ジュニア]";
+			mes "おや…";
+			mes "パスワードを";
+			mes "変えたって";
+			mes "言わなかったか？ *ウィンクウィンク*";
+			close;
+		}
+	}
+	else {
+		mes "^3355FF扉は";
+		mes "まだ施錠されている。^000000";
+		close;
+	}
+}
+
+in_rogue,200,389,0	script	gen_ro#1	-1,3,3,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",200,389,"Zombie",1015,1,"gen_ro#1::OnMyMobDead";
+		monster "in_rogue",201,389,"Zombie",1015,1,"gen_ro#1::OnMyMobDead";
+		donpcevent "gen_ro#2::OnDisable";
+		donpcevent "gen_ro#3::OnDisable";
+		donpcevent "gen_ro#4::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","gen_ro#1::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,100,389,0	script	gen_ro#2	-1,3,3,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",100,389,"Mummy",1041,1,"gen_ro#2::OnMyMobDead";
+		donpcevent "gen_ro#1::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","gen_ro#2::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,150,389,0	script	gen_ro#3	-1,3,3,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",145,389,"Zombie",1015,1,"gen_ro#3::OnMyMobDead";
+		monster "in_rogue",143,389,"Mummy",1041,1,"gen_ro#3::OnMyMobDead";
+		donpcevent "gen_ro#2::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","gen_ro#3::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,250,389,0	script	gen_ro#4	-1,3,3,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",200,389,"Abysmal Knight",1219,1,"gen_ro#4::OnMyMobDead";
+		donpcevent "gen_ro#3::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","gen_ro#4::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,9,389,0	script	oneway_to_gu	45,1,1,{
+OnTouch_:
+	donpcevent "gen_ro#4::OnDisable";
+	set ROGUE_Q,17;
+	warp "in_rogue",367,10;
+	end;
+}
+
+in_rogue,244,39,1	script	アラガム・ジュニア#rg::Aragham Junior#rg	99,{
+	if (ROGUE_Q == 9) {
+		mes "[アラガム・ジュニア]";
+		mes "おお、お前は";
+		mes "ローグギルドの者だな…";
+		next;
+		mes "[アラガム・ジュニア]";
+		mes "俺の名は";
+		mes "アラガム・ジュニア、";
+		mes "砂漠のローグだ。";
+		mes "ローグとしての生き方を";
+		mes "学ぶ準備はできてるか？";
+		next;
+		mes "[アラガム・ジュニア]";
+		mes "いいか、ローグの信条は『^0000FF強者は避けろ！弱者には容赦するな！^000000』ってやつだ。特にモンスター相手じゃそれが鉄則になる。";
+		next;
+		mes "[アラガム・ジュニア]";
+		mes "強者は避けろ！";
+		mes "弱者には容赦するな！";
+		mes "単純な決まりだ…";
+		next;
+		mes "[アラガム・ジュニア]";
+		mes "^0000FF地下トンネル^000000を進む間、これを忘れるな。ローグギルドまで歩き通してみせろ。";
+		next;
+		mes "[アラガム・ジュニア]";
+		mes "モンスターも何体か出るが、心配するな。お前が強いのは分かってる。よし、準備はいいか？";
+		next;
+		if (select("ああ、行こう。:今はいいや～") == 1) {
+			mes "[アラガム・ジュニア]";
+			mes "よし…";
+			mes "幸運を祈るぜ。";
+			close2;
+			warp "in_rogue",15,105;
+			set ROGUE_Q,13;
+			changequest 2022,2026;
+			end;
+		}
+		mes "[アラガム・ジュニア]";
+		mes "分かった分かった。";
+		mes "ゆっくり";
+		mes "準備してから";
+		mes "戻ってこい。";
+		close;
+	}
+	else if (ROGUE_Q == 13) {
+		mes "[アラガム・ジュニア]";
+		mes "おお、戻ったか。";
+		mes "今度はうまくやれると思うぜ。ローグにはもう一つ信条があってな、『^0000FF失敗は成功のもと^000000』ってやつだ。まあ、それはさておき…";
+		next;
+		if (select("再挑戦する:キャンセル") == 1) {
+			mes "[アラガム・ジュニア]";
+			mes "幸運を祈るぜ。";
+			close2;
+			warp "in_rogue",15,105;
+			end;
+		}
+		mes "[アラガム・ジュニア]";
+		mes "分かった分かった。";
+		mes "ゆっくり";
+		mes "準備してから";
+		mes "戻ってこい。";
+		close;
+	}
+	else if (BaseJob != Job_Rogue) {
+		mes "[アラガム・ジュニア]";
+		mes "あん…？";
+		mes "誰だお前！？";
+		mes "ローグギルドの";
+		mes "者じゃないな！！";
+		next;
+		mes "[アラガム・ジュニア]";
+		mes "俺を殺しに来たんだろう？い、嫌だ！まだ死ねねえ！消え失せろ！じゃなきゃ先にお前を殺してやる！";
+		close;
+	}
+	else {
+		mes "[アラガム・ジュニア]";
+		mes "よお…";
+		mes "何しに";
+		mes "戻ってきたんだ？";
+		mes "行く前に";
+		mes "ひと休みしてったら";
+		mes "どうだ？";
+		close;
+	}
+}
+
+in_rogue,160,34,1	script	ホルグレン・ジュニア#rg::Hollgrehenn junior#rg	85,{
+	if (ROGUE_Q == 11) {
+		mes "[ホルグレヘン・ジュニア]";
+		mes "ふむ…";
+		mes "ローグギルドの";
+		mes "者か？";
+		next;
+		mes "[ホルグレヘン・ジュニア]";
+		mes "俺はホルグレヘン・ジュニアだ。裏の商売をいろいろ取り仕切ってる。で、俺の試験を受ける覚悟はできてるか？";
+		next;
+		mes "[ホルグレヘン・ジュニア]";
+		mes "俺たちローグにはこんな信条がある：^0000FF強者は避けろ！弱者には容赦するな！^000000どんな脅威にも当てはまるが、特にモンスター相手にはな。";
+		next;
+		mes "[ホルグレヘン・ジュニア]";
+		mes "覚えるのは簡単だろ。";
+		mes "実践するのを忘れるなよ。分かったか？";
+		next;
+		mes "[ホルグレヘン・ジュニア]";
+		mes "俺の試験では^0000FF地下トンネル^000000を通ってもらう。ローグギルドまでずっとたどり着け。";
+		next;
+		mes "[ホルグレヘン・ジュニア]";
+		mes "モンスターもいるが、それも修行のうちだ。さあ、準備はいいか？";
+		next;
+		if (select("ああ、いいぜ。:今はいいや～") == 1) {
+			mes "[ホルグレヘン・ジュニア]";
+			mes "幸運を祈るぜ。";
+			close2;
+			warp "in_rogue",15,105;
+			set ROGUE_Q,15;
+			changequest 2024,2026;
+			end;
+		}
+		mes "[ホルグレヘン・ジュニア]";
+		mes "ゆっくりしろ。";
+		mes "準備ができたら";
+		mes "また来い。";
+		close;
+	}
+	else if (ROGUE_Q == 15) {
+		mes "[ホルグレヘン・ジュニア]";
+		mes "ふん。";
+		mes "失敗したのか。";
+		mes "もう一度挑戦するか？";
+		next;
+		if (select("再挑戦する:キャンセル。") == 1) {
+			mes "[ホルグレヘン・ジュニア]";
+			mes "幸運を祈るぜ。";
+			close2;
+			warp "in_rogue",15,105;
+			end;
+		}
+		mes "[ホルグレヘン・ジュニア]";
+		mes "ゆっくりしろ。";
+		mes "準備ができたら";
+		mes "また来い。";
+		close;
+	}
+	else if (BaseJob != Job_Rogue) {
+		mes "[ホルグレヘン・ジュニア]";
+		mes "あん…？";
+		mes "ローグギルドの";
+		mes "者じゃないな…";
+		next;
+		mes "[ホルグレヘン・ジュニア]";
+		mes "今すぐ";
+		mes "ここから出ていけ、";
+		mes "身のためを";
+		mes "考えるならな…";
+		next;
+		mes "[ホルグレヘン・ジュニア]";
+		mes "さあ…";
+		mes "殺す気が";
+		mes "変わらないうちに";
+		mes "消えろ。";
+		close;
+	}
+	else {
+		mes "[ホルグレヘン・ジュニア]";
+		mes "よお…";
+		mes "顔を見せに来たか？";
+		mes "ローグ同士";
+		mes "助け合わないとな？";
+		close;
+	}
+}
+
+in_rogue,177,109,1	script	アントニオ・ジュニア#rg::Antonio junior#rg	88,{
+	if (ROGUE_Q == 10) {
+		mes "[アントニオ・ジュニア]";
+		mes "ローグギルドの";
+		mes "者か？";
+		mes "ローグになる方法を";
+		mes "知りたいなら、";
+		mes "黙ってそこにいろ。";
+		next;
+		mes "[アントニオ・ジュニア]";
+		mes "^0000FF強者は避けろ！弱者には容赦するな！^000000ってのが、モンスターと戦う時の俺たちの信条だ。";
+		next;
+		mes "[アントニオ・ジュニア]";
+		mes "弱いモンスター相手には容赦するな、強いモンスターからは距離を置け。";
+		next;
+		mes "[アントニオ・ジュニア]";
+		mes "さあ、この^0000FF地下トンネル^000000を通ってローグギルドまで歩いてもらう。";
+		next;
+		mes "[アントニオ・ジュニア]";
+		mes "モンスターもいるが、強者は避けて弱者には容赦しなければ問題ないはずだ。";
+		next;
+		if (select("行こう！:ま、待ってくれ～") == 1) {
+			mes "[アントニオ・ジュニア]";
+			mes "この試験で";
+			mes "失敗しないことを願うぜ。";
+			mes "合格しないと";
+			mes "ローグにはなれないからな…";
+			close2;
+			warp "in_rogue",15,105;
+			set ROGUE_Q,14;
+			changequest 2023,2026;
+			end;
+		}
+		mes "[アントニオ・ジュニア]";
+		mes "お前と";
+		mes "のんびりしてる暇は";
+		mes "ねえんだ。さっさと";
+		mes "準備して";
+		mes "試験を受けろ。";
+		close;
+	}
+	else if (ROGUE_Q == 14) {
+		mes "[アントニオ・ジュニア]";
+		mes "失敗したのか…？";
+		mes "まあ、そういうこともある。";
+		mes "もう一度";
+		mes "挑戦するか？";
+		next;
+		if (select("再挑戦する:キャンセル") == 1) {
+			mes "[アントニオ・ジュニア]";
+			mes "いいか、俺は";
+			mes "お前に恩を売ってるんだぞ…";
+			mes "ローグになるまで";
+			mes "戻ってくるなよ。";
+			close2;
+			warp "in_rogue",15,105;
+			end;
+		}
+		mes "[アントニオ・ジュニア]";
+		mes "お前と";
+		mes "のんびりしてる暇は";
+		mes "ねえんだ。さっさと";
+		mes "準備して";
+		mes "試験を受けろ。";
+		close;
+	}
+	else if (BaseJob != Job_Rogue) {
+		mes "あん…？";
+		mes "誰だお前！？";
+		mes "ローグギルドの";
+		mes "者じゃないな！！";
+		next;
+		mes "[アントニオ・ジュニア]";
+		mes "俺を殺しに来たのか？！そうはさせるか！！さあ、かかってこい！お前の目玉をえぐり出してやりゃ、もう戦えないだろうな！";
+		close;
+	}
+	else {
+		mes "[アントニオ・ジュニア]";
+		mes "よお、調子はどうだ？";
+		mes "気楽にして、";
+		mes "行く前に一息つけよ。";
+		close;
+	}
+}
+
+in_rogue,370,320,0	script	quest_out	45,1,1,{
+OnTouch_:
+	set ROGUE_Q,16;
+	warp "in_rogue",378,113;
+	end;
+}
+
+in_rogue,15,184,0	script	mob_rogue#1	-1,8,1,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",14,187,"Zombie",1015,1,"mob_rogue#1::OnMyMobDead";
+		monster "in_rogue",15,188,"Zombie",1015,1,"mob_rogue#1::OnMyMobDead";
+		monster "in_rogue",16,189,"Zombie",1015,1,"mob_rogue#1::OnMyMobDead";
+		monster "in_rogue",17,187,"Zombie",1015,1,"mob_rogue#1::OnMyMobDead";
+		monster "in_rogue",18,188,"Zombie",1015,1,"mob_rogue#1::OnMyMobDead";
+		monster "in_rogue",19,189,"Zombie",1015,1,"mob_rogue#1::OnMyMobDead";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#1::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,15,273,0	script	mob_rogue#2	-1,8,1,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",15,276,"Mummy",1041,1,"mob_rogue#2::OnMyMobDead";
+		monster "in_rogue",13,276,"Mummy",1041,1,"mob_rogue#2::OnMyMobDead";
+		monster "in_rogue",11,276,"Mummy",1041,1,"mob_rogue#2::OnMyMobDead";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#2::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,15,333,0	script	mob_rogue#3	-1,8,1,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",15,336,"Zombie",1015,1,"mob_rogue#3::OnMyMobDead";
+		monster "in_rogue",15,336,"Zombie",1015,1,"mob_rogue#3::OnMyMobDead";
+		monster "in_rogue",15,336,"Zombie",1015,1,"mob_rogue#3::OnMyMobDead";
+		monster "in_rogue",15,336,"Zombie",1015,1,"mob_rogue#3::OnMyMobDead";
+		donpcevent "mob_rogue#4::OnDisable";
+		donpcevent "mob_rogue#7::OnDisable";
+		donpcevent "mob_rogue#8::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#3::OnMyMObDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,39,341,0	script	mob_rogue#4	-1,1,8,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",39,341,"Mummy",1041,1,"mob_rogue#4::OnMyMobDead";
+		monster "in_rogue",40,341,"Ghoul",1036,1,"mob_rogue#4::OnMyMobDead";
+		monster "in_rogue",41,341,"Abysmal Knight",1219,1,"mob_rogue#4::OnMyMobDead";
+		monster "in_rogue",42,341,"Mummy",1041,1,"mob_rogue#4::OnMyMobDead";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#4::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,102,334,0	script	mob_rogue#5	-1,1,4,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",92,334,"Khalitzburg",1132,1,"mob_rogue#5::OnMyMobDead";
+		donpcevent "mob_rogue#1::OnDisable";
+		donpcevent "mob_rogue#2::OnDisable";
+		donpcevent "mob_rogue#3::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#5::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,58,309,0	script	mob_rogue#6	-1,4,1,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",57,301,"Khalitzburg",1132,1,"mob_rogue#6::OnMyMobDead";
+		donpcevent "mob_rogue#1::OnDisable";
+		donpcevent "mob_rogue#2::OnDisable";
+		donpcevent "mob_rogue#3::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#6::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,101,264,0	script	mob_rogue#7	-1,5,5,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",101,264,"Abysmal Knight",1219,1,"mob_rogue#7::OnMyMobDead";
+		monster "in_rogue",102,264,"Abysmal Knight",1219,1,"mob_rogue#7::OnMyMobDead";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#7::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,140,312,0	script	mob_rogue#8	-1,5,5,{
+OnTouch_:
+	if (BaseJob == Job_Thief)
+		monster "in_rogue",140,312,"Abysmal Knight",1219,1,"mob_rogue#8::OnMyMobDead";
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#8::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,139,246,0	script	mob_rogue#9	-1,4,4,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",139,246,"Zombie",1015,1,"mob_rogue#9::OnMyMobDead";
+		monster "in_rogue",149,246,"Zombie",1015,1,"mob_rogue#9::OnMyMobDead";
+		monster "in_rogue",140,246,"Zombie",1015,1,"mob_rogue#9::OnMyMobDead";
+		monster "in_rogue",141,246,"Zombie",1015,1,"mob_rogue#9::OnMyMobDead";
+		monster "in_rogue",150,246,"Zombie",1015,1,"mob_rogue#9::OnMyMobDead";
+		monster "in_rogue",151,246,"Zombie",1015,1,"mob_rogue#9::OnMyMobDead";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#9::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,197,249,0	script	mob_rogue#10	-1,1,8,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",176,211,"Ghoul",1036,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",176,212,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",176,213,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",177,214,"Abysmal Knight",1219,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",177,211,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",177,212,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",177,213,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",177,214,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",178,211,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",178,212,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",178,213,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",178,214,"Archer Skeleton",1016,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",179,211,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",179,212,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",179,213,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		monster "in_rogue",179,214,"Zombie",1015,1,"mob_rogue#10::OnMyMobDead";
+		donpcevent "mob_rogue#4::OnDisable";
+		donpcevent "mob_rogue#5::OnDisable";
+		donpcevent "mob_rogue#6::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#10::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,96,205,0	script	mob_rogue#11	-1,1,8,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		donpcevent "mob_rogue#7::OnDisable";
+		donpcevent "mob_rogue#8::OnDisable";
+		donpcevent "mob_rogue#9::OnDisable";
+		donpcevent "mob_rogue#10::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+}
+
+in_rogue,86,187,0	script	mob_rogue#12	-1,1,8,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",90,187,"Mummy",1041,1,"mob_rogue#12::OnMyMobDead";
+		monster "in_rogue",90,183,"Mummy",1041,1,"mob_rogue#12::OnMyMobDead";
+		monster "in_rogue",90,190,"Mummy",1041,1,"mob_rogue#12::OnMyMobDead";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#12::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,223,187,0	script	mob_rogue#13	-1,1,8,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",236,186,"Abysmal Knight",1219,1,"mob_rogue#13::OnMyMobDead";
+		monster "in_rogue",238,186,"Abysmal Knight",1219,1,"mob_rogue#13::OnMyMobDead";
+		monster "in_rogue",234,186,"Abysmal Knight",1219,1,"mob_rogue#13::OnMyMobDead";
+		donpcevent "mob_rogue#12::OnDisable";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#13::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,233,207,0	script	mob_rogue#14	-1,8,3,{
+OnTouch_:
+	if (BaseJob == Job_Thief)
+		donpcevent "mob_rogue#13::OnDisable";
+	else
+		warp "mag_dun02",181,176;
+	end;
+}
+
+in_rogue,244,319,0	script	mob_rogue#15	-1,1,8,{
+OnTouch_:
+	if (BaseJob == Job_Thief) {
+		monster "in_rogue",240,319,"Mummy",1041,1,"mob_rogue#15::OnMyMobDead";
+		monster "in_rogue",259,319,"Archer Skeleton",1016,1,"mob_rogue#15::OnMyMobDead";
+		monster "in_rogue",259,320,"Ghoul",1036,1,"mob_rogue#15::OnMyMobDead";
+		monster "in_rogue",240,319,"Mummy",1041,1,"mob_rogue#15::OnMyMobDead";
+		monster "in_rogue",259,319,"Archer Skeleton",1016,1,"mob_rogue#15::OnMyMobDead";
+		monster "in_rogue",259,320,"Ghoul",1036,1,"mob_rogue#15::OnMyMobDead";
+	}
+	else
+		warp "mag_dun02",181,176;
+	end;
+
+OnDisable:
+	killmonster "in_rogue","mob_rogue#15::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	end;
+}
+
+in_rogue,334,319,0	script	mob_rogue#16	-1,8,8,{
+OnTouch_:
+	if (BaseJob == Job_Thief)
+		donpcevent "mob_rogue#15::OnDisable";
+	else
+		warp "mag_dun02",181,176;
+	end;
+}
+
+in_rogue,3,3,0	script	resetter#rogue	-1,{
+OnTimer500000:
+	donpcevent "mob_rogue#1::OnDisable";
+	donpcevent "mob_rogue#2::OnDisable";
+	donpcevent "mob_rogue#3::OnDisable";
+	donpcevent "mob_rogue#4::OnDisable";
+	donpcevent "mob_rogue#5::OnDisable";
+	donpcevent "mob_rogue#6::OnDisable";
+	donpcevent "mob_rogue#7::OnDisable";
+	donpcevent "mob_rogue#8::OnDisable";
+	donpcevent "mob_rogue#9::OnDisable";
+	donpcevent "mob_rogue#10::OnDisable";
+	donpcevent "mob_rogue#12::OnDisable";
+	donpcevent "mob_rogue#13::OnDisable";
+	donpcevent "mob_rogue#15::OnDisable";
+	initnpctimer;
+	end;
+
+OnEnable:
+	initnpctimer;
+	end;
+
+OnInit:
+	donpcevent "resetter#rogue::OnEnable";
+	end;
+}
+
+in_rogue,399,286,1	script	スイッチ#rogreset::switch#rogreset	88,{
+	mes "^F08080ジャジャーン～";
+	mes "ローグ転職試験の";
+	mes "モンスターを";
+	mes "リセットしたぞ^000000。";
+	donpcevent "mob_rogue#1::OnDisable";
+	donpcevent "mob_rogue#2::OnDisable";
+	donpcevent "mob_rogue#3::OnDisable";
+	donpcevent "mob_rogue#4::OnDisable";
+	donpcevent "mob_rogue#5::OnDisable";
+	donpcevent "mob_rogue#6::OnDisable";
+	donpcevent "mob_rogue#7::OnDisable";
+	donpcevent "mob_rogue#8::OnDisable";
+	donpcevent "mob_rogue#9::OnDisable";
+	donpcevent "mob_rogue#10::OnDisable";
+	donpcevent "mob_rogue#12::OnDisable";
+	donpcevent "mob_rogue#13::OnDisable";
+	donpcevent "mob_rogue#15::OnDisable";
+	donpcevent "resetter#rogue::OnEnable";
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 1.1 fixed 3 wrong questions, added missing lines [Lupus]
+//= 1.3 Baby Class Support + 40/50 JobLevel Item fix [Lupus]
+//= 1.5 Fixed possible EXP abuse [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//=     2nd Job Quests again. It also guides adv classes where
+//=     to go. [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.1 Removed Duplicates [Silent]
+//= 2.2 Merged JFunc [Lupus]
+//= 2.3 Added a possibility for players doing Meginjyard quest
+//=     to enter Rogue guild as there's a NPC inside [SinSloth]
+//= 2.3a fixed test4 person interaction, let BABY thieves pass
+//=     the test, too [Lupus]
+//============================================================ 

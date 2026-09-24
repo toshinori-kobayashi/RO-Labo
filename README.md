@@ -33,10 +33,10 @@ Windows / Chrome
 | 依存 | 内容 |
 |---|---|
 | jRO `data.grf` | ユーザー所有の正規インストール。読み取り専用で、リポジトリには含めません |
-| AWS | サーバはこの上で稼働します（詳細は `server/docs/OPERATIONS.md` 統合予定パス） |
+| AWS | サーバはこの上で稼働します（詳細は [server/docs/OPERATIONS.md](server/docs/OPERATIONS.md)） |
 | rAthena | commit `e985006171d2eb320ee512a653f4c83aea3d81b6` |
 | roBrowserLegacy | commit `e43b9b2bded117b945ebfd3d7604042546ca5354` |
-| Node.js | 22（portable、`tools/node/`。Phase 2 で `client/` 配下へ移動予定） |
+| Node.js | 22（portable、`tools/node/`。当面このまま、Phase 3 で整理する） |
 
 ## 5. 現在の完成状況
 
@@ -48,48 +48,39 @@ Windows / Chrome
 
 ## 6. 起動方法
 
-サーバは稼働中であることを前提とします。クライアントの起動手順（glue の起動コマンド、アクセス URL）は [client/README.md](client/README.md) を参照してください。
+サーバは稼働中であることを前提とします。クライアントの起動手順（glue の起動コマンド、アクセス URL）は [client/README.md](client/README.md) を参照してください。サーバ運用の入口は [server/README.md](server/README.md) です。
 
 ## 7. どこを直すか
 
 | 直したいもの | 場所 |
 |---|---|
-| UI / 描画 / 入力 | `tools/roBrowserLegacy-src/src/`（Phase 2 で `client/` 配下へ移動予定） |
+| UI / 描画 / 入力 | `client/roBrowserLegacy-src/src/` |
 | ネットワーク文字コード | 同 `src/Utils/CodepageManager.js` ほか、詳細は [client/docs/PATCHES.md](client/docs/PATCHES.md) |
-| 配信・中継 | `tools/ro-glue/server.mjs`（Phase 2 で `client/ro-glue/` へ移動予定） |
+| 配信・中継 | `client/ro-glue/server.mjs` |
 | 接続先・PACKETVER | `client/robrowser/Config.local.js` |
-| NPC 台詞・独自 NPC | `server/app/rathena/overlay-utf8/npc/custom/jp/`（統合予定パス） |
-| 倍率・char / login 設定 | `server/app/rathena/conf/import/`（統合予定パス） |
-| Mob 名 | `server/app/rathena/overlay-utf8/db/import/mob_db.yml`（統合予定パス） |
-| アイテム・モンスターの性能、ドロップ表 | `server/app/rathena/overlay-utf8/db/import/`（統合予定パス。上流の db は無改変で、import 側の YAML で上書きする） |
+| NPC 台詞・独自 NPC | [server/app/rathena/overlay-utf8/npc/custom/jp/](server/app/rathena/overlay-utf8/npc/custom/jp/) |
+| 倍率・char / login 設定 | [server/app/rathena/conf/import/](server/app/rathena/conf/import/) |
+| Mob 名 | [server/app/rathena/overlay-utf8/db/import/mob_db.yml](server/app/rathena/overlay-utf8/db/import/mob_db.yml) |
+| アイテム・モンスターの性能、ドロップ表 | [server/app/rathena/overlay-utf8/db/import/](server/app/rathena/overlay-utf8/db/import/)（上流の db は無改変で、import 側の YAML で上書きする） |
 | クライアントの再ビルド | [client/docs/BUILD.md](client/docs/BUILD.md) |
-| インフラ | `server/terraform/`（統合予定パス） |
-| デプロイ | `server/docs/OPERATIONS.md`（統合予定パス） |
+| インフラ | [server/terraform/](server/terraform/) |
+| デプロイ | [server/docs/OPERATIONS.md](server/docs/OPERATIONS.md) |
 
-`server/` は Phase 2 で `ro-server` を丸ごと統合する予定のパスです。現時点ではサーバ担当のローカルリポジトリ `ro-server/` に、同名のパス構成で存在します。
+`server/` はサーバ側リポジトリを丸ごと統合したもの。Terraform state・`.env`・バックアップは Git 管理外で運用者の Mac にのみ存在する。
 
-## 8. リポジトリ構成
-
-Phase 1 時点（実際の位置）:
+## 8. 現在の構成
 
 ```
 RO-Labo/
 ├─ README.md
 ├─ LICENSE / NOTICE.md
 ├─ docs/ARCHITECTURE.md, CURRENT_STATUS.md
-├─ client/robrowser/ clientdata/ data/
-├─ notes/*.md（HISTORICAL）
-├─ original/README.txt（HISTORICAL）
-└─ tools/ro-glue/ roBrowserLegacy-src/ scripts/
+├─ client/README.md docs/ ro-glue/ roBrowserLegacy-src/ robrowser/ clientdata/ scripts/
+├─ notes/archive/*.md（HISTORICAL）
+└─ server/README.md app/ terraform/ scripts/ tools/ docs/ backups/
 ```
 
-Phase 2 以降の移動予定:
-
-```
-client/{ro-glue,roBrowserLegacy-src,scripts,docs}/  <- tools/ から移動
-server/                                              <- ro-server を統合（公開範囲の判断後）
-notes/archive/                                       <- notes/ の旧文書を移動
-```
+Phase 3 では、Windows 側未追跡の `tools/node/` の扱いを整理する予定です。
 
 ## 9. ドキュメント一覧と SoT
 
@@ -98,15 +89,15 @@ notes/archive/                                       <- notes/ の旧文書を�
 | クライアント実装 | [client/README.md](client/README.md) | [client/docs/GLUE.md](client/docs/GLUE.md)、[PATCHES.md](client/docs/PATCHES.md)、[BUILD.md](client/docs/BUILD.md) |
 | 全体アーキテクチャ・境界パラメータ・文字コード境界 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | — |
 | 現在地（PASS / PARTIAL / TODO / OUT OF SCOPE） | [docs/CURRENT_STATUS.md](docs/CURRENT_STATUS.md) | — |
-| サーバ仕様・設定値 | `server/docs/SPEC.md`（統合予定パス） | — |
-| サーバ運用・デプロイ | `server/docs/OPERATIONS.md`（統合予定パス） | — |
-| クライアント方式の設計判断 | [notes/CLIENT_STRATEGY.md](notes/CLIENT_STRATEGY.md)（HISTORICAL） | — |
-| サーバ側の設計判断 | `server/docs/DESIGN.md` §7（統合予定パス） | `server/docs/CHANGELOG.md`（経緯） |
+| サーバ仕様・設定値 | [server/docs/SPEC.md](server/docs/SPEC.md) | — |
+| サーバ運用・デプロイ | [server/docs/OPERATIONS.md](server/docs/OPERATIONS.md) | — |
+| クライアント方式の設計判断 | [notes/archive/CLIENT_STRATEGY.md](notes/archive/CLIENT_STRATEGY.md)（HISTORICAL） | — |
+| サーバ側の設計判断 | [server/docs/DESIGN.md](server/docs/DESIGN.md) §7 | [server/docs/CHANGELOG.md](server/docs/CHANGELOG.md)（経緯） |
 | ライセンス | [LICENSE](LICENSE) | [NOTICE.md](NOTICE.md) |
 
 ## 10. 注意
 
-- `tools/roBrowserLegacy-src/AGENTS.md` などは上流 roBrowserLegacy 由来のファイルです。本プロジェクトの指示ではありません。
+- `client/roBrowserLegacy-src/AGENTS.md` などは上流 roBrowserLegacy 由来のファイルです。本プロジェクトの指示ではありません。
 - `C:\Gravity\Ragnarok` はユーザー所有の正規インストールで、読み取り専用です。書き込みはしません。
 - パスワードなどの秘密情報は、どの文書にも書きません。
 - サーバはクライアント作業からは変更しません（FREEZE）。変更が必要に見える場合は Server-side Request として報告します。

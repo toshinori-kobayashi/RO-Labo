@@ -1,0 +1,249 @@
+//===== rAthena Script ======================================= 
+//= Archer Job Quest
+//===== By: ================================================== 
+//= kobra_k88; L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.9
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Archer classes
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working.
+//= 1.1 Added instant job change for High Novice [Lupus]
+//= 1.3 Added Baby Class support [Lupus]
+//= 1.4 Optimised and moved first checker to Jfunc1-1 [massdriller]
+//= 1.5 Now saves/restores all quest skills [Lupus]
+//= 1.6 Merged back JFunc [Lupus]
+//= 1.7 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     Arrow reward is now equal to the type sof trunks brought.
+//=     No longer uses function "F_ToHigh"
+//= 1.7a Fixed minor dialogue bug at Grade==25 [Lupus]
+//= 1.8 Fixed mistake in condition check. [L0ne_W0lf]
+//= 1.9 Added Quest Log commands. [L0ne_W0lf]
+//============================================================ 
+//= Japanese overlay: translated strings only (structure identical to upstream). Managed as UTF-8, converted to CP932 at build.
+
+payon_in02,64,71,4	script	アーチャーギルド職員#archer::Archer Guildsman#archer	85,{
+	if (Upper == 1) {
+		if (Class == Job_Novice_High && (ADVJOB == Job_Sniper || ADVJOB == Job_Clown || ADVJOB == Job_Gypsy)) {
+			mes "[アーチャーギルド職員]";
+			mes "おや、見覚えがあるな。";
+			mes "前にもこの試験を";
+			mes "受けたことがあるだろう？";
+			next;
+			mes "[アーチャーギルド職員]";
+			mes "きっとヴァルハラへ行って";
+			mes "生まれ変わってきたんだな。";
+			mes "いやはや、大したものだ！";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[アーチャーギルド職員]";
+				mes "うーん……";
+				mes "アーチャーになるには、まず基本スキルを全部覚えてからおいで。";
+				next;
+				mes "[アーチャーギルド職員]";
+				mes "そうか、また今度な。";
+				close;
+			}
+			mes "[アーチャーギルド職員]";
+			mes "それなら";
+			mes "もう何も言うことはないな。";
+			mes "君ならきっと立派なアーチャーになれる……";
+			next;
+			skill "NV_TRICKDEAD",0,SKILL_PERM;
+			jobchange Job_Archer_high;
+			skill "AC_MAKINGARROW",1,SKILL_PERM;
+			skill "AC_CHARGEARROW",1,SKILL_PERM;
+			mes "[アーチャーギルド職員]";
+			mes "今回は特別な";
+			mes "報酬は用意できないが、わかってくれよ。体には気をつけてな。";
+			close;
+		}
+		else {
+			mes "[アーチャーギルド職員]";
+			mes "おや……？";
+			mes "おい、お前";
+			mes "こんな所で何をしているんだ……？";
+			next;
+			mes "[アーチャーギルド職員]";
+			mes "お前はアーチャー向きじゃないみたいだな。何か他に向いていることがある気がするぞ";
+			mes "そんな感じだ……";
+			close;
+		}
+	}
+	mes "[アーチャーギルド職員]";
+	mes "こんにちは。何か用かい？";
+	next;
+	switch(select("アーチャーになりたい。:必要な条件を教えてほしい。:特に用はない。")) {
+	case 1:
+		if (BaseJob == Job_Archer) {
+			mes "[アーチャーギルド職員]";
+			mes "もう既にアーチャーになっているじゃないか……";
+			close;
+		}
+		else if (BaseJob != Job_Archer && BaseJob != Job_Novice) {
+			mes "[アーチャーギルド職員]";
+			mes "うーん……";
+			mes "あまりノービスには見えないが……";
+			next;
+			mes "[アーチャーギルド職員]";
+			mes "とにかく、お前が何であれ、既に職業に就いているならアーチャーを選ぶことはできないぞ。";
+			close;
+		}
+		if (job_archer_q == 0) {
+			mes "[アーチャーギルド職員]";
+			mes "アーチャーになりたいのか？";
+			mes "それなら、この申込書に記入してくれ。";
+			next;
+			if (select("申し込む。:やめる") == 1) {
+				set job_archer_q,1;
+				setquest 1004;
+				mes "[アーチャーギルド職員]";
+				mes "よし、ここにサインしてくれ。条件を満たしたら転職させてやろう。";
+				next;
+				mes "[アーチャーギルド職員]";
+				mes "もう条件を満たしていると思うなら、今すぐ確認してやってもいいぞ。";
+				mes "準備はいいか？";
+				next;
+				if (select("はい、大丈夫です。:いいえ、まだです。") == 1) {
+					mes "[アーチャーギルド職員]";
+					mes "よし、確認しよう。";
+					next;
+				}
+				else {
+					mes "[アーチャーギルド職員]";
+					mes "わかった。条件を確認したいなら、遠慮なく聞いてくれ。";
+					close;
+				}
+			}
+			else {
+				mes "[アーチャーギルド職員]";
+				mes "まあ、それならいい。";
+				mes "また今度な。";
+				close;
+			}
+		}
+		mes "[アーチャーギルド職員]";
+		mes "君は……" + strcharinfo(0) + "だね？";
+		next;
+		if (!callfunc("F_CanChangeJob")) {
+			mes "[アーチャーギルド職員]";
+			mes "うーん、ジョブレベルが足りないな。もう一度条件を確認してくれ。";
+			next;
+			mes "[アーチャーギルド職員]";
+			mes "ジョブレベルが最低10は必要だ。それに基本スキルも全部覚えておくんだぞ。準備ができたらまた来てくれ。";
+			close;
+		}
+		if (job_archer_q == 1) {
+			set .@archer_item1,countitem(1066) * 5;
+			set .@archer_item2,countitem(1067) * 3;
+			set .@archer_item3,countitem(1068) * 2;
+			set .@archer_item4,countitem(1019);
+			set .@total_archer,.@archer_item1 + .@archer_item2 + .@archer_item3 + .@archer_item4;
+			set .@total_archer2,(((.@archer_item2 + .@archer_item3) * 2) + .@archer_item4);
+			mes "[アーチャーギルド職員]";
+			mes "素晴らしい！";
+			mes "それでは";
+			mes "見せてもらおうか……";
+			next;
+			mes "[アーチャーギルド職員]";
+			mes "弓を作るのに必要な、色々な種類の木の幹の価値を鑑定しよう。";
+			next;
+			if (countitem(1066) == 0 && countitem(1067) == 0 && countitem(1068) == 0 && countitem(1019) == 0) {
+				mes "[アーチャーギルド職員]";
+				mes "うーん……";
+				mes "残念だが、必要な品を何も持ってきていないようだな。鑑定するものが何もない。";
+				close;
+			}
+			mes "[アーチャーギルド職員]";
+			if (countitem(1066) != 0) mes " Sグレード：" + countitem(1066) + "個、評価点：" + .@archer_item1 + "点。";
+			if (countitem(1067) != 0) mes " Aグレード：" + countitem(1067) + "個、評価点：" + .@archer_item2 + "点。";
+			if (countitem(1068) != 0) mes " Bグレード：" + countitem(1068) + "個、評価点：" + .@archer_item3 + "点。";
+			if (countitem(1019) != 0) mes " Cグレード：" + countitem(1019) + "個、評価点：" + .@archer_item4 + "点。";
+			if (.@total_archer < 25) {
+				mes "合計評価点：^FF0000" + .@total_archer + "^000000 / 40";
+				next;
+				mes "[アーチャーギルド職員]";
+				mes "25点未満だと！？最低でも25点は必要だぞ！もっと頑張れ！";
+				close;
+			}
+			else {
+				mes "合計評価点：^0000FF" + .@total_archer + "^000000 / 40";
+				next;
+				mes "[アーチャーギルド職員]";
+				if (.@total_archer > 40) {
+					mes "おお！40点超えとは！";
+					mes "素晴らしい！おめでとう！";
+				}
+				else if (.@total_archer > 30) {
+					mes "30点超えか！よくやった！";
+					mes "おめでとう！";
+				}
+				else {
+					mes "……やれやれ、ギリギリ合格だな……まあ、よくやった。";
+				}
+			}
+			next;
+			mes "[アーチャーギルド職員]";
+			mes "この木の幹は弓の製造部門に回しておこう。条件を満たした以上、すぐにでも転職させてやろう！";
+			if (countitem(1066) != 0) delitem 1066,countitem(1066); //Tree_Of_Archer_1
+			if (countitem(1067) != 0) delitem 1067,countitem(1067); //Tree_Of_Archer_2
+			if (countitem(1068) != 0) delitem 1068,countitem(1068); //Tree_Of_Archer_3
+			if (countitem(1019) != 0) delitem 1019,countitem(1019); //Wooden_Block
+		}
+		next;
+		callfunc "Job_Change",Job_Archer;
+		callfunc "F_ClearJobVar";
+		completequest 1004;
+		mes "[アーチャーギルド職員]";
+		mes "おめでとう！";
+		mes "君は今、アーチャーになった！";
+		next;
+		mes "[アーチャーギルド職員]";
+		mes "もちろん、君の活躍でアーチャーギルドの未来に貢献してくれることを期待しているぞ。";
+		next;
+		mes "[アーチャーギルド職員]";
+		mes "おっと、弓の製造部門から弓が届いたぞ。ほら、受け取ってくれ！君のものだ～";
+		getitem 1702,1; //Bow_
+		getitem 1750,.@total_archer2; //Arrow
+		next;
+		mes "[アーチャーギルド職員]";
+		mes "さあ、行くといい。最高の師に鍛えられたことを誇りに、狩りに励んでくれ！";
+		close;
+	case 2:
+		mes "[アーチャーギルド職員]";
+		mes "アーチャーになるための条件を説明しよう。";
+		if (BaseJob != Job_Novice) {
+			if (BaseJob == Job_Archer) {
+				next;
+				mes "[アーチャーギルド職員]";
+				mes "だが……";
+				mes "君はもうアーチャーじゃないか。とっくに知っているはずだが……";
+			}
+			else {
+				next;
+				mes "[アーチャーギルド職員]";
+				mes "ちょっと待て。君は既に別の職業を選んでいるんだから、これを知る必要はないぞ～";
+			}
+			mes "つまり……そう……条件を教える理由は特にないな……";
+		}
+		next;
+		mes "[アーチャーギルド職員]";
+		mes "まず、ノービスとしてジョブレベル9に到達し、基本スキルを全て覚えている必要がある。";
+		next;
+		mes "[アーチャーギルド職員]";
+		mes "アーチャーには非常に高い集中力と反射神経が求められる。忍耐力のない者は受け入れられない。";
+		next;
+		mes "[アーチャーギルド職員]";
+		mes "^FF0000木の幹^000000も集める必要がある。木の幹には4種類あり、それぞれ品質が異なる。品質に応じて評価点が変わるぞ。";
+		next;
+		mes "[アーチャーギルド職員]";
+		mes "アーチャーになるには、40点満点中^0000FF25^000000点以上の評価点が必要だ。木の幹は木の魔物「ウィロー」から手に入る。ただし、なかなか手強い魔物だから気をつけろ。";
+		close;
+	case 3:
+		close;
+	}
+}
+

@@ -1,0 +1,253 @@
+//===== rAthena Script =======================================
+//= Old Pharmacist
+//===== By: ==================================================
+//= DZeroX
+//===== Current Version: =====================================
+//= 1.4
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Trade in items for potions.
+//= Breakdown of arguments used:
+//= arg(0): Herb required.
+//= arg(1): Zeny cost.
+//= arg(2): Potion given.
+//===== Additional Comments: =================================
+//= 1.0 Fully working. [DZeroX]
+//= 1.0a Minor fixes [Lupus]
+//= 1.1 Added changed the dialogs and name to fit the
+//=     the official information. [DZeroX]
+//= 1.1a Removed .GATs [Lupus]
+//= 1.1b Fixed a bug in Orange Potion creating. Copy&Pasting = bad. [L0ne_W0lf]
+//= 1.2 Added checkweight, and input min/max values. [L0ne_W0lf]
+//= 1.3 Fixed minor condition check bug. (bugreport:597) [L0ne_W0lf]
+//= 1.4 Updated to match AEGIS script. [Kisuka]
+//============================================================
+
+alberta_in,16,28,4	script	年老いた薬剤師::Pharmacist	61,{
+	if (checkweight(1201,1) == 0) {
+		mes "- ちょっと待って！ -";
+		mes "- 今のあなたは -";
+		mes "- 荷物を持ちすぎています。 -";
+		mes "- 少し倉庫に -";
+		mes "- 預けてから来てください。 -";
+		close;
+	}
+	mes "[年老いた薬剤師]";
+	mes "うーむ…";
+	mes "何の用だい…？";
+	next;
+	switch(select("ポーションを作る:世間話をする:調合について聞く:やめておく")) {
+	case 1:
+		if (MaxWeight - Weight < 5000) {
+			mes "[年老いた薬剤師]";
+			mes "そんなに抱えてどうするんだい！";
+			mes "欲張らず、必要な分だけ持っていればいいんだよ！";
+			next;
+			mes "[年老いた薬剤師]";
+			mes "そんなに重いんじゃ、ポーションを渡せないよ…";
+			mes "先に倉庫へ荷物を預けておいで！";
+			close;
+		} else {
+			mes "[年老いた薬剤師]";
+			mes "材料はちゃんと揃っているかい？どれにする？";
+			next;
+			switch(select("赤ポーション:橙ポーション:黄ポーション:白ポーション:青ポーション:緑ポーション:やっぱり何もいらない")) {
+			case 1:
+				callsub L_Making,507,3,501;
+			case 2:
+				mes "[年老いた薬剤師]";
+				if (countitem(507) < countitem(713)) {
+					set .@max,countitem(507);
+				}
+				else if (countitem(508) < countitem(713)) {
+					set .@max,countitem(508);
+				}
+				else {
+					set .@max,countitem(713);
+				}
+				if ((countitem(507) < 1) || (countitem(508) < 1) || (countitem(713) == 0)) {
+					mes "ふん、何しに来たんだい？手ぶらで来るとは図々しいね！";
+					mes "とっとと失せな！";
+					close;
+				}
+				if (Zeny < 3) {
+					mes "ふん、何しに来たんだい？手ぶらで来るとは図々しいね！";
+					mes "とっとと失せな！";
+					close;
+				}
+				mes "いくつだい？";
+				next;
+				switch(select("作れるだけ作る:個数を指定する:やっぱり何もいらない")) {
+				case 1:
+					if ((countitem(507) < .@max) || (countitem(508) < .@max) || (countitem(713) < .@max) || (Zeny < .@max*3)) {
+						mes "[年老いた薬剤師]";
+						mes "何を寝ぼけたことを言ってるんだ？材料も揃っていないのにポーションを作れというのか？！";
+						close;
+					}
+					set Zeny,Zeny-(.@max*5);
+					delitem 507,.@max; //Red_Herb
+					delitem 508,.@max; //Yellow_Herb
+					delitem 713,.@max; //Empty_Bottle
+					getitem 502,.@max; //Orange_Potion
+					break;
+				case 2:
+					mes "[年老いた薬剤師]";
+					mes "では100以下の数を言いな。いらないなら「0」と入力するんだ。今ある材料なら、だいたい"+.@max+"個ぐらい作れるよ。";
+					next;
+					input .@amount,0,101;
+					if (.@amount == 0) {
+						mes "[年老いた薬剤師]";
+						mes "はっきりしないやつだね！";
+						close;
+					}
+					if (.@amount > 100) {
+						mes "[年老いた薬剤師]";
+						mes "耳が遠いのかい？100以下だと言っただろう！";
+						close;
+					}
+					if ((countitem(507) < .@amount) || (countitem(508) < .@amount) || (countitem(713) < .@amount) || (Zeny < .@amount*3)) {
+						mes "[年老いた薬剤師]";
+						mes "何を寝ぼけたことを言ってるんだ？材料も揃っていないのにポーションを作れというのか？！";
+						close;
+					}
+					next;
+					set Zeny,Zeny-(.@amount*5);
+					delitem 507,.@amount; //Red_Herb
+					delitem 508,.@amount; //Yellow_Herb
+					delitem 713,.@amount; //Empty_Bottle
+					getitem 502,.@amount; //Orange_Potion
+					break;
+				case 3:
+					mes "[年老いた薬剤師]";
+					mes "何だと？！";
+					mes "むむむ…";
+					mes "ケッ！";
+					mes "とっとと失せな！";
+					close;
+				}
+				mes "[年老いた薬剤師]";
+				mes "はい、できたよ。持っていきな。ただし、薬の飲み過ぎはよくないからね！";
+				close;
+			case 3:
+				callsub L_Making,508,10,503;
+			case 4:
+				callsub L_Making,509,20,504;
+			case 5:
+				callsub L_Making,510,30,505;
+			case 6:
+				callsub L_Making,511,3,506;
+			case 7:
+				mes "[年老いた薬剤師]";
+				mes "何だと？！";
+				mes "むむむ…";
+				mes "ケッ！";
+				mes "とっとと失せな！";
+				close;
+			}
+		}
+	case 2:
+		mes "[年老いた薬剤師]";
+		mes "薬というのは、人の治癒力を高めてくれるものだ。だがそれにも限度がある…ふう、若い頃を思い出すよ。わしも年をとったもんだ。";
+		next;
+		mes "[年老いた薬剤師]";
+		mes "まあ何にせよ、ポーションはポーションに過ぎん。それ以上でもそれ以下でもないさ。";
+		close;
+	case 3:
+		mes "[年老いた薬剤師]";
+		mes "むうう…";
+		mes "近頃の若いもんは面倒だねぇ。まあ、聞かれたんだから教えてやるとするか。";
+		next;
+		mes "[年老いた薬剤師]";
+		mes "ハーブはそれだけでも効くが、わしの特別な技術とスキルでポーションに仕立てれば、効果は段違いになるんだよ。";
+		next;
+		mes "[年老いた薬剤師]";
+		mes "熱心に、礼儀正しく頼めば作ってやろう。ただしタダじゃないよ…といっても、ほんの少しの手間賃だから心配はいらないさ。";
+		next;
+		mes "[年老いた薬剤師]";
+		mes "赤ポーション - ^0098E5赤ハーブ2個、空き瓶1個、手数料2Zeny^000000";
+		mes "橙ポーション - ^0098E5赤ハーブ1個、黄ハーブ1個、空き瓶1個、手数料5Zeny^000000";
+		mes "黄ポーション - ^0098E5黄ハーブ2個、空き瓶1個、手数料10Zeny^000000";
+		next;
+		mes "[年老いた薬剤師]";
+		mes "白ポーション - ^0098E5白ハーブ2個、空き瓶1個、手数料20Zeny^000000";
+		mes "青ポーション - ^0098E5青ハーブ2個、空き瓶1個、手数料30Zeny^000000";
+		mes "緑ポーション - ^0098E5緑ハーブ2個、空き瓶1個、手数料3Zeny^000000";
+		close;
+	case 4:
+		mes "[年老いた薬剤師]";
+		mes "つまらんやつだね。言いたいことがあるならさっさと言いな！";
+		close;
+	}
+	
+L_Making:
+	.@item_req = getarg(0);
+	.@req_amount = getarg(1);
+
+	mes "[年老いた薬剤師]";
+	if ((countitem(.@item_req)/2) < countitem(713)) {
+		.@max = countitem(.@item_req) /2;
+	} else {
+		.@max = countitem(713);
+	}
+	if (countitem(.@item_req) < 2 || countitem(713) == 0) {
+		mes "ふん、何しに来たんだい？手ぶらで来るとは図々しいね！";
+		mes "とっとと失せな！";
+		close;
+	}
+	if (Zeny < 3) {
+		mes "ふん、何しに来たんだい？手ぶらで来るとは図々しいね！";
+		mes "とっとと失せな！";
+		close;
+	}
+	mes "いくつだい？";
+	next;
+	switch(select("作れるだけ作る:個数を指定する:やっぱり何もいらない")) {
+	case 1:
+		if ((countitem(.@item_req) < .@max*2) || countitem(713) < .@max || (Zeny < .@max*.@req_amount)) {
+			mes "[年老いた薬剤師]";
+			mes "何を寝ぼけたことを言ってるんだ？材料も揃っていないのにポーションを作れというのか？！";
+			close;
+		}
+		Zeny = Zeny - (.@max*.@req_amount);
+		delitem .@item_req,.@max*2;
+		delitem 713,.@max; //Empty_Bottle
+		getitem getarg(2),.@max; 
+		break;
+	case 2:
+		mes "[年老いた薬剤師]";
+		mes "では100以下の数を言いな。いらないなら「0」と入力するんだ。今ある材料なら、だいたい"+.@max+"個ぐらい作れるよ。";
+		next;
+		input .@amount;
+		if (.@amount == 0) {
+			mes "[年老いた薬剤師]";
+			mes "はっきりしないやつだね！";
+			close;
+		}
+		if (.@amount > 100) {
+			mes "[年老いた薬剤師]";
+			mes "耳が遠いのかい？100以下だと言っただろう！";
+			close;
+		}
+		if ((countitem(.@item_req) < .@amount*2) || countitem(713) < .@amount || (Zeny < .@amount*.@req_amount)) {
+			mes "[年老いた薬剤師]";
+			mes "何を寝ぼけたことを言ってるんだ？材料も揃っていないのにポーションを作れというのか？！";
+			close;
+		}
+		Zeny = Zeny - (.@max*.@req_amount);
+		delitem .@item_req,.@amount*2;
+		delitem 713,.@amount; //Empty_Bottle
+		getitem getarg(2),.@amount; 
+		break;
+	case 3:
+		mes "[年老いた薬剤師]";
+		mes "何だと？！";
+		mes "むむむ…";
+		mes "ケッ！";
+		mes "とっとと失せな！";
+		close;
+	}
+	mes "[年老いた薬剤師]";
+	mes "はい、できたよ。持っていきな。ただし、薬の飲み過ぎはよくないからね！";
+	close;
+}

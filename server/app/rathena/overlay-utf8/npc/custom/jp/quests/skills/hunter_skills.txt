@@ -1,0 +1,377 @@
+//===== rAthena Script ======================================= 
+//= Hunter Skills Quests
+//===== By: ================================================== 
+//= Lupus, Reddozen, Kisuka
+//===== Current Version: ===================================== 
+//= 1.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Quests for skills: Phantasmic Arrow
+//===== Additional Comments: ================================= 
+//= 1.0 for fully working skills only [Lupus]
+//= 1.1 Added more new skill quests for more classes [Lupus]
+//=     Somehow eA engine doesn't let you keep learn't skill V_V'
+//= 1.2 Added to correct locations, correct NPC's, fixed
+//=     some of the items required and made them into real
+//=     quests. [Reddozen] 
+//= 1.3 Fixed bugs and minor typos. Optimized [Lupus]
+//= 1.3a fixed an item ID typo, thx 2Spiritual Kid
+//= 1.3b Splitted into different files [DracoRPG]
+//= 1.3c Fixed some typos [IVBela]
+//= 1.3d Changed NPC Name to the official [Lupus]
+//= 1.4 Moved Arpesto from tu_archer and added his script. [Kisuka]
+//============================================================
+
+pay_arche,109,169,3	script	アルペスト::Arpesto	712,{
+	if (BaseJob == Job_Hunter) {
+		if (qskill_hunter == 100) {
+			if (getskilllv("HT_PHANTASMIC")) {
+				mes "[アルペスト]";
+				mes "いやなに、さっき";
+				mes "お前さんの攻撃が";
+				mes "うっかり掠っただけで、あんなに騒いですまなかったな。ちょうど熱心に";
+				mes "鍛錬しすぎて、腹も減っておって、疲れも溜まっとってな・・・";
+				next;
+				mes "[レイディン・コース]";
+				mes "はっ！　認めなよ、";
+				mes "じいさん！　ただ";
+				mes "ビビっただけだろ！　俺なら";
+				mes "そんなこと・・・";
+				emotion ET_KIK, getnpcid(0, "Reidin Corse#tu");
+				next;
+				mes "[アルペスト]";
+				mes "この";
+				mes "青二才が！";
+				mes "何を言っているのか";
+				mes "さっぱり分からんな！";
+				close;
+			} else {
+				mes "[アルペスト]";
+				mes "どこかで";
+				mes "見た顔だな、";
+				mes "確か。レイディン、";
+				mes "お前この男を覚えているか？";
+				next;
+				mes "[レイディン・コース]";
+				mes "勘弁してくれよ、";
+				mes "アーチャーもハンターも";
+				mes "スナイパーも何百人と見てきて・・・";
+				mes "全員なんて覚えてられるかよ。";
+				mes "でもまあ、こいつは";
+				mes "悪くないやつだよ。俺を信じろって！";
+				next;
+				mes "[アルペスト]";
+				mes "よかろう、よかろう。";
+				mes "レイディンが太鼓判を押すなら";
+				mes "本物ということだろう。";
+				mes "それなら、わしの秘技";
+				mes "「ファランクス」を";
+				mes "教えてやろうではないか。";
+				next;
+				mes "[レイディン・コース]";
+				mes "待て待て。こいつは";
+				mes "復習しに来ただけだろ。";
+				mes "ああ、確かこいつ";
+				mes "前にもこの技を";
+				mes "習いに来てたよな。そういう";
+				mes "勘がするんだよな。";
+				next;
+				mes "[アルペスト]";
+				mes "むう、復習だけか。";
+				mes "それなら";
+				mes "タダで教えてやろう・・・";
+				mes "これでもう";
+				mes "「ファランクス」が使えるはずだ。";
+				mes "道中、気をつけて行くのだぞ？";
+				skill "HT_PHANTASMIC",1,SKILL_PERM;
+				close;
+			}
+		}
+		else if (qskill_hunter == 1) {
+			if (countitem(724) > 4 && countitem(7115) > 4 && countitem(537) > 29) {
+				mes "[アルペスト]";
+				mes "ほう？　戻ってきたか？";
+				mes "おお、必要なものは";
+				mes "全部持ってきたのか。よし。";
+				mes "では、いよいよわしの";
+				mes "超極秘の技を見せてやろう・・・";
+				mes "アルペスト流・壱の型！";
+				next;
+				mes "[レイディン・コース]";
+				mes "待て！　待てって・・・";
+				mes "最初は";
+				mes "「アルペスト流・参の型」って";
+				mes "言ってなかったか？";
+				emotion ET_SWEAT, getnpcid(0, "Reidin Corse#tu");
+				next;
+				mes "[アルペスト]";
+				mes "う、そうだ、アルペスト流・";
+				mes "参の型、それで合っておる。";
+				mes "何しろ数が多くてな、";
+				mes "つい・・・";
+				mes "とにかく、お前には";
+				mes "「緊急の矢」を教えてやろう。";
+				next;
+				mes "[レイディン・コース]";
+				mes "おいおい、待てよ！";
+				mes "「緊急の矢」って！？";
+				mes "それ、前に付けてた";
+				mes "古い名前じゃなかったか？";
+				mes "改名したんじゃなかったのかよ？";
+				emotion ET_HUK;
+				next;
+				emotion ET_HUK;
+				mes "[アルペスト]";
+				mes "何を";
+				mes "言って――";
+				next;
+				mes "[アルペスト]";
+				mes "ああ、そうだった。";
+				mes "あの名前は";
+				mes "ダサすぎるという話だったな。";
+				mes "では何と呼んでいたか・・・";
+				mes "「ファランクス」だったか？";
+				emotion ET_THINK;
+				next;
+				mes "[アルペスト]";
+				mes "・・・";
+				mes "・・・・・・";
+				emotion ET_CRY;
+				next;
+				mes "[レイディン・コース]";
+				mes "うーん・・・";
+				mes "うーん・・・・・・";
+				next;
+				mes "[レイディン・コース]";
+				mes "ああ、それだ！";
+				mes "「^3131FFファランクス^000000」の方が";
+				mes "お前が考えたあの名前より";
+				mes "断然カッコいいぜ！";
+				emotion ET_AHA, getnpcid(0, "Reidin Corse#tu");
+				next;
+				mes "[アルペスト]";
+				mes "たまには";
+				mes "役に立つな、レイディン。さて、";
+				mes "本題に戻るとしよう。";
+				mes "わしの誇る技";
+				mes "「ファランクス」を教えてやろう・・・";
+				mes "心と体の準備をせよ！";
+				next;
+				mes "[アルペスト]";
+				mes "ファ――！";
+				mes "ラン――！";
+				mes "ンン――！";
+				mes "クスーッ！";
+				next;
+				mes "[アルペスト]";
+				mes "ファアアアランクスーッ！！";
+				specialeffect EF_FLASHER;
+				specialeffect2 EF_FLASHER;
+				next;
+				mes "[アルペスト]";
+				mes "^333333＊はあはあ＊^000000";
+				mes "よし、特別な技法で";
+				mes "お前の脳に";
+				mes "直接技を教え込んでやった。もう使えるはずだ";
+				mes "から、試してみるがいい。";
+				next;
+				mes "^3355FF＊シュルルルル！＊";
+				mes "＊ドンッ！＊^000000";
+				specialeffect EF_HIT2;
+				emotion ET_HUK;
+				emotion ET_HUK, playerattached();
+				next;
+				mes "[アルペスト]";
+				mes "^333333＊はあはあ＊";
+				mes "＊ゴホゴホ＊";
+				mes "＊ゴホゴホ＊^000000";
+				next;
+				mes "[アルペスト]";
+				mes "なぜワシがァァァ――！？";
+				emotion ET_HUK, getnpcid(0, "Reidin Corse#tu");
+				next;
+				mes "^3355FF＊ドサッ＊^000000";
+				next;
+				mes "[レイディン・コース]";
+				mes "ア、アルペスト、しっかり！";
+				mes "・・・・・・・・・・・・・・・・・・・・・・・・・・・";
+				mes "って、おいおい！　矢は";
+				mes "ちょっと掠っただけだろ！";
+				mes "大袈裟だなあ。";
+				next;
+				mes "[レイディン・コース]";
+				mes "まあ、アルペストのことは";
+				mes "気にするな。ただの";
+				mes "変わり者のじいさんだよ。あとは";
+				mes "俺が面倒みとくから、お前は";
+				mes "その新しい技を";
+				mes "うまく使ってくれよな～";
+				delitem 724,5; //Cardinal_Jewel_
+				delitem 7115,5; //Harpy's_Feather
+				delitem 537,30; //Pet_Food
+				set qskill_hunter,100;
+				skill "HT_PHANTASMIC",1,SKILL_PERM;
+				close;
+			} else {
+				mes "[アルペスト]";
+				mes "さっさと";
+				mes "^3131FF呪われたルビー5個^000000、";
+				mes "^3131FFペットフード30個^000000、";
+				mes "^3131FFハーピーの羽根5個^000000を";
+				mes "持ってくるのだ。そうすれば";
+				mes "「緊急の矢」を教えてやろう。";
+				close;
+			}
+		}
+		else {
+			if (getskilllv("HT_PHANTASMIC")) {
+				mes "[アルペスト]";
+				mes "おお、上出来だ。";
+				mes "さっき見せてくれたように、";
+				mes "わしの教え方は";
+				mes "完璧だったな。だが次は";
+				mes "その技、殴られて然るべき";
+				mes "相手にだけ使うのだぞ？　よし。";
+				set qskill_hunter,100;
+				close;
+			}
+			if (BaseJob == Job_Hunter && JobLevel < 40) {
+				mes "[アルペスト]";
+				mes "マスターに";
+				mes "寄越されたのか？　うーむ・・・";
+				mes "見たところ、まだまだ";
+				mes "青いな。今わしが教えられることは無さそうだ。";
+				next;
+				mes "[アルペスト]";
+				mes "もう少し鍛錬を積んで";
+				mes "経験を";
+				mes "重ねるのだな。狩りの腕が";
+				mes "もっと上がれば、わしが";
+				mes "ハンターやスナイパーたちに";
+				mes "教えてきたことも分かるはずだ。";
+				close;
+			} else {
+				mes "[アルペスト]";
+				mes "マスターの遣いか？";
+				mes "ふむ、確かにお前は";
+				mes "ハゲタカのように鋭い、";
+				mes "真のハンターの目をしておる。";
+				mes "わしの秘技";
+				mes "「アルペスト流・参の型」を学ぶ資格がありそうだ・・・";
+				next;
+				mes "[アルペスト]";
+				mes "メデューサと戦いながら";
+				mes "矢が尽きて困っていた時に";
+				mes "編み出した";
+				mes "便利な技での、わしは単純に";
+				mes "「^3131FF緊急の矢^000000」と呼んでおる。";
+				mes "学んでみる気はあるか？";
+				next;
+				switch(select("はい、ぜひ！:うーん・・・")) {
+				case 1:
+					mes "[アルペスト]";
+					mes "よかろう、よかろう。もちろん";
+					mes "この技の価値が分かるなら";
+					mes "断れるはずもあるまい。";
+					mes "とはいえ、教えるからには";
+					mes "少々の礼金をもらいたいところでな。";
+					next;
+					mes "[アルペスト]";
+					mes "同じハンターの仲間から";
+					mes "礼金を取るのは";
+					mes "心苦しいのだが、この技を";
+					mes "編み出すのには多大な犠牲と";
+					mes "想像を絶する";
+					mes "血が流れたのでな・・・";
+					next;
+					mes "[レイディン・コース]";
+					mes "おい！　嘘つけ！";
+					mes "お前がその技を";
+					mes "適当に思いついたとき、";
+					mes "俺もその場にいたぞ！　暇つぶしに";
+					mes "弓を振り回して";
+					mes "遊んでただけじゃねえか！";
+					emotion ET_KIK, getnpcid(0, "Reidin Corse#tu");
+					next;
+					emotion ET_HUK;
+					mes "[アルペスト]";
+					mes "^333333＊コホン＊^000000　よせ、レイディン、";
+					mes "根も葉もない噂を";
+					mes "真に受けるでない。エダガとの";
+					mes "幾多の戦いの末にこそ、わしは";
+					mes "「緊急の矢」を";
+					mes "編み出し、極めたのだ。";
+					next;
+					mes "[レイディン・コース]";
+					mes "^333333＊チッチッ＊^000000　へえ。";
+					mes "さっきは";
+					mes "メデューサと戦ってて";
+					mes "編み出したって言ってなかったか？";
+					next;
+					mes "[アルペスト]";
+					mes "と、とにかく、この技を";
+					mes "教える礼として";
+					mes "以下の品を";
+					mes "持ってくるがいい。";
+					next;
+					mes "[アルペスト]";
+					mes "持ってきてほしいのは";
+					mes "^3131FF呪われたルビー5個^000000、";
+					mes "^3131FFペットフード30個^000000、";
+					mes "^3131FFハーピーの羽根5個^000000を";
+					mes "揃えて持ってくるのだ。";
+					mes "そうすれば教えてやろう。";
+					next;
+					mes "[レイディン・コース]";
+					mes "ペットフード30個？";
+					mes "そんなに何に";
+					mes "使うんだよ？";
+					next;
+					mes "[アルペスト]";
+					mes "わ、わしの・・・";
+					mes "ファルコンの";
+					mes "餌に";
+					mes "使うのだ。";
+					next;
+					mes "[レイディン・コース]";
+					mes "・・・";
+					mes "・・・・・・";
+					mes "・・・・・・・・・";
+					mes "・・・そうかい。";
+					emotion ET_THINK, getnpcid(0, "Reidin Corse#tu");
+					set qskill_hunter,1;
+					close;
+				case 2:
+					mes "[アルペスト]";
+					mes "まあ、それが";
+					mes "お前の判断ならいい。だが";
+					mes "遅かれ早かれ";
+					mes "わしの技が";
+					mes "必要になるはずだ。気が変わったら";
+					mes "また来るがいい。";
+					close;
+				}
+			}
+		}
+	} else {
+		mes "[アルペスト]";
+		mes "空はまだ晴れておるが、近頃この地を吹き抜ける風には、どこか不穏な気配が漂っておる。";
+		next;
+		emotion ET_HNG, getnpcid(0, "Reidin Corse#tu");
+		mes "[レイディン・コース]";
+		mes "つまり・・・";
+		mes "何か危険が来るってことか？";
+		mes "はっ！　落ち着けよ、じいさん～";
+		mes "俺に任せとけって！";
+		next;
+		emotion ET_PROFUSELY_SWEAT;
+		mes "[アルペスト]";
+		mes "ほほう・・・";
+		mes "元気があるのは良いが";
+		mes "生意気なものだ。今どきの若者は・・・";
+		close;
+	}
+}
+

@@ -1,0 +1,159 @@
+#!/bin/bash
+# Amazon Linux 2023 用ブートストラップ。冪等に書いてあるので再実行しても安全。
+# ログは /var/log/cloud-init-output.log に残る。
+set -euxo pipefail
+
+MOUNT_POINT="${mount_point}"
+DATA_VOLUME_ID="${data_volume_id}"
+COMPOSE_VERSION="${docker_compose_version}"
+BUILDX_VERSION="${docker_buildx_version}"
+AWS_DEFAULT_REGION="${region}"
+export AWS_DEFAULT_REGION
+
+# ---------------------------------------------------------------------------
+# 0. リージョンをログイン環境にも反映（aws CLI / awslogs driver の確認用）
+# ---------------------------------------------------------------------------
+cat >/etc/profile.d/aws-region.sh <<PROFILE
+export AWS_REGION="$${AWS_DEFAULT_REGION}"
+export AWS_DEFAULT_REGION="$${AWS_DEFAULT_REGION}"
+PROFILE
+chmod 0644 /etc/profile.d/aws-region.sh
+
+# ---------------------------------------------------------------------------
+# 1. パッケージと Docker
+#    SSM Agent / EC2 Instance Connect は AL2023 に同梱されているので何もしない
+# ---------------------------------------------------------------------------
+dnf -y install docker git rsync xfsprogs unzip
+systemctl enable --now docker
+usermod -aG docker ec2-user
+
+# ---------------------------------------------------------------------------
+# 2. Docker Compose plugin（AL2023 のリポジトリには無いので GitHub Releases から）
+#    バージョン固定 + checksums.txt で sha256 検証してから配置する
+# ---------------------------------------------------------------------------
+PLUGIN_DIR="/usr/local/lib/docker/cli-plugins"
+PLUGIN_BIN="$${PLUGIN_DIR}/docker-compose"
+COMPOSE_ASSET="docker-compose-linux-x86_64"
+COMPOSE_BASE_URL="https://github.com/docker/compose/releases/download/$${COMPOSE_VERSION}"
+
+install -d -m 0755 "$${PLUGIN_DIR}"
+
+INSTALLED_VERSION=""
+if [ -x "$${PLUGIN_BIN}" ]; then
+  INSTALLED_VERSION="$("$${PLUGIN_BIN}" version --short 2>/dev/null || true)"
+fi
+
+if [ "v$${INSTALLED_VERSION#v}" != "$${COMPOSE_VERSION}" ]; then
+  WORK="$(mktemp -d)"
+  curl -fsSL --retry 5 --retry-delay 5 -o "$${WORK}/$${COMPOSE_ASSET}" "$${COMPOSE_BASE_URL}/$${COMPOSE_ASSET}"
+  curl -fsSL --retry 5 --retry-delay 5 -o "$${WORK}/checksums.txt" "$${COMPOSE_BASE_URL}/checksums.txt"
+  # checksums.txt は "<sha256> *<filename>" 形式（バイナリモードの * 付き）
+  grep -E "[[:space:]][*]?$${COMPOSE_ASSET}$" "$${WORK}/checksums.txt" > "$${WORK}/compose.sha256"
+  if [ "$(wc -l < "$${WORK}/compose.sha256")" -ne 1 ]; then
+    echo "checksum entry for $${COMPOSE_ASSET} not found in checksums.txt" >&2
+    exit 1
+  fi
+  ( cd "$${WORK}" && sha256sum -c compose.sha256 )
+  install -m 0755 "$${WORK}/$${COMPOSE_ASSET}" "$${PLUGIN_BIN}"
+  rm -rf "$${WORK}"
+fi
+docker compose version
+
+# ---------------------------------------------------------------------------
+# 2b. Docker Buildx plugin
+#     Compose v5 の build は buildx >= 0.17 を要求するが、AL2023 の docker パッケージに
+#     同梱される /usr/libexec/docker/cli-plugins/docker-buildx は 0.12 系で古い。
+#     /usr/local/lib/docker/cli-plugins は CLI の探索順で /usr/libexec より優先されるので、
+#     そこへ新しい buildx を置き、同梱版を上書きせずに差し替える。
+#     取得方法は compose と同じ（バージョン固定 + checksums.txt で sha256 検証）。
+# ---------------------------------------------------------------------------
+BUILDX_BIN="$${PLUGIN_DIR}/docker-buildx"
+BUILDX_ASSET="buildx-$${BUILDX_VERSION}.linux-amd64"
+BUILDX_BASE_URL="https://github.com/docker/buildx/releases/download/$${BUILDX_VERSION}"
+
+INSTALLED_BUILDX=""
+if [ -x "$${BUILDX_BIN}" ]; then
+  INSTALLED_BUILDX="$("$${BUILDX_BIN}" version 2>/dev/null | awk '{print $2}' || true)"
+fi
+
+if [ "$${INSTALLED_BUILDX}" != "$${BUILDX_VERSION}" ]; then
+  WORK="$(mktemp -d)"
+  curl -fsSL --retry 5 --retry-delay 5 -o "$${WORK}/$${BUILDX_ASSET}" "$${BUILDX_BASE_URL}/$${BUILDX_ASSET}"
+  curl -fsSL --retry 5 --retry-delay 5 -o "$${WORK}/checksums.txt" "$${BUILDX_BASE_URL}/checksums.txt"
+  grep -E "[[:space:]][*]?$${BUILDX_ASSET}$" "$${WORK}/checksums.txt" > "$${WORK}/buildx.sha256"
+  if [ "$(wc -l < "$${WORK}/buildx.sha256")" -ne 1 ]; then
+    echo "checksum entry for $${BUILDX_ASSET} not found in checksums.txt" >&2
+    exit 1
+  fi
+  ( cd "$${WORK}" && sha256sum -c buildx.sha256 )
+  install -m 0755 "$${WORK}/$${BUILDX_ASSET}" "$${BUILDX_BIN}"
+  rm -rf "$${WORK}"
+fi
+docker buildx version
+
+# ---------------------------------------------------------------------------
+# 3. swap 4GB（アプリのビルド時のメモリピーク対策）
+# ---------------------------------------------------------------------------
+if ! swapon --show=NAME --noheadings | grep -qx "/swapfile"; then
+  if [ ! -f /swapfile ]; then
+    fallocate -l 4G /swapfile || dd if=/dev/zero of=/swapfile bs=1M count=4096
+    chmod 600 /swapfile
+    mkswap /swapfile
+  fi
+  swapon /swapfile
+fi
+grep -q "^/swapfile " /etc/fstab || echo "/swapfile none swap sw 0 0" >> /etc/fstab
+
+# ---------------------------------------------------------------------------
+# 4. data EBS を XFS で用意して MOUNT_POINT にマウント
+#    アタッチは起動後なので最大 10 分待つ
+# ---------------------------------------------------------------------------
+DATA_DEVICE="/dev/disk/by-id/nvme-Amazon_Elastic_Block_Store_$(echo "$${DATA_VOLUME_ID}" | tr -d '-')"
+
+for _ in $(seq 1 60); do
+  if [ -e "$${DATA_DEVICE}" ]; then
+    break
+  fi
+  sleep 10
+done
+
+if [ ! -e "$${DATA_DEVICE}" ]; then
+  echo "data volume $${DATA_VOLUME_ID} was not attached within 10 minutes" >&2
+  exit 1
+fi
+
+DATA_REAL_DEVICE="$(readlink -f "$${DATA_DEVICE}")"
+
+if ! blkid "$${DATA_REAL_DEVICE}" >/dev/null 2>&1; then
+  mkfs.xfs -L app-data "$${DATA_REAL_DEVICE}"
+fi
+
+DATA_UUID="$(blkid -s UUID -o value "$${DATA_REAL_DEVICE}")"
+mkdir -p "$${MOUNT_POINT}"
+
+if ! grep -q "UUID=$${DATA_UUID}" /etc/fstab; then
+  echo "UUID=$${DATA_UUID} $${MOUNT_POINT} xfs defaults,nofail 0 2" >> /etc/fstab
+fi
+
+mountpoint -q "$${MOUNT_POINT}" || mount -a
+mountpoint -q "$${MOUNT_POINT}"
+
+# ---------------------------------------------------------------------------
+# 5. ディレクトリ構成
+#    mariadb は公式イメージの mysql ユーザー (uid/gid 999) が書き込む
+# ---------------------------------------------------------------------------
+install -d -m 0755 -o root -g root "$${MOUNT_POINT}"
+install -d -m 0755 -o ec2-user -g ec2-user "$${MOUNT_POINT}/app" "$${MOUNT_POINT}/backups"
+install -d -m 0755 -o 999 -g 999 "$${MOUNT_POINT}/mariadb"
+ln -sfn "$${MOUNT_POINT}/app" /opt/ro-server
+
+# ---------------------------------------------------------------------------
+# 6. ホスト名
+# ---------------------------------------------------------------------------
+hostnamectl set-hostname ${hostname}
+
+# ---------------------------------------------------------------------------
+# 7. 完了マーカー（アプリ本体と systemd unit は deploy スクリプトが配布する）
+# ---------------------------------------------------------------------------
+install -d -m 0755 /var/lib/ro-server
+date -Is > /var/lib/ro-server/bootstrap.done

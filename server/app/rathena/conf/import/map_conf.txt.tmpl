@@ -1,0 +1,15 @@
+//--------------------------------------------------------------
+// map-server 設定の上書き（conf/map_athena.conf の最後に import される）
+// このファイルはテンプレート。entrypoint.sh が envsubst で
+// conf/import/map_conf.txt に描画する（描画後は 0600）。
+//--------------------------------------------------------------
+
+// inter-server 認証。char_conf.txt と同じ値を使う。
+userid: ${INTERSERVER_USER}
+passwd: ${INTERSERVER_PASSWORD}
+
+// map-server が char-server へ接続する先（compose のサービス名で解決）
+char_ip: char-server
+
+// クライアントが map-server へ接続する先（EC2 の Public IP / EIP）
+map_ip: ${PUBLIC_IP}

@@ -1,0 +1,233 @@
+//===== rAthena Script =======================================
+//= Luoyang Guides
+//===== By: ==================================================
+//= jAthena/Tsuyuki; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Guides for the City of Luoyang
+//===== Additional Comments: =================================
+//= 0.5 Added first, Japanese version [Tsuyuki]
+//= 1.0 Translated to English from iRO NPC Dialogue (100% Official) [Tsuyuki]
+//= 1.1 Rescripted official 10.3 standards. [L0ne_W0lf]
+//= 1.2 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//============================================================
+
+louyang,213,213,3	script	衛兵#BA::LouGuide	825,{
+	mes "[衛兵]";
+	mes "龍之城へようこそ、";
+	mes "長く彩り豊かな";
+	mes "歴史を持つ街だ。";
+	next;
+	mes "[衛兵]";
+	mes "近ごろ我々は";
+	mes "海路を開き、";
+	mes "諸外国との";
+	mes "友好的な交流を進めている。";
+	next;
+	mes "[衛兵]";
+	mes "龍之城は豊かな歴史に加え、様々な特産品でも知られている。ここでしか見られない物がたくさんあるぞ。";
+	next;
+	mes "[衛兵]";
+	mes "どうかゆっくりと、";
+	mes "龍之城での旅を";
+	mes "楽しんでいってくれ。";
+	next;
+	switch(select("施設の場所を尋ねる:ミニマップの印を全部消す:キャンセル")) {
+	case 1:
+		mes "[衛兵]";
+		mes "どこへ行きたいんだ？";
+		next;
+		switch(select("龍城:医院:役所:武器屋:道具屋:酒場:キャンセル")) {
+		case 1:
+			mes "[衛兵]";
+			mes "龍城は^FF3355+^000000の場所にある。我らが主君をはじめ、貴族たちが住まう場所だ。";
+			next;
+			mes "[衛兵]";
+			mes "お前さんはよそ者のようだから、まずは我らが主君に挨拶するのが筋だろうな。";
+			viewpoint 1,218,255,2,0xFF3355;
+			break;
+		case 2:
+			mes "[衛兵]";
+			mes "とても腕の良い医者がいる。";
+			mes "彼女の医院は^CE6300+^000000の場所にある。";
+			next;
+			mes "[衛兵]";
+			mes "彼女に治せぬ病は";
+			mes "ないと言われているが…まあ、本当かどうかは保証できんがな。";
+			viewpoint 1,263,94,3,0xCE6300;
+			break;
+		case 3:
+			mes "[衛兵]";
+			mes "役所では政府の仕事が行われている。";
+			mes "場所は^A5BAAD+^000000だ。";
+			next;
+			mes "[衛兵]";
+			mes "何か困りごとがあれば、";
+			mes "役所の";
+			mes "職員に相談するといい。";
+			viewpoint 1,309,80,4,0xA5BAAD;
+			break;
+		case 4:
+			mes "[衛兵]";
+			mes "武器屋は^55FF33+^000000の場所にある。";
+			next;
+			mes "[衛兵]";
+			mes "龍之城の";
+			mes "熟練の鍛冶職人が鍛えた";
+			mes "見事な武器の数々を";
+			mes "目にすることができるぞ。";
+			viewpoint 1,145,174,5,0x55FF33;
+			break;
+		case 5:
+			mes "[衛兵]";
+			mes "道具屋は^3355FF+^000000の場所にある。";
+			next;
+			mes "[衛兵]";
+			mes "敵を知ることは";
+			mes "戦いの半分を制するようなものだ！";
+			mes "後で後悔するより、備えておく方が安全というものだろう。品揃えを見てきてはどうだ？";
+			viewpoint 1,135,98,6,0x3355FF;
+			break;
+		case 6:
+			mes "[衛兵]";
+			mes "旅の途中で疲れたら、酒場に寄ることを勧める。場所は^00FF00+^000000だ。";
+			next;
+			mes "[衛兵]";
+			mes "酒場は他の旅人と出会い、";
+			mes "役に立つ話を聞くのにもってこいの場所だ。";
+			viewpoint 1,280,167,7,0x00FF00;
+			break;
+		case 7:
+			mes "[衛兵]";
+			mes "ミニマップの印を";
+			mes "全部消したければ、メニューから「ミニマップの印を全部消す」を選んでくれ。";
+		}
+		break;
+	case 2:
+		viewpoint 2,218,255,2,0xFF00FF;
+		viewpoint 2,263,94,3,0xFF00FF;
+		viewpoint 2,309,80,4,0xFF00FF;
+		viewpoint 2,145,174,5,0xFF00FF;
+		viewpoint 2,135,98,6,0xFF00FF;
+		viewpoint 2,280,167,7,0xFF00FF;
+		mes "[衛兵]";
+		mes "よし、ミニマップの印は全部消したぞ。施設の場所が知りたくなったら、いつでも聞いてくれ。";
+		break;
+	case 3:
+		mes "[衛兵]";
+		mes "たまには自分で";
+		mes "探検してみるのも";
+		mes "楽しいものだろうな。気をつけてな。";
+	}
+	close;
+}
+
+louyang,160,175,3	duplicate(LouGuide)	衛兵#BB::Soldier#BB	825
+
+louyang,224,104,3	script	使者#lou::Representative#lou	818,{
+	mes "[使者]";
+	mes "龍之城へようこそ、";
+	mes "武勇の物語に満ちた";
+	mes "歴史を持つ";
+	mes "古の地だ。";
+	next;
+	mes "[使者]";
+	mes "今では海路を開き、諸外国からの旅人を迎え、互いに利のある文化交流を行っている。";
+	next;
+	mes "[使者]";
+	mes "龍之城は";
+	mes "精緻な歴史に加え、この国ならではの特産品でも知られている。どうかゆっくりと滞在を楽しんでいってくれ。";
+	next;
+	switch(select("施設の場所を尋ねる:ミニマップの印を全部消す:キャンセル")) {
+	case 1:
+		set .@compass_check,1;
+		mes "[使者]";
+		mes "どこへ行きたい？";
+		next;
+		switch(select("龍城:医院:役所:武器屋:道具屋:酒場:キャンセル")) {
+		case 1:
+			mes "[使者]";
+			mes "龍城は^FF3355+^000000の場所にある。我らが主君をはじめ、貴族たちが住まう場所だ。";
+			next;
+			mes "[使者]";
+			mes "お前さんはよそ者のようだから、まずは我らが主君に挨拶するのが筋だろうな。";
+			viewpoint 1,218,255,2,0xFFFF33;
+			break;
+		case 2:
+			mes "[使者]";
+			mes "とても腕の良い医者がいる。";
+			mes "彼女の医院は^CE6300+^000000の場所にある。";
+			next;
+			mes "[使者]";
+			mes "彼女に治せぬ病は";
+			mes "ないと言われているが…まあ、本当かどうかは保証できんがな。";
+			viewpoint 1,263,94,3,0xFFCE63;
+			break;
+		case 3:
+			mes "[使者]";
+			mes "役所では政府の仕事が行われている。";
+			mes "場所は^A5BAAD+^000000だ。";
+			next;
+			mes "[使者]";
+			mes "何か困りごとがあれば、";
+			mes "役所の";
+			mes "職員に相談するといい。";
+			viewpoint 1,309,80,4,0xFF00FF;
+			break;
+		case 4:
+			mes "[使者]";
+			mes "武器屋は^55FF33+^000000の場所にある。";
+			next;
+			mes "[使者]";
+			mes "龍之城の";
+			mes "熟練の鍛冶職人が鍛えた";
+			mes "見事な武器の数々を";
+			mes "目にすることができるぞ。";
+			viewpoint 1,145,174,5,0xFF55FF;
+			break;
+		case 5:
+			mes "[使者]";
+			mes "道具屋は^3355FF+^000000の場所にある。";
+			next;
+			mes "[使者]";
+			mes "敵を知ることは";
+			mes "戦いの半分を制するようなものだ！";
+			mes "後で後悔するより、備えておく方が安全というものだろう。品揃えを見てきてはどうだ？";
+			viewpoint 1,135,98,6,0xFF3355;
+			break;
+		case 6:
+			mes "[使者]";
+			mes "旅の途中で疲れたら、酒場に寄ることを勧める。場所は^00FF00+^000000だ。";
+			next;
+			mes "[使者]";
+			mes "酒場は他の旅人と出会い、";
+			mes "役に立つ話を聞くのにもってこいの場所だ。";
+			viewpoint 1,280,167,7,0xFF00FF;
+			break;
+		case 7:
+			mes "[使者]";
+			mes "ミニマップの印を";
+			mes "全部消したければ、メニューから「ミニマップの印を全部消す」を選んでくれ。";
+		}
+		break;
+	case 2:
+		viewpoint 2,218,255,2,0xFF00FF;
+		viewpoint 2,263,94,3,0xFF00FF;
+		viewpoint 2,309,80,4,0xFF00FF;
+		viewpoint 2,145,174,5,0xFF00FF;
+		viewpoint 2,135,98,6,0xFF00FF;
+		viewpoint 2,280,167,7,0xFF00FF;
+		mes "[使者]";
+		mes "よし、ミニマップの印は全部消えた。施設の場所が知りたくなったら、いつでも聞いてくれ。";
+		break;
+	case 3:
+		mes "[使者]";
+		mes "自分の足で龍之城を";
+		mes "見て回りたいのだな。よし、気をつけてな！";
+		break;
+	}
+	close;
+}

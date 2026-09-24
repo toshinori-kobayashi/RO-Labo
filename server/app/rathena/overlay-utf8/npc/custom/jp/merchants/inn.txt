@@ -1,0 +1,351 @@
+//===== rAthena Script =======================================
+//= Inn Npcs
+//===== By: ==================================================
+//= Darkchild (1.1)
+//= Playtester (1.2)
+//===== Current Version: =====================================
+//= 2.9a
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Inn Npcs, Save and Heal
+//============================================================
+//= variables:
+//= arg0 - name of npc
+//= arg1 - name of the inn
+//= arg2 - map to save at
+//= arg3, arg4 - x and y cord. to save at
+//= @cost - cost of renting a room
+//===== Additional Comments: =================================
+//= 1.1 Blind Effect By Kobra_k88 (Taken from his old script)
+//= I added it to all of them though [Darkchild]
+//= 1.1a Minor bug fixes and optimizations. Switched from @variables 
+//= to arguments.[kobra_k88]
+//= 1.2 Rewrote inn script [Playtester]
+//= 1.3 Added (finally) Rachel Inn Maid. Official warp
+//=     and save points[erKURITA]
+//= 1.4 Added Hugel inn [erKurita]
+//= 1.5 Added "end;" after warping the player. [L0ne_W0lf]
+//=	- Small corrections to the prontera Inns.
+//=	- Removed the Cancel dialog.
+//= 1.6 More fixes, changed progression of "Rest"ing.
+//=	- Corrected Morocc NPCs. [L0ne_W0lf]
+//= 1.7 Corrected Payon NPC. [L0ne_W0lf] 
+//= 1.8 Corrected Geffen NPC. [L0ne_W0lf] 
+//= 1.9 Added the Inn for Al De baran. [L0ne_W0lf]
+//= 2.0 Added Inn for the Town of Veins. [L0ne_W0lf]
+//= 2.1 Corrected NPC names to fall within proper restrictions. [L0ne_W0lf]
+//= 2.1a Corrected a little Typo error. (bugreport:536 & 537) [Samuray22]
+//= 2.2 Small update to Vein's Inn Master. [L0ne_W0lf]
+//= 2.3 Added Lighthalzen Inn from Lighthalzen town file. [L0ne_W0lf]
+//= 2.4 Fixed Inn Employee#Ahlma warping to same destination as save point, bugreport: 191.
+//= 2.5 Added Moskovia Gostinitsa (Inn) from jA
+//= 2.6 Updated Alberta inn to official. [L0ne_W0lf]
+//= 2.7 Removed Morocc Inns as per episode 12.1. [L0ne_W0lf]
+//= 2.8 Removed Moscovia Inn; Its in quests/quest_moscovia.txt [Kisuka]
+//= 2.9 Added switch menus, updated to match AEGIS scripts. [Kisuka]
+//= 2.9a Added 'npcskill' command. [Euphy]
+//============================================================
+
+
+//======================== Prontera ===================================
+// West Side Inn -------------------
+prt_in,244,135,2	script	宿屋の従業員#Sammy::Inn Employee#Sammy	53,{
+
+	callfunc "F_InnMaid","[サミー]","ネンカラス","prt_in",238,130;
+	warp "prt_in",247,104; end;
+}
+// East Side Inn ------------------
+prt_in,61,141,2	script	宿屋の従業員#Ahlma::Inn Employee#Ahlma	53,{
+
+	callfunc "F_InnMaid","[アルマ]","ネンカラス","prt_in",64,136;
+	warp "prt_in",60,166; end;
+}
+
+//======================== Alberta ====================================
+alberta_in,32,142,3	script	宿屋の従業員#Jennie::Inn Employee#Jennie	53,{
+
+	callfunc "F_InnMaid","[ジェニー]","「フィッシャーマン亭」！","alberta_in",26,142;
+	warp "alberta_in",18,188; end;
+}
+
+//====================== Geffen ======================================
+geffen_in,70,64,5	script	宿屋の従業員#Cena::Inn Employee#Cena	53,{
+
+	callfunc "F_InnMaid","[シーナ]","「イフリート」。ゲフェンで唯一の宿屋だ","geffen_in",70,59;
+	warp "geffen_in",31,31; end;
+}
+
+//======================= Payon ======================================
+payon_in01,132,62,5	script	宿屋の従業員#Ahee::Inn Employee#Ahee	53,{
+
+	callfunc "F_InnMaid","[アヒー]","フェイヨン宿屋","payon_in01",136,61;
+	warp "payon_in01",132,11; end;
+}
+
+//======================== Morocc ====================================
+// North East --------------------------
+/*
+morocc_in,147,141,3	script	Inn Employee#Hasna	53,{
+
+	callfunc "F_InnMaid","[Employee Hasna]","Morocc Inn","morocc_in",142,140;
+	warp "morocc_in",173,135; end;
+}
+// South --------------------------------
+morocc_in,80,100,5	script	Inn Employee#Manar	53,{
+
+	callfunc "F_InnMaid","[Employee Manar]","Morocc Inn","morocc_in",78,95;
+	warp "morocc_in",79,123; end;
+}
+*/
+
+//====================== Aldebaran ===================================
+aldeba_in,92,58,5	script	宿屋のメイド#Rilim::Inn Maid#Rilim	53,{
+
+	callfunc "F_InnMaid","[リリム]","アルデバラン宿屋","aldeba_in",92,50;
+	warp "aldeba_in",92,112; end;
+}
+
+//======================== Rachel ====================================
+ra_in01,376,69,4	script	宿屋の受付#Annie::Inn Keeper#Annie	931,{
+
+	callfunc "F_InnMaid","[アニー]","ラヘル宿屋","ra_in01",375,58;
+	warp "ra_in01",384,128; end;
+}
+
+//====================== Lighthalzen =================================
+lhz_in02,230,284,4	script	ホテル従業員#01::Hotel Employee#01	86,{
+	mes "[ホテル従業員]";
+	mes "ようこそ";
+	mes "『ロイヤルドラゴン』へ。";
+	mes "最高の宿泊設備と";
+	mes "最高のサービスを";
+	mes "ご用意しております。";
+	next;
+	switch(select("セーブポイント:休憩 - 5,000 Zeny:キャンセル")) {
+	case 1:
+		savepoint "lhz_in02",209,275,1,1;
+		mes "[ホテル従業員]";
+		mes "ありがとうございます。";
+		mes "リスポーン地点を";
+		mes "こちら『ロイヤルドラゴン』に";
+		mes "設定いたしました。";
+		close;
+	case 2:
+		if(Zeny < 5000) {
+			mes "[ホテル従業員]";
+			mes "申し訳ございませんが、";
+			mes "チェックインには";
+			mes "5,000 Zeny が必要です。";
+			close;
+		}
+		set Zeny,Zeny - 5000;
+		mes "[ホテル従業員]";
+		mes "ありがとうございます～";
+		mes "『ロイヤルドラゴン』での";
+		mes "ご滞在を";
+		mes "お楽しみください。";
+		close2;
+		warp "lhz_in02",219,150;
+		percentheal 100,100;
+		npcskill "AL_BLESSING",10,99,99;
+		end;
+	case 3:
+		mes "[ホテル従業員]";
+		mes "ありがとうございます。";
+		mes "良い一日を。";
+		close;
+	}
+}
+
+//======================== Hugel ====================================
+hu_in01,246,107,3	script	宿屋のメイド#Receptionist::Inn Maid#Receptionist	53,{
+
+	callfunc "F_InnMaid","[受付]","フィゲル宿屋","hu_in01",263,95;
+	warp "hu_in01",267,5; end;
+}
+
+//======================== Veins ====================================
+ve_in,157,219,5	script	宿屋の主人#Receptionist::Inn Master#Receptionist	709,{
+	mes "[宿屋の主人]";
+	mes "こんにちは～";
+	mes "ここベインスで";
+	mes "一番快適な宿屋へ";
+	mes "ようこそ～";
+	next;
+	switch(select("セーブする:休憩する -> 5000 Zeny:やめる")) {
+	case 1:
+		mes "[宿屋の主人]";
+		mes "リスポーン地点を";
+		mes "ベインスに設定しました。";
+		mes "この町での滞在をお楽しみください～";
+		savepoint "ve_in",157,209,1,1;
+		close;
+	case 2:
+		mes "[宿屋の主人]";
+		if(Zeny < 5000){
+			mes "申し訳ございませんが、";
+			mes "チェックインに必要な";
+			mes "お金が足りないようです。";
+			mes "利用料は5,000 Zenyです。";
+			close;
+		}
+		mes "ご滞在をお楽しみください～";
+		close2;
+		set Zeny,Zeny - 5000;
+		percentheal 100,100;
+		warp "ve_in",184,228;
+		end;
+	case 3:
+		mes "[宿屋の主人]";
+		mes "またのお越しをお待ちしております。";
+		close;
+	}
+}
+
+//======================== Brasilis =================================
+bra_in01,27,24,3	script	ホテル支配人#bra1::Hotel Keeper#bra1	478,{
+	mes "[ホテル支配人]";
+	mes "美しいブラジリスホテルへようこそ。";
+	next;
+	switch(select("セーブする:休憩する -5000 Zeny:キャンセル")) {
+	case 1:
+		mes "[ホテル支配人]";
+		mes "ブラジリスホテルでセーブしますか？";
+		next;
+		switch(select("いいえ、結構です。:もちろん。")) {
+		case 1:
+			mes "[ホテル支配人]";
+			mes "わかりました。ごゆっくりどうぞ。";
+			close;
+		case 2:
+			mes "[ホテル支配人]";
+			mes "リスポーン地点をこのホテルに設定しました。ブラジリスでのご滞在をお楽しみください。";
+			savepoint "bra_in01",144,69,1,1;
+			close;
+		}
+		end;
+	case 2:
+		if (Zeny > 4999) {
+			mes "[ホテル支配人]";
+			mes "素晴らしい部屋にご案内しましょう。";
+			close2;
+			if (Zeny < 5000)
+				end;
+			Zeny -= 5000;
+			percentheal 100,100;
+			warp "bra_in01",144,69;
+			end;
+		}
+		mes "[ホテル支配人]";
+		mes "申し訳ございませんが、宿泊料は1泊5,000 Zenyです。";
+	case 3:
+		close;
+	}
+}
+
+//======================== Einbroch =================================
+ein_in01,206,224,3	script	ホテル従業員#ein::Hotel Employee#ein	855,{
+	mes "[ホテル従業員]";
+	mes "こんにちは、";
+	mes "アインブロックホテルへ";
+	mes "ようこそ。当ホテルでは";
+	mes "常に最高水準の清潔さと";
+	mes "サービス、快適さで";
+	mes "お客様をお迎えしております～";
+	next;
+	if (kain_ticket == 5) {
+		mes "[ホテル従業員]";
+		mes "デフル・アークさんを";
+		mes "お探しですか？";
+		mes "ああ、そういえば空港から";
+		mes "荷物が届くのを";
+		mes "待っているとおっしゃって";
+		mes "いましたね…確認いたします…";
+		next;
+		mes "[ホテル従業員]";
+		mes "ああ、ありました。";
+		mes "デフル・アークさんは";
+		mes "201号室にご滞在です。";
+		next;
+	}
+	else {
+		switch(select("セーブする:休憩する - 5,000 Zeny:キャンセル")) {
+		case 1:
+			mes "[ホテル従業員]";
+			mes "リスポーン地点を";
+			mes "アインブロックホテルに";
+			mes "設定いたしました。";
+			mes "ありがとうございます、";
+			mes "またお越しください。";
+			close2;
+			savepoint "ein_in01",200,224,1,1;
+			end;
+		case 2:
+			if (Zeny > 4999) {
+				mes "[ホテル従業員]";
+				mes "ありがとうございます。";
+				mes "ごゆっくり";
+				mes "おくつろぎください～";
+				close2;
+				set Zeny, Zeny-5000;
+				percentheal 100,100;
+				warp "ein_in01",272,167;
+				end;
+			}
+			else {
+				mes "[ホテル従業員]";
+				mes "申し訳ございませんが、";
+				mes "宿泊料は";
+				mes "5,000 Zenyです。次は";
+				mes "十分なZenyを";
+				mes "ご用意くださいね。";
+				close;
+			}
+		case 3:
+			mes "[ホテル従業員]";
+			mes "ありがとうございます、";
+			mes "またお越しください～";
+			close;
+		}
+	}
+	mes "[ホテル従業員]";
+	mes "良い一日を。";
+	close;
+}
+
+//======================= Inn Function ==============================
+function	script	F_InnMaid	{
+	.@npc_name$ = getarg(0);
+
+	mes .@npc_name$;
+	mes "ようこそ、";
+	mes getarg(1) + ".";
+	mes "ご用件は何でしょうか？";
+	next;
+	switch(select("セーブする:休憩する -> 5000 Zeny:キャンセル")) {
+	case 1:
+		mes .@npc_name$;
+		mes "リスポーン地点を";
+		mes "設定いたしました。";
+		mes "ありがとうございます、";
+		mes "またお越しください。";
+		savepoint getarg(2),getarg(3),getarg(4),1,1;
+		close;
+	case 2:
+		mes .@npc_name$;
+		if(Zeny < 5000){
+			mes "申し訳ございませんが、利用料は5,000 Zenyです。次はチェックインに十分なお金をご用意くださいね。";
+			close;
+		}
+		mes "ありがとうございます。";
+		mes "ごゆっくり";
+		mes "おくつろぎください～";
+		close2;
+		set Zeny,Zeny - 5000;
+		percentheal 100,100;
+		return;
+	case 3:
+		close;
+	}
+}

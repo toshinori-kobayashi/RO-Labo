@@ -1,0 +1,116 @@
+//===== rAthena Script =======================================
+//= Rachel Guide
+//===== By: ==================================================
+//= L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.2b
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Rachel City guide
+//===== Additional Comments: =================================
+//= 1.0 First version. [L0ne_W0lf]
+//= 1.1 Change the while loops a bit. [L0ne_W0lf]
+//= 1.2 Deleted an Unnecessary "next;" [Samuray22]
+//	-Thanks to $ephiroth.
+//= 1.2a Fixed some errors with the loop[Samuray22]
+//	-Thanks to $ephiroth.
+//= 1.2b Deleted a unnecessary "end". [Samuray22]
+//============================================================
+
+rachel,138,146,5	script	ラヘル案内係::Rachel Guide	934,{
+	mes "[ラヘル案内係]";
+	mes "アルナベルツの都、";
+	mes "女神フレイアの温かな";
+	mes "息吹が届くラヘルへようこそ。";
+	mes "案内を利用するのが";
+	mes "初めてなら、まず";
+	mes "「お知らせ」メニューを見てみてはどうかな？";
+	set .@loop1,1;
+	while(.@loop1) {
+		next;
+		switch(select("街の案内:ミニマップの印を消す:お知らせ:キャンセル")) {
+		case 1:
+			mes "[ラヘル案内係]";
+			mes "ラヘルの中の建物なら、どこでも教えられるよ。";
+			mes "さて、どこへ行きたいんだい？";
+			if (.@compass_check == 0) {
+				mes "ミニマップに";
+				mes "目的地の印を";
+				mes "つけようか？";
+				next;
+				if (select("はい:いいえ") == 1) set .@compass_check,1;
+			}
+			set .@loop2,1;
+			while(.@loop2) {
+				if (.@wait_button_chk == 0) set .@wait_button_chk,1;
+				else next;
+
+				switch(select("シェシュルムニル:宿屋:武器屋:道具屋:飛行場:キャンセル")) {
+				case 1:
+					mes "[ラヘル案内係]";
+					mes "シェシュルムニルは、女神フレイアの化身たる教皇猊下がおわす聖地だよ。";
+					mes "北へ向かう道を進めば、その建物が見えてくる。";
+					if (.@compass_check == 1) viewpoint 1,150,249,1,0xFF0000;
+					break;
+				case 2:
+					mes "[ラヘル案内係]";
+					mes "宿屋では旅の疲れを癒すことができるよ。";
+					mes "わたしのすぐ左の建物がラヘルの宿屋さ。";
+					if (.@compass_check == 1) viewpoint 1,115,149,2,0xFF00FF;
+					break;
+				case 3:
+					mes "[ラヘル案内係]";
+					mes "ラヘルで売られている武器を見てみたいかい？";
+					mes "武器屋は西門の近くにあるよ。";
+					if (.@compass_check == 1) viewpoint 1,42,87,3,0x99FFFF;
+					break;
+				case 4:
+					mes "[ラヘル案内係]";
+					mes "ラヘルの道具屋では、最高品質のポーションを売っているよ。";
+					mes "西門の近くにあるんだ。";
+					if (.@compass_check == 1) viewpoint 1,83,78,4,0x0000FF;
+					break;
+				case 5:
+					mes "[ラヘル案内係]";
+					mes "飛行場は東門の外にあるよ。";
+					if (.@compass_check == 1) viewpoint 1,273,125,5,0x00FF00;
+					break;
+				case 6:
+					mes "[ラヘル案内係]";
+					mes "ミニマップの印を全部消したくなったら、";
+					mes "また声をかけて「ミニマップの印を消す」を選んでおくれ。";
+					set .@loop2,0;
+					break;
+				}
+			}
+			break;
+
+		case 2:
+			viewpoint 2,150,249,1,0xFF0000;
+			viewpoint 2,115,149,2,0xFF00FF;
+			viewpoint 2,42,87,3,0x99FFFF;
+			viewpoint 2,83,78,4,0x0000FF;
+			viewpoint 2,273,125,5,0x00FF00;
+			mes "[ラヘル案内係]";
+			mes "はい、これで印は消えたよ。まだ知りたい場所があれば、いつでも言っておくれ。";
+			break;
+		case 3:
+			mes "[ラヘル案内係]";
+			mes "「街の案内」メニューを使うと、";
+			mes "画面右上のミニマップに建物の場所が印されるようになるよ。";
+			mes "ミニマップが見当たらないときは、ショートカットキー「Ctrl+Tab」を押すか、基本情報ウィンドウの「Map」ボタンを押しておくれ、いいかい？";
+			mes "それと、村全体が見えないときは「－」ボタンでミニマップを縮小することもできるよ。";
+			break;
+		case 4:
+			mes "[ラヘル案内係]";
+			mes "アルナベルツでの旅が";
+			mes "素晴らしいものになりますように。";
+			close2;
+			set .@loop1,0;
+			break;
+		}
+	}
+	close;
+}

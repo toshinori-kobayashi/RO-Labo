@@ -1,0 +1,1157 @@
+//===== rAthena Script ======================================= 
+//= Merchant Job Quest
+//===== By: ================================================== 
+//= kobra_k88; L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 2.4
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Merchant classes
+//===== Additional Comments: ================================= 
+//= 1.0 Fully working.
+//= 1.1 Added instant job change for High Novice [Lupus]
+//= 1.3 Added Baby Class support [Lupus]
+//= 1.4 Optimised and moved first checker to Jfunc1-1 [massdriller]
+//= 1.5 Changed Prontera->Izlude teleport price to 600 [Lupus]
+//= 1.5.1 Removed Duplicates [Silent]
+//= 1.5.2 Now saves/restores all quest skills [Lupus]
+//= 1.6 Merged back JFunc, CHANGED NUMBERS TO CONSTANTS [Lupus]
+//= 1.7 Updated to use Free Ticket for Kafra [Lupus]
+//= 1.8 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//=     No longer uses function "F_ToHigh"
+//= 1.9 Bugfixes, thanks to Barron-Monster. [L0ne_W0lf]
+//= 1.9a Added a missing next; (Barron-Monster) [L0ne_W0lf]
+//= 1.9b Typo. "nextl" -> "next;" (Barron-Monster) [L0ne_W0lf]
+//= 2.0 Should "fix" the problem with the Biliban Kafra. [L0ne_W0lf]
+//= 2.1 Fixed mistake in condition check. [L0ne_W0lf]
+//= 2.2 Added Quest Log commands. [L0ne_W0lf]
+//= 2.3 Fixed an issue with completequest by adding checkquest. [Kisuka]
+//= 2.4 Quest log fixes. [Euphy]
+//============================================================ 
+//= Japanese overlay: translated strings only (structure identical to upstream). Managed as UTF-8, converted to CP932 at build.
+
+alberta_in,53,43,6	script	商人#mer::Merchant#mer	86,{
+	if (Upper == 1) {
+		if (Class == Job_Novice_High && (ADVJOB == Job_Whitesmith || ADVJOB == Job_Creator)) {
+			mes "[マンスー組合長]";
+			mes "久しぶりだね！";
+			mes "まさか商売を";
+			mes "やめたわけじゃ";
+			mes "ないだろうね？何があったんだ？";
+			next;
+			mes "[マンスー組合長]";
+			mes "おお…";
+			mes "本当にヴァルハラへ行ってきたのか？！いやはや、ずいぶん遠くまで旅したもんだね…";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[マンスー組合長]";
+				mes "うーむ…";
+				mes "まだ商人に戻る準備ができていないようだね。まずはノービスの基本スキルを一通り習得してきなさい。";
+				next;
+				mes "[マンスー組合長]";
+				mes "心配いらないよ、商人の席はいつでも空けておく。準備ができたら、また戻っておいで。";
+				close;
+			}
+			mes "[マンスー組合長]";
+			mes "こうしてまた会えたのも何かの縁だろう。よし、もう一度お前を商人に転職させてやろう！";
+			next;
+			skill "NV_TRICKDEAD",0,SKILL_PERM;
+			jobchange Job_Merchant_High;
+			skill "MC_CARTREVOLUTION",1,SKILL_PERM;
+			skill "MC_CHANGECART",1,SKILL_PERM;
+			skill "MC_LOUD",1,SKILL_PERM;
+			mes "[マンスー組合長]";
+			mes "ああ～懐かしいねえ。あの頃のようだ！よし、頑張るんだぞ！";
+			close;
+		}
+		else {
+			mes "[マンスー組合長]";
+			mes "^333333はぁ…^000000";
+			mes "退屈だなあ…";
+			mes "愛しのブロッサムから、いつ便りが届くんだろうね？";
+			close;
+		}
+	}
+	if (BaseJob == Job_Merchant) {
+		mes "[マンスー組合長]";
+		mes "やあ、いらっしゃい！";
+		mes "商人になった";
+		mes "気分はどうだい？";
+		next;
+		mes "[マンスー組合長]";
+		mes "お金の扱いに";
+		mes "長けているというのも";
+		mes "なかなか";
+		mes "いいものだろう？";
+		close;
+	}
+	else if (BaseJob != Job_Merchant && BaseJob != Job_Novice) {
+		mes "[マンスー組合長]";
+		mes "俺たち商人は、二枚舌を使うやつが大嫌いでね。商売に響くんだよ。";
+		next;
+		mes "[マンスー組合長]";
+		mes "とんでもない値段で人につけ込んで、無駄に使う金を稼ごうとする輩が一番タチが悪い。";
+		next;
+		mes "[マンスー組合長]";
+		mes "まあ、いずれにせよ商人への転職を受け付けるのはノービスだけだ。だが、俺たちの仕事に興味を持ってくれたことには感謝するよ。";
+		close;
+	}
+	else if (job_merchant_q == 9) {
+		mes "[マンスー組合長]";
+		mes "やあ、";
+		mes ""+ strcharinfo(0) +"。";
+		set job_merchant_q,0;
+		set job_merchant_q2,0;
+		set quest_alb_01,0;
+		mes "残念だが、今回は商人免許を取得できなかったね。";
+		next;
+		mes "[マンスー組合長]";
+		mes "記録は消しておくから、また挑戦したくなったらいつでもおいで。";
+		close;
+	}
+	else if (job_merchant_q == 8 || job_merchant_q == 7) {
+		mes "[マンスー組合長]";
+		mes "やあ、";
+		mes ""+ strcharinfo(0) +"。";
+		mes "いい知らせがあるんだ、";
+		mes "喜んで伝えるよ！";
+		next;
+		mes "[マンスー組合長]";
+		mes "商人ギルドがお前の申請を受理した。お前は商人としての資質を十分に証明してみせたんだ。";
+		if (job_merchant_q == 7) {
+			next;
+			mes "[マンスー組合長]";
+			mes "あとは会費の支払いを済ませるだけだ。";
+			mes "準備はいいかい？";
+			next;
+			switch(select("残りの500Zenyを支払う:やめておく")) {
+			case 1:
+				mes "[マンスー組合長]";
+				if (Zeny < 500) {
+					mes "うーむ…";
+					mes "今は残りの会費を払うだけのZenyが足りないようだね。";
+					next;
+					mes "[マンスー組合長]";
+					mes "商人になるために必要な500Zenyを稼いだら、また戻っておいで。";
+					close;
+				}
+				set Zeny, Zeny-500;
+				mes "おお、そうだ…！";
+				mes "これで";
+				mes "会費は";
+				mes "全て払い終えたな。";
+				break;
+			case 2:
+				mes "[マンスー組合長]";
+				mes "会費を払うためのZenyを集めるのに、もう少し時間が必要なようだね。";
+				mes "準備ができ次第、また来ておくれ。";
+				close;
+			}
+		}
+		next;
+		mes "[マンスー組合長]";
+		mes "おめでとう！";
+		callfunc "Job_Change",Job_Merchant;
+		callfunc "F_ClearJobVar";
+		for ( .@quest_id = 1009; .@quest_id <= 1012; .@quest_id++ ) {
+			if (isbegin_quest(.@quest_id) == 1)
+				completequest .@quest_id;
+		}
+		mes "商人ギルドに加わってくれて本当に嬉しいよ。ルーンミッドガッツの経済で大いに活躍してくれることを願っている。";
+		next;
+		if (quest_alb_01 == 1) {
+			mes "[マンスー組合長]";
+			mes "*コホン* それと、ブロッサムへの伝言を届けてくれた礼に、少しばかりお金を渡しておこう。";
+			mes "また今度も力を貸してくれると嬉しいな～";
+			set Zeny, Zeny+200;
+			set quest_alb_01,2;
+		}
+		else {
+			mes "[マンスー組合長]";
+			mes "私が頼んでおいた伝言のことだが？忘れてしまったのかい？まあいい、よくやったな！";
+		}
+		next;
+		mes "[マンスー組合長]";
+		mes "我々の目標は、世界の収入の20％を掌握することだ！お前のような若くて意欲のある人材が必要なんだよ！";
+		next;
+		mes "[マンスー組合長]";
+		mes "とはいえ、結局のところ、たんまり稼げればそれで満足なんだがね。";
+		mes "まあ、みんなそんなものさ～";
+		close;
+	}
+	else if (job_merchant_q2 && job_merchant_q > 0 && job_merchant_q < 7) {
+		mes "[マンスー組合長]";
+		if (job_merchant_q2 == 1 || job_merchant_q2 == 2) {
+			mes "まず倉庫から配達の荷物を受け取り、それをプロンテラの旧剣士協会へ持っていくんだ。";
+			next;
+			mes "[マンスー組合長]";
+			mes "着いたら、そこに常駐しているカプラ職員に荷物を渡してくれ。彼女の名前はブロッサムだ。分かったかい？";
+			next;
+			if (job_merchant_q2 == 1) {
+				mes "[マンスー組合長]";
+				mes "いいか、荷物のシリアル番号は^3355FF2485741^000000だ。";
+			}
+			else {
+				mes "[マンスー組合長]";
+				mes "いいか、荷物のシリアル番号は^3355FF2328137^000000だ。";
+			}
+		}
+		else if (job_merchant_q2 == 3 || job_merchant_q2 == 4) {
+			mes "まず倉庫から配達の荷物を受け取り、それをゲフェンの魔法使いギルドへ持っていくんだ。";
+			next;
+			if (job_merchant_q2 == 3) {
+				mes "[マンスー組合長]";
+				mes "着いたら、担当の魔法使いギルド職員に荷物を渡すんだ。いいか、荷物のシリアル番号は^3355FF2989396^000000だ。";
+			}
+			else {
+				mes "[マンスー組合長]";
+				mes "着いたら、担当の魔法使いギルド職員に荷物を渡すんだ。いいか、荷物のシリアル番号は^3355FF2191737^000000だ。";
+			}
+		}
+		else if (job_merchant_q2 == 5 || job_merchant_q2 == 6) {
+			mes "まず倉庫から配達の荷物を受け取り、それをモロクへ持っていくんだ。";
+			next;
+			mes "[マンスー組合長]";
+			mes "染物屋のジャバ・ドゥリハンを見つけて、彼が注文した品を届けてもらう必要がある。";
+			next;
+			if (job_merchant_q2 == 5) {
+				mes "[マンスー組合長]";
+				mes "だが彼は少々物忘れが激しくてね、弟子の誰かに渡すといい。いいか、荷物のシリアル番号は^3355FF3012685^000000だ。";
+			}
+			else {
+				mes "[マンスー組合長]";
+				mes "だが彼は少々物忘れが激しくてね、弟子の誰かに渡すといい。いいか、荷物のシリアル番号は^3355FF3487372^000000だ。";
+			}
+		}
+		else if (job_merchant_q2 == 7 || job_merchant_q2 == 8) {
+			mes "まず倉庫から荷物を受け取り、ビアラン島に常駐しているカプラ職員に渡すんだ。彼女の名前はブロッサムだ。";
+			next;
+			if (job_merchant_q2 == 7) {
+				mes "[マンスー組合長]";
+				mes "いいか、荷物のシリアル番号は^3355FF3318702^000000だ。";
+			}
+			else {
+				mes "[マンスー組合長]";
+				mes "いいか、荷物のシリアル番号は^3355FF3543625^000000だ。";
+			}
+		}
+		if (job_merchant_q2 == 7 || job_merchant_q2 == 8) {
+			next;
+			mes "[マンスー組合長]";
+			mes "それとねえ…";
+			mes "あの伝言も忘れずに届けておくれよ～";
+		}
+		next;
+		mes "[マンスー組合長]";
+		mes "行き先と荷物のシリアル番号を忘れないように。";
+		mes "それを";
+		mes "倉庫番に伝える必要がある。";
+		next;
+		mes "[マンスー組合長]";
+		mes "倉庫は私の右手の";
+		mes "部屋にある。そこで";
+		mes "倉庫番に話しかければ";
+		mes "力になってくれるはずだ。";
+		next;
+		mes "[マンスー組合長]";
+		mes "配達を終えたら倉庫に戻り、倉庫番に受領証を渡すんだ。";
+		mes "それから";
+		mes "私のところへ戻ってきなさい。";
+		next;
+		mes "[マンスー組合長]";
+		mes "分かったかい？";
+		mes "よし、";
+		mes "その意気だ。";
+		mes "気をつけてな！";
+		close;
+	}
+	else {
+		mes "[マンスー組合長]";
+		mes "それで、商人組合に";
+		mes "何の用だい？";
+		mes "何か";
+		mes "力になれることは？";
+		next;
+		switch(select("商人になりたいです:商人について教えてください:必要な条件を教えてください:いいえ")) {
+		case 1:
+			mes "[マンスー組合長]";
+			mes "商人に";
+			mes "なりたいのかい？";
+			mes "そうだねえ…";
+			next;
+			if (!callfunc("F_CanChangeJob")) {
+				mes "[マンスー組合長]";
+				mes "まず、ジョブレベル10のノービスである必要がある。それができたら、基本スキルを全て習得しておくんだ。";
+				next;
+				mes "[マンスー組合長]";
+				mes "我々はただの";
+				mes "金儲け屋じゃないんだ！";
+				mes "基準を持ち、資格ある者だけを受け入れることに誇りを持っている！";
+				close;
+			}
+			mes "[マンスー組合長]";
+			mes "よし、この申込書に記入して、会費として1000Zenyを用意してもらう必要がある。";
+			next;
+			mes "[マンスー組合長]";
+			mes "おっと…！";
+			mes "全額用意できないなら、";
+			mes "今は500Zenyだけでもいい。";
+			mes "残りは試験に合格して";
+			mes "商人ギルドの免許を";
+			mes "取得した後に払えばいい。";
+			next;
+			mes "[マンスー組合長]";
+			mes "それで、どうだい？";
+			mes "今すぐ入る準備はできたかい？";
+			next;
+			if (select("はい、なります:うーん、また今度…") ==1 ) {
+				mes "[マンスー組合長]";
+				mes "申込書に";
+				mes "全部記入したか";
+				mes "確認させてもらおう…";
+				next;
+				mes "[マンスー組合長]";
+				mes "うむ…";
+				mes "" + strcharinfo(0) + "…";
+				mes "いい名前だね。";
+				next;
+				mes "[マンスー組合長]";
+				mes "この申込書は";
+				mes "会費の支払いが";
+				mes "完了して初めて";
+				mes "登録される。";
+				mes "支払い方法はどうする？";
+				next;
+				switch(select("今すぐ1000Zeny全額払う！:500Zenyずつ2回に分けて払う:やめておく")) {
+				case 1:
+					mes "[マンスー組合長]";
+					if (Zeny >= 1000) {
+						set job_merchant_q,2;
+						set Zeny, Zeny-1000;
+						mes "よし～";
+						mes "1000Zeny、確かに。";
+						mes "結構、結構。";
+					}
+					else {
+						mes "今は全額を払うだけのZenyが足りないようだね。とりあえず500Zenyだけ払ってみてはどうだい？考えておくといい。";
+						close;
+					}
+					break;
+				case 2:
+					mes "[マンスー組合長]";
+					if (Zeny >= 500) {
+						set job_merchant_q,1;
+						set Zeny, Zeny-500;
+						mes "ええと…";
+						mes "500Zeny、確かに。分割払いは商人としてあまり褒められたものじゃないが、まだ見習いだからよしとしよう。";
+					}
+					else {
+						mes "うーむ…";
+						mes "会費の半分を払うだけの資金も無いようだね。必要なZenyを集めてから、また来ておくれ。";
+						close;
+					}
+					break;
+				case 3:
+					mes "[マンスー組合長]";
+					mes "準備ができたら";
+					mes "いつでも戻っておいで、いいね？";
+					close;
+				}
+			}
+			else {
+				mes "[マンスー組合長]";
+				mes "今はZenyが足りないのかい？問題ないさ。ゆっくり準備して、";
+				mes "整ったらまた来ておくれ、いいね？";
+				close;
+			}
+			next;
+			mes "[マンスー組合長]";
+			mes "よし、これでお前は申請者リストに載ったぞ。さて、始める前にひとつだけ言っておこう。";
+			next;
+			mes "[マンスー組合長]";
+			mes "世の中には、商人であるということの意味も分からず、愚かで欲深いだけの者もいる。";
+			mes "お前はそんな風にはならないと信じているよ？";
+			next;
+			mes "[マンスー組合長]";
+			mes "さあ、";
+			mes "商人免許試験で";
+			mes "何をすればいいか";
+			mes "説明しよう。";
+			next;
+			mes "[マンスー組合長]";
+			switch(rand(1,4)) {
+			case 1:
+				mes "まず倉庫から配達の荷物を受け取り、プロンテラの旧剣士協会へ向かうんだ。";
+				next;
+				mes "[マンスー組合長]";
+				mes "着いたら、そこのカプラ職員を訪ねるんだ。彼女の名前はブロッサムだ。";
+				mes "分かったかい？";
+				callsub S_GiveSerial,2485741,1,2328137,2,1009;
+				break;
+			case 2:
+				mes "まず倉庫から配達の荷物を受け取り、ゲフェンの魔法使いギルドへ向かうんだ。着いたら、担当の魔法使いギルド職員を訪ねるんだ。";
+				callsub S_GiveSerial,2989396,3,2191737,4,1010;
+				break;
+			case 3:
+				mes "まず倉庫から配達の荷物を受け取り、モロクへ向かうんだ。そこで染物屋のジャバ・ドゥリハンを見つけるんだ。";
+				next;
+				mes "[マンスー組合長]";
+				mes "彼は少々物忘れが激しいから、弟子の誰かに荷物を渡すのがいいだろう。";
+				callsub S_GiveSerial,3012685,5,3487372,6,1011;
+				break;
+			case 4:
+				mes "まず倉庫から配達の荷物を受け取り、ビアラン島に常駐しているカプラ職員に渡すんだ。";
+				callsub S_GiveSerial,3318702,7,3543625,8,1012;
+				next;
+				mes "[マンスー組合長]";
+				mes "うーんと…";
+				mes "実は";
+				mes "ちょっとした個人的な";
+				mes "頼みごとがあるんだ。";
+				next;
+				mes "[マンスー組合長]";
+				mes "荷物を届けるとき、この手紙も彼女に渡してくれないかい？頼むよ～";
+				getitem 1072,1; //Delivery_Message
+				break;
+			}
+			next;
+			mes "[マンスー組合長]";
+			mes "行き先と荷物のシリアル番号を忘れないように。それを、私の右手にある倉庫の倉庫番に伝える必要がある。";
+			next;
+			mes "[マンスー組合長]";
+			mes "配達が終わったら受領証を倉庫番に渡し、それから私のところへ戻ってきなさい。";
+			next;
+			mes "[マンスー組合長]";
+			mes "分かったかい？";
+			mes "よし、";
+			mes "その意気だ。";
+			mes "気をつけてな！";
+			close;
+		case 2:
+			mes "[マンスー組合長]";
+			mes "商人？";
+			mes "まあ、基本的に商品を売って金を稼ぐ、それが";
+			mes "商人のやり方だ。";
+			next;
+			mes "[マンスー組合長]";
+			mes "戦いはそう得意な方じゃないし、特別な攻撃技もそう多くない。回復スキルも無いしね…";
+			next;
+			mes "[マンスー組合長]";
+			mes "だが、NPCの店で安く仕入れて、他の人に高く売ることができる～";
+			next;
+			mes "[マンスー組合長]";
+			mes "我々の最強の攻撃技は「マモナイト」だ。マモナイトの威力は、";
+			mes "せっかくの大事なZenyを投げ捨てさせられる怒りから生まれるのさ。";
+			next;
+			mes "[マンスー組合長]";
+			mes "そうやってZenyを投げ捨てることは";
+			mes "商人の心に凄まじい怒りを湧き上がらせるんだ！";
+			mes "考えただけで";
+			mes "血が沸き立つよ！";
+			next;
+			mes "[マンスー組合長]";
+			mes "とにかく、我々は";
+			mes "弓や杖、両手剣を除けばほとんどの武器を使える。まあ、それらも売ってしまえばいいがね。";
+			next;
+			mes "[マンスー組合長]";
+			mes "そうだな…";
+			mes "我々商人はいつも";
+			mes "頭の中は金のことでいっぱいなのさ…";
+			close;
+		case 3:
+			mes "[マンスー組合長]";
+			mes "商人になるには、満たすべき条件が三つある。";
+			next;
+			mes "[マンスー組合長]";
+			mes "第一に、ジョブレベル10のノービスであり、基本スキルを全て習得していること。";
+			next;
+			mes "[マンスー組合長]";
+			mes "第二に、1000Zenyの会費を払うこと。商人を目指す者なら、1000Zenyくらい容易く稼げるはずだと思っているよ。";
+			next;
+			mes "[マンスー組合長]";
+			mes "第三に、体力と方向感覚を試す免許試験がある。特定の場所にいる特定の人物へ、荷物を届けてもらうことになる。";
+			close;
+		case 4:
+			close;
+		}
+	}
+
+S_GiveSerial:
+	next;
+	mes "[マンスー組合長]";
+	mes "いいか…";
+	mes "荷物の";
+	mes "シリアル番号は";
+	if (rand(2)) {
+		mes "^3355FF"+getarg(0)+"^000000.";
+		set job_merchant_q2,getarg(1);
+	}
+	else {
+		mes "^3355FF"+getarg(2)+"^000000.";
+		set job_merchant_q2,getarg(3);
+	}
+	setquest getarg(4);
+	return;
+}
+
+alberta_in,28,29,2	script	商人ギルド職員#mer::Merchant Guildsman#mer	83,{
+	if (BaseJob == Job_Merchant) {
+		mes "[組合職員ケイ]";
+		mes "よう、相棒。";
+		mes "調子はどうだい？";
+		close;
+	}
+	else if (BaseJob != Job_Merchant && BaseJob != Job_Novice) {
+		mes "[組合職員ケイ]";
+		mes "おい、あんた。うちはアルバイトの空きは無いんだ。Zenyが欲しいなら、他を当たってくれ。";
+		close;
+	}
+	else if (job_merchant_q == 9) {
+		mes "[組合職員ケイ]";
+		mes "おい、あんた。そうだ、あんただよ。";
+		mes "試験をやり直したいなら、隣の部屋のマンスーのところへ行きな。それから話をしよう。";
+		close;
+	}
+	else if (job_merchant_q == 8 || job_merchant_q == 7) {
+		mes "[組合職員ケイ]";
+		mes "よし！完璧だな！ギルドマスターに成功を報告しておくよ。さあ、マンスー組合長に話しに行きな？";
+		close;
+	}
+	else if (job_merchant_q == 6 || job_merchant_q == 5) {
+		mes " [組合職員ケイ] ";
+		mes "ああ、そうかい？よし、確認させてくれ。あんたの名前は" + strcharinfo(0) + "だったな？で、行き先は…";
+		next;
+		mes "[組合職員ケイ]";
+		if (job_merchant_q2 == 1 || job_merchant_q2 == 2)
+			mes "おお！プロンテラのカプラ嬢に会ったのか？！運がいいな～…で、受領証は？";
+		else if (job_merchant_q2 == 3 || job_merchant_q2 == 4)
+			mes "ゲフェンの魔法学院か。よし、受領証は？";
+		else if (job_merchant_q2 == 5 || job_merchant_q2 == 6)
+			mes "モロクの染物屋か。悪くない。受領証は？";
+		else if (job_merchant_q2 == 7 || job_merchant_q2 == 8)
+			mes "おっほほほ～！ビアラン島のカプラ嬢だと？！すごいじゃないか！それで、受領証は持ってきたかい？";
+
+		if (job_merchant_q2 == 1 && countitem(1073) != 0)
+			delitem 1073,1; //Merchant_Voucher_1
+		else if (job_merchant_q2 == 2 && countitem(1074) != 0)
+			delitem 1074,1; //Merchant_Voucher_2
+		else if (job_merchant_q2 == 3 && countitem(1075) != 0)
+			delitem 1075,1; //Merchant_Voucher_3
+		else if (job_merchant_q2 == 4 && countitem(1076) != 0)
+			delitem 1076,1; //Merchant_Voucher_4
+		else if (job_merchant_q2 == 5 && countitem(1077) != 0)
+			delitem 1077,1; //Merchant_Voucher_5
+		else if (job_merchant_q2 == 6 && countitem(1078) != 0)
+			delitem 1078,1; //Merchant_Voucher_6
+		else if (job_merchant_q2 == 7 && countitem(1079) != 0)
+			delitem 1079,1; //Merchant_Voucher_7
+		else if (job_merchant_q2 == 8 && countitem(1080) != 0)
+			delitem 1080,1; //Merchant_Voucher_8
+		else {
+			next;
+			set job_merchant_q,9;
+			mes " [組合職員ケイ] ";
+			mes "ちょっと待てよ。";
+			mes "受領証はどこだ？";
+			mes "どうしたんだ？";
+			next;
+			mes " [組合職員ケイ] ";
+			mes "受領証が無いなら試験は不合格だ！やり直したいなら、マンスーに話しな、いいな？次はちゃんと気をつけろよ！";
+			close;
+		}
+		next;
+		mes " [組合職員ケイ] ";
+		mes "……よし！完璧だ！ギルドマスターに成功を報告しておくよ。さあ、マンスー組合長に話しに行きな、いいな？";
+		close2;
+		if (job_merchant_q == 6)
+			set job_merchant_q,8;
+		else if (job_merchant_q == 5)
+			set job_merchant_q,7;
+		end;
+	}
+	else if (job_merchant_q == 4 || job_merchant_q == 3 && countitem(1081) == 0 && countitem(1082) == 0 && countitem(1091) == 0) {
+		mes " [組合職員ケイ] ";
+		mes "おや？";
+		mes "戻ってきたのか？";
+		mes "それで";
+		mes "配達はどうだった？";
+		next;
+		if (select("（泣）荷物を失くしました:順調です") == 1) {
+			set job_merchant_q,9;
+			mes "[組合職員ケイ]";
+			mes "冗談だろ？荷物を失くしたら試験は不合格になるんだぞ！";
+			next;
+			mes "[組合職員ケイ]";
+			mes "ああ、まったく。まあ、試験をやり直したいならマンスーに話しな、いいな？もう一度チャンスがもらえるだけ運がいいと思えよ！";
+			close;
+		}
+		mes "[組合職員ケイ]";
+		mes "おや…";
+		mes "そうか…";
+		close;
+	}
+	else if (job_merchant_q == 4 || job_merchant_q == 3 && countitem(1081) != 0 || countitem(1082) != 0 || countitem(1091) != 0) {
+		mes "[組合職員ケイ]";
+		mes "おい、まだこんな所で何をしてるんだ？もう出発してるはずじゃないのか？";
+		next;
+		if (select("新しい荷物が必要です:ああ、そうでした！") == 1) {
+			if (countitem(1081) == 0 && countitem(1082) == 0 && countitem(1083) == 0 && countitem(1091) == 0) {
+				mes "[組合職員ケイ]";
+				mes "な、なんだって？";
+				mes "じゃあ";
+				mes "荷物はどこへ";
+				mes "行ったんだ？！";
+				next;
+				if (select("（泣）失くしました！:ここに持っています") == 1) {
+					set job_merchant_q,9;
+					mes "[組合職員ケイ]";
+					mes "お前…";
+					mes "失くしただと？！";
+					mes "試験は不合格だ！";
+					next;
+					mes "[組合職員ケイ]";
+					mes "はぁ……試験をやり直したいなら、隣の部屋のマンスーのところへ行きな、いいな？";
+					close;
+				}
+				mes "[組合職員ケイ]";
+				mes "おや。";
+				mes "てっきり";
+				mes "失くしたのかと思ったよ。";
+				mes "それなら";
+				mes "新しいのは要らないな。";
+				close;
+			}
+			mes "[組合職員ケイ]";
+			mes "はぁ……まったく、面倒なやつだな。ちょっと待て、記録を取り消しておく…";
+			if (countitem(1081) != 0)
+				delitem 1081,1; //Merchant_Box_1
+			else if (countitem(1082) != 0)
+				delitem 1082,1; //Merchant_Box_2
+			else if (countitem(1091) != 0)
+				delitem 1091,1; //Merchant_Box_Etc
+			if (job_merchant_q == 4)
+				set job_merchant_q,2;
+			else if (job_merchant_q == 3)
+				set job_merchant_q,1;
+			next;
+			mes "[組合職員ケイ]";
+			mes "諸々整理するのに少し時間がかかる、また後で来てくれ。";
+			close;
+		}
+		mes "[組合職員ケイ]";
+		mes "がっかりだな…";
+		close;
+	}
+	else if ((job_merchant_q == 0 || job_merchant_q == 1 || job_merchant_q == 2)) {
+		set where_village,0;
+		mes "[組合職員ケイ]";
+		mes "やあ。";
+		mes "何の用で";
+		mes "ここへ来たんだい？";
+		next;
+		switch(select("商人免許試験のことで:アルバイトを探しています:何でもありません")) {
+		case 1:
+			mes "[組合職員ケイ]";
+			mes "なるほど。";
+			mes "よし。";
+			mes "それで";
+			mes "名前は？";
+			mes "" + strcharinfo(0) + "……？";
+			next;
+			if (job_merchant_q == 0) {
+				mes "[組合職員ケイ]";
+				mes "おや。あんたの名前はリストに無いな。転職クエストの申請はしたのか？";
+				next;
+				mes "[組合職員ケイ]";
+				mes "まずはこの建物の中央にいる";
+				mes "マンスー組合長に話して申請しないとな、いいか？";
+				close;
+			}
+			mes "[組合職員ケイ]";
+			mes "よし、それじゃあ。荷物を渡すから、配達先を選んでくれ。";
+			next;
+			switch(select("プロンテラ:ゲフェン:モロク:ビアラン島")) {
+			case 1: set .@where_village,1; break;
+			case 2: set .@where_village,2; break;
+			case 3: set .@where_village,3; break;
+			case 4: set .@where_village,4; break;
+			}
+			mes "[組合職員ケイ]";
+			mes "よし、次は荷物のシリアル番号を教えてくれ。キャンセルしたいなら「0」を入力すればいい、いいな？";
+			next;
+			while(1) {
+				while(1) {
+					input .@input;
+					if (.@input == 0) {
+						mes "[組合職員ケイ]";
+						mes "本当にキャンセルするのか？";
+						if (select("はい:もう一度試します") == 1) {
+							mes "分かった、今回はキャンセルにしよう。";
+							close;
+						}
+						next;
+					}
+					else if (.@input < 1000000 || .@input > 5000000) {
+						mes "[組合職員ケイ]";
+						mes "おいおい。その番号は無効だぞ！1000000から5000000までの値を入力してくれ。分かったか？";
+						next;
+					}
+					else 
+						break;
+				}
+				mes "[組合職員ケイ]";
+				if (.@where_village == 1)
+					mes "行き先はプロンテラ、シリアル番号は" + .@input + "だな。それでいいか？";
+				else if (.@where_village == 2)
+					mes "行き先はゲフェンか。ふう！ずいぶん遠いな！シリアル番号は" + .@input + "だな。それでいいか？";
+				else if (.@where_village == 3)
+					mes "行き先はモロクか。かなり遠いな！シリアル番号は" + .@input + "だな。それでいいか？";
+				else
+					mes "運がいいな！行き先はビアラン島、シリアル番号は" + .@input + "だな。それでいいか？";
+				next;
+				if (select("それでいい:しまった、番号を間違えました！") == 1) {
+					break;
+				}
+			}
+			if (.@where_village == 1) {
+				if (job_merchant_q2 == 1 && .@input == 2485741)
+					getitem 1081,1; //Merchant_Box_1
+				else if (job_merchant_q2 == 2 && .@input == 2328137)
+					getitem 1082,1; //Merchant_Box_2
+				else
+					getitem 1091,1; //Merchant_Box_Etc
+			}
+			else if (.@where_village == 2) {
+				if (job_merchant_q2 == 3 && .@input == 2989396)
+					getitem 1081,1; //Merchant_Box_1
+				else if (job_merchant_q2 == 4 && .@input == 2191737)
+					getitem 1082,1; //Merchant_Box_2
+				else
+					getitem 1091,1; //Merchant_Box_Etc
+			}
+			else if (.@where_village == 3) {
+				if (job_merchant_q2 == 5 && .@input == 3012685)
+					getitem 1081,1; //Merchant_Box_1
+				else if (job_merchant_q2 == 6 && .@input == 3487372)
+					getitem 1082,1; //Merchant_Box_2
+				else
+					getitem 1091,1; //Merchant_Box_Etc
+			}
+			else {
+				if (job_merchant_q2 == 7 && .@input == 3318702)
+					getitem 1081,1; //Merchant_Box_1
+				else if (job_merchant_q2 == 8 && .@input == 3543625)
+					getitem 1082,1; //Merchant_Box_2
+				else
+					getitem 1091,1; //Merchant_Box_Etc
+			}
+			if (job_merchant_q == 2)
+				set job_merchant_q,4;
+			else if (job_merchant_q == 1)
+				set job_merchant_q,3;
+			mes "[組合職員ケイ]";
+			mes "よし。この荷物を受け取って、無事にお客に届けるまで命がけで守り抜け。絶対に失くすなよ、分かったか？";
+			next;
+			mes "[組合職員ケイ]";
+			mes "それじゃあ、幸運を祈るよ。忘れるなよ、配達が終わったら";
+			mes "受領証を私のところへ持ってくるんだぞ、いいな？";
+			close;
+		case 2:
+			mes "[組合職員ケイ]";
+			mes "アルバイトだって？悪いな相棒、まだ空きは無いんだ。経理部がいつまで経っても予算を合わせられなくてね…";
+			close;
+		case 3:
+			mes "[組合職員ケイ]";
+			mes "何でもない、か？";
+			mes "つまり、理由もなく";
+			mes "人にちょっかいを";
+			mes "出すのが好きってことか？";
+			close;
+		}
+	}
+}
+
+morocc_in,140,102,4	script	染物職人の弟子#mer::Student#mer	86,{
+	if ((job_merchant_q == 4) || (job_merchant_q == 3)) {
+		mes "[染物職人の弟子]";
+		mes "商人ギルドの";
+		mes "方ですか？";
+		mes "はい！ちょうど";
+		mes "いい所に来ました。";
+		next;
+		mes "[染物職人の弟子]";
+		if (countitem(1081) == 1 || countitem(1082) == 1 || countitem(1091) == 1) {
+			mes "はい～";
+			mes "荷物は";
+			mes "そちらに";
+			mes "置いてください。";
+		}
+		else {
+			mes "あの…";
+			mes "注文した";
+			mes "荷物はどこですか？";
+			mes "おかしいですね…";
+			close;
+		}
+		next;
+		mes "[染物職人の弟子]";
+		mes "受領証をお渡しするので、荷物のシリアル番号を確認させてください、いいですか？";
+		next;
+		mes "[染物職人の弟子]";
+		if (job_merchant_q2 == 5 && countitem(1081) != 0) {
+			mes "3012685……";
+			mes "間違いありません。";
+			mes "こちらが";
+			mes "受領証です。";
+			delitem 1081,1; //Merchant_Box_1
+			getitem 1077,1; //Merchant_Voucher_5
+		}
+		else if (job_merchant_q2 == 6 && countitem(1082) != 0) {
+			mes "3487372……";
+			mes "間違いありません。";
+			mes "こちらが";
+			mes "受領証です。";
+			delitem 1082,1; //Merchant_Box_2
+			getitem 1078,1; //Merchant_Voucher_6
+		}
+		else {
+			mes "すみませんが……";
+			if (job_merchant_q2 == 5)
+				mes "これは注文した荷物ではないと思います。シリアル番号は3012685のはずです。ほら？";
+			else if (job_merchant_q2 == 6)
+				mes "これは注文した荷物ではないと思います。シリアル番号は3487372のはずです。ほら？";
+			else
+				mes "これは注文した荷物ではないと思います。シリアル番号は3012685か3487372のはずです。まあ、どちらかですね……";
+			close;
+		}
+		if (job_merchant_q == 4)
+			set job_merchant_q,6;
+		else if (job_merchant_q == 3)
+			set job_merchant_q,5;
+		next;
+		mes "[染物職人の弟子]";
+		mes "ありがとうございます！";
+		mes "また";
+		mes "会いましょう！";
+		close;
+	}
+	else if (job_merchant_q == 6 || job_merchant_q == 5 && job_merchant_q2 == 6 || job_merchant_q2 == 5) {
+		mes "[染物職人の弟子]";
+		mes "あ…";
+		mes "もう";
+		mes "戻られるんですね？";
+		mes "それでは、お気をつけて！";
+		close;
+	}
+	else {
+		mes "[染物職人の弟子]";
+		mes "ジャバ・ドゥリハン様は、ミッドガルド大陸で唯一無二、最高の染物職人なんですよ。";
+		next;
+		mes "[染物職人の弟子]";
+		mes "そして私は、その弟子であることを誇りに思っています！いつか私も、本当に美しい染料を作れるようになりますよ！";
+		next;
+		mes "[染物職人の弟子]";
+		mes "もちろん、今はまだ基礎を学んでいる最中ですが、いつかは……";
+		close;
+	}
+}
+
+geffen_in,155,122,4	script	ギルド職員#mer::Guild Staff#mer	47,{
+	if (job_merchant_q == 4 || job_merchant_q == 3) {
+		mes "[ギルド職員]";
+		mes "ああ、商人ギルドの方ですね。やっと荷物が届きました！よし……！";
+		next;
+		mes "[ギルド職員]";
+		if (countitem(1081) == 1 || countitem(1082) == 1 || countitem(1091) == 1) {
+			mes "こんな天気の中";
+			mes "旅をしてきて";
+			mes "さぞ";
+			mes "お疲れでしょう……";
+		}
+		else {
+			mes "待ってください……";
+			mes "荷物は";
+			mes "どこですか？";
+			close;
+		}
+		next;
+		mes "[ギルド職員]";
+		mes "それでは、";
+		mes "シリアル番号を確認させてください……";
+		if (job_merchant_q2 == 3 && countitem(1081) != 0) {
+			mes "2989396。ええ、これは注文した品です。こちらが受領証です。";
+			delitem 1081,1; //Merchant_Box_1
+			getitem 1075,1; //Merchant_Voucher_3
+		}
+		else if (job_merchant_q2 == 4 && countitem(1082) != 0) {
+			mes "2191737。ええ、これは注文した品です。こちらが受領証です。";
+			delitem 1082,1; //Merchant_Box_2
+			getitem 1076,1; //Merchant_Voucher_4
+		}
+		else {
+			mes "おっと、これは番号が違いますね。注文した品ではありません……";
+			next;
+			mes "[ギルド職員]";
+			if (job_merchant_q2 == 3) {
+				mes "シリアル番号は";
+				mes "2989396のはずです。";
+			}
+			else if (job_merchant_q2 == 4) {
+				mes "シリアル番号は";
+				mes "2191737のはずです。";
+			}
+			else {
+				mes "シリアル番号は";
+				mes "2989396か";
+				mes "2191737の";
+				mes "どちらかのはずです。";
+			}
+			mes "見てください！";
+			mes "何かが";
+			mes "おかしいと";
+			mes "思いませんか？";
+			close;
+		}
+		if (job_merchant_q == 4)
+			set job_merchant_q,6;
+		else if (job_merchant_q == 3)
+			set job_merchant_q,5;
+		next;
+		mes "[ギルド職員]";
+		mes "へへ～";
+		mes "ありがとうございます！";
+		mes "それでは！";
+		close;
+	}
+	else if (job_merchant_q == 6 || job_merchant_q == 5 && job_merchant_q2 == 4 || job_merchant_q2 == 3) {
+		mes "[ギルド職員]";
+		mes "こんにちは、";
+		mes "商人ギルドの方～";
+		mes "感謝しています。";
+		close;
+	}
+	else {
+		mes "[ギルド職員]";
+		mes "そろそろ荷物が届いているはずなんですが。おかしいですね、商人ギルドも少し遅れているのかもしれません……";
+		close;
+	}
+}
+
+prontera,248,42,0	script	カプラ職員#mer::Kafra Employee#mer	116,{
+	cutin "kafra_02",2;
+	if (job_merchant_q == 6 || job_merchant_q == 5) && (job_merchant_q2 == 2 || job_merchant_q2 == 1) {
+		mes "[カプラ職員]";
+		mes "あら！";
+		mes "こんなに遠くまで";
+		mes "来てくださって、ありがとうございます～";
+		close2;
+		cutin "",255;
+		end;
+	}
+	else if (job_merchant_q == 4 || job_merchant_q == 3) {
+		mes "[カプラ職員]";
+		mes "商人ギルドからの";
+		mes "配達ですか？";
+		mes "ああ、はい、そちらに";
+		mes "置いてください……";
+		if (countitem(1081) == 1 || countitem(1082) == 1 || countitem(1091) == 1) {
+			mes "そんなに長く";
+			mes "運んできて、お疲れでしょう！";
+		}
+		else {
+			mes "ま、待ってください。持ってきていないんですか？";
+			mes "荷物はどこに？";
+			close2;
+			cutin "",255;
+			end;
+		}
+		next;
+		mes "[カプラ職員]";
+		mes "それでは";
+		mes "シリアル番号を確認しますね……";
+		if (job_merchant_q2 == 1 && countitem(1081) != 0) {
+			mes "2485741。ええ、これが";
+			mes "注文した品ですね。あ、";
+			mes "受領証もお忘れなく！";
+			next;
+			delitem 1081,1; //Merchant_Box_1
+			getitem 1073,1; //Merchant_Voucher_1
+		}
+		else if (job_merchant_q2 == 2 && countitem(1082) != 0) {
+			mes "2328137。ええ、これが";
+			mes "注文した品ですね。あ、";
+			mes "受領証もお忘れなく！";
+			next;
+			delitem 1082,1; //Merchant_Box_2
+			getitem 1074,1; //Merchant_Voucher_2
+		}
+		else {
+			mes "うーん？ちょっと待って。これは";
+			mes "違う荷物ですね。私たちが";
+			if (job_merchant_q2 == 1)
+				mes "注文したのはシリアル番号2485741の品です。これは違うはずです。";
+			else if (job_merchant_q2 == 2)
+				mes "注文したのはシリアル番号2328137の品です。これは違うはずです。";
+			else
+				mes "注文したのはシリアル番号2485741か2328137の品です。";
+			next;
+			mes "[カプラ職員]";
+			mes "何か";
+			mes "間違いが";
+			mes "あったようですね。";
+			mes "商人ギルドに戻って";
+			mes "この件を";
+			mes "確認してもらえますか？";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (job_merchant_q == 4)
+			set job_merchant_q,6;
+		else if (job_merchant_q == 3)
+			set job_merchant_q,5;
+		mes "[カプラ職員]";
+		mes "本当に";
+		mes "お手数を";
+		mes "おかけしました～";
+		close2;
+		cutin "",255;
+		end;
+	}
+	else {
+		mes "[カプラ職員]";
+		mes "カプラ商会へ";
+		mes "ようこそ、";
+		mes "いつでも";
+		mes "あなたの味方です～";
+		next;
+		mes "[カプラ職員]";
+		mes "ご覧の通り、";
+		mes "剣士協会は";
+		mes "プロンテラの衛星都市";
+		mes "イズルードへ移転しました。";
+		mes "現在、600Zenyで";
+		mes "イズルードへの転送サービスを提供しています。";
+		next;
+		if (select("利用する:やめる") == 1) {
+			if (Zeny < 600) {
+				mes "[カプラ職員]";
+				mes "申し訳ございません、";
+				mes "転送サービスをご利用いただくには";
+				mes "Zenyが足りないようです。";
+				close2;
+				cutin "",255;
+				end;
+			}
+			set Zeny, Zeny-600;
+			set RESRVPTS, RESRVPTS + 37;
+			cutin "",255;
+			warp "izlude",94,103;
+			end;
+		}
+		close2;
+		cutin "",255;
+		end;
+	}
+}
+
+//izlu2dun,106,58,4	script	Kafra Employee#mer	116,{
+function	script	F_MercKafra	{
+	if ((job_merchant_q == 6 || job_merchant_q == 5) && (job_merchant_q2 == 8 || job_merchant_q2 == 7)) {
+		mes "[カプラ職員]";
+		mes "あら、こんにちは～";
+		mes "ええと、";
+		mes "何か特別なご用でも";
+		mes "おありですか？";
+		close2;
+		cutin "",255;
+		end;
+	}
+	else if (job_merchant_q == 4 || job_merchant_q == 3) {
+		mes "[カプラ職員]";
+		mes "商人ギルドからの";
+		mes "配達ですか？";
+		mes "ああ、はい、そちらに";
+		mes "置いてください……";
+		if (countitem(1081) == 1 || countitem(1082) == 1 || countitem(1091) == 1) {
+			mes "そんなに長く";
+			mes "運んできて、お疲れでしょう！";
+		}
+		else {
+			mes "ま、待ってください。持ってきていないんですか？";
+			mes "荷物はどこに？";
+			close2;
+			cutin "",255;
+			end;
+		}
+		next;
+		mes "[カプラ職員]";
+		mes "それでは";
+		mes "シリアル番号を確認しますね……";
+		if (job_merchant_q2 == 7 && countitem(1081) != 0) {
+			mes "3318702。ええ、これが";
+			mes "注文した品ですね。あ、";
+			mes "受領証もお忘れなく！";
+			delitem 1081,1; //Merchant_Box_1
+			getitem 1079,1; //Merchant_Voucher_7
+		}
+		else if (job_merchant_q2 == 8 && countitem(1082) != 0) {
+			mes "3543625。ええ、これが";
+			mes "注文した品ですね。あ、";
+			mes "受領証もお忘れなく！";
+			delitem 1082,1; //Merchant_Box_2
+			getitem 1080,1; //Merchant_Voucher_8
+		}
+		else {
+			mes "うーん？ちょっと待って。これは";
+			mes "違う荷物ですね。私たちが";
+			if (job_merchant_q2 == 7)
+				mes "注文したのはシリアル番号3318702の品です。これは違うはずです。";
+			else if (job_merchant_q2 == 8)
+				mes "注文したのはシリアル番号3543625の品です。これは違うはずです。";
+			else
+				mes "注文したのはシリアル番号3318702か3543625の品です。";
+			close2;
+			cutin "",255;
+			end;
+		}
+		if (job_merchant_q == 4)
+			set job_merchant_q,6;
+		else if (job_merchant_q == 3)
+			set job_merchant_q,5;
+		next;
+		if (countitem(1072) != 0 && quest_alb_01 == 0) {
+			select("これは商人ギルドのマンスー組合長からです……");
+			delitem 1072,1; //Delivery_Message
+			set quest_alb_01,1;
+			mes "[カプラ職員]";
+			mes "あら～！マンスーさんからの";
+			mes "お手紙ですね！本当に";
+			mes "ありがとうございます、ずっと";
+			mes "彼からの便りを待っていたんです。";
+			mes "元気にしているかしら？";
+			mes "早く読みたいわ……";
+			next;
+			mes "[カプラ職員]";
+			mes "ああ、わざわざ";
+			mes "届けてくださって";
+			mes "ありがとうございます。";
+			mes "大したものではありませんが、";
+			mes "どうぞ受け取ってください。";
+			mes "それでは、また今度～";
+			getitem 513,3; //Banana
+		}
+		else {
+			mes "[カプラ職員]";
+			mes "本当に";
+			mes "お手数を";
+			mes "おかけしました～";
+		}
+		close2;
+		cutin "",255;
+		end;
+	}
+	return;
+}

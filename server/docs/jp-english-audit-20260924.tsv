@@ -1,0 +1,14 @@
+file	line	command	string	reason_guess
+npc/custom/jp/jobs/2-1/assassin.txt	1105	waitingroom	Standby Room	英単語2語以上の連続: Standby Room
+npc/custom/jp/merchants/inn.txt	216	select	No thank you.	英単語2語以上の連続: thank you
+npc/custom/jp/merchants/inn.txt	216	select	Absolutely.	英字8文字以上の単語: Absolutely
+npc/custom/jp/other/arena/arena_aco.txt	36	waitingroom	Personal Force, Acolyte Class	英単語2語以上の連続: Personal Force
+npc/custom/jp/other/arena/arena_lvl50.txt	22	waitingroom	Individual; Level 50 to 69	英単語2語以上の連続: Individual; Level
+npc/custom/jp/other/arena/arena_lvl60.txt	23	waitingroom	Individual; Level 60 to 79	英単語2語以上の連続: Individual; Level
+npc/custom/jp/other/arena/arena_lvl70.txt	22	waitingroom	Individual; Level 70 to 89	英単語2語以上の連続: Individual; Level
+npc/custom/jp/other/arena/arena_lvl80.txt	22	waitingroom	Individual; Level 80 to 	英単語2語以上の連続: Individual; Level
+npc/custom/jp/other/arena/arena_party.txt	25	waitingroom	Party Mode - 5 Member Parties	英単語2語以上の連続: Party Mode
+npc/custom/jp/other/pvp.txt	361	waitingroom	Combat Square players entrance only	英単語2語以上の連続: Combat Square
+npc/custom/jp/other/pvp.txt	389	waitingroom	Compete Square viewer's entrance	英単語2語以上の連続: Compete Square
+npc/custom/jp/pre-re/guides/guides_veins.txt	25	select	Village Guide	英単語2語以上の連続: Village Guide
+npc/custom/jp/pre-re/guides/guides_veins.txt	25	select	Remove Marks from Mini-Map	英単語2語以上の連続: Remove Marks

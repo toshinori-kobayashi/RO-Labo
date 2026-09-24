@@ -1,0 +1,55 @@
+# 英語表示のまま許容する箇所の一覧（tools/jp_english_audit.py が読む）
+#
+# 形式: 1 行 1 ルール、TAB 区切り 3 列
+#     <file><TAB><pattern><TAB><reason>
+#   file    : 対象ファイル。空 または * なら全ファイル。
+#             overlay 相対パス / ファイル名のどちらにも glob（と部分一致）で当てる。
+#   pattern : 正規表現。マッチした部分を判定前に取り除く（= その部分は英語でよい）。
+#   reason  : 許容する理由。レポートには出ないが、後から判断を追える形で必ず書く。
+#
+# 出自: docs/JP_TRANSLATION_RULES.md / docs/JP_GLOSSARY.md（「NPC 固有名詞の扱い」
+#       「添字式の中で英語表記のまま残した箇所」）と
+#       backups/jp-translation/batch-*-result-*.txt に記録された意図的英語箇所。
+# 追加するときは reason を必ず書くこと。--strict で許容リストを無視して全件出せる。
+
+# ---------------------------------------------------------------- 全ファイル共通
+*	(?<![A-Za-z])Zeny(?![A-Za-z])	通貨は文字列内でも Zeny 表記で統一（docs/JP_TRANSLATION_RULES.md）
+*	(https?://)?[A-Za-z0-9][A-Za-z0-9.\-]*\.(com|net|org|jp)(/[^\s^]*)?	URL（iro.ragnarokonline.com 等）は原文のまま
+*	(?<![A-Za-z])(MaxHP|MaxSP|HP|SP|STR|AGI|VIT|INT|DEX|LUK|MATK|ATK|MDEF|DEF|ASPD|FLEE|HIT|CRIT|CRI|JobEXP|EXP|BaseLv|JobLv|Lv)(?![A-Za-z])	ステータス略語はクライアント UI と同じ英字表記
+*	(Ctrl|Alt|Shift)\s*\+\s*[A-Za-z0-9]+	UI のショートカットキー表記（Ctrl+Tab 等）
+*	(?<![A-Za-z])Map(?![A-Za-z])	基本情報ウィンドウの「Map」ボタン名（クライアント UI が英語）
+*	(?<![A-Za-z])GM(?![A-Za-z])	GM は運営呼称としてそのまま
+*	(?<![A-Za-z])(PvP|WoE|GvG|BG)(?![A-Za-z])	コンテンツ略称はプレイヤー間でも英字で通用する
+*	Kafra Points?	カプラポイントはシステム表示が英語
+*	\[\?+\]	話者不明タグ [?] / [???]
+*	^\[$|^\]$	"[" + strcharinfo(0) + "]" のプレイヤー名連結（記号のみのリテラル）
+*	^[^A-Za-z]*$	英字を含まない（記号・数字・日本語だけの）文字列
+*	\.\s*\.\s*\.	". . ." の省略記号
+*	Job change (target|monster)	転職試験で狩る mob の表示名。mob_db の英語名と一致させる必要がある
+*	(?<![A-Za-z])(GOD-)?POING(?![A-Za-z])	geffen.txt / sage.txt のロボット固有名詞（原文どおりの英字表記）
+
+# ---------------------------------------------------------------- ファイル個別
+npc/custom/jp/jobs/2-2/monk.txt	(?<![A-Za-z])(In nomine Patris|et Filii|et Spiritus Sancti|Spiritus Sancti|veritas|aequitas)(?![A-Za-z])	モンク試験のラテン語の祈祷句（訳さないことで儀式感を出す原文の意図）
+npc/custom/jp/jobs/2-2/alchemist.txt	(?<![A-Za-z])(Lorem|ipsum|dolor|sit|amet|consectetuer|adipiscing|elit|Aenean|fermentum|ullamcorper|Vestibulum|ante|primis|faucibus|orci|luctus|ultrices|posuere|cubilia|Curae|Morbi|massa|vitae|Vivamus|sem|Sed|metus|lacus|viverra|rutrum|eget|rhoncus|lectus|Suspendisse|urna|nisl|fringilla|Nulla|scelerisque|eros)(?![A-Za-z])	「読めない古文書」の Lorem ipsum。読めないことが演出なので原文のまま
+npc/custom/jp/jobs/2-2/alchemist.txt	(?<![A-Za-z])(Brake|Brass|Broken|Brigan|vendor|storage|weapon|simple|streetshop|molasses|party|leader|sweets|treacle|partisan|partizan|pato|paros|pack|packman|sunshine|ragnarok|wonderland|frost|purple|smoker|bolt|burnt wood|scab|kinship|donate|source|opening|forgemerchant|potionmerchant|dcmerchant|vendingmerchant|battlemerchant|tiger|wolf|pumpkin|tripped|tore|bash|provoke|endure|stun|abracadabra|alberta|latifoliate|crimson|maple|evergreen)(?![A-Za-z])	アナグラム問題の選択肢。並べ替える英字列と答えが対応しているため訳せない
+npc/custom/jp/jobs/2-2/alchemist.txt	(?<![A-Za-z])(Karvodailnirol|Detrimindexta|Alcohol)(?![A-Za-z])	アイテム名。getitemname() の表示（英語）と一致させる
+npc/custom/jp/quests/skills/blacksmith_skills.txt	(?<![A-Za-z])(Karvodailnirol|Detrimindexta)(?![A-Za-z])	アイテム名。getitemname() の表示（英語）と一致させる
+npc/custom/jp/merchants/elemental_trader.txt	(?<![A-Za-z])(Mystic Frozen|Great Nature|Flame Heart|Rough Wind)(?![A-Za-z])	添字式 .@Items[select(...)] の中。CP932 2 バイト目が [ ] の文字を置けない（parse_variable の制約 / map-server SIGSEGV）
+npc/custom/jp/quests/skills/bard_skills.txt	(?<![A-Za-z])(U+u*m+|Ba+la+a*|Kk+u+r+i?r+e+|Oo+umm|guandlejdl|Wo+o+|Ei)(?![A-Za-z])	リオットの催眠術の擬音（意味のない呪文なので原文のまま）
+npc/custom/jp/merchants/coin_exchange.txt	(?<![A-Za-z])(BurWehAla|tasnarAndu|Rtt|Qwo|irr|Ie|Ru|od|hd|is|d)(?![A-Za-z])	マヌク／スプレンディッドの架空言語。訳すと意味が壊れる
+npc/custom/jp/jobs/2-1/wizard.txt	(?<![A-Za-z])Z[zZ]{2,}(?![A-Za-z])	いびきの擬音（原文の表記をそのまま残す）
+npc/custom/jp/pre-re/jobs/novice/novice.txt	//organize	プレイヤーがそのまま打ち込むチャットコマンド
+npc/custom/jp/quests/quests_alberta.txt	(?<![A-Za-z])tur_dun[0-9]+(?![A-Za-z])	マップ ID。プレイヤーが /navi 等で使うので英字のまま
+npc/custom/jp/quests/quests_alberta.txt	- O / X / XOVX -	記号列（batch-5 の記録どおり意図的に英語）
+npc/custom/jp/quests/quests_yuno.txt	mjolnir_02 \. 170 193	マップ座標の表記（batch-5 の記録どおり意図的に英語）
+npc/custom/jp/pre-re/guides/guides_lighthalzen.txt	(?<![A-Za-z])spacer(?![A-Za-z])	原文どおりの文字列（クライアント側の見た目調整用）
+
+# 参考: 過去に「意図的な英語」と記録されたが現在は日本語化済み、または
+#       判定規則に掛からないため許容ルールが不要な箇所。
+#   - jobs/2-2/rogue.txt のパスワードドア（合言葉は日本語化済み、扉の番号は数字）
+#   - quests/skills/sage_skills.txt の記号だけの呪文（英字を含まないため対象外）
+#   - jobs/2-2/rogue.txt の伏せ字 'F#%k'（「ち○しょう」へ変更済み）
+*	(victkleyundncem|hekdlfiDrindkelsd|ConBanfoevidehi|TheisWesomeof)	tu_sword.txt の暗号パズル（input 照合文字列。Phase 2-C）
+*	(?<![A-Za-z])(Karvodailnirol|Detrimindexta)(?![A-Za-z])	架空アイテム名（alchemist.txt / counteragent_mixture.txt / blacksmith_skills.txt で英語統一）
+*	SHIFT \+ Blessing	tu_acolyte.txt の操作説明（キー + スキル名）
+*	kamenriderblack	tu_magician01.txt の上流イースターエッグ（白文字で不可視）

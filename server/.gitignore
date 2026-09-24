@@ -1,0 +1,34 @@
+# 秘密情報（EC2 上で生成し、ローカルには置かない）
+.env
+*.env.local
+
+# ローカル検証用の compose データ（app/docker-compose.local.yml が使う）
+app/.local/
+
+# Terraform（state は Sandbox の S3 に置けないためローカル保持。Git には入れない。
+# .terraform.lock.hcl は provider バージョン固定のため Git 管理対象に含める）
+terraform/.terraform/
+terraform/.build/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# 配布用アーカイブ
+app.zip
+
+# バックアップ・DB ダンプ
+backups/
+*.sql.gz
+
+# SSH 鍵・known_hosts の類
+*.pem
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+known_hosts
+
+# OS / エディタ
+.DS_Store
+*.swp

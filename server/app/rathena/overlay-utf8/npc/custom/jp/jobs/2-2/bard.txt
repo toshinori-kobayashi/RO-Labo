@@ -1,0 +1,953 @@
+//===== rAthena Script ======================================= 
+//= Bard Job Quest
+//===== By: ==================================================
+//= Muad_Dib(The Prometheus Project), Lupus, Samuray22
+//===== Current Version: ===================================== 
+//= 2.6
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Job quest for Bard class
+//===== Additional Comments: =================================
+//= 2.1b Updated to the Official One. [Samuray22]
+//= 2.2 Fixed BUG when baby classes weren't able to get a job,
+//=	- fixed bug with final prize [Lupus] HAVE TO CHANE ALL ITEMS to numeric IDs
+//= 2.3 Updated NPC dialogs and cutins using Aegis 10.3 files. [L0ne_W0lf]
+//=	- Fixed error with the present checking. (Lupus beat me to committing)
+//=	- Changed the reward checking to use callsub (fixed the flow of the script)
+//=	- Optimized and changed the flow of things slightly.
+//=	- Temporary character variables "@" are now ".@"
+//=	- Fixed some indentation.
+//=	- Changed item names to item IDs
+//= 2.4 Fixed hang up on bard quest. ($kiN.) [L0ne_W0lf]
+//= 2.5 Added Quest Log commands. [Kisuka]
+//= 2.6 Removed the need for use of 'goto.' [L0ne_W0lf]
+//============================================================
+
+// Ayealo
+//============================================================
+comodo,226,123,5	script	さすらいのバード::Wandering Bard	741,{
+	if(Upper == 1) {
+		mes "[ラロ]";
+		mes "神になる運命を背負った者は";
+		mes "この時代にも数多くいる";
+		mes "だが生きている間はその定めに気づかない。";
+		mes "そして誰もが平凡な人間で終わっていく……";
+		next;
+		mes "[ラロ]";
+		mes "風よ、雲よ、この言葉を伝えておくれ";
+		mes "衣食住と富ばかりを追い求める者たちに。";
+		mes "それは時間の無駄だと……";
+		mes "人生で一番大切なものを忘れていると……";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BaseJob != Job_Archer) {
+		if(BaseJob == Job_Bard) {
+			mes "[ラロ]";
+			mes "おっ、久しぶりだな！最近の歌の調子はどうだ？";
+			mes "少しは声が良くなったんじゃないか？";
+			next;
+			mes "[ラロ]";
+			mes "街々にいい知らせを届けるのを忘れちゃいないだろうな？";
+			mes "新しい歌を覚えるのも忘れずにな……";
+			next;
+			mes "[ラロ]";
+			mes "前向きな気持ちと喜びの意味を忘れるなよ。";
+			mes "俺たちの歌は誰の心にも幸せと喜びを届けるものだからな。";
+		}
+		else if(Class == Job_Novice) {
+			cutin "job_bard_aiolo01",2;
+			mes "[ラロ]";
+			mes "この胸を覆う悲しみは……";
+			mes "消えてはくれない……";
+			mes "これが俺の悩みの原因なのか";
+			mes "これが俺の弱さの理由なのか";
+			mes "だからお前を忘れられないんだろうな……";
+			next;
+			mes "[ラロ]";
+			mes "ああ、悪い。歌詞を考えるのに夢中で気づかなかったよ。";
+			mes "俺の歌を聴いてみたいか？一曲歌ってやろうか？";
+			next;
+			mes "[ラロ]";
+			mes "はは……他の奴に頼んでくれ。";
+			mes "今は新しい歌を作るのに手一杯でな。";
+		}
+		else {
+			cutin "job_bard_aiolo01",2;
+			mes "[ラロ]";
+			mes "ラララ、ラララ。美しきコモドよ。";
+			mes "いつだって楽しい瞬間で満ちている～";
+			next;
+			mes "[ラロ]";
+			if (Sex == SEX_MALE) {
+				mes "悩みごとは忘れちまいな～";
+				mes "何もかも楽しんじまえ～";
+			}
+			else mes "可愛いお嬢さん、一緒に踊らないか～";
+			mes "青春は二度と巡ってこないのさ～";
+		}
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BARD_Q == 0) {
+		cutin "job_bard_aiolo01",2;
+		mes "[ラロ]";
+		if (Sex == SEX_MALE) mes "アーチャーさん、こんにちは。";
+		else mes "こんにちは、美しきアーチャーの君。";
+		mes "旅の身の俺に、何か用かい？";
+		next;
+		switch(select("良い声をしていますね。:歌ってもらえますか？:何でもない。")) {
+		case 1:
+			mes "[ラロ]";
+			mes "ハハハ！もちろんだとも！";
+			mes "楽しい気持ちで歌えば、声はどんどん良くなっていくものさ。";
+			next;
+			mes "[ラロ]";
+			mes "だがな、バードにとって声は命そのものだ。";
+			mes "時には声が出なくなることもある、気をつけないとな。";
+			break;
+
+		case 2:
+			mes "[ラロ]";
+			mes "歌か……そうだな。";
+			mes "よし、一曲思いついたぞ……";
+			next;
+			mes "[ラロ]";
+			mes "歌おう……「戦太鼓」を。";
+			mes "んんっ……ゲホッ、ンー、メメメメメ……";
+			mes "1、2、3、4……";
+			next;
+			mes "^000088地平線を駆ける馬蹄の音";
+			mes "遠い太陽を覆い隠す砂塵";
+			mes "夜空に幾千の瞳が開くとき";
+			mes "城の炎は力強く燃え上がる。^000000";
+			next;
+			mes "^000088聞こえる……この胸の鼓動が。";
+			mes "感じる……血が体を駆け巡るのを。";
+			mes "……そしてこの鎧の重み。";
+			mes "見える……敵の姿が。^000000";
+			next;
+			mes "^000088もっと大きく、もっと大きく……";
+			mes "戦士たちに力を与えよ！";
+			mes "もっと高く、もっと高く……";
+			mes "この日は二度と訪れない！^000000";
+			next;
+			mes "^000088空を震わせ、大地に轟け。";
+			mes "再びこの心を高鳴らせろ！";
+			mes "ラッパを鳴らし、城壁に響かせよ。";
+			mes "この瞬間は二度と訪れない！^000000";
+			next;
+			mes "[ラロ]";
+			mes "うむ……いつ歌ってもいい歌だ。";
+			mes "どうだった？なかなかいい歌だと思わないか？";
+			next;
+			if (select("とても良かったです。:あまり……") == 1) {
+				mes "[ラロ]";
+				mes "ありがとう！楽しんでもらえたなら、俺も嬉しいよ。";
+				next;
+				if (Sex == SEX_MALE && JobLevel > 39) {
+					mes "[ラロ]";
+					mes "もっと多くの人が旅をしながら歌ってくれたら嬉しいんだがな……";
+					mes "まあ、今のままでも悪くはないさ……ふふん。";
+					set BARD_Q,1;
+					setquest 3000;
+					close2;
+					cutin "job_bard_aiolo01",255;
+					end;
+				}
+				mes "[ラロ]";
+				mes "また俺の歌が聴きたくなったら、いつでも声をかけてくれ。";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			cutin "job_bard_aiolo02",2;
+			mes "[ラロ]";
+			mes "うーん……俺の感覚も鈍ったか、もっと精進しないとな。";
+			mes "とにかく……聴いてくれてありがとう。";
+			break;
+
+		case 3:
+			cutin "job_bard_aiolo02",2;
+			mes "[ラロ]";
+			mes "おいおい、バードに出会って歌をせがまないとは、ちょっと不作法だぞ。";
+			mes "まあ、急いでいるみたいだから仕方ないか。";
+			next;
+			mes "[ラロ]";
+			mes "狩りもいいが、たまには一息つくのを忘れるなよ。";
+			mes "青春は短い、過ぎてしまえばもう戻ってこないんだからな……";
+			break;
+		}
+		close2;
+		cutin "job_bard_aiolo02",255;
+		end;
+	}
+	else if(BARD_Q == 1) {
+		cutin "job_bard_aiolo01",2;
+		mes "[ラロ]";
+		mes "やあ、アーチャーの君。";
+		mes "旅の身の俺に、何か用かい？";
+		next;
+		switch(select("良い声をしていますね。:歌ってもらえますか？:何でもない。")) {
+		case 1:
+			mes "[ラロ]";
+			mes "ほほう、君もなかなかいい声をしているな？";
+			mes "歌ってみようと思ったことはないか？";
+			next;
+			if (select("もちろん！:とてもそんな……") == 1) {
+				mes "[ラロ]";
+				mes "はは、いい心意気だ。バードになるにはそのくらいでなくてはな。";
+				mes "よし、バードになれるよう手伝ってやろう。";
+				next;
+				mes "[ラロ]";
+				mes "だがその前に……花を一輪持ってきてもらえるか？";
+				mes "教える気になるには、花の香りを嗅がないとな。";
+				next;
+				mes "[ラロ]";
+				mes "どんな花でも構わないが、俺の気に入る花を持ってきてくれ。";
+				mes "適当に買ってきただけの花じゃだめだぞ？";
+				set BARD_Q,2;
+				changequest 3000,3001;
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			mes "[ラロ]";
+			mes "はは、ずいぶん臆病なんだな。";
+			mes "自分をそんなに卑下するもんじゃないぞ。";
+			next;
+			mes "[ラロ]";
+			mes "君には十分な才能がある。";
+			mes "気が変わったら、また来るといい。";
+			break;
+
+		case 2:
+			mes "[ラロ]";
+			mes "ふむ……君にも歌の才があるようだな？";
+			mes "歌をねだるだけじゃなく、自分で歌うのもなかなか楽しいものだぞ。";
+			next;
+			mes "[ラロ]";
+			mes "バードとしての人生を楽しんでみるといい。";
+			mes "街から街へと渡り歩き、人々に歌を届ける……いいと思わないか？";
+			break;
+
+		case 3:
+			mes "[ラロ]";
+			mes "うーん……よくわからんが、人生を楽しむことだな。";
+			mes "君はちょっと肩に力が入りすぎだ。";
+			next;
+			mes "[ラロ]";
+			mes "それじゃあな～楽しんでくれよ～";
+			break;
+		}
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if(BARD_Q == 2) {
+		cutin "job_bard_aiolo01",2;
+		mes "[ラロ]";
+		mes "よく来たな！アーチャーの友よ。";
+		mes "花は持ってきてくれたか？見せてくれ。";
+		next;
+		mes "[ラロ]";
+		//Good Flowers
+		if (countitem(629) > 0) {
+			mes "おお！歌う花じゃないか！";
+			mes "色々な思い出が詰まっているんだ……";
+			next;
+			delitem 629,1; //Singing Flower
+			mes "[ラロ]";
+			mes "友人のチャイコフスキーが好きだった花でな。";
+			mes "あいつは今頃どうしているだろうな……";
+		}
+		else if(countitem(703) > 0) {
+			mes "ああ……可愛いヒナルの花か……";
+			mes "香りはないが、控えめで可愛らしい花だな。";
+			next;
+			delitem 703,1; //Hinalle
+			mes "[ラロ]";
+			mes "若い頃、転びそうになった時この葉に力をもらったものだ。";
+			mes "この花は本当に好きなんだ、ありがとう。";
+		}
+		else if(countitem(704) > 0) {
+			mes "アロエか……これは珍しい花だな。";
+			mes "どうやって手に入れたんだ？なかなかやるじゃないか？";
+			next;
+			delitem 704,1; //Aloe
+			mes "[ラロ]";
+			mes "葉も良いし、アロエベラも美味いが……";
+			mes "花の姿が一番美しいのは間違いないな。";
+		}
+		else if(countitem(708) > 0) {
+			mes "メントか……これがあれば苦労もみんな忘れられる。";
+			mes "久しぶりに見たな、嬉しいよ！";
+			next;
+			delitem 708,1; //Ment
+			mes "[ラロ]";
+			mes "これで鎮痛剤が作れるとも聞くが……";
+			mes "それじゃちょっともったいないな……ありがとう！";
+		}
+		else if(countitem(709) > 0) {
+			mes "おお、これはイジドールじゃないか？";
+			mes "危険だが美しい花だ……";
+			next;
+			delitem 709,1; //Izidor
+			mes "[ラロ]";
+			mes "この深い紫が人を魅了するんだ……";
+			mes "ありがとう、この花は本当に気に入っているんだ。";
+		}
+		else if(countitem(748) > 0) {
+			mes "おお、枯れないバラか。決して枯れない強い花だ。";
+			mes "恋人に贈るにはぴったりだな。";
+			next;
+			delitem 748,1; //Witherless_Rose
+			mes "[ラロ]";
+			mes "俺みたいな旅人がもらってもいいものかな。";
+			mes "ハハ、まあいいよな……？";
+		}
+		else if(countitem(749) > 0 ) {
+			mes "凍ったバラか……花と呼んでいいものか迷うが、";
+			mes "それでも美しい……透き通ったバラだ。";
+			next;
+			delitem 749,1; //Frozen_Rose
+			mes "[ラロ]";
+			mes "香りはなくなっても、花と呼んでいいだろう。";
+			mes "それじゃあ、ありがたく受け取っておこう。";
+		}
+		else if(countitem(710) > 0) {
+			mes "おお、これは幻の花じゃないか！？";
+			mes "すごいな、こんなに珍しい花をどうやって手に入れたんだ！？";
+			next;
+			delitem 710,1; //Illusion_Flower
+			mes "[ラロ]";
+			mes "本当にありがとう、ああ……まるで天国が目の前にあるようだ。";
+			mes "なんて素晴らしい気分だ！本当に嬉しいよ！";
+		}
+		//Bad Flowers
+		else if(countitem(712) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "え？これはただの普通の花じゃないか。";
+			mes "嫌いじゃないが……これじゃ足りないな。";
+			next;
+			mes "[ラロ]";
+			mes "この花ならプロンテラの女の子からもらえるだろう。";
+			mes "別の花を持ってきてくれ。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else if(countitem(744) > 0) {
+			mes "おいおい、花束を持ってきたのか？";
+			mes "こんなものを俺に持ってきてもらっても困る。";
+			next;
+			mes "[ラロ]";
+			mes "それは卒業するセージにでも贈ってやれ。";
+			mes "そういう贈り物にはぴったりだからな……別の花を持ってきてくれ。";
+			close2;
+			cutin "job_bard_aiolo01",255;
+			end;
+		}
+		else if(countitem(745) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "おいおい……結婚式にでも行ってきたのか？";
+			mes "男にウェディングブーケを渡してどうしろって言うんだ？";
+			next;
+			mes "[ラロ]";
+			mes "俺じゃなくて、誰かご婦人にでも渡してくれ。";
+			mes "それは俺が欲しかった花とは違うな。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else if(countitem(2207) > 0) {
+			mes "うーん……ファンシーフラワーか。";
+			mes "悪くはないが……これじゃ物足りないな。";
+			next;
+			mes "[ラロ]";
+			mes "俺は香りがあって美しい花が好きなんだ。";
+			mes "頭に飾るだけの造花は好みじゃない。";
+			close2;
+			cutin "job_bard_aiolo01",255;
+			end;
+		}
+		else if(countitem(1032) > 0) {
+			cutin "job_bard_aiolo02",2;
+			mes "……うわ、なんでこんな醜いものを持ってきたんだ？";
+			mes "ちゃんと考えているのか？";
+			next;
+			mes "[ラロ]";
+			mes "面白いことをしようとしたなら、なかなかの出来だが……";
+			mes "次はちゃんとした花を持ってきてくれ。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		else {
+			cutin "job_bard_aiolo02",2;
+			mes "ん？なんだ……何も持ってきていないじゃないか。";
+			mes "花を持ってくるよう頼んだはずだが？";
+			next;
+			mes "[ラロ]";
+			mes "まあ……自分の力で学びたいというなら、それもいいだろう。";
+			mes "歌うだけなら誰にでもできることだしな。";
+			close2;
+			cutin "job_bard_aiolo02",255;
+			end;
+		}
+		next;
+		cutin "job_bard_aiolo01",2;
+		mes "[ラロ]";
+		mes "約束通り、バードになれるよう手伝ってやろう。";
+		mes "だが簡単な道のりじゃないぞ。ハハ！";
+		next;
+		mes "[ラロ]";
+		mes "歌を学ぶには、多くの人と知り合うことが大切だ。";
+		mes "色々な村で起きていることにも目を配らないとな……";
+		next;
+		mes "[ラロ]";
+		mes "ルティエという町に、しゃべる雪だるまがいる。";
+		mes "そこへ行って、プレゼントをもらってきてくれ。";
+		next;
+		set BARD_Q,3;
+		changequest 3001,3002;
+		set xmas_npc,1;
+		mes "[ラロ]";
+		mes "^008800ジャック・フロスト^000000と仲良くなれれば、何かもらえるはずだ。";
+		mes "それに、町の人たちとも話をしてみるといい……";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	else if ((BARD_Q >= 3) || (BARD_Q <= 5)) {
+		if (BARD_Q == 3) {
+			if(xmas_npc > 10) { //this var is set in LUTIE.TXT
+				cutin "job_bard_aiolo01",2;
+				mes "[ラロ]";
+				mes "旅はどうだった？たくさんの人に出会えたか？";
+				mes "プレゼントよりも大事な何かを学べたはずだ。";
+				next;
+				mes "[ラロ]";
+				mes "それじゃあ、歌に挑戦してみるか……？";
+				mes "短い旋律を俺が歌うから……";
+				mes "その後で君も歌ってみてくれ。";
+				if(checkquest(3003) == -1) {
+					changequest 3002,3003;
+				}
+				next;
+				mes "[ラロ]";
+				mes "それじゃあ行くぞ。";
+				mes "んんっ、コホン。";
+				mes "1、2、3、4";
+				next;
+			}
+			else {
+				cutin "job_bard_aiolo01",2;
+				set xmas_npc,1;
+				mes "[ラロ]";
+				mes "おや、まだ仲良くなれていないのか？";
+				mes "話しかけるだけじゃ足りないみたいだな。";
+				next;
+				mes "[ラロ]";
+				mes "^008800ジャック・フロスト^000000と仲良くなれれば、何かもらえるはずだ。";
+				mes "村の人たちとも話してみるんだぞ……";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+		}
+		else if (BARD_Q == 4) {
+			cutin "job_bard_aiolo01",2;
+			mes "[ラロ]";
+			mes "うむ……今度はもっとうまくやれるだろう？";
+			mes "もう一度挑戦してみよう、君ならできる。";
+			next;
+			mes "[ラロ]";
+			mes "俺が一節歌うから……";
+			mes "その後で君も歌ってみてくれ。";
+			next;
+			mes "[ラロ]";
+			mes "それじゃあ行くぞ。";
+			mes "んんっ。";
+			mes "1、2、3、4";
+			next;
+		}
+		if (BARD_Q != 5) {
+			set .@bard_s, rand(1,5);
+			if (.@bard_s == 1) {
+				mes "^3377FFその昔、ひとりの男がいた^000000";
+				mes "不死身と噂される男が。";
+				mes "その名はイヒフレイド、";
+				mes "英雄イヒムントの息子。";
+				mes "邪悪な巨人パプナーは、";
+				mes "竜と化して彼を食らった。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "その昔、ひとりの男がいた")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFその昔、ひとりの男がいた";
+				mes "不死身と噂される男が。^000000";
+				mes "その名はイヒフレイド、";
+				mes "英雄イヒムントの息子。";
+				mes "邪悪な巨人パプナーは、";
+				mes "竜と化して彼を食らった。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "不死身と噂される男が。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFその昔、ひとりの男がいた";
+				mes "不死身と噂される男が。";
+				mes "その名はイヒフレイド、^000000";
+				mes "英雄イヒムントの息子。";
+				mes "邪悪な巨人パプナーは、";
+				mes "竜と化して彼を食らった。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "その名はイヒフレイド、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFその昔、ひとりの男がいた";
+				mes "不死身と噂される男が。";
+				mes "その名はイヒフレイド、";
+				mes "英雄イヒムントの息子。^000000";
+				mes "邪悪な巨人パプナーは、";
+				mes "竜と化して彼を食らった。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "英雄イヒムントの息子。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFその昔、ひとりの男がいた";
+				mes "不死身と噂される男が。";
+				mes "その名はイヒフレイド、";
+				mes "英雄イヒムントの息子。";
+				mes "邪悪な巨人パプナーは、^000000";
+				mes "竜と化して彼を食らった。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "邪悪な巨人パプナーは、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFその昔、ひとりの男がいた";
+				mes "不死身と噂される男が。";
+				mes "その名はイヒフレイド、";
+				mes "英雄イヒムントの息子。";
+				mes "邪悪な巨人パプナーは、";
+				mes "竜と化して彼を食らった。^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "竜と化して彼を食らった。")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 2) {
+				mes "^3377FF金も道具も持たぬ商人がいた、^000000";
+				mes "何ひとつ売れない商人が。";
+				mes "だが誇り高く、物乞いはしなかった。";
+				mes "そこで品物を売って金を集めた。";
+				mes "はじめは赤ポーションばかり売っていたが、";
+				mes "ジャガイモも売っていたという者もいる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "金も道具も持たぬ商人がいた、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF金も道具も持たぬ商人がいた、";
+				mes "何ひとつ売れない商人が。^000000";
+				mes "だが誇り高く、物乞いはしなかった。";
+				mes "そこで品物を売って金を集めた。";
+				mes "はじめは赤ポーションばかり売っていたが、";
+				mes "ジャガイモも売っていたという者もいる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "何ひとつ売れない商人が。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF金も道具も持たぬ商人がいた、";
+				mes "何ひとつ売れない商人が。";
+				mes "だが誇り高く、物乞いはしなかった。^000000";
+				mes "そこで品物を売って金を集めた。";
+				mes "はじめは赤ポーションばかり売っていたが、";
+				mes "ジャガイモも売っていたという者もいる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "だが誇り高く、物乞いはしなかった。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF金も道具も持たぬ商人がいた、";
+				mes "何ひとつ売れない商人が。";
+				mes "だが誇り高く、物乞いはしなかった。";
+				mes "そこで品物を売って金を集めた。^000000";
+				mes "はじめは赤ポーションばかり売っていたが、";
+				mes "ジャガイモも売っていたという者もいる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "そこで品物を売って金を集めた。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF金も道具も持たぬ商人がいた、";
+				mes "何ひとつ売れない商人が。";
+				mes "だが誇り高く、物乞いはしなかった。";
+				mes "そこで品物を売って金を集めた。";
+				mes "はじめは赤ポーションばかり売っていたが、^000000";
+				mes "ジャガイモも売っていたという者もいる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "はじめは赤ポーションばかり売っていたが、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF金も道具も持たぬ商人がいた、";
+				mes "何ひとつ売れない商人が。";
+				mes "だが誇り高く、物乞いはしなかった。";
+				mes "そこで品物を売って金を集めた。";
+				mes "はじめは赤ポーションばかり売っていたが、";
+				mes "ジャガイモも売っていたという者もいる。^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "ジャガイモも売っていたという者もいる。")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 3) {
+				mes "^3377FF神々は決して老いることはない。^000000";
+				mes "この上なく美しき女神イーデン、";
+				mes "美しく気高き女神イーデン、";
+				mes "オーディンの義理の娘にしてブラギの妻。";
+				mes "その籠に盛られた甘き林檎、";
+				mes "その甘き林檎のおかげなのだ。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "神々は決して老いることはない。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF神々は決して老いることはない。";
+				mes "この上なく美しき女神イーデン、^000000";
+				mes "美しく気高き女神イーデン、";
+				mes "オーディンの義理の娘にしてブラギの妻。";
+				mes "その籠に盛られた甘き林檎、";
+				mes "その甘き林檎のおかげなのだ。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "この上なく美しき女神イーデン、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF神々は決して老いることはない。";
+				mes "この上なく美しき女神イーデン、";
+				mes "美しく気高き女神イーデン、^000000";
+				mes "オーディンの義理の娘にしてブラギの妻。";
+				mes "その籠に盛られた甘き林檎、";
+				mes "その甘き林檎のおかげなのだ。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "美しく気高き女神イーデン、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF神々は決して老いることはない。";
+				mes "この上なく美しき女神イーデン、";
+				mes "美しく気高き女神イーデン、";
+				mes "オーディンの義理の娘にしてブラギの妻。^000000";
+				mes "その籠に盛られた甘き林檎、";
+				mes "その甘き林檎のおかげなのだ。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "オーディンの義理の娘にしてブラギの妻。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF神々は決して老いることはない。";
+				mes "この上なく美しき女神イーデン、";
+				mes "美しく気高き女神イーデン、";
+				mes "オーディンの義理の娘にしてブラギの妻。";
+				mes "その籠に盛られた甘き林檎、^000000";
+				mes "その甘き林檎のおかげなのだ。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "その籠に盛られた甘き林檎、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FF神々は決して老いることはない。";
+				mes "この上なく美しき女神イーデン、";
+				mes "美しく気高き女神イーデン、";
+				mes "オーディンの義理の娘にしてブラギの妻。";
+				mes "その籠に盛られた甘き林檎、";
+				mes "その甘き林檎のおかげなのだ。^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "その甘き林檎のおかげなのだ。")
+					set .@w_point,.@w_point+1;
+			}
+			else if (.@bard_s == 4) {
+				mes "^3377FFブラギよ、ブラギよ、^000000";
+				mes "永遠に詩人の名を呼ばん。";
+				mes "我が歌は彼の息吹、";
+				mes "我が心は彼の意志、";
+				mes "さすらう詩人はみな彼の民、";
+				mes "すべての賛美は彼へと捧げられる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "ブラギよ、ブラギよ、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFブラギよ、ブラギよ、";
+				mes "永遠に詩人の名を呼ばん。^000000";
+				mes "我が歌は彼の息吹、";
+				mes "我が心は彼の意志、";
+				mes "さすらう詩人はみな彼の民、";
+				mes "すべての賛美は彼へと捧げられる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "永遠に詩人の名を呼ばん。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFブラギよ、ブラギよ、";
+				mes "永遠に詩人の名を呼ばん。";
+				mes "我が歌は彼の息吹、^000000";
+				mes "我が心は彼の意志、";
+				mes "さすらう詩人はみな彼の民、";
+				mes "すべての賛美は彼へと捧げられる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "我が歌は彼の息吹、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFブラギよ、ブラギよ、";
+				mes "永遠に詩人の名を呼ばん。";
+				mes "我が歌は彼の息吹、";
+				mes "我が心は彼の意志、^000000";
+				mes "さすらう詩人はみな彼の民、";
+				mes "すべての賛美は彼へと捧げられる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "我が心は彼の意志、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFブラギよ、ブラギよ、";
+				mes "永遠に詩人の名を呼ばん。";
+				mes "我が歌は彼の息吹、";
+				mes "我が心は彼の意志、";
+				mes "さすらう詩人はみな彼の民、^000000";
+				mes "すべての賛美は彼へと捧げられる。";
+				next;
+				input .@Song$;
+				if (.@Song$ != "さすらう詩人はみな彼の民、")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFブラギよ、ブラギよ、";
+				mes "永遠に詩人の名を呼ばん。";
+				mes "我が歌は彼の息吹、";
+				mes "我が心は彼の意志、";
+				mes "さすらう詩人はみな彼の民、";
+				mes "すべての賛美は彼へと捧げられる。^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "すべての賛美は彼へと捧げられる。")
+					set .@w_point,.@w_point+1;
+			}
+			else {
+				mes "^3377FFもっと大きく、もっと大きく、もっと大きく。^000000";
+				mes "戦士たちに力を与えよ！";
+				mes "空を震わせ、大地に轟け。";
+				mes "再びこの心を高鳴らせろ！";
+				mes "城壁に鳴り響かせよ。";
+				mes "この日は二度と訪れない！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "もっと大きく、もっと大きく、もっと大きく。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFもっと大きく、もっと大きく、もっと大きく。";
+				mes "戦士たちに力を与えよ！^000000";
+				mes "空を震わせ、大地に轟け。";
+				mes "再びこの心を高鳴らせろ！";
+				mes "城壁に鳴り響かせよ。";
+				mes "この日は二度と訪れない！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "戦士たちに力を与えよ！")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFもっと大きく、もっと大きく、もっと大きく。";
+				mes "戦士たちに力を与えよ！";
+				mes "空を震わせ、大地に轟け。^000000";
+				mes "再びこの心を高鳴らせろ！";
+				mes "城壁に鳴り響かせよ。";
+				mes "この日は二度と訪れない！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "空を震わせ、大地に轟け。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFもっと大きく、もっと大きく、もっと大きく。";
+				mes "戦士たちに力を与えよ！";
+				mes "空を震わせ、大地に轟け。";
+				mes "再びこの心を高鳴らせろ！^000000";
+				mes "城壁に鳴り響かせよ。";
+				mes "この日は二度と訪れない！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "再びこの心を高鳴らせろ！")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFもっと大きく、もっと大きく、もっと大きく。";
+				mes "戦士たちに力を与えよ！";
+				mes "空を震わせ、大地に轟け。";
+				mes "再びこの心を高鳴らせろ！";
+				mes "城壁に鳴り響かせよ。^000000";
+				mes "この日は二度と訪れない！";
+				next;
+				input .@Song$;
+				if (.@Song$ != "城壁に鳴り響かせよ。")
+					set .@w_point,.@w_point+1;
+
+				mes "^3377FFもっと大きく、もっと大きく、もっと大きく。";
+				mes "戦士たちに力を与えよ！";
+				mes "空を震わせ、大地に轟け。";
+				mes "再びこの心を高鳴らせろ！";
+				mes "城壁に鳴り響かせよ。";
+				mes "この日は二度と訪れない！^000000";
+				next;
+				input .@Song$;
+				if (.@Song$ != "この日は二度と訪れない！")
+					set .@w_point,.@w_point+1;
+			}
+
+			if (.@w_point) {
+				cutin "job_bard_aiolo02",2;
+				mes "[ラロ]";
+				mes "おいおい、歌詞を間違えているじゃないか！";
+				mes "歌に合わせることもできないのか……？";
+				next;
+				mes "[ラロ]";
+				mes "発音がはっきりしなさすぎるぞ。";
+				mes "次はもっとちゃんとやってくれ。";
+				close2;
+				cutin "job_bard_aiolo02",255;
+				end;
+			}
+			mes "[ラロ]";
+			mes "…………";
+			next;
+			set BARD_Q,5;
+			mes "[ラロ]";
+			mes "素晴らしい！一発で決めたな！";
+			mes "君は立派なバードになれるぞ。";
+			next;
+			mes "[ラロ]";
+			mes "うーん……というわけで、バードにはならないんだったな。";
+			mes "だが記念に何か贈り物をしたい……";
+			next;
+			mes "[ラロ]";
+			mes "今すぐ転職するか？";
+			mes "それとも贈り物が欲しいか？";
+			next;
+			set .@selection,select("すぐに転職したいです。:贈り物をいただけると嬉しいです。");
+		}
+		if ((.@selection == 1) || (BARD_Q == 5)) {
+			if(SkillPoint) {
+				cutin "job_bard_aiolo01",2;
+				mes "[ラロ]";
+				mes "ああ……準備は万端だが、まだスキルポイントが残っているな。";
+				mes "残りのスキルを覚えてから、また来てくれ。";
+				next;
+				mes "[ラロ]";
+				mes "それとちょっとした贈り物もしようと思っている……";
+				mes "木の幹を持ってきてくれ。";
+				mes "種類は何でもいいが、同じ種類を60個そろえてくれ……";
+				close2;
+				cutin "job_bard_aiolo01",255;
+				end;
+			}
+			else {
+				switch(BARD_Q) {
+				case 5:
+					if(countitem(1019) > 59) callsub S_ChangeJob,1019,1901;
+					else if(countitem(1068) > 59) callsub S_ChangeJob,1068,1903;
+					else if(countitem(1067) > 59) callsub S_ChangeJob,1067,1903;
+					else if(countitem(1066) > 59) {
+						if(JobLevel > 49) callsub S_ChangeJob,1066,1910;
+						else callsub S_ChangeJob,1066,1905;
+					}
+					cutin "job_bard_aiolo01",2;
+					mes "[ラロ]";
+					mes "うーん？木の幹をまだそろえていないみたいだな？";
+					mes "とにかく転職だけしておくか？";
+					next;
+					if (select("はい、もう転職してしまいます。:いいえ、用意してきます。") == 2)
+						break;
+				default:
+					completequest 3003;
+					callfunc "Job_Change",Job_Bard;
+					callfunc "F_ClearJobVar";		//clears all job variables for the current player
+					mes "[ラロ]";
+					mes "よし！楽しい歌をたくさん歌ってくれよ。";
+					mes "風と雲のように生きるんだ！";
+					next;
+					mes "[ラロ]";
+					mes "また今度な！";
+					close2;
+					cutin "job_bard_aiolo01",255;
+					end;
+				}
+			}
+		}
+		changequest 3003,3004;
+		mes "[ラロ]";
+		mes "うーん……よし、木の幹を持ってきてくれ。";
+		mes "種類は何でもいいが、同じ種類を60個そろえてくれ……";
+		next;
+		mes "[ラロ]";
+		mes "持ってきてくれたら贈り物をあげよう。";
+		mes "道中気をつけてな。";
+		close2;
+		cutin "job_bard_aiolo01",255;
+		end;
+	}
+	cutin "job_bard_aiolo01",2;
+	mes "[ラロ]";
+	mes "ふんふんふ～ん♪";
+	close2;
+	cutin "job_bard_aiolo01",255;
+	end;
+
+S_ChangeJob:
+	completequest 3004;
+	callfunc "Job_Change",Job_Bard;
+	callfunc "F_ClearJobVar";
+	mes "[ラロ]";
+	mes "よくやった。これで転職記念の贈り物を作ってやろう。";
+	mes "少し待っていてくれ。";
+	next;
+	mes "[ラロ]";
+	mes "^3355FFガタガタ、トントン^000000";
+	mes "^3355FFキュッキュッ、ゴリゴリ^000000";
+	delitem getarg(0),60;
+	getitem getarg(1),1;
+	next;
+	mes "[ラロ]";
+	mes "さあ、贈り物だ。歌う時に役立つはずだ。";
+	mes "楽しい歌をたくさん歌ってくれよ。";
+	next;
+	mes "[ラロ]";
+	mes "また今度な！";
+	close2;
+	cutin "job_bard_aiolo01",255;
+	end;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= 07/06/05 : Added 1st Version. [Muad_Dib]
+//= Converted to rAthena format by Dr.Evil
+//= Info about gifts and other info --> http://www.ragnainfo.net/forums/viewtopic.php?t=51467&start=0 
+//= 1.1 Optimized, changed some stuff, fixed some bugs [Lupus]
+//= 1.1a minor song test fix [Lupus]
+//= 1.2 Fixed wrong item ID, added missing commands [Lupus]
+//= 1.3 Updated flower sub-quest according to official [Lupus]
+//= 1.4 Changed priority for the gifts. Now you can win the 1st
+//=     prize, too. Added Izidor flower [Lupus]
+//= 2.0 Changed numbers to constants. [Vicious]
+//============================================================ 

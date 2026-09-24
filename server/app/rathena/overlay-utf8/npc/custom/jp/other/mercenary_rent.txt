@@ -1,0 +1,332 @@
+//===== rAthena Script ======================================= 
+//= Mercenary related NPCs
+//===== By: ================================================== 
+//= L0ne_W0lf
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Sells Lancer, Sword, and Archer mercenaries,
+//= along with related mercenary items.
+//===== Additional Comments: ================================= 
+//= 1.0 First version. [L0ne_W0lf]
+//= 1.1 Optimization. [Zephyrus]
+//= 1.2 Removed redundent input. [L0ne_W0lf]
+//= 1.3 Duplicates now spawned from floating NPCs. [L0ne_W0lf]
+//= 1.4 Optimized and fixed wrong item id. [Joseph]
+//= 1.5 Added Mercenary Guild Switch & fixed a bug
+//=		in izlude duplicate. [Capuche]
+//= 1.5a Change to F_GM_NPC function in Mercenary Guild Switch
+//============================================================ 
+
+-	script	Mercenary Manager#main	-1,{
+	setarray .@name$, 	"Spear", 			"Sword", 			"Bow";
+	setarray .@faith$, 	"SPEAR_MERC_GUILD",	"SWORD_MERC_GUILD",	"ARCH_MERC_GUILD";
+	setarray .@item, 	12182,				12172,				12162;
+	.@npc$ = strnpcinfo(2);
+	for (.@size = getarraysize(.@name$); .@type < .@size; .@type++)
+		if( compare( .@npc$,.@name$[.@type] ) ) break;
+	.@faith_merc = mercenary_get_faith(getd(.@faith$[.@type]));
+	mes "[傭兵ギルド職員]";
+	mes "ようこそ";
+	mes .@name$[.@type] + " 傭兵ギルドへ。";
+	mes "何か用かな？";
+	next;
+	switch(select("傭兵を雇う:傭兵について:何でもない:10級の傭兵")) {
+		case 1:
+			mes "[傭兵ギルド職員]";
+			mes "君が雇いたいのは";
+			mes .@name$[.@type] + "傭兵か？";
+			mes "どの階級を";
+			mes "希望する？";
+			next;
+			for (.@i = 1; .@i <= 9; .@i++)
+				.@menu$ = .@menu$ + callfunc("F_GetNumSuffix",.@i) + "級" + .@name$[.@type] + "傭兵:";
+			.@Grade = select(.@menu$);
+			.@BaseLevel = 5 + (.@Grade * 10);
+			.@BaseLevel = (.@val > 90)? 90 : .@BaseLevel;
+			.@ZenyCost = 7 * .@Grade;
+			setarray .@FaithCost[7], 50,100,300;
+			.@FaithCost = .@FaithCost[.@Grade];
+			mes "[傭兵ギルド職員]";
+			mes "つまり、君が雇いたいのは" + callfunc("F_GetNumSuffix",.@Grade);
+			mes "級の" + .@name$[.@type] + "傭兵か？";
+			mes "必要な条件は、";
+			mes "ベースレベル" + .@BaseLevel + "以上であること、";
+			mes "そして" + .@ZenyCost + ",000Zenyの手数料を支払うことだ。";
+			next;
+			if(select("はい:いいえ") == 2) {
+				mes "[傭兵ギルド職員]";
+				mes "そうか。今は";
+				mes "傭兵を雇うのに";
+				mes "良いタイミングでは";
+				mes "ないのかもしれないが、";
+				mes "気が変わったら";
+				mes "また来てくれ。ありがとう～";
+			}
+			else if(.@FaithCost && .@faith_merc < .@FaithCost) {
+				mes "[傭兵ギルド職員]";
+				mes "ああ…君の忠誠度は、";
+				mes "" + .@name$[.@type] + "傭兵ギルドでは";
+				mes "この傭兵を雇うには";
+				mes "足りないようだ。";
+				mes "忠誠度が";
+				mes "" + .@FaithCost + "以上になってから来てくれ。";
+			}
+			else if (BaseLevel < .@BaseLevel) {
+				mes "[傭兵ギルド職員]";
+				mes "すまないが、";
+				mes "君のベースレベルは";
+				mes "この傭兵を雇うには足りない。";
+				mes "ベースレベル";
+				mes "" + .@BaseLevel + "に達したら、また来てくれ。";
+			}
+			else if (Zeny < .@ZenyCost * 1000) {
+				mes "[傭兵ギルド職員]";
+				mes "すまないが、";
+				mes "この傭兵を雇うだけの";
+				mes "Zenyが足りないようだ。";
+				mes "雇用料は" + .@ZenyCost + ",000Zenyだ。";
+			}
+			else {
+				mes "[傭兵ギルド職員]";
+				mes "よし！我々の傭兵は";
+				mes "誠実で、依頼主を";
+				mes "守ることに全力を尽くす。";
+				mes "召喚した傭兵は";
+				mes "30分の間、君を";
+				mes "サポートしてくれる。気をつけてな。";
+				Zeny = Zeny - (.@ZenyCost * 1000);
+				getitem .@item[.@type] - 10 + .@Grade, 1;
+			}
+			close;
+		case 2:
+			mes "[傭兵ギルド職員]";
+			mes "傭兵とは、戦場で";
+			mes "君の側に立って";
+			mes "戦ってくれる兵士のことだ。";
+			mes "ただし、雇うにはいくつかの";
+			mes "条件を満たす必要がある。";
+			next;
+			mes "[傭兵ギルド職員]";
+			mes "傭兵を雇うには、";
+			mes "レベル条件を満たし、";
+			mes "Zenyの手数料を払う必要がある。";
+			mes "より高い階級の傭兵は、";
+			mes "さらに我々との";
+			mes "忠誠度も必要になる。";
+			next;
+			mes "[傭兵ギルド職員]";
+			mes "傭兵の契約は";
+			mes "他人に譲渡できない。";
+			mes "また、傭兵と依頼主のベースレベル差は5までと定めている。";
+			mes "君よりずっと強い傭兵を雇うことはできないんだ。";
+			next;
+			mes "[傭兵ギルド職員]";
+			mes "詳しいことは、";
+			mes "実際に我々の傭兵と";
+			mes "契約を結ぶときに";
+			mes "分かるだろう。契約すると";
+			mes "傭兵を呼び出すための";
+			mes "召喚スクロールがもらえる。";
+			next;
+			mes "[傭兵ギルド職員]";
+			mes "このスクロールを";
+			mes "他人に渡すことはできない。";
+			mes "それに、傭兵は";
+			mes "召喚してから30分しか";
+			mes "君のそばにいられない。";
+			mes "時間制限を忘れないでくれよ？";
+			close;
+		case 3:
+			mes "[傭兵ギルド職員]";
+			mes "何もいらない、と？";
+			mes "それなら結構。もし";
+			mes "傭兵について何か";
+			mes "聞きたければ、いつでもどうぞ。";
+			close;
+		case 4:
+			mes "[傭兵ギルド職員]";
+			mes "10級の傭兵は";
+			mes "我々が用意できる";
+			mes "最高の傭兵だ。雇用の";
+			mes "基準も他とは違う。";
+			mes "Zenyの手数料は不要だが、";
+			mes "忠誠度500が必要になる。";
+			next;
+			mes "[傭兵ギルド職員]";
+			mes "10級の傭兵と";
+			mes "契約を結ぶと、";
+			mes "忠誠度が400";
+			mes "減ることになる。つまり、";
+			mes "10級の傭兵を雇うには";
+			mes "忠誠度400を支払うわけだ。";
+			next;
+			mes "[傭兵ギルド職員]";
+			mes "それに、10級の傭兵を";
+			mes "雇うにはベースレベル90";
+			mes "以上でなければならない。";
+			mes "それでも、この契約を";
+			mes "結びたいか？";
+			next;
+			if (select("はい:いいえ") == 2) {
+				mes "[傭兵ギルド職員]";
+				mes "分かった…10級の傭兵を";
+				mes "雇えるようになるまでには";
+				mes "多大な努力と";
+				mes "犠牲が必要だ。";
+				mes "もう少し低い階級の";
+				mes "傭兵を考えてみないか？";
+			}
+			else if (.@faith_merc < 500) {
+				mes "[傭兵ギルド職員]";
+				mes "すまないが、君の";
+				mes "忠誠度では10級の";
+				mes "傭兵を雇うには";
+				mes "足りない。契約を結ぶには";
+				mes "忠誠度500以上が";
+				mes "必要だ。";
+			}
+			else if (BaseLevel < 90) {
+				mes "[傭兵ギルド職員]";
+				mes "すまないが、10級の";
+				mes "傭兵と契約するには";
+				mes "ベースレベル90以上で";
+				mes "なければならない。";
+			}
+			else {
+				mes "[傭兵ギルド職員]";
+				mes "おめでとう！10級の";
+				mes "傭兵を雇うとは、";
+				mes "よほど危険な仕事を";
+				mes "考えているようだな。";
+				mes "彼と共に、幸運を";
+				mes "祈っているぞ。";
+				mercenary_set_faith getd(.@faith$[.@type]),-400;
+				getitem .@item[.@type],1;
+			}
+			close;
+	}
+}
+prontera,41,337,5	duplicate(Mercenary Manager#main)	傭兵ギルド職員#Spear::Mercenary Manager#Spear	8W_SOLDIER
+pay_arche,99,167,4	duplicate(Mercenary Manager#main)	傭兵ギルド職員#Bow::Mercenary Manager#Bow	4_M_JOB_HUNTER
+
+// Mercenary Merchant NPCs
+//============================================================
+-	script	Mercenary Merchant#dummy::MercMerchant	-1,{
+	mes "[傭兵用品商人]";
+	mes "こんにちは、傭兵が";
+	mes "使える品を";
+	mes "扱っているよ。";
+	mes "何か探して";
+	mes "いるものはあるかい？";
+	next;
+	setarray .@item, 12184,	12185,	12241,	12242,	12243;
+	setarray .@cost, 2500,	5000,	800,	1500,	3000;
+	for (.@size = getarraysize(.@item); .@i < .@size; .@i++)
+		.@menu$ = .@menu$ + getitemname(.@item[.@i]) + ":";
+	.@m = select(.@menu$)-1;
+	.@str$ = .@cost[.@m] + "";
+	.@len = getstrlen(.@str$);
+	.@str_cost$ = (.@len <= 3)? .@str$ : insertchar(.@str$,",",.@len-3);
+	mes "[傭兵用品商人]";
+	mes getitemname(.@item[.@m]);
+	mes "1つ" + .@str_cost$ + "Zenyだよ。";
+	mes "いくつ欲しい？";
+	next;
+	input .@input;
+	if (!.@input) {
+		mes "[傭兵用品商人]";
+		mes "気が変わったのか？";
+		mes "分かった、傭兵用の";
+		mes "ポーションが欲しく";
+		mes "なったら、いつでも来てくれ。";
+		close;
+	}
+	else if (.@input < 0 || .@input > 10000) {
+		mes "[傭兵用品商人]";
+		mes "すまないが、";
+		mes "一度に買えるのは";
+		mes "10,000個までだ。";
+		mes "1から10,000までの";
+		mes "数を入力してくれ。";
+		close;
+	}
+	else if (set(.@total_po, .@input * .@cost[.@m]) > Zeny) {
+		mes "[傭兵用品商人]";
+		mes "すまないが、";
+		mes "その数のポーションを";
+		mes "買うだけのZenyが";
+		mes "足りないようだ。";
+		mes "また準備ができたら";
+		mes "来てくれ。";
+		close;
+	}
+	else if (!checkweight(.@item[.@m], .@input)) {
+		mes "[傭兵用品商人]";
+		mes "そんなに渡したら、";
+		mes "持ちきれなく";
+		mes "なってしまうよ。";
+		mes "所持品に空きを";
+		mes "作ってから";
+		mes "また来てくれ。";
+		close;
+	}
+	mes "[傭兵用品商人]";
+	if (.@input == 1) 
+		mes "" + getitemname(.@item[.@m]) + "をどうぞ。";
+	else {
+		mes "はい、ちょうど";
+		mes callfunc("F_InsertPlural",.@input,getitemname(.@item[.@m])) + "分だよ。";
+	}
+	mes "ありがとう。また";
+	mes "傭兵用のポーションが";
+	mes "必要になったら来てくれ。";
+	Zeny = Zeny - .@total_po;
+	getitem .@item[.@m], .@input;
+	close;
+}
+prontera,30,337,4	duplicate(MercMerchant)	傭兵用品商人#Spear::Mercenary Merchant#Spear	8_F_GIRL
+pay_arche,102,167,5	duplicate(MercMerchant)	傭兵用品商人#Bow::Mercenary Merchant#Bow	4_F_CAPEGIRL
+
+// Mercenary Switch NPCs
+//============================================================
+-	script	Mercenary_Switch	-1,{
+
+	setarray .@name$, "Spear","Sword","Bow";
+	.@npc$ = strnpcinfo(2);
+	for (.@size = getarraysize(.@name$); .@type < .@size; .@type++)
+		if (.@npc$ == .@name$[.@type]) break;
+
+	mes "[チェッカー]";
+	mes "パスワードを入力してください。";
+	next;
+	.@i = callfunc("F_GM_NPC",1854,0,0,10000);
+	mes "[チェッカー]";
+	if (.@i == -2)
+		mes "エラー。";
+	else if (.@i == 0)
+		mes "番号が違います";
+	else if (.@i == 1) {
+		mes "選択してください。";
+		next;
+		switch( select( "傭兵NPCをオフにする","傭兵NPCをオンにする" ) ) {
+		case 1:
+			mes "NPCをオフにしました。";
+			disablenpc "Mercenary Manager#" + .@name$[.@type];
+			disablenpc "Mercenary Merchant#" + .@name$[.@type];
+			break;
+		case 2:
+			mes "NPCをオンにしました。";
+			enablenpc "Mercenary Manager#" + .@name$[.@type];
+			enablenpc "Mercenary Merchant#" + .@name$[.@type];
+			break;
+		}
+	}
+	close;
+}
+prontera,299,379,5	duplicate(Mercenary_Switch)	チェッカー#Spear::Mercenary Switch#Spear	8W_SOLDIER
+pay_arche,170,185,5	duplicate(Mercenary_Switch)	チェッカー#Bow::Mercenary Switch#Bow	4_F_CAPEGIRL
+izlude,245,250,4	duplicate(Mercenary_Switch)	チェッカー#Sword::Mercenary Switch#Sword	4_F_HUWOMAN

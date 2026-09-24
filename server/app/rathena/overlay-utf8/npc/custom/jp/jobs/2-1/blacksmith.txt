@@ -1,0 +1,1644 @@
+//===== rAthena Script =======================================
+//= Blacksmith Job Quest
+//===== By: ==================================================
+//= EREMES THE CANIVALIZER(Aegis)
+//= Translated by: yoshiki.
+//= Converted by: Komurka.
+//= Optimized and further edited by kobra_k88.
+//= Further bugfixed and tested by Lupus
+//===== Current Version: =====================================
+//= 2.9
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Job Change quest for Blacksmith class.
+//===== Additional Comments: =================================
+//= Changed some npc names to the iRO names. Changed some variable
+//= names and labels. Edited some text.[kobra_k88]
+//= Removed "if (JobLevel > 48) goto higher". It was a left over line.
+//= Thx to "Decker".[kobra_k88]
+//= Fixed some typos, thanks to Riotblade [celest]
+//= 1.3-1.5 Added Baby Class support [Lupus]
+//= 1.6 Added a func which prevent advanced classes passing
+//=     2nd Job Quests again. It also guides adv classes where
+//=     to go. [Lupus]
+//= 1.7 item quantity/ids typos fix
+//= 1.8 Moved the Quest to Einbroch [Poki#3]
+//= 2.0 Changed numbers to constants. [Vicious]
+//= 2.1 Removed Duplicates [Silent]
+//= 2.2 Merged Jfunc, changed job numbers to constants [Lupus]
+//= 2.3 Rescripted to Aegis 10.3 standards. [L0ne_W0lf]
+//= 2.4 Several bugfixes with the help of Barron-Monster. [L0ne_W0lf]
+//= 2.4a Changed a BaseJob to baseclass. [L0ne_W0lf]
+//= 2.4b Further bug fixes with teh hel of Barron-Monster. [L0ne_W0lf]
+//= 2.4c More fixes courtosy of Micktu. [L0ne_W0lf]
+//= 2.4d Fixed an incorrect answer in the quiz. (Trojal) [L0ne_W0lf]
+//= 2.4e Touched up a few issues as pointed out by Ultramage. [L0ne_W0lf]
+//= 2.5 Krongast is in Lighthalzen. (DarkValmir) [L0ne_W0lf]
+//= 2.6 Fixed 4 bugs [Lupus]
+//= 2.6a Typo fix [Yommy]
+//= 2.7 Added Quest Log commands. [Kisuka]
+//= 2.8 Removed the need for use of 'goto.' [L0ne_W0lf]
+//= 2.9 Updated with some extra conditions. [Euphy]
+//==============================================================
+
+ein_in01,18,28,4	script	ギルド職員#BLS::Guildsman#BLS	731,{
+	if (Upper == 1) {
+		mes "[アルティレゲン]";
+		mes "よお、無駄話してる暇はないんだ。俺は結構忙しい男でね。ブラックスミスを目指して頑張ってる商人たちが大勢いるんだよ。";
+		next;
+		mes "[アルティレゲン]";
+		mes "待てよ、お前とは前に会ったことがある気がするな。";
+		mes "ええと……";
+		next;
+		mes "[アルティレゲン]";
+		mes "俺の武器を壊して逃げたやつか？それとも、俺を脅して武器を打たせたやつか？どうして思い出せないんだ？";
+		next;
+		mes "[アルティレゲン]";
+		mes "……";
+		mes "お前が誰だったか、どうしても思い出せない。これはデジャヴュか？";
+		next;
+		mes "[アルティレゲン]";
+		mes "うわああ！！これは本当に気になるな！だが、お前には何か特別なものを感じるぞ。まあいい、気にするな。良い一日を～";
+		close;
+	}
+	mes "[アルティレゲン]";
+	mes "ようこそ！";
+	mes "俺たちは鋼の職人、";
+	mes "ブラックスミスギルドだ。";
+	next;
+	mes "[アルティレゲン]";
+	mes "俺たちは情熱と";
+	mes "魂の全てを";
+	mes "この仕事に注ぎ込んでいる。金属を溶かして新たな武器や";
+	mes "道具に変える技は、まさに芸術そのものだ！";
+	if (BaseClass >= Job_Thief) close;	// Custom expanded class check.
+	next;
+
+	// Third class check - precedes other BaseClass dialogue.
+	if (Class >= Job_Rune_Knight && Class <= Job_Baby_Mechanic2) {
+		mes "[アルティレゲン]";
+		mes "お前……見覚えのない顔だな。だが、どこか俺たちのギルドと縁があるように感じるぞ。ハハ～";
+		mes "違うか？";
+		close;
+	}
+
+	if (BaseClass == Job_Novice) {
+		mes "[アルティレゲン]";
+		if (Sex == SEX_FEMALE) {
+			mes "おお～";
+			mes "なんて";
+			mes "可愛い娘なんだ！";
+		}
+		mes "ブラックスミスに";
+		mes "興味があるのかい？";
+		next;
+		mes "[アルティレゲン]";
+		mes "まず、ブラックスミスになる前に商人にならなくちゃいけない。商人の仕事を学ぶには、アルベルタの街へ行くといい。";
+		close;
+	}
+	else if (BaseClass == Job_Swordman) {
+		mes "[アルティレゲン]";
+		mes "おっと、武器を打ってほしいのか？悪いが、俺には片付けなきゃいけない仕事が山ほどあるんだ。";
+		close;
+	}
+	else if (BaseClass == Job_Archer) {
+		mes "[アルティレゲン]";
+		mes "おや……";
+		mes "ここでお前に提供できるものはあまり無いな。それに、物作りを知らなきゃここで手伝うこともできないぞ……";
+		close;
+	}
+	else if (BaseClass == Job_Mage) {
+		mes "[アルティレゲン]";
+		mes "おや？魔法使いがこんな所で何を？驚いたな。普通、お前さんたち知識人はこういう荒仕事を嫌うもんだろう。";
+		close;
+	}
+	else if (BaseClass == Job_Acolyte) {
+		mes "[アルティレゲン]";
+		mes "おお！お前は聖職者様とお見受けするが？帰る前に俺を祝福してくれないか！";
+		close;
+	}
+	else if (BaseClass == Job_Thief) {
+		mes "[アルティレゲン]";
+		mes "悪いが……";
+		mes "ここにはお前が盗めそうな物は本当に無いんだ。まあ、奥にダガーを置いてはいるが……";
+		close;
+	}
+	else if (BaseJob == Job_Alchemist) {
+		mes "[アルティレゲン]";
+		mes "最近、薬局の商売はどうだ？";
+		mes "まあ、俺の方の鍛冶の商売はもうこれ以上伸びそうにないがな。";
+		close;
+	}
+	else if (BaseJob == Job_Blacksmith) {
+		mes "[アルティレゲン]";
+		mes "おお！久しぶりだな。";
+		mes "クリストファーから資材を買いに来たのか？最近は俺もずっとこの机に張り付きでな。体が疼くぐらい、久々に金床を叩きたいもんだ。";
+		close;
+	}
+	else if (BaseJob == Job_Merchant) {
+		if (SkillPoint) {
+			mes "[アルティレゲン]";
+			mes "スキルポイントを全部使い切らないと、ブラックスミスに転職できないぞ。スキルポイントを賢く使ってから、また来てくれ。";
+			close;
+		}
+		if (BSMITH_Q == 0) {
+			mes "[アルティレゲン]";
+			mes "商人としてZenyを稼ぐのに";
+			mes "四苦八苦するのはやめて、";
+			mes "エリートのブラックスミスにならないか？";
+			mes "興味があるなら、この申込書に名前と";
+			mes "ジョブレベルを記入してくれ。";
+			next;
+			switch(select("申込書に記入する:必要な条件は？:うーん、少し考えさせてください。")) {
+			case 1:
+				if (SkillPoint) {
+					mes "[アルティレゲン]";
+					mes "スキルポイントを全部使い切らないと、ブラックスミスに転職できないぞ。スキルポイントを賢く使ってから、また来てくれ。";
+					close;
+				}
+				else if (JobLevel > 39 && BSMITH_Q == 0) {
+					mes "[アルティレゲン]";
+					mes "ふむ……";
+					mes "どうやらお前は";
+					mes "ジョブレベルの";
+					mes "条件を満たしているようだな。";
+					next;
+					mes "[アルティレゲン]";
+					mes "いいか、俺たちのギルドは誰でも受け入れるわけじゃない。まず、偉大なブラックスミスになろうという本気の意志を持つ、経験豊かな商人だけを受け入れているんだ。そうだな……";
+					next;
+					mes "^3355FF＊書類をめくる音＊^000000";
+					next;
+					mes "[アルティレゲン]";
+					mes "ふむ……";
+					mes "アインベフにいる俺たちのブラックスミスの一人、^8E6B23ゲシュペンシュテ^000000から人手が足りないと連絡が来てる。お前の最初の資質試験は、そいつを手伝うことだ。";
+					next;
+					set BSMITH_Q,1;
+					setquest 2000;
+					mes "[アルティレゲン]";
+					mes "気をつけて";
+					mes "頑張ってこい！";
+					close;
+				}
+				else if (JobLevel < 40) {
+					mes "[アルティレゲン]";
+					mes "ふむ、商人としての経験がまだ足りないようだな。ジョブレベル40以上が必要なんだ。";
+					next;
+					mes "[アルティレゲン]";
+					mes "ここまで来てもらったのに追い返すのは心苦しいが、規則は規則だ。がっかりさせて悪いが、準備が整ったらまた歓迎するよ。";
+					close;
+				}
+			case 2:
+				mes "[アルティレゲン]";
+				mes "俺たちの条件を知りたいのか？まず、商人としてジョブレベル40以上が必要だ。次に、ブラックスミスギルドが行う試験に合格する必要がある。";
+				next;
+				mes "[アルティレゲン]";
+				mes "試験は難しい課題があるかもしれないが、決して不可能じゃない。世界各地に、特定の品を届けてもらうことになる";
+				mes "それで試験は完了だ。";
+				close;
+			case 3:
+				mes "[アルティレゲン]";
+				mes "ふむ……";
+				mes "まあ、";
+				mes "また会えるのを楽しみにしてるよ。";
+				close;
+			}
+		}
+		else if (BSMITH_Q > 0  && BSMITH_Q < 8) {
+			mes "[アルティレゲン]";
+			mes "まだ出発してないのか？";
+			mes "アインベフへ行って^8E6B23ゲシュペンシュテ^000000を見つけるんだ。彼の手伝いを終えたら、俺のところへ戻ってこい。";
+			close;
+		}
+		else if (BSMITH_Q > 8 && BSMITH_Q < 15) {
+			mes "[アルティレゲン]";
+			mes "^8E6B23ゲシュペンシュテ^000000の下でやった仕事は気に入ったか？彼は結構厳しいことで知られてるからな……";
+			close;
+		}
+		else if (BSMITH_Q == 15) {
+			mes "[アルティレゲン]";
+			mes "よくやった！！";
+			mes "お前は";
+			mes "最初の試験に合格したぞ……";
+			next;
+			mes "[アルティレゲン]";
+			mes "ん？驚いた顔をしてるな。";
+			mes "試験が一つだけじゃないって知らなかったみたいだな。";
+			mes "ハハ、心配するな、そんなに遠くまで旅する必要はない。";
+			mes "次の試験の詳細は、建物の中のギルド職員に聞いてくれ。";
+			next;
+			if (select("早く転職したいです！でも……仕方ないですね。:もう！うんざりだ！") == 1) {
+				set BSMITH_Q,16;
+				changequest 2013,2014;
+				mes "[アルティレゲン]";
+				mes "悪いが、分かってくれるよな？俺たちは誰でも気軽に";
+				mes "ギルドに受け入れるわけにはいかないんだ！";
+				next;
+				mes "[アルティレゲン]";
+				mes "基準を保たなければ、";
+				mes "ブラックスミスギルドの品位を保つことができない！";
+				mes "こんなことでギルドの恥をさらすわけにはいかない！＊コホン＊とにかく、今すぐ建物の中のギルド職員と話してこい。";
+				close;
+			}
+			mes "[アルティレゲン]";
+			mes "つまりお前は";
+			mes "申請を取りやめるつもりか？それは俺たちのギルドへの侮辱だぞ！";
+			mes "出て行け！そんな態度じゃ、ブラックスミスギルドの一員になることは忘れるんだな！";
+			next;
+			mes "[アルティレゲン]";
+			mes "お前には根性がない！";
+			mes "これに耐えられないようじゃ、ブラックスミスには永遠になれないぞ！";
+			close;
+		}
+		else if (BSMITH_Q == 16) {
+			mes "[アルティレゲン]";
+			mes "ん？まだギルド職員と話してないのか？";
+			mes "まだなら、できるだけ早く話してくることをすすめるぞ。";
+			close;
+		}
+		else if (BSMITH_Q == 17 && countitem(1005) > 0 && JobLevel > 39) {
+			mes "[アルティレゲン]";
+			if (ismounting()) {
+				mes "騎乗ペットに乗ったままでは転職できない。";
+				mes "騎乗ペットを外して、もう一度試してくれ！";
+				close;
+			}
+			mes "素晴らしい、目の輝きを見れば成功したことは分かるぞ。これでお前に鍛冶の才、ブラックスミスの技を授けよう。";
+			if (checkquest(2015) != -1) {
+				changequest 2015,2016;
+			}
+			next;
+			set .@joblvl,JobLevel;
+			callfunc "Job_Change",Job_Blacksmith;
+			callfunc "F_ClearJobVar";		// clears all job variables for the current player
+			mes "[アルティレゲン]";
+			mes "俺たちは創造者であり、金属を操る芸術家だということを常に忘れるな。私欲と";
+			mes "強欲の罠に陥らないよう気をつけろ。";
+			next;
+			delitem 1005,1; //Hammer_Of_Blacksmith
+			completequest 2016;
+			mes "[アルティレゲン]";
+			mes "これは";
+			mes "お前の";
+			mes "ブラックスミスとしての人生の";
+			mes "始まりを記す、ささやかな贈り物だ。";
+			mes "おめでとう！！！";
+			if (.@joblvl > 48)
+				getitem 999,30; //Steel
+			else 
+				getitem 999,5; //Steel
+			close;
+		}
+	}
+}
+
+ein_in01,201,27,3	script	ギルド職員#alberta::Guildsman#alberta	63,{
+	mes "[ゲシュペンシュテ]";
+	mes "やあ、こんにちは！";
+	mes "俺は^8E6B23ゲシュペンシュテ^000000、";
+	mes "職業はブラックスミスだ。";
+	mes "よろしくな！";
+	next;
+	if (BaseJob == Job_Merchant) {
+		mes "[ゲシュペンシュテ]";
+		mes "おっほほ！";
+		mes "商人か！";
+		mes "いいぞ！ちょうど";
+		mes "人手が欲しかったんだ！";
+		next;
+		if (BSMITH_Q == 0) {
+			mes "[ゲシュペンシュテ]";
+			mes "だがもちろん、";
+			mes "忙しいなら";
+			mes "邪魔はしない。";
+			mes "行きたいなら行っていいぞ～";
+			next;
+			mes "[ゲシュペンシュテ]";
+			mes "何しろ……";
+			mes "俺こそ";
+			mes "忙しいってのが";
+			mes "どんなものか知ってるからな～";
+			close;
+		}
+		else if ((BSMITH_Q == 1) || (BSMITH_Q == 2)) {
+			if (BSMITH_Q == 1) {
+				mes "[ゲシュペンシュテ]";
+				mes "お前はブラックスミスギルドが寄越した助っ人と考えていいんだな？雇える信頼できる人材はそう多くなくてな、いつも";
+				mes "人手不足なんだ。";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "ふむ、とにかく、";
+				mes "お前が寄越された助っ人ってことでいいんだな？よし、すぐにでも片付けなきゃいけない";
+				mes "仕事があるんだ！";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "少し前、経験のない小僧を雇ったら、間違った資材を買ってきてな！ひどい目に遭ったよ……";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "そんな馬鹿げたミスで金を失うのは誰だって嫌だろう。だが、お前には少し難しい仕事を頼みたい。";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "ただ、その前にお前が商人としての基本知識を持っているか確認したい。いくつか質問してもいいか？";
+				next;
+				set .@selection,select("はい。:うーん、少し準備の時間をもらえますか？");
+			}
+			else if (BSMITH_Q == 2) {
+				mes "[ゲシュペンシュテ]";
+				mes "それで、";
+				mes "今回はもう少し";
+				mes "勉強したかい？";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "初回で満点を期待するのは無理があるってのは俺も分かってる、だから";
+				mes "少しだけ大目に見てやろう……";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "1問までは";
+				mes "間違えてもいいぞ！";
+				mes "よし、";
+				mes "質問を始めよう～";
+				next;
+			}
+			if (.@selection != 2) {
+				if (rand(2)) {
+					mes "[ゲシュペンシュテ]";
+					mes "1．次の地域のうち、";
+					mes "特産品の組み合わせが間違っているのはどれか？";
+					next;
+					if (select("モロク－シーフクローズ:アルベルタ－ツーハンドアクス:コモド－バーサークポーション:アルベルタ－ソードメイス") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "2．どんな状態異常を";
+					mes "与えられるか、";
+					mes "^8E6B23ハンマーフォール^000000スキルは？";
+					next;
+					if (select("スタン:暗闇:沈黙:睡眠") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "3．商人が使えない";
+					mes "スキルはどれか？";
+					next;
+					if (select("ベンディング:ディスカウント:オーバーチャージ:速度増加") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "4．青いジェムストーンを売る店は";
+					mes "どこにあるか？";
+					next;
+					if (select("アルベルタ:モロク:ゲフェン:プロンテラ") == 3)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "5．ゲフェンの";
+					mes "道具商人は";
+					mes "どこにいるか？";
+					next;
+					if (select("広場から8時の方向:広場から11時の方向:広場から6時の方向:広場から5時の方向") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "6．商人が";
+					mes "使えない武器は";
+					mes "どれか？";
+					next;
+					if (select("スティレット:リングポメルセイバー:チェーン:バイブル") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "7．次のうち";
+					mes "防御力が最も高いのは？";
+					next;
+					if (select("パンティー:ミンクコート:ウッドンメイル:シルクローブ") == 2)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "8．レベル3の武器の、";
+					mes "^8E6B23安全^000000精錬の";
+					mes "上限は？";
+					next;
+					if (select("+3まで:+4まで:+5まで:+6まで") == 3)
+						set .@black_q,.@black_q+10;
+					mes "9．次の";
+					mes "アイテムのうち、";
+					mes "^8E6B23木の幹^000000で作れるのは？";
+					next;
+					if (select("サッカト:ゴーストバンダナ:マジェスティックゴート:アントラー") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "10．商人にとって";
+					mes "最も大切なものは……？";
+					next;
+					select("信用:誠実:金:話術");
+					set .@black_q,.@black_q+10;
+				}
+				else {
+					mes "[ゲシュペンシュテ]";
+					mes "1．次の都市のうち、特産品の組み合わせが正しくないのはどれか？";
+					next;
+					if (select("アルデバラン－ユグドラシルの葉:アルベルタ－ハンマー:コモド－バーサークポーション:アルデバラン－ハンマー") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "2．ジェロピー1個は";
+					mes "何Zenyか？";
+					next;
+					if (select("1Zeny:2Zeny:3Zeny:4Zeny") == 3)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "3．商人が";
+					mes "^8E6B23ベンディング^000000スキルを使うのに";
+					mes "必要な条件は？";
+					next;
+					if (select("カートを持っている必要がある。:売る品物を持っている必要がある。:武器を装備している必要がある。:防具を身につけている必要がある。") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "4．商人に転職";
+					mes "できるのは";
+					mes "どこか？";
+					next;
+					if (select("アルベルタ:モロク:ゲフェン:プロンテラ") == 1)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "5．モロクの";
+					mes "武器商人は";
+					mes "どこにいるか？";
+					next;
+					if (select("町の中心から7時の方向:町の中心から11時の方向:町の中心から6時の方向:町の中心から5時の方向") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "6．商人が";
+					mes "使えない武器は";
+					mes "どれか？";
+					next;
+					if (select("メインゴーシュ:クレイモア:チェーン:ツーハンドアクス") == 2)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "7．次のうち";
+					mes "防御力が最も高いのは？";
+					next;
+					if (select("パンティー:ミンクコート:ウッドンメイル:シルクローブ") == 2)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "8．レベル3の武器の、";
+					mes "^8E6B23安全^000000精錬の";
+					mes "上限は？";
+					next;
+					if (select("+3まで:+4まで:+5まで:+6まで") == 3)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "9．鉄鉱石を";
+					mes "ドロップしないモンスターは？";
+					next;
+					if (select("チョンチョン:スチールチョンチョン:ゼロム:アノリアン") == 4)
+						set .@black_q,.@black_q+10;
+					mes "[ゲシュペンシュテ]";
+					mes "10．商人にとって";
+					mes "最も大切なものは？";
+					next;
+					select("話術:信用:金:経験");
+					set .@black_q,.@black_q+10;
+				}
+				mes "[ゲシュペンシュテ]";
+				mes "うむ。よくやったな！";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "さて……お前の点数は……" + .@black_q + "点だ。";
+				if (.@black_q == 100) {
+					set BSMITH_Q,3;
+					if (checkquest(2001) != -1) {
+						changequest 2001,2002;
+					} else {
+						changequest 2000,2002;
+					}
+					mes "おっほほ～";
+					mes "この点数なら";
+					mes "何の";
+					mes "問題もないな！";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "お前に仕事を任せよう！";
+					mes "必要な手配に少し時間をくれ。";
+					mes "戻ってくる頃には準備できてるはずだ！";
+					close;
+				}
+				set BSMITH_Q,2;
+				if (checkquest(2001) == -1) {
+					changequest 2000,2001;
+				}
+				mes "…………";
+				next;
+				mes "[ゲシュペンシュテ]";
+				if (BSMITH_Q == 2) {
+					mes "何と言えばいいか。";
+					mes "どうしてまた失敗したんだ？！";
+					mes "そんな調子で仕事をするつもりなら、どんな仕事も任せられないぞ……";
+					close;
+				}
+				mes "ふむ……";
+				mes "言いにくいが、もう少し勉強が必要なようだな。この点数じゃ";
+				mes "とても";
+				mes "ブラックスミスにはなれないぞ！";
+				close;
+			}
+			mes "[ゲシュペンシュテ]";
+			mes "ああ、少し遅れて戻ってきても構わないぞ。備えあれば憂いなし、というやつだ";
+			mes "後で困らないよう、";
+			mes "慎重にな～";
+			close;
+		}
+		/*
+		else if (BSMITH_Q == 2) {
+			mes "[Geschupenschte]";
+			mes "So, have you";
+			mes "studied a little";
+			mes "more this time?";
+			next;
+			mes "[Geschupenschte]";
+			mes "I admit that it's pretty unreasonable to expect anyone to get a perfect score the first time around, so I'll give you";
+			mes "a little break...";
+			next;
+			mes "[Geschupenschte]";
+			mes "You can miss";
+			mes "one problem!";
+			mes "Alright, let's start";
+			mes "with the questions~";
+			next;
+			goto L_AskQuestions;
+		}
+		*/
+		else if (BSMITH_Q == 3) {
+			mes "[ゲシュペンシュテ]";
+			mes "ふむ……";
+			mes "さて、";
+			mes "あの注文書はどこだったか……";
+			next;
+			mes "^3355FF＊書類をめくる音＊";
+			mes "＊紙のこすれる音＊^000000";
+			next;
+			mes "[ゲシュペンシュテ]";
+			mes "おお！あったぞ！";
+			mes "これが";
+			mes "一番";
+			mes "遅れている注文だ……";
+			mes "ヘヘ～";
+			next;
+			mes "[ゲシュペンシュテ]";
+			mes "さて、";
+			mes "これを作るには……";
+			next;
+			switch(rand(1,5)) {
+			//Steel, Rotten_Bandage, Blue_Gemstone, Arc_Wand
+			case 1: setarray .@items[0], 999,1, 930,1, 717,2, 1610,1, 4; changequest 2002,2003; break;
+			//Sparkling_Dust, Skel_Bone, Zargon, Gladius
+			case 2: setarray .@items[0], 1001,2, 932,1, 912,1, 1219,1, 5; changequest 2002,2004; break;
+			//Coal, Shell, Boody_Red, Tsurugi
+			case 3: setarray .@items[0], 1003,1, 935,2, 990,2, 1119,1, 6; changequest 2002,2005; break;
+			//Iron_Ore, Eye_Bandage, Blue_Gemstone, Arbalest
+			case 4: setarray .@items[0], 1002,1, 2212,1, 717,2, 1713,1, 7; changequest 2002,2006; break;
+			//Iron, Green_Herb, Animal's_Skin, Ring_Pommel_Saber
+			default: setarray .@items[0], 998,1, 511,1, 919,2, 1122,1, 8; changequest 2002,2007; break;
+			}
+			set BSMITH_Q,.@items[8];
+			mes "[ゲシュペンシュテ]";
+			mes "^8E6B23"+.@items[1]+"個の"+getitemname(.@items[0])+"^000000、";
+			mes "^8E6B23"+.@items[3]+"個の"+getitemname(.@items[2])+"^000000、";
+			mes "^8E6B23"+.@items[5]+"個の"+getitemname(.@items[4])+"^000000、そして";
+			mes "^8E6B23"+.@items[7]+"個の"+getitemname(.@items[6])+"^000000。これは";
+			mes "NPC商店で";
+			mes "買える品だ。";
+			next;
+			mes "[ゲシュペンシュテ]";
+			mes "これらのアイテムを集めるのがお前の試験だ。ついでに言うと、俺の節約にもちょっとした助けになるんだよ。持ってきてもらうものをもう一度言っておくぞ……";
+			next;
+			mes "[ゲシュペンシュテ]";
+			mes "よし～";
+			mes "最初の仕事、";
+			mes "頑張れよ！";
+			close;
+		}
+		else if (BSMITH_Q > 3 && BSMITH_Q < 9) {
+			switch(BSMITH_Q) {
+			case 4: setarray .@items[0], 999,1, 930,1, 717,2, 1610,1, 9; break;
+			case 5: setarray .@items[0], 1001,2, 932,1, 912,1, 1219,1, 10; break;
+			case 6: setarray .@items[0], 1003,1, 935,2, 990,2, 1119,1, 11; break;
+			case 7: setarray .@items[0], 1002,1, 2212,1, 717,2, 1713,1, 12; break;
+			case 8: setarray .@items[0], 998,1, 511,1, 919,2, 1122,1, 13; break;
+			}
+			mes "[ゲシュペンシュテ]";
+			mes "おお、戻ったか！";
+			mes "頼んだ物は";
+			mes "ちゃんと";
+			mes "持ってきたか？";
+			next;
+			if (countitem(.@items[0]) >= .@items[1] && countitem(.@items[2]) >= .@items[3] && countitem(.@items[4]) >= .@items[5] && countitem(.@items[6]) >= .@items[7]) {
+				mes "[ゲシュペンシュテ]";
+				mes "待てよ……";
+				mes "確か";
+				mes "鋼鉄3個って言ったよな？";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "ああ、";
+				mes "2個だったか。ええと……";
+				mes "うん、全部揃ってるな！";
+				mes "よし、少し待っててくれ。";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "念のため言っておくが、^FF0000"+getitemname(.@items[6])+"^000000を2個以上持っていないか確認しておけよ。所持品にあるのは、NPC商店で買った"+getitemname(.@items[6])+"だけのはずだ。";
+				next;
+				if (select("あの、少し待ってもらえますか？:頼まれた物は持ってきました。") == 1) {
+					mes "[ゲシュペンシュテ]";
+					mes "うーん、それなら";
+					mes "残りの荷物は";
+					mes "カプラ倉庫に";
+					mes "預けておくといいぞ。";
+					close;
+				}
+				mes "[ゲシュペンシュテ]";
+				mes "よし。";
+				mes "上出来だ～！！";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "^3355FF＊カァン……！＊^000000";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "^3355FF＊ガシャン ガシャン！＊^000000";
+				next;
+				delitem .@items[0],.@items[1];
+				delitem .@items[2],.@items[3];
+				delitem .@items[4],.@items[5];
+				delitem .@items[6],.@items[7];
+				set BSMITH_Q,.@items[8];
+				mes "[ゲシュペンシュテ]";
+				mes "うおおお～～～";
+				mes "これで全部だ……";
+				switch(BSMITH_Q) {
+				case 9:
+					mes "よし、これをルーンミッドガッツ王国のゲフェンにいる^8E6B23バイスリスト^000000のところへ届けてくれ。渡すだけでいい、受領証をもらって帰ってくるんだ。";
+					getitem 1610,1; //Arc_Wand
+					if (checkquest(2003) != -1) {
+						changequest 2003,2008;
+					}
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "ん……？";
+					mes "何だその顔は？";
+					mes "これはただの";
+					mes "アークワンドじゃないぞ！柄のところを";
+					mes "よく見てみろ……";
+					next;
+					mes "^3355FF柄にはこう刻まれている：";
+					mes "『ゲシュペンシュテ特製";
+					mes "スーパーアークワンド";
+					mes "マーク2』。確かに";
+					mes "全く違う";
+					mes "感触だな。^000000";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "とにかく、これを";
+					mes "ルーンミッドガッツ王国のゲフェンにいる^8E6B23バイスリスト^000000のところへ持っていくんだ、";
+					break;
+				case 10:
+					mes "よし、これをルーンミッドガッツ王国のモロクにいる^8E6B23ウィッケバイン^000000のところへ届けてくれ。渡すだけでいい、受領証をもらって帰ってくるんだ。";
+					getitem 1219,1; //Gladius
+					if (checkquest(2004) != -1) {
+						changequest 2004,2009;
+					}
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "ん……？";
+					mes "何だその顔は？";
+					mes "これはただの";
+					mes "グラディウスじゃないぞ！柄のところを";
+					mes "よく見てみろ……";
+					next;
+					mes "^3355FF柄にはこう刻まれている：";
+					mes "『ゲシュペンシュテ特製";
+					mes "スーパーグラディウス";
+					mes "マーク2』。確かに";
+					mes "全く違う";
+					mes "感触だな。^000000";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "とにかく、これを";
+					mes "ルーンミッドガッツ王国のモロクにいる^8E6B23ウィッケバイン^000000のところへ持っていくんだ、";
+					break;
+				case 11:
+					mes "よし、これをリヒタルゼンにいる^8E6B23クロンガスト^000000のところへ届けてくれ。渡すだけでいい、受領証をもらって帰ってくるんだ。";
+					getitem 1119,1; //Tsurugi
+					if (checkquest(2005) != -1) {
+						changequest 2005,2010;
+					}
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "ん……？";
+					mes "何だその顔は？";
+					mes "これはただの";
+					mes "ツルギじゃないぞ！刃のところを";
+					mes "よく見てみろ……";
+					next;
+					mes "^3355FF刃にはこう刻まれている：";
+					mes "『鋭利なる";
+					mes "ゲシュペンシュテ";
+					mes "ツルギ・スペシャル』。";
+					mes "普通のツルギとは";
+					mes "まるで違う";
+					mes "感触のようだな……^000000";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "とにかく、これを";
+					mes "リヒタルゼンにいる^8E6B23クロンガスト^000000のところへ持っていくんだ、";
+					break;
+				case 12:
+					mes "よし、これをルーンミッドガッツ王国のフェイヨンにいる^8E6B23タルピズ^000000のところへ届けてくれ。渡すだけでいい、受領証をもらって帰ってくるんだ。";
+					getitem 1713,1; //Arbalest
+					if (checkquest(2006) != -1) {
+						changequest 2006,2011;
+					}
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "ん……？";
+					mes "何だその顔は？";
+					mes "これはただの";
+					mes "アーバレストじゃないぞ！弓の部分を";
+					mes "よく見てみろ……";
+					next;
+					mes "^3355FF弓にはこう刻まれている：";
+					mes "ゲシュペンシュテ";
+					mes "アーバレスト・ラグジュアリーエディション。";
+					mes "普通のアーバレストより";
+					mes "豪華な仕上がりのようだな。^000000";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "とにかく、これを";
+					mes "ルーンミッドガッツ王国のフェイヨンにいる^8E6B23タルピズ^000000のところへ持っていくんだ、";
+					break;
+				case 13:
+					mes "よし、これをフィゲルにいる^8E6B23ビスマーク^000000のところへ届けてくれ。渡すだけでいい、受領証をもらって帰ってくるんだ。";
+					getitem 1122,1; //Ring_Pommel_Saber
+					if (checkquest(2007) != -1) {
+						changequest 2007,2012;
+					}
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "ん……？";
+					mes "何だその顔は？";
+					mes "これはただの";
+					mes "リングポメルセイバーじゃないぞ！";
+					mes "柄のところを";
+					mes "よく見てみろ……";
+					next;
+					mes "^3355FF柄にはこう刻まれている：";
+					mes "『緑ハーブの";
+					mes "リングポメルセイバー";
+					mes "・ゲシュペンシュテ";
+					mes "マーク2』。確かに";
+					mes "全く違う";
+					mes "感触だな。^000000";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "この剣に込められた緑ハーブの力はかなり役に立つぞ！素早く突き刺せば、毒でゆっくり死にかけている者を救うこともできる！";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "とにかく、これを";
+					mes "フィゲルにいる^8E6B23ビスマーク^000000のところへ持っていくんだ、";
+				}
+				mes "そして";
+				mes "受領証を忘れるなよ！";
+				close;
+			}
+			else {
+				mes "[ゲシュペンシュテ]";
+				mes "まだ";
+				mes "全部のアイテムを持ってきてないな。";
+				mes "もう一度言った方が";
+				mes "いいか？持ってくるのは……";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "^8E6B23"+.@items[1]+"個の"+getitemname(.@items[0])+"^000000、";
+				mes "^8E6B23"+.@items[3]+"個の"+getitemname(.@items[2])+"^000000、";
+				mes "^8E6B23"+.@items[5]+"個の"+getitemname(.@items[4])+"^000000、そして";
+				mes "^8E6B23"+.@items[7]+"個の"+getitemname(.@items[6])+"^000000。これは";
+				mes "NPC商店で";
+				mes "買える品だ。";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "次に来るときは";
+				mes "必要な物を";
+				mes "全部揃えてくるんだぞ。忘れるな、";
+				mes "これは試験だ！";
+				mes "手を抜いてたら";
+				mes "ブラックスミスにはなれないぞ！";
+				close;
+			}
+		}
+		else if (BSMITH_Q > 8 && BSMITH_Q < 14) {
+			mes "[ゲシュペンシュテ]";
+			mes "まだ";
+			mes "こんな所で何をしてるんだ？";
+			mes "早く荷物を";
+			mes "届けてこい～！";
+			mes "行き先を";
+			mes "忘れたのか？";
+			next;
+			mes "[ゲシュペンシュテ]";
+			if (BSMITH_Q == 9) {
+				mes "ゲフェンの、";
+				mes "町の中心から11時の方向に^8E6B23バイスリスト^000000がいる。受領証を忘れるなよ。";
+			}
+			else if (BSMITH_Q == 10) {
+				mes "ソードメイスの";
+				mes "商人^8E6B23ウィッケバイン^000000をモロクで探すんだ。受領証を忘れるなよ。";
+			}
+			else if (BSMITH_Q == 11) {
+				mes "リヒタルゼンの、町の中心から6時の方向、武器屋の近くに^8E6B23クロンガスト^000000がいる。受領証を忘れるなよ。";
+			}
+			else if (BSMITH_Q == 12) {
+				mes "フェイヨンの、町の中心から5時の方向に^8E6B23タルピズ^000000がいる。受領証を忘れるなよ。";
+			}
+			else {
+				mes "フィゲルの、町の中心から1時の方向、飛行船の近くに^8E6B23ビスマーク^000000がいる。受領証を忘れるなよ。";
+			}
+			close;
+		}
+		else if (BSMITH_Q == 14) {
+			mes "[ゲシュペンシュテ]";
+			mes "ふむ……？";
+			mes "配達は";
+			mes "ちゃんと";
+			mes "終わったか？";
+			mes "受領証を見せてくれ～";
+			next;
+			if (select("はい、こちらです。:受領証ですか？ええと、どこかにあるはずです……") == 1) {
+				if (countitem(1073) > 0) {
+					set BSMITH_Q,15;
+					delitem 1073,1; //Merchant_Voucher_1
+					if (checkquest(2008) != -1) {
+						changequest 2008,2013;
+					}
+					else if (checkquest(2009) != -1) {
+						changequest 2009,2013;
+					}
+					else if (checkquest(2010) != -1) {
+						changequest 2010,2013;
+					}
+					else if (checkquest(2011) != -1) {
+						changequest 2011,2013;
+					}
+					else {
+						changequest 2012,2013;
+					}
+					mes "[ゲシュペンシュテ]";
+					mes "おっほほ～";
+					mes "素晴らしい！";
+					mes "お前は本当に";
+					mes "優れた商人だな！";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "よくやった！";
+					mes "アインブロックの^8E6B23アルティレゲン^000000のところへ戻るんだ、お前がブラックスミスに応募したとき最初に会った男だ。";
+					next;
+					mes "[ゲシュペンシュテ]";
+					mes "お前ならきっと";
+					mes "偉大なブラックスミスになれると信じているぞ！";
+					close;
+				}
+				set BSMITH_Q,3;
+				mes "[ゲシュペンシュテ]";
+				mes "つまり……";
+				mes "受領証を";
+				mes "もらってないのか？";
+				mes "何だって……？";
+				next;
+				mes "[ゲシュペンシュテ]";
+				mes "受領証は";
+				mes "商人の一番の友だぞ！";
+				mes "仕事に必要不可欠なんだ！";
+				mes "もう一度、試験を";
+				mes "最初からやり直しだ！";
+				close;
+			}
+			mes "[ゲシュペンシュテ]";
+			mes "受領証が";
+			mes "見つかったら戻ってこい～";
+			mes "もらい忘れたわけじゃ";
+			mes "ないよな。";
+			mes "だよな……？";
+			close;
+		}
+		else if (BSMITH_Q == 15) {
+			mes "[ゲシュペンシュテ]";
+			mes "本当に";
+			mes "助かったよ、";
+			mes "ありがとう。";
+			mes "アインブロックへ戻って";
+			mes "^8E6B23アルティレゲン^000000に会いに行ってくれ！";
+			close;
+		}
+		mes "[ゲシュペンシュテ]";
+		mes "ん……？";
+		mes "お前は俺のところでの";
+		mes "試験はもう終わってるぞ！";
+		mes "それに、驚いたことに";
+		mes "今日はもう手伝いは必要ないんだ。";
+		close;
+	}
+	else {
+		mes "[ゲシュペンシュテ]";
+		mes "ブラックスミスってのは";
+		mes "本当に";
+		mes "最高だぞ！";
+		mes "そう思わないか？";
+		mes "ムハハハハハ！！";
+		close;
+	}
+}
+
+geffen,46,164,1	script	バイスリスト#BLS::Baisulist#BLS	69,{
+	if (BSMITH_Q == 9 && countitem(1610) > 0) {
+		mes "[バイスリスト]";
+		mes "ああ、こんにちは！";
+		mes "私の";
+		mes "アークワンドを";
+		mes "届けに来てくれたんですか？";
+		next;
+		mes "[バイスリスト]";
+		mes "本当に私が注文した物ですよね？もし使用済みの物なら、";
+		mes "受け取りたくないんです。";
+		next;
+		if (select("あっ、これは私が使ってる物でした……:間違いありません！新品です！") == 1) {
+			mes "[バイスリスト]";
+			mes "そうですか……";
+			mes "それなら";
+			mes "もう少し待つしかないですね。";
+			mes "早く";
+			mes "届けてくださいね～";
+			close;
+		}
+		mes "[バイスリスト]";
+		mes "本当に";
+		mes "間違いないんですか？";
+		set BSMITH_Q,14;
+		delitem 1610,1; //Arc_Wand
+		next;
+		mes "[バイスリスト]";
+		mes "はるばる来てくださって本当にありがとうございます。今度ゲシュペンシュテに会ったら、注文がこんなに遅れたこと、代わりに一発叩いておいてください……";
+		next;
+		mes "[バイスリスト]";
+		mes "少し";
+		mes "待ってください、";
+		mes "受領証をお渡ししますね～";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[バイスリスト]";
+		mes "はい、どうぞ。";
+		mes "本当にありがとうございました！";
+		mes "ああ、それと頑張ってくださいね～";
+		mapannounce "geffen","" +strcharinfo(0)+ "さん、配達ありがとうございました～",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[バイスリスト]";
+		mes "本当に";
+		mes "配達";
+		mes "ありがとうございます～";
+		close;
+	}
+	else {
+		mes "[バイスリスト]";
+		mes "ああ……";
+		mes "しばらく";
+		mes "アルベルタへ";
+		mes "行っていませんね。";
+		next;
+		mes "[バイスリスト]";
+		mes "少し前に";
+		mes "そこで注文したのですが、";
+		mes "まだ";
+		mes "届いていないんです……";
+		next;
+		mes "[バイスリスト]";
+		mes "もしかして……";
+		mes "ブラックスミスギルドは";
+		mes "人手不足なんでしょうか？遅れる理由が他に思いつきません……";
+		next;
+		mes "[バイスリスト]";
+		mes "私の特別な";
+		mes "アークワンドはいつ届くんでしょう？";
+		close;
+	}
+}
+
+morocc,27,112,4	script	ウィッケバイン#BLS::Wickebine#BLS	725,{
+	if (BSMITH_Q == 10 && countitem(1219) > 0) {
+		cutin "Job_Black_hucke01",2;
+		mes "[ウィッケバイン]";
+		mes "……！";
+		mes "届いたわ！";
+		next;
+		mes "[ウィッケバイン]";
+		mes "これ、私が注文した物よね？";
+		mes "使い古した中古のグラディウスなんて要らないんだから！";
+		next;
+		if (select("あっ、違う物でした。:新品だって保証するよ。") == 1) {
+			cutin "Job_Black_hucke03",2;
+			mes "[ウィッケバイン]";
+			mes "もーう……！";
+			mes "早く";
+			mes "私のグラディウス持ってきてよね～";
+			next;
+			mes "－彼女は怒っているようだ－";
+			close2;
+			cutin "Job_Black_hucke03",255;
+			end;
+		}
+		cutin "Job_Black_hucke02",2;
+		mes "[ウィッケバイン]";
+		mes "はっはっは！";
+		mes "やっと来たわね！さあ……";
+		mes "ちょっと";
+		mes "見せてちょうだい！";
+		next;
+		mes "－彼女はとても嬉しそうだ－";
+		next;
+		set BSMITH_Q,14;
+		delitem 1219,1; //Gladius
+		cutin "Job_Black_hucke01",2;
+		mes "[ウィッケバイン]";
+		mes "あなた、";
+		mes "アインブロックのブラックスミスギルドの人よね？";
+		mes "このメッセージをゲシュペンシュテに伝えてちょうだい！";
+		next;
+		cutin "Job_Black_hucke03",2;
+		mes "[ウィッケバイン]";
+		mes "『^660000遅いわよ！";
+		mes "どれだけ待たせたか";
+		mes "分かってるの？！^000000』";
+		next;
+		cutin "Job_Black_hucke02",2;
+		mes "[ウィッケバイン]";
+		mes "でも、これも";
+		mes "見事な出来栄えの品だわ。";
+		mes "腕前には満足してるって伝えておいて。";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		emotion ET_THROB;
+		mes "[ウィッケバイン]";
+		mes "これが受領証よ。";
+		mes "あなた、";
+		mes "よくやったわね。";
+		mapannounce "morocc","" + strcharinfo(0) + "さん、配達ありがとう～！",bc_map;
+		close2;
+		cutin "Job_Black_hucke02",255;
+		end;
+	}
+	else if (BSMITH_Q == 14) {
+		emotion ET_THROB;
+		cutin "Job_Black_hucke02",2;
+		mes "[ウィッケバイン]";
+		mes "配達ありがとう。";
+		close2;
+		cutin "Job_Black_hucke02",255;
+		end;
+	}
+	else {
+		cutin "Job_Black_hucke03",2;
+		mes "[ウィッケバイン]";
+		mes "……";
+		next;
+		mes "[ウィッケバイン]";
+		mes "……";
+		mes "…………";
+		next;
+		mes "[ウィッケバイン]";
+		mes "遅いわね。";
+		mes "遅いったら";
+		mes "遅いんだから";
+		mes "もう本当に遅いんだから～！";
+		next;
+		mes "[ウィッケバイン]";
+		mes "ゲシュペンシュテからの発送、一体どれだけ時間がかかるのよ？いつもならゲフェンのブラックスミスギルドはもっと早いのに……";
+		next;
+		emotion ET_THROB;
+		mes "[ウィッケバイン]";
+		mes "もーう……";
+		mes "本当に";
+		mes "イライラするわ……";
+		close2;
+		cutin "Job_Black_hucke03",255;
+		end;
+	}
+}
+
+lighthalzen,209,80,4	script	クロンガスト#BLS::Krongast#BLS	734,{
+	if (BSMITH_Q == 11 && countitem(1119) > 0) {
+		mes "[クロンガスト]";
+		mes "おおおお～";
+		mes "届いたのか？";
+		mes "いいぞ。";
+		mes "見せてもらおう。";
+		next;
+		mes "[クロンガスト]";
+		mes "これは俺が";
+		mes "注文した品で間違いないよな？使用済みの物なら要らないぞ。";
+		next;
+		if (select("あっ、これは使用済みでした！:できたばかりの新品です。") == 1) {
+			mes "[クロンガスト]";
+			mes "うーむ！";
+			mes "正しい剣を";
+			mes "届けてくれ！";
+			mes "もう";
+			mes "十分待ったんだ……";
+			close;
+		}
+		mes "[クロンガスト]";
+		mes "よく確かめたんだな？";
+		mes "よし、それなら受け取ろう！";
+		next;
+		set BSMITH_Q,14;
+		delitem 1119,1; //Tsurugi
+		mes "[クロンガスト]";
+		mes "おお……";
+		mes "これはいいな。";
+		mes "思っていたより";
+		mes "ずっと良い。";
+		next;
+		mes "[クロンガスト]";
+		mes "この剣があれば……";
+		mes "俺の必殺技はさらに強力になるぞ！速攻の技も極められるかもしれない！最高だ！";
+		next;
+		mes "[クロンガスト]";
+		mes "よし、それなら。";
+		mes "受領証を";
+		mes "渡そう。";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[クロンガスト]";
+		mes "これが";
+		mes "お前の受領証だ。";
+		mes "取引";
+		mes "ありがとう！";
+		mapannounce "lighthalzen",strcharinfo(0)+"……配達感謝する。",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[クロンガスト]";
+		mes "配達";
+		mes "感謝するぞ。";
+		close;
+	}
+	else {
+		mes "[クロンガスト]";
+		mes "……";
+		next;
+		mes "[クロンガスト]";
+		mes "……";
+		mes "…………";
+		next;
+		mes "[クロンガスト]";
+		mes "注文した剣は";
+		mes "一体いつ届くんだ？";
+		mes "あの剣で、俺の必殺技^2F4F4Fファインエッジ^000000を試したいんだ。";
+		next;
+		mes "[クロンガスト]";
+		mes "ああああ！";
+		mes "どうしても";
+		mes "あの剣が必要なんだ！";
+		close;
+	}
+}
+
+payon,214,79,4	script	タルピズ#BLS::Talpiz#BLS	59,{
+	if (BSMITH_Q == 12 && countitem(1713) > 0) {
+		mes "[タルピズ]";
+		mes "あら～";
+		mes "やっと届いたの？";
+		mes "注文した荷物が？";
+		next;
+		mes "[タルピズ]";
+		mes "ねえ、これ私が注文した物よね？使い古したアーバレストなんて要らないわよ。";
+		next;
+		if (select("あっ、これは使用済みの物でした。:間違いなく新品です。") == 1) {
+			mes "[タルピズ]";
+			mes "うーん。";
+			mes "急いで";
+			mes "正しい品を";
+			mes "持ってきてちょうだい。";
+			mes "もう";
+			mes "十分待ったのに……";
+			close;
+		}
+		mes "[タルピズ]";
+		mes "それなら、間違いないのね？";
+		mes "見せてもらうわ……";
+		next;
+		set BSMITH_Q,14;
+		delitem 1713,1; //Arbalest
+		mes "[タルピズ]";
+		mes "＊ヒューヒュー＊";
+		mes "とっても素敵！！";
+		next;
+		mes "[タルピズ]";
+		mes "本当に上質な特注品だわ。眼帯用のケースまで付いてるなんて最高よ！本当に本当に気に入ったわ～";
+		next;
+		mes "[タルピズ]";
+		mes "ありがとう！";
+		mes "これだけの品質なら、";
+		mes "使った後でも高く売れそうね！";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[タルピズ]";
+		mes "はい！";
+		mes "受領証を";
+		mes "受け取って。";
+		mes "本当に";
+		mes "お疲れさまでした。";
+		mapannounce "payon","" +strcharinfo(0)+ "さん、本当にありがとう。見るたびにもっと好きになっちゃう～",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[タルピズ]";
+		mes "本当に、";
+		mes "何度言っても";
+		mes "言い足りないくらい、";
+		mes "最高の仕事だったわ～！";
+		close;
+	}
+	else {
+		mes "[タルピズ]";
+		mes "えっと……";
+		mes "私の注文品は";
+		mes "いつ届くのかしら？";
+		next;
+		mes "[タルピズ]";
+		mes "眼帯を入れる";
+		mes "上質なケース付きの特注アーバレスト。そんな物を作れるのは、一人しかいないのよね……";
+		next;
+		mes "[タルピズ]";
+		mes "ああ……";
+		mes "待つのが";
+		mes "耐えられないわ！";
+		close;
+	}
+}
+
+hugel,168,183,1	script	ビスマーク#BLS::Bismarc#BLS	118,{
+	if (BSMITH_Q == 13 && countitem(1122) > 0) {
+		mes "[ビスマーク]";
+		mes "ああ神よ……";
+		mes "天使を";
+		mes "遣わされたのか……？";
+		mes "それは私が注文した";
+		mes "リングポメルセイバーか？それだけが望みなんだ……";
+		next;
+		mes "[ビスマーク]";
+		mes "^666666＊ヒュッ＊^000000これが私の注文した品で間違いないな？特別に";
+		mes "この毒を止めるために作らせた物なんだ……";
+		next;
+		if (select("あっ、これは私物のリングポメルセイバーでした。:間違いなくこれです。") == 1) {
+			mes "[ビスマーク]";
+			mes "そ、そんな……";
+			mes "急いでくれ……！";
+			mes "その剣が";
+			mes "な、な、な";
+			mes "解……毒……薬……なんだ！";
+			next;
+			mes "^3355FFどうやら";
+			mes "彼はゆっくりと死にかけているようだ……！";
+			mes "急いだ方がいい。^000000";
+			close;
+		}
+		mes "[ビスマーク]";
+		mes "^666666＊ガフッ＊^000000";
+		mes "渡してくれ……！";
+		mes "頼むうう！";
+		next;
+		set BSMITH_Q,14;
+		delitem 1122,1; //Ring_Pommel_Saber
+		mes "^3355FFビスマークは";
+		mes "緑ハーブの力が込められた";
+		mes "リングポメルセイバーで";
+		mes "自らを何度も";
+		mes "突き刺した。^000000";
+		next;
+		mes "[ビスマーク]";
+		mes "^666666＊ガハッ＊^000000";
+		mes "＊ゼエゼエ＊";
+		next;
+		mes "[ビスマーク]";
+		mes "頼む……";
+		mes "起こしてくれ。";
+		mes "毒が";
+		mes "まだ体の中を";
+		mes "駆け巡っているんだ……";
+		next;
+		mes "[ビスマーク]";
+		mes "いだだだだッ！！";
+		mes "焼けるようだ！";
+		next;
+		mes "[ビスマーク]";
+		mes "＊ゼエゼエ＊";
+		mes "＊ふう＊よし、";
+		mes "解毒薬が";
+		mes "効いてくるのが分かる。";
+		mes "まさに求めていた物だ。";
+		next;
+		getitem 1073,1; //Merchant_Voucher_1
+		mes "[ビスマーク]";
+		mes "これが";
+		mes "お前の受領証だ。";
+		mes "も、持っていけ……！";
+		mes "お前の物だ！";
+		mapannounce "hugel","" +strcharinfo(0)+ "さん、配達ありがとう。命を救われたよ……",bc_map;
+		close;
+	}
+	else if (BSMITH_Q == 14) {
+		mes "[ビスマーク]";
+		mes "ありがとう。";
+		mes "君に";
+		mes "命を救われた……";
+		close;
+	}
+	else {
+		mes "[ビスマーク]";
+		mes "^666666＊ガハッ＊^000000";
+		mes "^666666＊ヒュッ ヒュッ＊^000000";
+		mes "私の注文品は";
+		mes "い、いつ届くんだ……？";
+		next;
+		mes "[ビスマーク]";
+		mes "体の中の";
+		mes "毒が……この痛みが……";
+		mes "耐え難い……あ、ああ神よ……";
+		next;
+		mes "[ビスマーク]";
+		mes "解毒薬は";
+		mes "一体";
+		mes "いつ届くんだ？！";
+		close;
+	}
+}
+
+ein_in01,24,41,5	script	ブラックスミスギルド職員#moc::Blacksmith Guildsman#moc	726,{
+	if (BSMITH_Q == 16) {
+		emotion ET_SCRATCH;
+		mes "[ミーテマイユ]";
+		mes "おお……ブラックスミスになりたいってのはお前か？";
+		mes "いいねえ、ヘヘ。";
+		mes "これまでの試験でも分かっただろうが、商人からブラックスミスにすぐなれるわけじゃないぞ。";
+		next;
+		mes "[ミーテマイユ]";
+		mes "鍛冶についてどれだけ本当に理解してるか？いくつか質問してもいいか？";
+		next;
+		if (select("はい:いいえ、まだです～") == 1) {
+			mes "[ミーテマイユ]";
+			mes "よし……";
+			mes "試験は簡単だ。";
+			mes "5つ質問する。";
+			mes "間違えすぎたら";
+			mes "不合格だ。それに";
+			mes "どこを間違えたかは教えないぞ。";
+			next;
+			set .@blackss_te,0;
+			mes "[ミーテマイユ]";
+			mes "よく聞いて、";
+			mes "慎重に答えてくれ……";
+			next;
+			switch(rand(1,3)) {
+			case 1:
+				mes "[ミーテマイユ]";
+				mes "1．^8E6B23ディスカウント^000000スキルを";
+				mes "習得するのに";
+				mes "必要な能力は？";
+				next;
+				if (select("プッシュカートLv3:アイテム鑑定:マモナイトLv10:重量拡張Lv3") == 4)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "2．^8E6B23ハンマーフォール^000000で";
+				mes "攻撃したとき、";
+				mes "敵に与えられる";
+				mes "状態異常は？";
+				next;
+				if (select("スタン:暗闇:混乱:沈黙") == 1)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "3．マモナイトスキルを極めた状態で";
+				mes "攻撃するとき、";
+				mes "消費するZenyは？";
+				mes "（マモナイトLv10）";
+				next;
+				if (select("900Zeny:1000Zeny:2000Zeny:100,000Zeny") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "4．^8E6B23ディスカウント^000000スキルを";
+				mes "極めたときの";
+				mes "割引率は";
+				mes "何％？";
+				next;
+				if (select("21％:22％:23％:24％") == 4)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "5．^8E6B23オーバーチャージ^000000スキルを";
+				mes "極めたあと、";
+				mes "NPCに売る品に上乗せできる";
+				mes "最大の割増率は";
+				mes "何％？";
+				next;
+				if (select("21％:22％:23％:24％") == 3)
+					set .@blackss_te,.@blackss_te+20;
+				break;
+			case 2:
+				mes "[ミーテマイユ]";
+				mes "1．鋼鉄を";
+				mes "ドロップする";
+				mes "モンスターは次のうちどれ？";
+				next;
+				if (select("ゼロム:チョンチョン:スケルワーカー:レクイエム") == 3)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "2．レッドブラッドから";
+				mes "作れる石は";
+				mes "次のうちどれ？";
+				next;
+				if (select("フレイムハート:ラフウィンド:グレイトネイチャー:ミスティックフローズン") == 1)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "3．お前のカプラ倉庫に";
+				mes "一番多くある石は";
+				mes "次のうちどれ？";
+				next;
+				select("ウィンドオブヴェルデュア:レッドブラッド:グリーンライブ:クリスタルブルー");
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "4．一般的に、";
+				mes "風属性の武器から";
+				mes "最もダメージを受ける";
+				mes "属性は";
+				mes "次のうちどれ？";
+				next;
+				if (select("火属性:水属性:地属性:風属性") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "5．鋼鉄1個を作るのに";
+				mes "必要な";
+				mes "鉄鉱石の数は？";
+				next;
+				if (select("鉄鉱石5個:鉄鉱石4個:鉄鉱石3個:鉄鉱石6個") == 1)
+					set .@blackss_te,.@blackss_te+20;
+				break;
+			case 3:
+				mes "[ミーテマイユ]";
+				mes "1．街で誰かと";
+				mes "偶然会ったとき、";
+				mes "普段どうする？";
+				next;
+				switch(select("何か必要か尋ねる。:軽く会話する。:無視する。:アイテムを渡して逃げる。")) {
+				case 1:
+				case 2:
+					set .@blackss_te,.@blackss_te+20;
+					break;
+				default:
+					break;
+				}
+				mes "[ミーテマイユ]";
+				mes "2．^8E6B23クレイジーアップロア^000000と";
+				mes "^8E6B23チェンジカート^000000を";
+				mes "習得できるのは";
+				mes "どの村？";
+				next;
+				if (select("アルデバラン:アルベルタ:モロク:イズルード") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "3．アインブロックの中心から見て、";
+				mes "ブラックスミスギルドはどの方向？";
+				next;
+				if (select("11時:5時:7時:12時") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "4．ブラックスミスが";
+				mes "一番多くいる街は";
+				mes "どこ？";
+				next;
+				if (select("プロンテラ:モロク:アルベルタ:アインブロック") == 4)
+					set .@blackss_te,.@blackss_te+20;
+				mes "[ミーテマイユ]";
+				mes "5．次のうち";
+				mes "ブラックスミスの";
+				mes "スキルに";
+				mes "影響する能力は？";
+				next;
+				if (select("STR:DEX:AGI:VIT") == 2)
+					set .@blackss_te,.@blackss_te+20;
+				break;
+			}
+			mes "[ミーテマイユ]";
+			mes "ああ……";
+			mes "クイズは";
+			mes "終わりだ。さて……";
+			next;
+			mes "[ミーテマイユ]";
+			mes "獲得した";
+			mes ""+ .@blackss_te +"点だ……";
+			if (.@blackss_te > 70) {
+				mes "上出来だ！";
+				mes "おめでとう！";
+				mes "見事合格だ！";
+				next;
+				mes "[ミーテマイユ]";
+				mes "だが、早くも成功したからといって調子に乗るなよ。ブラックスミスの人生は生易しいものじゃない。試験に合格した証として、このブラックスミスのハンマーを授けよう。";
+				set BSMITH_Q,17;
+				getitem 1005,1; //Hammer_Of_Blacksmith
+				changequest 2014,2015;
+				next;
+				mes "[ミーテマイユ]";
+				mes "このブラックスミスの";
+				mes "ハンマーを持ってアルティレゲンのところへ戻るんだ。いいな？幸運を祈るぞ！";
+				close;
+			}
+			mes "不合格だ！ここに戻ってくる前に、もっと勉強することだな。";
+			next;
+			mes "[ミーテマイユ]";
+			mes "その知識の無さじゃ、ハンマーを持っても自分を傷つけるのが関の山だぞ！";
+			close;
+		}
+		mes "[ミーテマイユ]";
+		mes "よし、それなら。";
+		mes "準備をして、";
+		mes "戻ってくるんだ、";
+		mes "準備ができたらな……";
+		close;
+	}
+	else if (BSMITH_Q == 17) {
+		emotion ET_SCRATCH;
+		mes "[ミーテマイユ]";
+		mes "ああ、お前はブラックスミスの試験に合格したばかりだったな～";
+		next;
+		mes "[ミーテマイユ]";
+		mes "アルティレゲンさんのところへ戻ったらどうだ？";
+		next;
+		mes "[ミーテマイユ]";
+		mes "ブラックスミスのハンマーを持っていくのを忘れるなよ！";
+		next;
+		mes "[ミーテマイユ]";
+		mes "ああ、それと転職前にスキルポイントを使い切っておくのを忘れるなよ～";
+		close;
+	}
+	else {
+		emotion ET_SCRATCH;
+		mes "[ミーテマイユ]";
+		mes "モロクにいた頃は暑さに悩まされたが、";
+		mes "今度はこのアインブロックのスモッグに悩まされてるよ！";
+		next;
+		mes "[ミーテマイユ]";
+		mes "だが、正直言ってここはブラックスミスにとって最高の場所だ。資材も豊富だし、設備も高度に発達している。";
+		next;
+		mes "[ミーテマイユ]";
+		mes "俺たちブラックスミスは、最高の中の最高の武器を打とうと日々努力してるんだ。";
+		next;
+		mes "[ミーテマイユ]";
+		mes "それに誇りをかけている！";
+		close;
+	}
+}
+
+geffen_in,109,170,3	script	ブラックスミスギルド職員#gef::Blacksmith Guildsman#gef	726,{
+	mes "[ブラックスミスギルド職員]";
+	mes "こんにちは、ブラックスミスギルドへのご用件でしょうか？";
+	next;
+	mes "[ブラックスミスギルド職員]";
+	mes "遠いところ私どものギルドまでお越しいただき、ありがとうございます。しかし残念ながら、ブラックスミスギルドは";
+	mes "^3131FFシュバルツバルド共和国の『アインブロック』^000000へ移転しております。";
+	next;
+	mes "[ブラックスミスギルド職員]";
+	mes "シュバルツバルド共和国へは飛行船でお越しいただけます。";
+	mes "飛行船をご利用いただけるイズルードまで、テレポートサービスをご提供できます。";
+	mes "すぐにイズルードへ移動なさいますか？";
+	next;
+	switch(select("アインブロックへの行き方は？:はい！:いいえ、結構です。")) {
+	case 1:
+		mes "[ブラックスミスギルド職員]";
+		mes "あら、まだ飛行船をご利用になったことがないのですね？";
+		next;
+		mes "[ブラックスミスギルド職員]";
+		mes "ルーンミッドガッツ王国とは違い、シュバルツバルド共和国では町を移動する際、テレポートサービスの代わりに『飛行船』を利用します。";
+		next;
+		mes "[ブラックスミスギルド職員]";
+		mes "^3131FF『イズルード』^000000では、^3131FFイズルードとシュバルツバルド共和国のジュノーを結ぶ^000000^3131FF『国際飛行船』^000000をご利用いただけます。";
+		next;
+		mes "[ブラックスミスギルド職員]";
+		mes "飛行船に乗ってジュノーへ向かってください。ジュノーからは、アインブロックへ行くために^3131FF国内飛行船^000000に乗り換える必要があります。";
+		mes "国際飛行船から国内飛行船への乗り換えの際は、^3131FF空港の外へは出られません^000000のでご注意ください。";
+		next;
+		mes "[ブラックスミスギルド職員]";
+		mes "複雑に聞こえるかもしれませんが、空港に着けば分かりますよ。";
+		mes "ブラックスミスギルドに着いたら、同僚たちによろしくお伝えください！";
+		close;
+	case 2:
+		if (Zeny < 600) {
+			mes "[ブラックスミスギルド職員]";
+			mes "申し訳ございませんが、Zenyが足りないようです。";
+			close;
+		}
+		set Zeny, Zeny-600;
+		warp "izlude",94,103;
+		end;
+	case 3:
+		mes "[ブラックスミスギルド職員]";
+		mes "お気をつけて！";
+		close;
+	}
+}

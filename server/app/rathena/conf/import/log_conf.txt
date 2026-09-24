@@ -1,0 +1,12 @@
+//--------------------------------------------------------------
+// ログ設定の上書き（conf/log_athena.conf の最後に import される）
+// いずれも rAthena の既定値と同じだが、意図を固定するため明示する。
+//--------------------------------------------------------------
+
+// ログを SQL テーブルへ（no の場合 log/ 配下のフラットファイル）
+sql_logs: yes
+
+// GM コマンド（@/#）を atcommandlog テーブルへ記録する。
+// 実際に記録されるのは conf/groups.yml で LogCommands: true のグループのみ。
+// Id 99 "Admin" は LogCommands: true。
+log_commands: yes

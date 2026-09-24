@@ -1,0 +1,476 @@
+//===== rAthena Script ======================================= 
+//= Episode 12 Socket Enchant NPC
+//===== By: ================================================== 
+//= Gepard
+//===== Current Version: ===================================== 
+//= 1.1a
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= [Official Conversion]
+//= Adds slots to selected weapons and armor.
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//= 1.1 Duplicates now spawn from floating NPCs. [L0ne_W0lf]
+//= 1.1a Added 'disable_items' command. [Euphy]
+//============================================================ 
+
+-	script	Leablem#dummy::SocketEnchant2	-1,{
+	if (checkweight(1201,1) == 0)
+	{
+		mes "－ちょっと待って！！－";
+		mes "－今、荷物を－";
+		mes "－持ちすぎているようだ。－";
+		mes "－もう一度、－";
+		mes "－身軽になってから来てください。－";
+		close;
+	}
+	mes "[レアブレム]";
+	mes "こんにちは。私はレアブレム、";
+	mes "武器や防具にスロットを追加する";
+	mes "専門の技術者です。";
+	mes "大変なこともありますが、この仕事が好きで";
+	mes "誇りを持ってやっています。";
+	next;
+	mes "[レアブレム]";
+	mes "技術の多くは兄のセイヤブレムから学びましたが、";
+	mes "まだまだ学ぶことが多いと思っています。";
+	mes "ですから、兄のセイヤブレムと違って、";
+	mes "私が対応できるスロット追加は限られていることをご理解ください。";
+	next;
+	mes "[レアブレム]";
+	mes "兄は、自分の技術が";
+	mes "唯一のものでなくなることを";
+	mes "心配していて、教えるのに";
+	mes "あまり乗り気ではありませんでしたが、それでも精一杯教えてくれました。";
+	next;
+	mes "[レアブレム]";
+	mes "おかげでたくさんのことを学べました。";
+	mes "色々なことに";
+	mes "挑戦するのはまだ自信がありませんが、";
+	mes "今できることを";
+	mes "精一杯やらせていただきます。";
+	next;
+	mes "[レアブレム]";
+	mes "実は、一つだけ";
+	mes "兄がやってほしくないことがあります。";
+	mes "兄を怒らせたくないので…その話は置いておきますね。";
+	mes "これ以上は言いません！";
+	next;
+	mes "[レアブレム]";
+	mes "それで、スロットを";
+	mes "追加したい装備はありますか？";
+	mes "手数料や必要な材料、";
+	mes "成功率は";
+	mes "扱うアイテムによって変わります。";
+	next;
+	switch(select("武器:防具:さっき言いかけたこと:詳しい情報:やめる"))
+	{
+		case 1:
+			mes "[レアブレム]";
+			mes "武器ですね？ ええ、大丈夫ですよ。";
+			mes "武器は作業難易度によって";
+			mes "4つのクラスに分かれています。";
+			mes "Cクラスが一番簡単で、Sクラスが一番難しいです。";
+			mes "どのクラスを試してみますか？";
+			next;
+			switch(select("C:B:A:S"))
+			{
+				case 1:
+					mes "[レアブレム]";
+					mes "Cクラスですね、了解です。";
+					mes "それで、どんな武器をお持ちですか？";
+					next;
+					switch(select("大地の書:怒涛の書:疾風の書:灼熱の書"))
+					{
+						case 1: callfunc "Func_Socket2",1554,1569,40,66,200,1010,10;
+						case 2: callfunc "Func_Socket2",1553,1568,40,66,200,1010,10;
+						case 3: callfunc "Func_Socket2",1556,1571,40,66,200,1010,10;
+						case 4: callfunc "Func_Socket2",1555,1570,40,66,200,1010,10;
+					}
+				case 2:
+					mes "[レアブレム]";
+					mes "標準的なBクラスをお選びですね。";
+					mes "それで、どんな武器をお持ちですか？";
+					next;
+					switch(select("オークアックス:シミター:スパイク"))
+					{
+						case 1: callfunc "Func_Socket2",1304,1309,40,66,200,984,1;
+						case 2: callfunc "Func_Socket2",1113,1114,40,66,200,984,1;
+						case 3: callfunc "Func_Socket2",1523,1538,40,61,300,984,1;
+					}
+				case 3:
+					mes "[レアブレム]";
+					mes "Aクラスですか？少し欲張りな気もしますが、大丈夫ですよ。";
+					mes "それで、どんな武器をお持ちですか？";
+					next;
+					switch(select("ドラゴンキラー:震撼のカタール:猛火のカタール:氷結のカタール:疾風のカタール:ゴールデンメイス:東洋のリュート:クイーンズウィップ:スペクトラルスピア:ゲイボルグ:シュヴァイツァーザーベル"))
+					{
+						case 1:  callfunc "Func_Socket2",13001,13030,40,61,500,984,2;
+						case 2:  callfunc "Func_Socket2", 1257, 1276,40,66,500,984,2;
+						case 3:  callfunc "Func_Socket2", 1258, 1277,40,66,500,984,2;
+						case 4:  callfunc "Func_Socket2", 1256, 1275,40,66,500,984,2;
+						case 5:  callfunc "Func_Socket2", 1259, 1278,40,66,500,984,2;
+						case 6:  callfunc "Func_Socket2", 1524, 1539,40,61,500,984,2;
+						case 7:  callfunc "Func_Socket2", 1918, 1922,40,61,500,984,2;
+						case 8:  callfunc "Func_Socket2", 1970, 1976,40,61,500,984,2;
+						case 9:  callfunc "Func_Socket2", 1477, 1479,40,56,500,984,2;
+						case 10: callfunc "Func_Socket2", 1474, 1480,40,56,500,984,2;
+						case 11: callfunc "Func_Socket2", 1167, 1178,40,61,500,984,2;
+					}
+				case 4:
+					mes "[レアブレム]";
+					mes "えっ、Sクラスですか？！ 本気ですか…？*震え*";
+					mes "それで…どのSクラス武器にスロットを作りますか？！";
+					next;
+					switch(select("ゼフュロス:メイルブレイカー:ドラゴンスレイヤー:ソードブレイカー:アサシンダガー:グランドクロス:エクスキューショナー"))
+					{
+						case 1: callfunc "Func_Socket2",1468, 1481,40,51,1000,984,5,999,10;
+						case 2: callfunc "Func_Socket2",1225,13032,40,51,1000,984,5,999,10;
+						case 3: callfunc "Func_Socket2",1166, 1180,40,51,1000,984,5,999,10;
+						case 4: callfunc "Func_Socket2",1224,13031,40,51,1000,984,5,999,10;
+						case 5: callfunc "Func_Socket2",1232,13033,40,51,1000,984,5,999,10;
+						case 6: callfunc "Func_Socket2",1528, 1540,40,51,1000,984,5,999,10;
+						case 7: callfunc "Func_Socket2",1169, 1179,40,51,1000,984,5,999,10;
+					}
+			}
+		case 2:
+			mes "[レアブレム]";
+			mes "防具ですね？ ええ、大丈夫ですよ。";
+			mes "防具は作業難易度によって";
+			mes "4つのクラスに分かれています。";
+			mes "Cクラスが一番簡単で、Sクラスが一番難しいです。";
+			mes "どのクラスを試してみますか？";
+			next;
+			switch(select("C:B:A:S"))
+			{
+				case 1:
+					mes "[レアブレム]";
+					mes "Cクラスですね、了解です。";
+					mes "それで、どんな防具をお持ちですか？";
+					next;
+					switch(select("ひまわり:博士帽:ビッグリボン:少年帽"))
+					{
+						case 1: callfunc "Func_Socket2",2253,5351,40,66,100,999,3;
+						case 2: callfunc "Func_Socket2",5012,5347,40,66,100,999,3;
+						case 3: callfunc "Func_Socket2",2244,5348,40,66,100,999,5;
+						case 4: callfunc "Func_Socket2",5016,5349,40,66,100,999,5;
+					}
+				case 2:
+					mes "[レアブレム]";
+					mes "標準的なBクラスをお選びですね。";
+					mes "それで、どんな防具をお持ちですか？";
+					next;
+					switch(select("スカルリング:ハイヒール"))
+					{
+						case 1: callfunc "Func_Socket2",2609,2715,40,61,300,999,5;
+						case 2: callfunc "Func_Socket2",2409,2432,40,61,300,999,5;
+					}
+				case 3:
+					mes "[レアブレム]";
+					mes "Aクラスですか？少し欲張りな気もしますが、大丈夫ですよ。";
+					mes "それで、どんな防具をお持ちですか？";
+					next;
+					switch(select("パイレーツバンダナ:ブラックレザーブーツ"))
+					{
+						case 1: callfunc "Func_Socket2",2287,5350,50,61,500,985,1; // 50,61 - it's not a typo
+						case 2: callfunc "Func_Socket2",2425,2434,40,51,500,985,1;
+						//case 3: callfunc "Func_Socket2",15053,15056,x,x,x,x,x;	// Special Ninja Suit (Needs more info)
+					}
+				case 4:
+					mes "[レアブレム]";
+					mes "えっ、Sクラスですか？！ 本気ですか…？*震え*";
+					mes "それで…どのSクラス防具にスロットを作りますか？！";
+					next;
+					switch(select("メイジコート:ホーリーローブ:セイクリッドミッション:アンダーシャツ:パンティ"))
+					{
+						case 1: callfunc "Func_Socket2",2334,2372,40,51,1000,985,1; // Mage Coat has 10% success chance
+						case 2: callfunc "Func_Socket2",2327,2373,45,51,1000,985,1; // the rest has 5%
+						case 3: callfunc "Func_Socket2",2111,2128,45,51,1000,985,1;
+						case 4: callfunc "Func_Socket2",2522,2523,45,51,1000,985,1;
+						case 5: callfunc "Func_Socket2",2339,2371,45,51,1000,985,1;
+					}
+			}
+		case 3:
+			mes "[レアブレム]";
+			mes "ああ、大したことじゃないんですが、兄が";
+			mes "人間が手を出すべきじゃないと言っていて。";
+			mes "兄を怒らせたくないので、";
+			mes "忘れておいた方がいいですね。";
+			next;
+			mes "[レアブレム]";
+			mes "…そのサービス自体は成功率がとても高いのですが、";
+			mes "大量の材料と高額な手数料が必要になります。";
+			mes "仮に始めたとしても、実際に";
+			mes "利用したい人がいるとは思えませんけど。";
+			next;
+			mes "[レアブレム]";
+			mes "…うーん…";
+			next;
+			mes "[レアブレム]";
+			mes "………………";
+			next;
+			mes "[レアブレム]";
+			mes "………………";
+			next;
+			mes "[レアブレム]";
+			mes "そのサービスに興味がおありのようですね。";
+			mes "よろしければ、少しだけお話ししますよ。";
+			mes "ただし、これは秘密にすると約束してください。";
+			mes "もし兄にこの話をしたことがバレたら、";
+			mes "ぶたれてしまいます！";
+			next;
+			mes "[レアブレム]";
+			mes "この特別なサービスは成功率90%ですが、";
+			mes "ゴールド2個と2億Zenyが必要です。";
+			mes "太陽神の帽子にスロットを追加できます。";
+			next;
+			mes "[レアブレム]";
+			mes "兄によれば、大昔からあの帽子に手を加えるのは禁じられているそうです。";
+			mes "でも人間って、禁じられているほど";
+			mes "試したくなるものだと思うんですよね。";
+			mes "ただ、兄に怒られたくないだけなんです。それだけです。";
+			next;
+			switch(select("そのサービスを頼む","やめる"))
+			{
+				case 1:
+					mes "[レアブレム]";
+					mes "………………";
+					next;
+					mes "[レアブレム]";
+					mes "………………";
+					next;
+					mes "[レアブレム]";
+					mes "…な…何ですか？ ダメです！";
+					mes "そんな目で見ても";
+					mes "やる気にはなりません！";
+					mes "ダメと言ったらダメです！ダメなものはダメ！";
+					next;
+					mes "[レアブレム]";
+					mes "ダメです、やりません！ダメ！";
+					next;
+					mes "[レアブレム]";
+					mes "できません…";
+					next;
+					mes "[レアブレム]";
+					mes "やっぱり…できません…";
+					next;
+					mes "[レアブレム]";
+					mes "………………";
+					next;
+					mes "[レアブレム]";
+					mes "うーん…";
+					next;
+					mes "[レアブレム]";
+					mes "本当にしつこいですね。分かりました、特別にお受けします。";
+					mes "誰にも言わないでくださいね、";
+					mes "特に兄には。約束できますか？";
+					next;
+					mes "[レアブレム]";
+					mes "それでは、";
+					mes "^FF0000ゴールド2個、手数料の2億Zeny、";
+					mes "^FF0000そして太陽神の帽子を";
+					mes "^FF0000持ってきてください。成功率は90%ですよ。^000000";
+					mes "時間がもったいないので、";
+					mes "早速取りかかりましょう。";
+					next;
+					if ((Zeny > 199999999) && (countitem(969) > 1) && (countitem(5022) > 0))
+					{
+						mes "[レアブレム]";
+						mes "それでは始めましょうか。";
+						mes "幸運を祈っていてください。";
+						next;
+						set .@a, rand(1,100);
+						if ((.@a > 4) && (.@a < 95))
+						{
+							specialeffect EF_LORD;
+							mes "[レアブレム]";
+							mes "素晴らしい！やっぱり成功率90%は本当だったんですね！";
+							mes "見てください、完璧な位置にスロットが追加されました。";
+							mes "おめでとうございます。";
+							delitem 5022,1; //Helm_Of_Sun
+							delitem 969,2; //Gold
+							set Zeny, Zeny - 200000000;
+							getitem 5353,1; //Helm_Of_Sun_
+							next;
+							mes "[レアブレム]";
+							mes "これが最初で最後です。";
+							mes "誰にも";
+							mes "言わないでくださいね。いいですか？";
+							close;
+						}
+						else
+						{
+							specialeffect EF_SUI_EXPLOSION;
+							mes "[レアブレム]";
+							mes "うわっ！なんてことでしょう、失敗しました！";
+							mes "最悪の運だったみたいです…";
+							mes "どうしましょう…だからこそ";
+							mes "最初はやりたくなかったんです！";
+							delitem 5022,1; //Helm_Of_Sun
+							delitem 969,2; //Gold
+							set Zeny, Zeny - 200000000;
+							next;
+							mes "[レアブレム]";
+							mes "もう二度とこんな危険なことは頼まないでください！";
+							mes "もう～";
+							close;
+						}
+					}
+					else
+					{
+						mes "[レアブレム]";
+						mes "うーん…";
+						next;
+						mes "[レアブレム]";
+						mes "材料が足りないですね。";
+						mes "もう、どうしてやってみようと思ったんですか？";
+						mes "材料を持ってきても、";
+						mes "二度とやりませんからね。もう～";
+						close;
+					}
+				case 2:
+					mes "[レアブレム]";
+					mes "今の話は誰にも";
+					mes "言わないでくださいね。いいですか？";
+					close;
+			}
+		case 4:
+			mes "[レアブレム]";
+			mes "もっと詳しい情報が知りたいんですね？";
+			mes "うーん、特に";
+			mes "知っておくべきことは無い気がしますが、";
+			mes "ちょっとしたコツならお教えできます。";
+			next;
+			mes "[レアブレム]";
+			mes "各街のスロット技師は";
+			mes "装備の強化値によって";
+			mes "成功率が異なります。";
+			mes "本当かどうかは分かりませんが、";
+			mes "街ごとに違いがあるのは確かです。";
+			next;
+			mes "[レアブレム]";
+			mes "例えば、ある街の技師は";
+			mes "強化値が高い装備ほど";
+			mes "成功率が上がりますが、";
+			mes "別の街の技師は";
+			mes "強化値が低いほど成功率が上がります。";
+			next;
+			mes "[レアブレム]";
+			mes "スロット追加に失敗すると、装備は";
+			mes "壊れて消えてしまいます。";
+			mes "私も成功するよう努力していますが、";
+			mes "スロット追加は複雑な作業なんです。";
+			next;
+			mes "[レアブレム]";
+			mes "ああ、注意していただきたい大事なことがあります。";
+			mes "^FF0000スロットを追加するときは、";
+			mes "^FF0000同じ装備を2つ持たないようにしてください。";
+			mes "^FF0000そうしないと、ランダムに選ばれた方にスロットが追加され、";
+			mes "^FF0000最悪の場合、大切なアイテムを失うことになります。^000000";
+			next;
+			mes "[レアブレム]";
+			mes "この情報がお役に立てば嬉しいです。";
+			mes "ありがとうございます。";
+			close;
+		case 5:
+			mes "[レアブレム]";
+			mes "それでは、失礼します。";
+			close;
+	}
+}
+
+payon,236,199,3	duplicate(SocketEnchant2)	レアブレム#pay::Leablem#pay	86
+lighthalzen,96,137,3	duplicate(SocketEnchant2)	レアブレム#lhz::Leablem#lhz	86
+prt_in,22,60,6	duplicate(SocketEnchant2)	レアブレム#prt::Leablem#prt	86
+
+function	script	Func_Socket2	{
+	.@item_id = getarg(0);
+	.@zeny_req = getarg(4);
+	setarray .@item_req[0], getarg(5), getarg(7,0);
+	setarray .@req_amount[0], getarg(6), getarg(8,0);
+
+	disable_items;
+	mes "[レアブレム]";
+	if (.@item_req[1] != 0 && .@req_amount[1] != 0)
+	{
+		mes getitemname(.@item_id) +"…では、用意していただくのは";
+		mes "^FF0000"+ (.@zeny_req >= 1000 ? (.@zeny_req /1000 +",000") : .@zeny_req) +",000 Zenyの手数料、";
+		mes "^FF0000"+ .@req_amount[0] +"個の"+ getitemname(.@item_req[0]) +"、"+ .@req_amount[1] +"個の"+ getitemname(.@item_req[1]) +"です。";
+		mes "^FF0000もちろん、"+ getitemname(.@item_id) +"も必要です。^000000";
+	}
+	else
+	{
+		mes getitemname(.@item_id) +"ですね？では、持ってきていただくのは";
+		mes "^FF0000"+ (.@zeny_req >= 1000 ? (.@zeny_req/1000 +",000") : .@zeny_req) +",000 Zenyの手数料と、"+ .@req_amount[0] +"個の"+ getitemname(.@item_req[0]) + (.@req_amount[0] > 1 && .@item_req[0] != 999 ? "":"") +"です。";
+		mes "^FF0000もちろん、"+ getitemname(.@item_id) +"も忘れずに持ってきてください。";
+		mes "^FF0000すべて揃えてくださいね。^000000";
+	}
+	next;
+	mes "[レアブレム]";
+	mes "もう全部持ってきましたか？";
+	mes "念のためお伝えしますが、スロット作成に失敗すると、";
+	mes "必要な素材と対象の"+ ((getiteminfo(.@item_id, ITEMINFO_LOCATIONS)&EQP_HAND_R) ? "武器" : "防具") +"を全て失います。";
+	mes "また、その"+ ((getiteminfo(.@item_id, ITEMINFO_LOCATIONS)&EQP_HAND_R) ? "武器" : "防具") +"が強化されていたり、カードが挿入されていたりする場合、";
+	mes "スロット作成に成功しても、それらは失われますのでご注意ください。";
+	next;
+	switch(select("スロット作成を頼む:また今度にする"))
+	{
+		case 1:
+			if ((Zeny >= .@zeny_req*1000) && countitem(.@item_req[0]) >= .@req_amount[0] && countitem(getarg(7,512)) >= .@req_amount[1] && countitem(.@item_id) > 0)// if there's no .@req_amount[0] and .@req_amount[1] provided, check itemcount against 0 (we still need a valid item ID though)
+			{
+				mes "[レアブレム]";
+				mes "それでは、作業を始めますね！";
+				mes "うまくいくよう祈っていてください。";
+				next;
+				set .@a, rand(1,100);
+				if ((.@a > getarg(2)) && (.@a < getarg(3)))
+				{
+					specialeffect EF_LORD;
+					mes "[レアブレム]";
+					mes "やりました、成功したようです。";
+					mes "とても綺麗に仕上がりましたよ。おめでとうございます！";
+					delitem .@item_id,1;
+					delitem .@item_req[0],.@req_amount[0];
+					if (.@item_req[1] != 0 && .@req_amount[1] != 0)
+						delitem .@item_req[1],.@req_amount[1];
+					Zeny = Zeny - .@zeny_req *1000;
+					getitem getarg(1),1;
+					next;
+					mes "[レアブレム]";
+					mes "また会いましょうね！";
+					close;
+				}
+				else
+				{
+					specialeffect EF_SUI_EXPLOSION;
+					mes "[レアブレム]";
+					mes "うわっ…申し訳ありません、失敗しました。";
+					mes "でも、私に非があるわけではないんです。";
+					mes "これは運、神様が決めたことですから、いいですね？";
+					mes "あまりがっかりせずに、";
+					mes "また次の機会に挑戦してください。";
+					delitem .@item_id,1;
+					delitem .@item_req[0],.@req_amount[0];
+					if (.@item_req[1] != 0 && .@req_amount[1] != 0)
+						delitem .@item_req[1],.@req_amount[1];
+					Zeny = Zeny - .@zeny_req *1000;
+					next;
+					mes "[レアブレム]";
+					mes "また会いましょうね！";
+					close;
+				}
+			}
+			else
+			{
+				mes "[レアブレム]";
+				mes "何を考えているんですか？必要なものが全部揃っていませんよ！";
+				mes "早く持ってきてください！";
+				close;
+			}
+		case 2:
+			mes "[レアブレム]";
+			mes "また今度お待ちしています。";
+			close;
+	}
+}

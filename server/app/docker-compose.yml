@@ -1,0 +1,141 @@
+# rAthena Pre-Renewal 検証サーバ
+# 実行場所: /srv/ro-server/app （systemd ro-server.service の WorkingDirectory）
+# 変数は同ディレクトリの .env から補間される（scripts/init-env.sh が生成）。
+
+x-rathena-common: &rathena-common
+  # 3 サービスとも同一イメージ。build 定義は login-server にのみ置く。
+  image: rathena:prere
+  restart: unless-stopped
+  init: true
+  security_opt:
+    - "no-new-privileges:true"
+  cap_drop:
+    - ALL
+  # 実行ユーザーは Dockerfile の USER rathena(1000)
+  environment:
+    PUBLIC_IP: ${PUBLIC_IP}
+    INTERSERVER_USER: ${INTERSERVER_USER}
+    INTERSERVER_PASSWORD: ${INTERSERVER_PASSWORD}
+    MARIADB_USER: ${MARIADB_USER}
+    MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    MARIADB_DATABASE: ${MARIADB_DATABASE}
+    SERVER_NAME: ${SERVER_NAME}
+    TZ: ${TZ}
+
+services:
+  mariadb:
+    image: ${MARIADB_IMAGE}
+    restart: unless-stopped
+    init: true
+    # 文字コード:
+    #   テーブルは utf8mb4 で作る（sql-files/main.sql の CREATE TABLE は CHARSET 未指定のため
+    #   DB 既定の文字コードに従う）。rAthena からの接続は conf/import/inter_conf.txt の
+    #   *_codepage: cp932 により SET NAMES cp932 となり、CP932 <-> UTF-8 の変換は MariaDB が行う。
+    #   照合順序 utf8mb4_general_ci は ASCII の大文字小文字を同一視しつつ、
+    #   ひらがな / カタカナ / 全角半角は別文字として区別する（キャラ名の重複判定に使われる）。
+    #   --skip-character-set-client-handshake は入れないこと。
+    #   入れるとクライアントからの charset 指定（SET NAMES cp932）が無視され、cp932 変換が壊れる。
+    command:
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_general_ci"
+    security_opt:
+      - "no-new-privileges:true"
+    # ports は定義しない（compose ネットワーク内からのみ到達可能）
+    volumes:
+      - /srv/ro-server/mariadb:/var/lib/mysql
+      - ./rathena/sql-init:/docker-entrypoint-initdb.d:ro
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+      # sql-init/99-interserver-account.sh が参照する
+      INTERSERVER_USER: ${INTERSERVER_USER}
+      INTERSERVER_PASSWORD: ${INTERSERVER_PASSWORD}
+      TZ: ${TZ}
+    healthcheck:
+      # 公式イメージ同梱のヘルスチェックスクリプト
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION}
+        awslogs-group: ${CW_LOG_GROUP}
+        awslogs-stream: mariadb
+        awslogs-create-group: "false"
+
+  login-server:
+    <<: *rathena-common
+    build:
+      context: ./rathena
+      args:
+        RATHENA_COMMIT: ${RATHENA_COMMIT}
+        PACKETVER: ${PACKETVER}
+    command: ["login"]
+    ports:
+      - "6900:6900"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "bash", "-c", "</dev/tcp/127.0.0.1/6900"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION}
+        awslogs-group: ${CW_LOG_GROUP}
+        awslogs-stream: login-server
+        awslogs-create-group: "false"
+
+  char-server:
+    <<: *rathena-common
+    command: ["char"]
+    ports:
+      - "6121:6121"
+    depends_on:
+      login-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "bash", "-c", "</dev/tcp/127.0.0.1/6121"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION}
+        awslogs-group: ${CW_LOG_GROUP}
+        awslogs-stream: char-server
+        awslogs-create-group: "false"
+
+  map-server:
+    <<: *rathena-common
+    command: ["map"]
+    ports:
+      - "5121:5121"
+    depends_on:
+      char-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "bash", "-c", "</dev/tcp/127.0.0.1/5121"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      # map-server はマップ/NPC 読み込みに時間がかかる
+      start_period: 180s
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ${AWS_REGION}
+        awslogs-group: ${CW_LOG_GROUP}
+        awslogs-stream: map-server
+        awslogs-create-group: "false"

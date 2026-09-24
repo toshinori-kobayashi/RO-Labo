@@ -1,6 +1,6 @@
 # ro-glue 仕様
 
-`ro-glue` は `tools/ro-glue/server.mjs`（Phase 2 で `client/ro-glue/` へ移動予定）の 1 ファイル・1 プロセスで動く自作 Node（ESM、依存は `ws` のみ、`package.json` は GPL-3.0-or-later）です。本書はこのファイルを読んで書いています。起動コマンドの例は [`../README.md`](../README.md) を参照してください。
+`ro-glue` は `client/ro-glue/server.mjs` の 1 ファイル・1 プロセスで動く自作 Node（ESM、依存は `ws` のみ、`package.json` は GPL-3.0-or-later）です。本書はこのファイルを読んで書いています。起動コマンドの例は [`../README.md`](../README.md) を参照してください。
 
 ## 責務
 
@@ -24,7 +24,7 @@ node server.mjs --port 8000 --static <dir> [--grf <file.grf> ...] [--loose <dir>
 | `--grf <file>` | `[]`（複数指定可） | 指定順が資産解決の優先順になる |
 | `--loose <dir>` | `[]`（複数指定可） | 指定順が資産解決の優先順になる |
 | `--allow <ip:port,...>` | `[]`（複数回指定するとカンマ区切りをまとめて集合に追加） | **空のまま起動すると WS 中継の宛先制限が効かず、どの宛先へも中継してしまう**（`allowSet.size` が 0 だと許可リスト判定自体をスキップするため）。実運用では必ず指定する |
-| `--decrypt <path>` | `path.resolve('..', 'roBrowserLegacy-src', 'src', 'Loaders', 'GameFileDecrypt.js')`（プロセスの **CWD 起点**） | `tools/ro-glue/` で起動する前提の相対解決。別ディレクトリから起動する場合は明示指定が必要 |
+| `--decrypt <path>` | `path.resolve('..', 'roBrowserLegacy-src', 'src', 'Loaders', 'GameFileDecrypt.js')`（プロセスの **CWD 起点**） | `client/ro-glue/` で起動する前提（`client/roBrowserLegacy-src/` が兄弟ディレクトリ）の相対解決。別ディレクトリから起動する場合は明示指定が必要 |
 | `--verbose` | `false` | 資産 404 のたびにログを出す（既定では初回のみ） |
 | `--dump-rx <path>` | 未指定（ダンプしない） | サーバ→クライアント方向のバイト列のみを追記ダンプ。クライアント→サーバ（パスワードを含みうる）は書かない |
 

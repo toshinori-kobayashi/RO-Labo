@@ -1,0 +1,119 @@
+//===== rAthena Script =======================================
+//= Amatsu Guides
+//===== By: ==================================================
+//= MasterOfMuppets; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.3
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Guides for the City of Amatsu
+//===== Additional Comments: =================================
+//= 1.0 First version [MasterOfMuppets]
+//= 1.1 Removed Duplicates [Silent]
+//= 1.3 Rescripted to official 10.3 standards. [L0ne_W0lf]
+//============================================================
+
+amatsu,207,89,3	script	アマツ案内係#ama::Amatsu Guide#ama	758,{
+	mes "[アマちゃん]";
+	mes "アマツへようこそ、";
+	mes "親切な人々と";
+	mes "美しい桜の街へ。";
+	next;
+	mes "[アマちゃん]";
+	mes "わたしはアマちゃん、";
+	mes "13代目ミス・アマツです。";
+	mes "ミス・アマツとして";
+	mes "街をご案内します。";
+	mes "知りたいことがあれば";
+	mes "何でも聞いてくださいね。";
+	next;
+	switch(select("王宮:道具屋:武器屋:酒場")) {
+	case 1:
+		viewpoint 1,85,235,0,0xFF3355;
+		mes "[アマちゃん]";
+		mes "ミニマップで";
+		mes "^FF3355+^000000のマークへ";
+		mes "進めば王宮です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	case 2:
+		viewpoint 1,96,118,1,0xCE6300;
+		mes "[アマちゃん]";
+		mes "ミニマップで";
+		mes "^CE6300+^000000のマークへ";
+		mes "進めば道具屋です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	case 3:
+		viewpoint 1,132,117,2,0x55FF33;
+		mes "[アマちゃん]";
+		mes "ミニマップで";
+		mes "^55FF33+^000000のマークへ";
+		mes "進めば武器屋です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	case 4:
+		viewpoint 1,217,116,3,0x3355FF;
+		mes "[アマちゃん]";
+		mes "ミニマップで";
+		mes "^3355FF+^000000のマークへ";
+		mes "進めば酒場です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	}
+}
+	
+amatsu,251,283,4	script	案内人#2ama::Guide Man#2ama	767,{
+	mes "[案内人]";
+	mes "ミッドガッツから来た旅人よ、ようこそ。";
+	mes "わたしはこの美しい街";
+	mes "アマツの案内人です。";
+	next;
+	mes "[案内人]";
+	mes "何をお探しですか？";
+	next;
+	switch(select("王宮:道具屋:武器屋:酒場")) {
+	case 1:
+		viewpoint 1,85,235,0,0xFF3355;
+		mes "[案内人]";
+		mes "ミニマップで";
+		mes "^FF3355+^000000のマークへ";
+		mes "進めば王宮です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	case 2:
+		viewpoint 1,96,118,1,0xCE6300;
+		mes "[案内人]";
+		mes "ミニマップで";
+		mes "^CE6300+^000000のマークへ";
+		mes "進めば道具屋です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	case 3:
+		viewpoint 1,132,117,2,0x55FF33;
+		mes "[案内人]";
+		mes "ミニマップで";
+		mes "^55FF33+^000000のマークへ";
+		mes "進めば武器屋です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	case 4:
+		viewpoint 1,217,116,3,0x3355FF;
+		mes "[案内人]";
+		mes "ミニマップで";
+		mes "^3355FF+^000000のマークへ";
+		mes "進めば酒場です。";
+		mes "アマツでの";
+		mes "滞在をお楽しみください。";
+		close;
+	}
+}

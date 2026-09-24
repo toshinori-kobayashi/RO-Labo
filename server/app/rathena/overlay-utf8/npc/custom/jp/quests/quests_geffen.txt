@@ -1,0 +1,430 @@
+//===== rAthena Script ======================================= 
+//= Quest NPCs related to Geffen
+//===== By: ================================================== 
+//= kobra_k88 & Samuray22
+//===== Current Version: ===================================== 
+//= 1.5
+//===== Compatible With: ===================================== 
+//= rAthena Project; 7.15 +
+//===== Description: ========================================= 
+//= Welding Mask and Headset Quests.
+//===== Additional Comments: ================================= 
+//= 1.1 Fixed exploits [Lupus]
+//= 1.2 Removed Duplicates [Silent]
+//= 1.3 Updated "Welding Mask" Quest to the Official one. [Samuray22]
+//= 1.3a replaced item "names" with item id. Added missing [Lupus]
+//= 1.4 Updated welding mask and headset quests. [L0ne_W0lf]
+//= 1.5 Added Number Match Game. [Euphy]
+//============================================================ 
+
+// Blacksmith: 'Welding Mask' Quest
+//============================================================
+geffen_in,144,166,4	script	ブラックスミス::Blacksmith	63,{
+	mes "[ブラックスミス]";
+	mes "俺を知らないのか？これでもこの地で名の知れたベテランブラックスミスだぞ。灼熱の地獄のような炎の中で30年、鋼鉄を我が意のままに曲げ続けてきたのだ！";
+	next;
+	mes "[ブラックスミス]";
+	mes "だがな…";
+	mes "歳を重ねるにつれ、腕も衰えてきた。だから、これから育つ若く血気盛んなブラックスミスたちのために、あるものを発明したのだ。彼らにも俺の技を極めてもらいたくてな…";
+	next;
+	switch(select("それは何ですか？:…")) {
+	case 1:
+		mes "[ブラックスミス]";
+		mes "我々ブラックスミスは常に灼熱の中で鋼鉄を扱わねばならん。熱風と溶けた金属は、並の人間には到底耐えられるものではないのだ。";
+		next;
+		mes "[ブラックスミス]";
+		mes "我らの技のためとはいえ、この美しくも男らしい顔が危険にさらされるというわけだ…";
+		next;
+		mes "[ブラックスミス]";
+		mes "だが、この技術の結晶があれば、もう心配はいらん！見るがいい、この^3355FFウェルディングマスク^000000を！！";
+		next;
+		mes "[ブラックスミス]";
+		mes "分厚い金属板で顔を覆う仕組みになっている。まさに誰もが欲しがる逸品だ！自分で使わずとも、鍛冶を学ぶ友人に譲ってやるのもいいだろう。";
+		next;
+		mes "[ブラックスミス]";
+		mes "どうだ？^2244FF鋼鉄50個^000000と^4422FFたったの2000 Zeny^000000をくれれば、今すぐにでも作ってやろう～！！";
+		next;
+		switch(select("うーん…悪くないな。よし。:もう一度説明してくれ")) {
+		case 1:
+			if ((countitem(999) > 49) && (Zeny > 1999)){
+				mes "[ブラックスミス]";
+				mes "おお、ブラックスミスの仕事の価値が分かるとはな！よし、すぐに作ってやろう！！";
+				next;
+				delitem 999,50;  //Steel
+				set Zeny,Zeny-2000;
+				getitem 2292,1; // Welding_Mask
+				mes "[ブラックスミス]";
+				mes "ハハハ～！存分に使うがいい！";
+				close;
+			}
+			else {
+				mes "[ブラックスミス]";
+				mes "ふむ…";
+				mes "必要な材料が揃っていないようだな。";
+				next;
+				mes "[ブラックスミス]";
+				mes "普通のブラックスミスなら無礼と受け取るところだが、今回は大目に見てやろう。マスクを作ってほしければ、何が必要か忘れるなよ。";
+				close;
+			}
+		case 2:
+			mes "[ブラックスミス]";
+			mes "^3355FFウェルディングマスク^000000は分厚い金属板で顔を覆い、保護するものだ。この発明は、ハンマーと金床の前で過ごした30年の弛まぬ努力の結晶と言える。";
+			close;
+		}
+	case 2:
+		mes "[ブラックスミス]";
+		mes "ああ…！";
+		mes "俺ほど偉大なブラックスミスに会うのは初めてで、言葉も出ないというわけか。ゆっくり構わんから、準備ができたら話しかけてくれ。";
+		next;
+		mes "^3355FFこの男は";
+		mes "ちょっと";
+		mes "うぬぼれているようだ。^000000";
+		close;
+	}
+}
+
+// Eric: 'Headset' Quest
+//============================================================
+geffen_in,30,71,4	script	エリック::Eric	83,{
+	mes "[エリック]";
+	mes "どうか聞いてください";
+	mes "僕の";
+	mes "敬愛する祖父の";
+	mes "話を。";
+	next;
+	switch(select("話を聞く:必要なアイテムを尋ねる:作ってもらう:やめる")) {
+	case 1:
+		mes "[エリック]";
+		mes "数年前に亡くなった祖父は、僕にとって特別な存在でした。いつもそばにいて、僕の面倒を見てくれました。いつも仕事で忙しかった父よりも、ずっと僕を気にかけてくれたんです。";
+		next;
+		mes "[エリック]";
+		mes "僕にとって祖父の書斎は、いつも現実逃避できる夢の国のような場所でした。ほとんどの時間をそこで過ごしていました。";
+		next;
+		mes "[エリック]";
+		mes "書斎の本から、たくさんのことを学びました。祖父は錬金術と音楽に興味があって、書斎には不思議な古い本がたくさんありました。";
+		next;
+		mes "[エリック]";
+		mes "ある日…";
+		mes "いつものように書斎に行くと、興味深い設計図を見つけたんです。";
+		next;
+		mes "[エリック]";
+		mes "それはイヤーマフのような形をした装置で、頭に着けると、細い線を通して音楽やささやき声を耳に伝えられるというものでした。";
+		next;
+		mes "[エリック]";
+		mes "たぶん…";
+		mes "これは祖父が未完成のまま残した仕事なんだと思います。何人かの錬金術師に作ってほしいと頼んだんですが、断られてしまって…";
+		next;
+		mes "[エリック]";
+		mes "結局、『自分で作るしかない』と思って、何年も研究しました。今ではもう、あれの作り方は完全に分かっています。でも、材料をどうしても集められなくて！";
+		next;
+		mes "[エリック]";
+		mes "その材料さえ手に入れば、すぐにでも作りたいんです。僕のこの考えに興味があるなら、材料を持ってきてもらえませんか？";
+		next;
+		mes "[エリック]";
+		mes "僕がやりたいのは、祖父に敬意を表して、祖父が始めた仕事を完成させることだけなんです。もし僕に預けてくれるなら、それで構いません。";
+		close;
+	case 2:
+		mes "[エリック]";
+		mes "^3355FF鋼鉄^000000 40個";
+		mes "^3355FFオリデオコン^000000 1個";
+		mes "^3355FFアルコール^000000 1個";
+		mes "^3355FF石炭^000000 1個";
+		mes "これが、祖父の傑作を作るために必要なものです。";
+		close;
+	case 3:
+		if ((countitem(999) > 39) && (countitem(984) > 0) && (countitem(970) > 0) && (countitem(1003) > 0)) {
+			delitem 999,40; //Steel
+			delitem 984,1; //Oridecon
+			delitem 970,1; //Alchol
+			delitem 1003,1; //Coal
+			getitem 5001,1; //Headset
+			mes "*コンコンコン！*";
+			next;
+			mes "[エリック]";
+			mes "ありがとうございます。";
+			mes "あなたのおかげで、祖父の願いを叶えることができました。天国から見ていたら、きっと喜んでくれるはずです。";
+			next;
+			mes "[エリック]";
+			mes "言った通り、これを受け取ってください。自分の手でこれを作れたことが、ただただ誇らしいんです。";
+			close;
+		}
+		else {
+			mes "[エリック]";
+			mes "手伝おうとしてくれてありがとうございます。でも、必要なものが全部揃っていないみたいです。でも、きっとすぐに全部見つかると思いますよ。";
+			close;
+		}
+	case 4:
+		mes "[エリック]";
+		mes "え…そうですか？";
+		mes "そう…ですね…";
+		mes "誰にでも";
+		mes "事情はありますもんね。";
+		mes "それでは。";
+		close;
+	}
+}
+
+// Number Match Game :: gef_yagu
+//============================================================
+geffen,122,77,4	script	ニア#yagu::Nia#yagu	700,{
+	mes "[ニア]";
+	mes "こんにちは、私はニア。";
+	mes "数字合わせ遊びの";
+	mes "名人マウォンの";
+	mes "五番弟子です。さあ、";
+	mes "数字合わせゲームで勝負してみませんか？";
+	next;
+	switch(select("数字合わせゲームとは？:練習で遊ぶ:本番で遊ぶ:記録を見る:やめる")) {
+	case 1:
+		mes "[ニア]";
+		mes "ああ、そうですね。";
+		mes "数字合わせゲームの";
+		mes "目的は、私が思い浮かべた";
+		mes "数字を当てることです。";
+		mes "もちろん、私が選べる数字には";
+		mes "ちょっとしたルールがあるんですよ。";
+		next;
+		mes "[ニア]";
+		mes "私が考える数字は";
+		mes "すべて3桁で、";
+		mes "どの桁にも0は";
+		mes "使えません。それに、";
+		mes "同じ数字を複数の桁で";
+		mes "使うこともできないんです。";
+		next;
+		mes "[ニア]";
+		mes "たとえば、103や112、";
+		mes "252、701のような";
+		mes "数字は選べません。";
+		mes "0が含まれていたり、";
+		mes "同じ数字を複数回";
+		mes "使っていたりするからです。分かりましたか？";
+		next;
+		mes "[ニア]";
+		mes "さて、推測できるのは";
+		mes "5回まで。1回答えるごとに、";
+		mes "正しい数字がいくつ";
+		mes "含まれているか、そのうち";
+		mes "何個が正しい桁にあるかを教えます。";
+		next;
+		mes "[ニア]";
+		mes "たとえば、私の考えた";
+		mes "数字が168だとします。";
+		mes "最初に678と答えたら、6と8の";
+		mes "2つの数字は当たっていますが、";
+		mes "正しい桁にあるのは8だけです。";
+		next;
+		mes "[ニア]";
+		mes "まずは練習モードで";
+		mes "試してみるといいですよ。";
+		mes "慣れてきたら、本番の";
+		mes "数字合わせゲームに挑戦して";
+		mes "みてください。スコアにはスピードも関係するので忘れずに！";
+		next;
+		mes "[ニア]";
+		mes "ああ、もし数字合わせ";
+		mes "ゲームで新記録を出したら、";
+		mes "あなたの名前が記録";
+		mes "されますよ。名声と、";
+		mes "もしかしたら富も手に入る";
+		mes "このチャンス、お見逃しなく～";
+		close;
+	case 2:
+		mes "[ニア]";
+		mes "よし、練習で";
+		mes "数字合わせゲームを";
+		mes "やってみましょう。私の数字を当ててみてください。";
+		mes "やめたい時は、1000より大きい数字を入力してくださいね。";
+		set .@practice,1;
+		break;
+	case 3:
+		mes "[ニア]";
+		mes "よし、数字合わせゲームを始めましょう！";
+		mes "5回のチャンスで、私が考えた数字を当ててください。";
+		mes "やめたい時は、1000より大きい数字を入力してくださいね。";
+		set .@practice,0;
+		break;
+	case 4:
+		set .@name_record$, $050908_minus1_yagu$;
+		if (.@name_record$ == "") //custom
+			set .@name_record$,"(未登録)";
+		set .@score_record, $050908_minus1_yagu;
+		set .@score_min, .@score_record / 60;
+		set .@score_sec, .@score_record % 60;
+		mes "[ニア]";
+		mes "^ff0000" + .@name_record$ + "^000000さんが";
+		mes "数字合わせ";
+		mes "ゲームの記録保持者です。タイムは";
+		mes "^ff0000" + .@score_min + "分" + .@score_sec + "秒^000000でした。";
+		close;
+	case 5:
+		mes "[ニア]";
+		mes "お元気で、冒険者さん。";
+		mes "また数字合わせゲームが";
+		mes "したくなったら、";
+		mes "いつでも話しかけて";
+		mes "くださいね。それでは～";
+		close;
+	}
+	next;
+
+	// Generate 3 digits of a number.
+	while(1) {
+		set .@yagu100, rand(1,9);
+		set .@yagu10, rand(1,9);
+		set .@yagu1, rand(1,9);
+		if ((.@yagu100 != .@yagu10) && (.@yagu100 != .@yagu1) && (.@yagu10 != .@yagu1)) {
+			// Store the actual number (unofficial).
+			set .@yagu, (100*.@yagu100) + (10*.@yagu10) + .@yagu1;
+			break;
+		}
+	}
+
+	// The official time calculation is based on ServerTime,
+	// an int HHMMSS equivalent to atoi(gettimestr("%H%M%S",7)).
+	// UNIX time is really a better way to do this.
+	set .@start_time, gettimetick(2);
+
+	while(1) {
+
+		// Guess a number that meets all conditions.
+		while(1) {
+			if (input(.@input,100,999) != 0) {
+				mes "[ニア]";
+				mes "数字合わせゲームを";
+				mes "キャンセルしました。";
+				close;
+			}
+			set .@input100, .@input / 100;
+			set .@input10, (.@input % 100) / 10;
+			set .@input1, .@input % 10;
+			if ((.@input100 > 0) && (.@input10 > 0) && (.@input1 > 0)) {
+				if ((.@input100 != .@input10) && (.@input100 != .@input1) && (.@input10 != .@input1))
+					break;
+			}
+			mes "[ニア]";
+			mes "0を含めて入力したか、";
+			mes "同じ数字を複数の桁で";
+			mes "使って入力しましたね。";
+			mes "もう一度、別の数字を";
+			mes "入力してください。";
+			next;
+		}
+
+		set .@retry, .@retry+1;
+		mes "[ニア]";
+		mes "^ff0000"+strcharinfo(0)+"^000000さん、";
+		mes "あなたの予想は^0000ff"+.@input+"^000000ですね。";
+		mes "ちょっと";
+		mes "結果を確認しますね。";
+		next;
+
+		// Correct digits in correct locations.
+		set .@strike,0;
+		if (.@yagu100 == .@input100)
+			set .@strike, .@strike+1;
+		if (.@yagu10 == .@input10)
+			set .@strike, .@strike+1;
+		if (.@yagu1 == .@input1)
+			set .@strike, .@strike+1;
+
+		// Correct digits in incorrect locations.
+		set .@ball,0;
+		if ((.@yagu100 == .@input10) || (.@yagu100 == .@input1))
+			set .@ball, .@ball+1;
+		if ((.@yagu10 == .@input100) || (.@yagu10 == .@input1))
+			set .@ball, .@ball+1;
+		if ((.@yagu1 == .@input100) || (.@yagu1 == .@input10))
+			set .@ball, .@ball+1;
+
+		if (.@strike == 3) {
+			if (.@practice) {
+				mes "[ニア]";
+				mes "正解です！私が考えた";
+				mes "数字は^ff0000"+.@yagu+"^000000でした！";
+				mes "おめでとうございます、";
+				mes "この練習ゲームに";
+				mes "勝ちましたね！これで";
+				mes "本番の準備もばっちりです～";
+				close;
+			} else {
+
+				// Calculate final time and check against the previous record.
+				set .@end_time, gettimetick(2);
+				if (.@end_time < .@start_time)
+					set .@end_time, .@end_time + 3600;
+				set .@total_time, .@end_time - .@start_time;
+				set .@total_min, .@total_time / 60;
+				set .@total_sec, .@total_time % 60;
+				set .@name_record$, $050908_minus1_yagu$;
+				if (.@name_record$ == "") //custom
+					set .@name_record$,"(未登録)";
+				set .@score_record, $050908_minus1_yagu;
+				set .@score_min, .@score_record / 60;
+				set .@score_sec, .@score_record % 60;
+
+				if (.@score_record >= .@total_time || !.@score_record) { //custom (second condition)
+					set $050908_minus1_yagu$, strcharinfo(0);
+					set $050908_minus1_yagu, .@total_time;
+					mes "[ニア]";
+					mes "やりました！";
+					mes "私が考えた数字は";
+					mes "^ff0000" + .@yagu + "^000000でした。タイムは";
+					mes "^ff0000" + .@total_min + "分" + .@total_sec + "秒^000000、";
+					mes "これまでの記録";
+					mes "は^ff0000" + .@score_min + "分" + .@score_sec + "秒^000000でした。";
+					next;
+					mes "[ニア]";
+					mes "^ff0000" + .@name_record$ + "^000000さんが";
+					mes "持っていた記録でしたが、";
+					mes "今度はあなたが";
+					mes "数字合わせゲームの";
+					mes "新しい目標です。";
+					mes "おめでとうございます、新記録達成です！";
+					close;
+				}
+				mes "[ニア]";
+				mes "よくやりました、";
+				mes "数字を当てましたね！答えは";
+				mes "^ff0000" + .@yagu + "^000000でした。あなたは";
+				mes "この数字を、正解として";
+				mes "^ff0000" + .@total_min + "分" + .@total_sec + "秒^000000で導き出しましたね。";
+				next;
+				mes "[ニア]";
+				mes "^ff0000" + .@name_record$ + "^000000さんが";
+				mes "現在の数字合わせ";
+				mes "ゲームの記録保持者です。タイムは";
+				mes "^ff0000" + .@score_min + "分" + .@score_sec + "秒^000000です。";
+				mes "いつかこの記録を";
+				mes "破れるといいですね～";
+				close;
+			}
+		} else {
+			if (.@practice) {
+				mes "[ニア]";
+				mes "あなたの予想には^ff0000" + .@ball + "^000000個の";
+				mes "正しい数字が含まれています。^ff0000" + .@strike + "^000000個は";
+				mes "正しい桁に";
+				mes "ありました。もう一度、";
+				mes "挑戦してみて";
+				mes "ください～";
+				next;
+			} else {
+				mes "[ニア]";
+				mes "今回の予想には^ff0000" + .@ball + "^000000個の";
+				mes "正しい数字があり、";
+				mes "^ff0000" + .@strike + "^000000個は";
+				mes "正しい桁に";
+				mes "入っていました。";
+				switch(.@retry) {
+					case 1: mes "残り4回です。"; break;
+					case 2: mes "残り3回です。"; break;
+					case 3: mes "残り2回です。"; break;
+					case 4: mes "残り1回だけです…"; break;
+					case 5: mes "答えは^ff0000" + .@yagu + "^000000でした。"; close;
+				}
+				next;
+			}
+		}
+	}
+}

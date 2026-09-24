@@ -1,0 +1,358 @@
+//===== rAthena Script ======================================= 
+//= Quest NPCs related to Lutie
+//===== By: ================================================== 
+//= TonyMan & Samuray22
+//===== Current Version: ===================================== 
+//= 1.3b
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Blush, Cake Hat, Candle, Chef Hat, Raccoon Hat, Rainbow Eggshell,
+//= Spore Hat, Wonder Nutshell Quests
+//===== Additional Comments: ================================= 
+//= 1.1 Optimized [Lupus]
+//= 1.2 Fixed Chef Hat items [Lupus]
+//= 1.3 Update NPC to the Official One. [Samuray22]
+//= 1.3a Changed item names to item IDs. [Samuray22]
+//= 1.3b Removed a scrap " left in a delitem. [L0ne_W0lf]
+//= 1.4 Updated NPCs once again. [L0ne_W0lf]
+//============================================================ 
+
+xmas,117,295,4	script	自動販売機の男::Vending Machine Man	704,{
+	mes "[ティティキュペ]";
+	mes "ふむ…？";
+	mes "このティティキュペ、おもちゃ工場の偉大なる工場長にして天才発明家が、またやってのけたぞ！たった今、世界一精巧な自動販売機を作り上げたのだ！";
+	next;
+	switch(select("自動販売機について話す:自動販売機に入れるアイテムを聞く:話をやめる")) {
+	case 1:
+		mes "[ティティキュペ]";
+		mes "私の左側にいる小さな雪だるまが見えるか？見えるだろう？その口をよく見てみると、かなり大きく作られているのが分かるはずだ。普通の用途にしては、少し大きすぎると言えるかもしれんな…";
+		next;
+		mes "[ティティキュペ]";
+		mes "実はあの雪だるま、私が血と汗と涙、そして雪を注ぎ込んで発明した、驚くべき自動販売機なのだよ。";
+		next;
+		mes "[ティティキュペ]";
+		mes "あの口の中には、ありとあらゆる物を入れられる。正しいアイテムを入れれば、お返しに帽子がもらえるという仕組みだ…";
+		next;
+		mes "[ティティキュペ]";
+		mes "お前がずっと夢見てきた、あのお洒落な帽子たちが…！ブワハハハハ～！";
+		next;
+		mes "[ティティキュペ]";
+		mes "ああ、私のこの発明品はなんと素晴らしいのだろう！";
+		emotion ET_CHUPCHUP;
+		next;
+		mes "[ティティキュペ]";
+		mes "そしてあの帽子たちの数々…！私…私はもう抑えられない！";
+		next;
+		mes "^3355FFおもちゃ工場長のティティキュペは、大喜びで跳ね回り体を震わせている。正気を疑いたくなるが、もしかしたら本当に天才なのかもしれない。^000000";
+		emotion ET_SURPRISE;
+		close;
+	case 2:
+		mes "[ティティキュペ]";
+		mes "そうだ！欲しい物と引き換えに、自動販売機に何を入れればいいか知りたいのだろう？さあ…聞いてみるといい～";
+		emotion ET_AHA;
+		next;
+		switch(select("ラクーンハット:スポアハット:ワンダーナッツシェル:レインボーエッグシェル:ブラッシュ:シェフハット:キャンドル:ケーキハット:会話を終える")) {
+		case 1:
+			mes "[ティティキュペ]";
+			mes "ラクーンハットか？";
+			mes "キティバンド1個";
+			mes "ドラゴンの鱗20枚";
+			mes "硬い鱗状の茎200個";
+			mes "ラッコの毛皮300個";
+			break;
+		case 2:
+			mes "[ティティキュペ]";
+			mes "スポアハットか？";
+			mes "毒キノコの胞子850個";
+			mes "焦げた木300個";
+			mes "舌1個";
+			break;
+		case 3:
+			mes "[ティティキュペ]";
+			mes "ワンダーナッツシェルか？";
+			mes "木の実の殻1個";
+			mes "トンボの羽500枚";
+			break;
+		case 4:
+			mes "[ティティキュペ]";
+			mes "レインボーエッグシェルか？";
+			mes "卵の殻1個";
+			mes "コバルトブルー染料1個";
+			mes "デザートウルフの爪50個";
+			break;
+		case 5:
+			mes "[ティティキュペ]";
+			mes "ブラッシュだと？！";
+			mes "お前！";
+			mes "何か知っているようだな…";
+			mes "ヘッヘッ～まあいい、";
+			mes "アリスのエプロン100個";
+			break;
+		case 6:
+			mes "[ティティキュペ]";
+			mes "シェフハットか？";
+			mes "ケーキの欠片120個";
+			mes "ホワイト染料1個";
+			mes "羽根330枚";
+			mes "ドラゴンの鱗450枚";
+			break;
+		case 7:
+			mes "[ティティキュペ]";
+			mes "キャンドルか？";
+			mes "爆弾の導火線1個";
+			mes "マッチ棒50本";
+			mes "ローヤルゼリー100個";
+			break;
+		case 8:
+			mes "[ティティキュペ]";
+			mes "ケーキハットか？";
+			mes "キャンディ10個";
+			mes "キャンディケイン5個";
+			mes "よく焼けたクッキー15個";
+			mes "ケーキの欠片20個";
+			mes "鋼鉄10個";
+			break;
+		case 9:
+			mes "[ティティキュペ]";
+			mes "いつでも聞くがいい。その程度の質問、私のような天才には造作もないことだ！";
+		}
+		next;
+		mes "[ティティキュペ]";
+		mes "ああ幸せだ！！";
+		mes "私は天才だ～！";
+		mes "ホッホッホ";
+		mes "ホッホッホッホ！";
+		close;
+	case 3:
+		mes "[ティティキュペ]";
+		mes "時々、自分のこの発明があまりに素晴らしすぎて、信じられなくなることがある…！";
+		next;
+		mes "[ティティキュペ]";
+		mes "私は…";
+		mes "愛しているよ";
+		mes "雪だるま自動販売機";
+		mes "くん。";
+		emotion ET_CHUPCHUP;
+		next;
+		mes "^3355FFおもちゃ工場長のティティキュペは踊るように跳ね回り、抑えきれない歓喜の叫びを上げ始めた。もはやその正気だけでなく、天才かどうかさえ疑わしくなってくる。";
+		close;
+	}
+}
+
+xmas,115,297,4	script	Vending Machine	111,{
+	mes "[オーディ]";
+	mes "^555555わくわくアイテム自動販売機。偉大なるティティキュペが発明。欲しいアイテムを選び、必要な材料を雪だるまの口の投入口に入れてください。^000000";
+	next;
+	switch(select("^FF3355注意事項（必読）^000000:ラクーンハット:スポアハット:ワンダーナッツシェル:レインボーエッグシェル:ブラッシュ:シェフハット:キャンドル:ケーキハット:やめる")) {
+	case 1:
+		mes "[オーディ]";
+		mes "こんにちは～！";
+		mes "大切なことを一つお伝えしないといけません。この自動販売機には、特別なアイテムと普通のアイテムを見分ける機能がないんです。";
+		next;
+		mes "[オーディ]";
+		mes "そのため、^FF3355精錬済みだったりカードが挿さっていたりするアイテム^000000を使うと、新しいアイテムを作る際にカードや精錬値は失われてしまいます。";
+		next;
+		mes "[オーディ]";
+		mes "アイテムを交換・生成する際は、使わない大切なアイテムはあらかじめカプラの倉庫に預けておいてくださいね。";
+		next;
+		mes "[オーディ]";
+		mes "この自動販売機では返品・返金・交換は一切行っておりませんので、その点もご了承ください。";
+		next;
+		mes "[オーディ]";
+		mes "楽しい時間をお過ごしください！";
+		mes "ありがとうございました！";
+		close;
+	case 2:
+		if ((countitem(2213) > 0) && (countitem(1036) > 19) && (countitem(7012) > 199) && (countitem(7065) > 299)) {
+			mes "^3355FFあなたはそっとアイテムを雪だるまの口に入れた。^000000";
+			next;
+			delitem 2213,1;  //Cat_Hairband
+			delitem 1036,20;  //Dragon_Scale
+			delitem 7012,200;  //Tough_Scalelike_Stem
+			delitem 7065,300;  //Sea_Otter_Leather
+			emotion ET_O;
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ガッシャン！*^000000";
+			getitem 5033,1; // Smokie_Hat
+			next;
+			mes "[オーディ]";
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			close;
+		}
+		break;
+	case 3:
+		if ((countitem(7033) > 849) && (countitem(7068) > 299) && (countitem(1015) > 0)) {
+			mes "^3355FFあなたはそっとアイテムを雪だるまの口に入れた。^000000";
+			next;
+			delitem 7033,850;  //Poison_Spore
+			delitem 7068,300;  //Burn_Tree
+			delitem 1015,1;  //Thin_N'_Long_Tongue
+			emotion ET_O;
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ガッシャン！*";
+			mes "*ゲコッゲコッ*^000000";
+			getitem 5029,1; // Spore_Hat
+			next;
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			close;
+		}
+		break;
+	case 4:
+		if ((countitem(5037) > 0) && (countitem(7064) > 499)) {
+			mes "^3355FFあなたはそっとアイテムを雪だるまの口に入れた。^000000";
+			next;
+			delitem 5037,1;  //Fruit_Shell
+			delitem 7064,500;  //Dragon_Fly_Wing
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ガッシャン！*";
+			mes "*ピコピコピコピコ*";
+			mes "*ピーーーッ*^000000";
+			emotion ET_O;
+			getitem 5050,1; // Mystery_Fruit_Shell
+			next;
+			mes "[オーディ]";
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			close;
+		}
+		break;
+	case 5:
+		if ((countitem(5015) > 0) && (countitem(978) > 0) && (countitem(7030) > 49)){ 
+			mes "^3355FFあなたはそっとアイテムを雪だるまの口に入れた。^000000";
+			next;
+			delitem 5015,1;  //Egg_Shell
+			delitem 978,1;  //Cobaltblue_Dyestuffs
+			delitem 7030,50;  //Claw_Of_Desert_Wolf
+			emotion ET_O;
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ウーーイーーッ～*^000000";
+			getitem 5039,1; // Mottled_Egg_Shell
+			next;
+			mes "[オーディ]";
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			close;
+		}
+		break;
+	case 6:
+		if (countitem(7047) > 99) {
+			mes "^3355FFあなたはエプロン100個をそっと雪だるまの口に入れた。^000000";
+			next;
+			delitem 7047,100;  //Alice's_Apron
+			emotion ET_O;
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ガッシャン！*";
+			mes "*チュプチュプ*";
+			mes "*ジャアアッ！*^000000";
+			getitem 5040,1; // Blush
+			mes "[オーディ]";
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			next;
+			mes "[ティティキュペ]";
+			mes "ブラッシュを手に入れたのか？！ふむ。よほど華やかに見られたいと見える～！これで私の天才ぶりがよく分かっただろう？";
+			close;
+		}
+		break;
+	case 7:
+		if ((countitem(539) > 119) && (countitem(982) > 0) && (countitem(949) > 329) && (countitem(1036) > 449)) {
+			mes "^3355FFあなたはそっとアイテムを雪だるまの口に入れた。^000000";
+			next;
+			delitem 539,120;  //Piece_Of_Cake
+			delitem 982,1;  //White_Dyestuffs
+			delitem 949,330;  //Feather
+			delitem 1036,450;  //Dragon_Scale
+			emotion ET_O;
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ガッシャン！*";
+			mes "*ムゥウウゲエエ*^000000";
+			getitem 5026,1; // Hat_Of_Cook
+			next;
+			mes "[オーディ]";
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			close;
+		}
+		break;
+	case 8:
+		if ((countitem(2279) > 0) && (countitem(7035) > 49) && (countitem(526) > 99)) {
+			mes "^3355FFあなたはそっとアイテムを雪だるまの口に入れた。^000000";
+			next;
+			delitem 2279,1;  //Bomb_Wick
+			delitem 7035,50;  //Matchstick
+			delitem 526,100;  //Royal_Jelly
+			emotion ET_O;
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ガッシャン！*^000000";
+			getitem 5028,1; // Candle
+			next;
+			mes "[オーディ]";
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			close;
+		}
+		break;
+	case 9:
+		if ((countitem(529) > 9) && (countitem(530) > 4) && (countitem(538) > 14) && (countitem(539) > 19) && (countitem(999) > 9)) { 
+			mes "^3355FFあなたはそっとアイテムを雪だるまの口に入れた。^000000";
+			next;
+			delitem 529,10;  //Candy
+			delitem 530,5;  //Candy_Striper
+			delitem 538,15;  //Well_Baked_Cookie
+			delitem 539,20;  //Piece_Of_Cake
+			delitem 999,10;  //Steel
+			emotion ET_O;
+			mes "^3355FF*ブゥウウン～～*";
+			mes "*ジジジジッ*";
+			mes "*ガッチャンガッチャン*";
+			mes "*ガッシャン！*^000000";
+			getitem 5024,1; // Hat_Of_Cake
+			next;
+			mes "[オーディ]";
+			mes "^555555ご来店ありがとうございました。";
+			mes "またのお越しを！";
+			mes "ああ、お友達にもぜひ！^000000";
+			close;
+		}
+		break;
+	case 10:
+		mes "[オーディ]";
+		mes "^555555どうか…";
+		mes "入れて…";
+		mes "ください。^000000";
+		close;
+	}
+	emotion ET_X;
+	mes "[オーディ]";
+	mes "^555555エラー、エラー！";
+	mes "アイテムが違います！^000000";
+	next;
+	mes "[ティティキュペ]";
+	mes "私は…";
+	mes "きっと多くの者が、ブラッシュを手に入れるためなら何でもするのだろうな。";
+	close;
+}

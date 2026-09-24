@@ -1,0 +1,487 @@
+//===== rAthena Script =======================================
+//= Swordsman Skills Quests
+//===== By: ==================================================
+//= kobra_k88
+//===== Current Version: =====================================
+//= 1.9
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Quests for skills: Fatal Blow, Mobile HP Recovery,
+//  Auto-Berserk
+//===== Additional Comments: =================================
+//= 1.6 Rescripted to Aegis 10.3 stadards. [L0ne_W0lf]
+//= 1.7 Updated to latest available official file. [Masao]
+//= 1.8 Fixed JobLevel requirements. [Euphy]
+//= 1.9 Moved Izlude NPC to pre-re/re paths. [Euphy]
+//=     Updated "Knight De Thomas" NPC to latest version.
+//============================================================
+
+-	script	::KnightDeThomas	98,4,4,{
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 35 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		if (getskilllv("SM_MOVINGRECOVERY") == 1) {
+			mes "[デ・トーマス]";
+			mes "おお、お前か？";
+			mes "久しぶりだな！";
+			mes "前より健康そうじゃないか。";
+			mes "ハハハハ！";
+			mes "気をつけてな！またな！";
+			close;
+		} else if (countitem(713) >= 200 && countitem(1058) >= 1) {
+			mes "[デ・トーマス]";
+			mes "おかえり…";
+			mes "ムービングHP回復を覚える準備はできたか？";
+			next;
+			switch (select("はい。:いえ、まだ準備ができていません。")) {
+			case 1:
+				mes "[デ・トーマス]";
+				mes "ふむ…そうだな…";
+				next;
+				mes "[デ・トーマス]";
+				mes "よし！それでは教えよう…";
+				mes "…ムービングHP回復のスキルをな！";
+				next;
+				delitem 713,200; //Empty_Bottle
+				delitem 1058,1; //Wing_Of_Moth
+				skill "SM_MOVINGRECOVERY",1,SKILL_PERM;
+				mes "[デ・トーマス]";
+				mes "これでよし！";
+				mes "自分で試してみるといい。";
+				mes "だが、無理はするなよ。";
+				next;
+				mes "[デ・トーマス]";
+				mes "ああ、そうだ。お前の防具は";
+				mes "もう必要ないから、返しておこう。";
+				mes "それじゃあ、幸運を！";
+				close;
+			case 2:
+				mes "[デ・トーマス]";
+				mes "そうか？";
+				mes "それなら、準備ができてからまた来い。";
+				close;
+			}
+		} else {
+			mes "[デ・トーマス]";
+			mes "ふむ…剣士か…";
+			mes "私がデ・トーマス・カルロスだということは知っているだろう？";
+			mes "プロンテラ第3騎兵隊の騎士だ。";
+			mes "デ・トーマス・カルロスだぞ！";
+			next;
+			mes "[デ・トーマス]";
+
+			// bug: official script always states that job level is too low
+			//mes "Wait a second, your Job level isn't above ^00880035^000000!";
+			//mes "Come back when it is.";
+
+			// custom: old dialog
+			mes "私が頼んだ品を全て持っていないようだな。";
+			next;
+			mes "[デ・トーマス]";
+			mes "いいか、必要なのは^008800空き瓶200個^000000、お前の防具、そして^008800蛾の羽^000000だ。全部揃ったらまた来い。";
+			close;
+		}
+	} else {
+		mes "[デ・トーマス]";
+		mes "私の名はデ・トーマス・カルロス。";
+		mes "プロンテラ第3騎兵隊の騎士だ。";
+		mes "近頃はある任務についていてな。";
+		mes "ふむ！これ以上は言うまでもないだろう。";
+		close;
+	}
+	end;
+
+OnTouch:
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 35 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		mes "[デ・トーマス]";
+		mes "おお、大変だ！怪我をしているな！大丈夫か？";
+		mes "そんなひどい傷を負うとは、よほど激しく戦ったんだろう…";
+		mes "剣士であるということは、多くの責任と犠牲を伴うものだ。";
+		next;
+		mes "[デ・トーマス]";
+		if (Sex == SEX_MALE)
+			mes "そんな剣士やナイトたちのために、素晴らしいスキルがある。";
+		else
+			mes "そんな剣士やナイトの娘たちのために、素晴らしいスキルがあるんだ、お嬢さん。";
+		mes "紹介しよう－ムービングHP回復だ！";
+		mes "移動しながら体力(HP)を";
+		mes "回復できるという、";
+		mes "実に見事なスキルだぞ！";
+		next;
+		mes "[デ・トーマス]";
+		mes "今はまだ開発途中だから";
+		mes "そう多くは回復しないかもしれないが、";
+		mes "それでも少しは助けになるはずだ。";
+		mes "どうだ？このスキルを覚えたいか？";
+		next;
+		switch (select("なんて素敵なスキルだ！ぜひ覚えたい！:いえ、結構です。")) {
+		case 1:
+			mes "[デ・トーマス]";
+			mes "よろしい。このスキルを覚えるのに必要なものを教えよう。";
+			mes "まず、ジョブレベルが^00880035^000000より高くなければならない。";
+			mes "それから^008800空き瓶200個^000000も必要だ。";
+			mes "なぜかって？それだけ多くのポーションを使うほど、激しく戦ってきた証だからだ。";
+			next;
+			mes "[デ・トーマス]";
+			mes "それから、戦闘で使った防具も。";
+			mes "これもまた、経験豊富な戦士の証だ。";
+			mes "防具については…お前のものでちょうどいい！";
+			mes "お前の防具を持ってこい！";
+			mes "そして最後に…^008800蛾の羽^0000001枚を持ってきてくれ。";
+			next;
+			select("え？それも必要なんですか？");
+			mes "[デ・トーマス]";
+			mes "いや…本当に必要というわけじゃないんだ。";
+			mes "ただ、姪が夏休みの宿題で昆虫採集をすることになってな。";
+			mes "もちろん、私自身で取りに行った方がずっと早いんだが、";
+			mes "ここでずっと仕事をしていなければならなくて、外に出て取りに行く時間がないんだ。";
+			next;
+			mes "[デ・トーマス]";
+			mes "毎日一箇所にとどまったまま外にも出られないなんて、哀れだと思わないか？";
+			mes "頼むから、一枚見つけてきてくれ…グスッ";
+			mes "もし見つからなかったら…";
+			close;
+		case 2:
+			mes "[デ・トーマス]";
+			mes "…";
+			close;
+		}
+	}
+	end;
+}
+
+prt_in,75,88,5	script	レオン・フォン・フリッヒ::Leon Von Frich	85,3,3,{
+	if ((BaseClass == Job_Swordman) && (JobLevel >= 25 || (BaseJob == Job_Knight || BaseJob == Job_Crusader))) {
+		if (getskilllv("SM_FATALBLOW") == 1) {
+			mes "[レオン]";
+			mes "ん？";
+			mes "誰かと思えば！";
+			mes "この前のやつじゃないか！";
+			mes "また会えて嬉しいぞ！元気だったか？";
+			mes "気をつけてな！ハハハ！";
+			close;
+		}
+		else if ((countitem(1752) > 9) && (countitem(1751) > 9) && (countitem(532) > 0) && (countitem(962) > 29) && (countitem(526) > 4)) {
+			mes "[レオン]";
+			mes "おお！ファタルブローを覚える";
+			mes "準備は十分すぎるほどできているな！";
+			mes "どうだ？覚えてみたいか？";
+			next;
+			switch (select("はい！:いえ、覚えたくありません。:でも、ファタルブローって何ですか？")) {
+			case 1:
+				mes "[レオン]";
+				mes "よし、始めるぞ！";
+				next;
+				delitem 1752,10; //Fire_Arrow
+				delitem 1751,10; //Silver_Arrow
+				delitem 532,1; //Banana_Juice
+				delitem 962,30; //Tentacle
+				delitem 526,5; //Royal_Jelly
+				skill "SM_FATALBLOW",1,SKILL_PERM;
+				mes "[レオン]";
+				mes "成功だ！";
+				mes "新しいスキルを存分に活かしてこい。";
+				mes "ハハハハハハハハハ！";
+				close;
+			case 2:
+				mes "[レオン]";
+				mes "お前なんて嫌いだ！！！";
+				close;
+			case 3:
+				mes "[レオン]";
+				mes "最近、このスキルを開発したんだ。";
+				mes "バッシュを使うと、レベルに";
+				mes "応じて相手をスタンさせる";
+				mes "ことができる。";
+				mes "バッシュはもう覚えているだろう？";
+				next;
+				mes "[レオン]";
+				mes "どう思う？スタンは";
+				mes "とても便利な技だ。このスキル、魅力的だと思わないか？";
+				mes "そう思ったら、すぐに私のところへ戻ってこい！";
+				close;
+			}
+		}
+		mes "[レオン]";
+		mes "おお！若くて強そうな剣士だな！";
+		next;
+		mes "[レオン]";
+		mes "おお、その腕を見ると、バッシュを使うのが好きなんだろう？";
+		next;
+		select("え、私は…その…");
+		mes "[レオン]";
+		if (Sex == SEX_FEMALE) {
+			mes "驚くことはない。";
+			mes "剣を使うなら、当然いい腕をしているはずだからな！";
+		}
+		else {
+			mes "恥ずかしがることはない。";
+			mes "たとえ女性でも、剣を使うには強い腕が必要だからな！";
+		}
+		mes "役立たずで怠け者の若者ばかりのこの時代に、";
+		mes "お前のような強い者に会えて嬉しいよ。";
+		next;
+		mes "[レオン]";
+		mes "そうだ、お前のような素晴らしい剣士に、贈り物をしたい。";
+		next;
+		switch (select("どんな贈り物ですか？:結構です。")) {
+		case 1:
+			mes "[レオン]";
+			mes "ハハ、大したものじゃないが、急所を突くスキルだ！";
+			next;
+		case 2:
+			mes "[レオン]";
+			mes "…ハハ、大したものじゃない、急所を狙うスキルというだけだ！";
+			next;
+		}
+		mes "[レオン]";
+		mes "最近開発したスキルだ。";
+		mes "バッシュを使うと、";
+		mes "レベルに応じて相手を";
+		mes "スタンさせられる。";
+		mes "バッシュはもう覚えているだろう？";
+		next;
+		mes "[レオン]";
+		mes "私がお前のような剣士だった頃、";
+		mes "バッシュを使うのが好きでな。毎回思っていたんだ";
+		mes "－同時にスタンさせれば、攻撃が";
+		mes "もっと強力になるんじゃないかと。";
+		next;
+		mes "[レオン]";
+		mes "戦場から退いて研究に打ち込み、";
+		mes "ついにこの素晴らしい新スキルを開発した！";
+		mes "このスキルを覚えたいか？";
+		next;
+		switch (select("はい。:いいえ。:寿司の食べ方について何かアドバイスはありますか？")) {
+		case 1:
+			mes "[レオン]";
+			mes "よし。必要なものを教えよう。";
+			mes "まず、バッシュのレベルが5以上でなければならない。";
+			mes "それから火の矢10本、銀の矢10本、バナナジュース1本、触手30個、ローヤルゼリー5個を用意する必要がある。";
+			mes "まあ…材料のようなものだ。";
+			next;
+			mes "[レオン]";
+			mes "材料が全部揃ったら、また私のところへ来い。";
+			mes "その時に話そう。";
+			close;
+		case 2:
+			mes "[レオン]";
+			mes "ハハハハハハハハハハハハ！";
+			mes "…";
+			mes "…";
+			mes "…";
+			mes "言葉も出ないな！？";
+			close;
+		case 3:
+			mes "[寿司キングレオン]";
+			mes "寿司を食べる一番いい方法は";
+			mes "手で食べることだ。";
+			mes "それが基本だな。";
+			mes "それから、醤油につけるのは";
+			mes "米じゃなく魚の方だ。";
+			next;
+			mes "[寿司キングレオン]";
+			mes "そうすればより豊かな風味が楽しめる。";
+			mes "それに、必ず旬のものを食べることだ。";
+			mes "白身魚から食べて、次に";
+			mes "青魚の順で食べると、より美味くなるぞ！";
+			mes "うむ！寿司は好きだぞ～～！";
+			close;
+		}
+	}
+	mes "[レオン]";
+	mes "おお、いかん！お前にやれるものが何もない！";
+	mes "剣士以外の誰かに、楽しく素敵な";
+	mes "話をすることはできないんだ！";
+	mes "またどこかで会おう！";
+	close;
+
+OnTouch_:
+	mes "[レオン]";
+	mes "ハハハハハハハハ！";
+	mes "ハハハハハハハハ！";
+	close;
+}
+
+prt_in,94,57,3	script	フアン::Juan	85,4,4,{
+	if (BaseClass == Job_Swordman) {
+		if (getskilllv("SM_AUTOBERSERK") == 1) {
+			mes "[フアン]";
+			mes "うむ？久しぶりだな！";
+			mes "元気だったか？";
+			mes "前より強くなったようだな。";
+			mes "多くの者がお前に期待している。";
+			mes "お前ならできる。";
+			close;
+		}
+		else if (JobLevel < 10 && (BaseJob != Job_Knight && BaseJob != Job_Crusader)) {
+			mes "[？]";
+			mes "お前は何者だ？";
+			mes "ふん、まだ初心者か。";
+			mes "忙しいんだ、もう少し鍛錬してから";
+			mes "また出直してこい。";
+			close;
+		}
+		else if (JobLevel < 30 && (BaseJob != Job_Knight && BaseJob != Job_Crusader)) {
+			mes "[フアン]";
+			mes "おお、はじめまして。";
+			mes "もう行っていいぞ。（にっこり～）";
+			close;
+		}
+		else if ((countitem(924) > 34) && (countitem(958) > 9) && (countitem(957) > 9) && (countitem(518) > 9)) {
+			mes "[フアン]";
+			mes "おお。若い剣士よ！";
+			mes "最新のスキル、オートバーサークを";
+			mes "覚える準備はできているか？！";
+			next;
+			switch (select("ほほう、今すぐ覚えたいですね。:それは何ですか？")) {
+			case 1:
+				mes "[フアン]";
+				mes "よし。それでは…";
+				next;
+				delitem 924,35; //Powder_Of_Butterfly
+				delitem 958,10; //Horrendous_Mouth
+				delitem 957,10; //Decayed_Nail
+				delitem 518,10; //Honey
+				skill "SM_AUTOBERSERK",1,SKILL_PERM;
+				mes "[フアン]";
+				mes "お前は今、オートバーサークを";
+				mes "使える剣士になった。";
+				mes "これからも";
+				mes "偉大なことを成し遂げるがいい！";
+				next;
+				mes "[フアン]";
+				mes "幸運を祈る！";
+				next;
+				mes "[フアン]";
+				mes "……………………………ああ、そうだ。";
+				mes "言い忘れていたことがあった。";
+				mes "心に留めておくべきことがいくつかある。";
+				next;
+				mes "[フアン]";
+				mes "体力が回復すれば、";
+				mes "このスキルの効果は収まる。";
+				mes "それに、実際には時間制限はないが、";
+				mes "プロボックを無効化するスキルで";
+				mes "攻撃されると、それでも";
+				mes "消えてしまうことがある。";
+				next;
+				mes "[フアン]";
+				mes "この特徴を覚えておかないと、";
+				mes "スキルが突然消えてしまった時に";
+				mes "戦場で困ったことになるかもしれないぞ。";
+				next;
+				mes "[フアン]";
+				mes "それじゃあ…本当にまたな～";
+				close;
+			case 2:
+				mes "[フアン]";
+				mes "オートバーサーク？";
+				mes "戦場では欠かせないスキルだ。";
+				mes "体力が赤くなった時、";
+				mes "お前の隠れた潜在能力が";
+				mes "戦闘の助けとなって自らを奮い立たせる。";
+				next;
+				mes "[フアン]";
+				mes "炎のように戦場で戦う者に";
+				mes "うってつけだ！";
+				mes "お前の実力なら、";
+				mes "今すぐこのスキルを覚えられる。";
+				mes "それでは、必要な材料を教えよう。";
+				next;
+				mes "[フアン]";
+				mes "蝶の粉35個が必要だ。";
+				mes "蝶の見事な羽から得られる";
+				mes "エネルギーが、お前の力を";
+				mes "集める助けとなるだろう！";
+				mes "それから恐ろしい口10個。";
+				mes "腐った爪10個。";
+				mes "そして最後に…";
+				mes "蜂蜜10個だ！";
+				next;
+				mes "[フアン]";
+				mes "全部わかったか？";
+				mes "いつものように、準備が";
+				mes "できたら戻ってこい。";
+				mes "また会えるのを楽しみにしている。";
+				close;
+			}
+		}
+		mes "[フアン]";
+		mes "おお、前に会った時よりも";
+		mes "怪我が増えているじゃないか。";
+		mes "そんな状態で戦いに行ったのか？";
+		mes "無理をしているようだな。";
+		next;
+		mes "[フアン]";
+		mes "たとえ多くの力を持っていても、";
+		mes "限界に達すれば大したことはできない、";
+		mes "だから自分の力を過信するな。";
+		mes "もちろん、この限界を";
+		mes "乗り越えるために我々が開発したスキルを使う手もあるがな。";
+		next;
+		switch (select("え！何の話ですか？:ハハ、そんなものあるわけないでしょう。:クゥウウウウウ！")) {
+		case 1:
+			mes "[フアン]";
+			mes "そのスキルはオートバーサークという。";
+			mes "戦場の華とも呼ばれている。";
+			mes "体力が赤くなった時、";
+			mes "お前の隠れた潜在能力が";
+			mes "戦闘の助けとなって自らを奮い立たせる。";
+			next;
+			mes "[フアン]";
+			mes "炎のように戦場で戦う者に";
+			mes "うってつけだ！";
+			mes "お前の実力なら、";
+			mes "今すぐこのスキルを覚えられる。";
+			mes "それでは、必要な材料を教えよう。";
+			next;
+			mes "[フアン]";
+			mes "蝶の粉35個が必要だ。";
+			mes "蝶の見事な羽から得られる";
+			mes "エネルギーが、お前の力を";
+			mes "集める助けとなるだろう！";
+			mes "それから恐ろしい口10個。";
+			mes "腐った爪10個。";
+			mes "そして最後に…";
+			mes "蜂蜜10個だ！";
+			next;
+			mes "[フアン]";
+			mes "全部わかったか？";
+			mes "いつものように、準備が";
+			mes "できたら戻ってこい。";
+			mes "また会えるのを楽しみにしている。";
+			close;
+		case 2:
+			mes "[フアン]";
+			mes "ふん、今までずっと騙されてきたのか。";
+			mes "知らんな。話しかけるな。";
+			close;
+		case 3:
+			mes "[フアン]";
+			mes "クゥウウウウウウウウウウウ！";
+			mes "オオオワワワワウウウウウウウウウウウウウフフッ！";
+			mes "クゥアアアアアアアアアア！";
+			close;
+		}
+	}
+	mes "[フアン]";
+	mes "旅は楽しんでいるか？";
+	mes "この先も良い日々が続くことを願っているよ。";
+	mes "ああ、私はただの親切な騎士フアンさ。";
+	mes "あまり気にしないでくれ。ハハハ…";
+	close;
+}
+
+//============================================================ 
+// Old changelog
+//============================================================ 
+//= Fully working
+//= 1.0a Now using functions found in "Global_Functions.txt"
+//=     for class checks.
+//= 1.1 Added missing delitem [Lupus]
+//= 1.2 Added Baby Class Support [Lupus]
+//= 1.3 Removed callfunc Is_####_Class in favor of baseClass [Silentdragon]
+//= 1.4 Updated the NPC to allow subclasses of swordsman to learn the skills, [MasterOfMuppets]
+//= 1.5 Fixed exploits [Lupus]
+//= 1.5a Fixed some typos [IVBela]
+//============================================================

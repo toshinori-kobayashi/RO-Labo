@@ -1,0 +1,12 @@
+//--------------------------------------------------------------
+// login-server 設定の上書き（conf/login_athena.conf の最後に import される）
+//--------------------------------------------------------------
+
+// _M / _F による野良アカウント登録を無効化（rAthena 既定も no）。
+// アカウントは scripts/create-account.sh で作成する。
+new_account: no
+
+// ログイン操作をログに記録する。
+// login-server の動的パスワード失敗 BAN（ipban_dynamic_pass_failure_ban）は
+// このログを前提にしているので yes のままにすること。
+log_login: yes

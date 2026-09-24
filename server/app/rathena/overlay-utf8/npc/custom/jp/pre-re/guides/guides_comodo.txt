@@ -1,0 +1,128 @@
+//===== rAthena Script =======================================
+//= Comodo Guides
+//===== By: ==================================================
+//= kobra_k88; L0ne_W0lf
+//===== Current Version: =====================================
+//= 1.5
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= [Official Conversion]
+//= Guides for the City of Comodo
+//===== Additional Comments: =================================
+//= Fully working
+//= 1.1 Now using duplicate command.
+//= 1.2 Optimized, updated common guide names [Lupus]
+//= 1.3 Updated the guide according to how it is on iRO, thanks
+//=     to Muad_Dib [MasterOfMuppets]
+//= 1.4 Removed 3 guides, and converted to use functions.
+//= 1.5 Rescripted to official 10.3 standards. [L0ne_W0lf]
+//============================================================
+
+comodo,322,178,4	script	案内係#cmd::CmdGuide	700,{
+	callfunc "F_CmdGuide","コモド案内係";
+}
+
+comodo,176,350,4	script	コモド案内係#2cmd::Comodo Guide#2cmd	700,{
+	callfunc "F_CmdGuide","コモド案内係";
+}
+
+comodo,37,219,4	script	案内係#2cmd::Guide#2cmd	700,{
+	callfunc "F_CmdGuide","コモド案内係";
+}
+
+function	script	F_CmdGuide	{
+	mes "["+getarg(0)+"]";
+	mes "夢とファンタジーの街、";
+	mes "コモドへようこそ。";
+	mes "ここの夜はいつまでも終わりません！";
+	mes "この辺りには詳しいので、";
+	mes "道に迷ったら";
+	mes "いつでも聞いてください。";
+	next;
+	switch(select("カジノ:フラダンス会場^3355FF（ダンサー転職）^000000:武器防具屋:道具屋:みやげ物屋:カプラ西支店:族長の家:酒場:キャンプ場:会話を終える")) {
+	case 1:
+		viewpoint 1,140,98,0,0xFF6633;
+		mes "ミニマップの十字マーク";
+		mes "^FF6633+^000000 で見つかります。";
+		mes "カジノは疲れた旅人の";
+		mes "憩いの場であり、";
+		mes "コモドの夜の賑わいの中心です。";
+		close;
+	case 2:
+		viewpoint 1,188,168,1,0x0000FF;
+		mes "ミニマップの十字マーク";
+		mes "^0000FF+^000000 で見つかります。";
+		mes "フラダンス会場は、";
+		mes "女性アーチャーが";
+		mes "ダンサーへ転職できる場所です。";
+		close;
+	case 3:
+		viewpoint 1,266,70,2,0x00FFFF;
+		mes "ミニマップの十字マーク";
+		mes "^00FFFF+^000000 で見つかります。";
+		mes "武器防具屋では、";
+		mes "コモドならではの";
+		mes "特別なアイテムが";
+		mes "手に入るかもしれません！";
+		close;
+	case 4:
+		viewpoint 1,86,128,3,0x515151;
+		mes "ミニマップの十字マーク";
+		mes "^515151+^000000 で見つかります。";
+		mes "道具屋には、まだ";
+		mes "行ったことが";
+		mes "なければぜひ立ち寄って、";
+		mes "必要な道具を揃えましょう。";
+		close;
+	case 5:
+		viewpoint 1,298,124,4,0x3355FF;
+		mes "ミニマップの十字マーク";
+		mes "^3355FF+^000000 で見つかります。";
+		mes "みやげ物屋では";
+		mes "コモド地方でしか手に入らない品が買えますよ～";
+		close;
+	case 6:
+		viewpoint 1,136,202,5,0xFF5555;
+		mes "ミニマップの十字マーク";
+		mes "^FF5555+^000000 で見つかります。";
+		mes "カプラ西支店では";
+		mes "重要なサービスを";
+		mes "利用できるので、後でぜひ覗いてみてください。";
+		close;
+	case 7:
+		viewpoint 1,114,294,5,0xFF5555;
+		mes "ミニマップの十字マーク";
+		mes "^FF5555+^000000 で見つかります。";
+		mes "族長の家を訪ねても";
+		mes "構いません。族長はいつも";
+		mes "来客を歓迎してくれますよ。";
+		close;
+	case 8:
+		viewpoint 1,166,298,5,0xFF5555;
+		mes "ミニマップの十字マーク";
+		mes "^FF5555+^000000 で見つかります。";
+		mes "酒場では他の旅行者と";
+		mes "出会い、くつろぎながら";
+		mes "楽しく交流できますよ～";
+		close;
+	case 9:
+		viewpoint 1,210,308,5,0xFF5555;
+		mes "ミニマップの十字マーク";
+		mes "^FF5555+^000000 で見つかります。";
+		mes "キャンプ場に家族や";
+		mes "友人たちと集まって、";
+		mes "コモド名物のバーベキューを";
+		mes "楽しんでくださいね～";
+		close;
+	case 10:
+		mes "["+getarg(0)+"]";
+		mes "実のところ、コモドは";
+		mes "大きな洞窟の中にあるので";
+		mes "いつも夜のように";
+		mes "見えるんです。日は差しませんが、";
+		mes "この暗さがかえって";
+		mes "わくわくするでしょう～";
+		close;
+	}
+}

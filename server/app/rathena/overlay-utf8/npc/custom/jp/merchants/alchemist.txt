@@ -1,0 +1,170 @@
+//===== rAthena Script ======================================= 
+//= Alchemist Shop
+//===== By: ================================================== 
+//= rAthena Dev Team
+//===== Current Version: ===================================== 
+//= 1.8
+//===== Compatible With: ===================================== 
+//= rAthena Project
+//===== Description: ========================================= 
+//= Merchants for Alchemist Materials and Manuals.
+//===== Additional Comments: ================================= 
+//= 1.1 fixed Medicine Bowl issue, thanx 2 MasterOfMuppets
+//= 1.2 Reddozen's fixes of typos. added optional Elemental
+//=     Potion Guide. [Lupus]
+//= 1.3 Deleted Elemental Potions Guide due to original quest [Lupus]
+//= 1.4 Alchemists can now purchase 2000 Medicine Bowls at once. [SinSloth]
+//= 1.5 Updated to Aegis 10.3 Standards. [L0ne_W0lf]
+//= 1.6 Corrected canceling purchase. [L0ne_W0lf]
+//= 1.7 Updated to match AEGIS script. [Masao]
+//= 1.8 Moved Craft Book Merchant to Renewal path. [Euphy]
+//============================================================ 
+
+alde_alche,24,188,3	script	ギルド商人::Guild Dealer	740,{
+	if (checkweight(1201,1) == 0) {
+		mes "- ちょっと待って！ -";
+		mes "- 今のあなたは -";
+		mes "- 荷物を持ちすぎています。 -";
+		mes "- また今度 -";
+		mes "- 倉庫に預けてから来てください。 -";
+		close;
+	}
+	mes "[ゲヴァー・アル・シャープ]";
+	mes "錬金術師ギルドへ";
+	mes "ようこそ。";
+	mes "本日はどのようなご用件でしょうか？";
+	next;
+	switch(select("材料を購入する:製作マニュアルを購入する:やめる")) {
+	case 1:
+		mes "[ゲヴァー・アル・シャープ]";
+		mes "どちらになさいますか？";
+		next;
+		if (select("調合ボウル - 8Zeny:やめる") == 1) {
+			mes "[ゲヴァー・アル・シャープ]";
+			mes "いくつご入用ですか？";
+			mes "やめる場合は「0」を入力してください。";
+			next;
+			while(1) {
+				input .@input,0,2001;
+				if (.@input == 0) {
+					mes "[ゲヴァー・アル・シャープ]";
+					mes "取引は中止されました。";
+					mes "またのお越しをお待ちしております。";
+					close;
+				}
+				else if (.@input < 1 || .@input > 2000) {
+					mes "[ゲヴァー・アル・シャープ]";
+					mes "数量は2000未満で";
+					mes "指定してください。";
+					next;
+				}
+				else {
+					break;
+				}
+			}
+			set .@sell,.@input * 8;
+			set .@item_weight,.@input * 10;
+			if (Zeny < .@sell) {
+				mes "[ゲヴァー・アル・シャープ]";
+				mes "Zenyが";
+				mes "足りないようです。";
+				mes "所持Zenyを";
+				mes "ご確認ください。";
+				close;
+			}
+			if ((MaxWeight - Weight) < .@item_weight) {
+				mes "[ゲヴァー・アル・シャープ]";
+				mes "それを全部";
+				mes "持ちきれないようですね。";
+				mes "所持品の空きを";
+				mes "ご確認ください。";
+				close;
+			}
+			set Zeny, Zeny-.@sell;
+			getitem 7134,.@input; //Medicine_Bowl
+			mes "[ゲヴァー・アル・シャープ]";
+			mes "ありがとうございます。";
+			mes "またお越しください。";
+			close;
+		}
+		mes "[ゲヴァー・アル・シャープ]";
+		mes "それでは、";
+		mes "錬金術に関する";
+		mes "材料が";
+		mes "必要になったら";
+		mes "また来てくださいね。";
+		close;
+	case 2:
+		mes "[ゲヴァー・アル・シャープ]";
+		mes "何がご入用ですか？";
+		mes "マニュアルは基本的に10万Zenyですが、中にはそれより高額な特別なものもあります。";
+		next;
+		switch(select("ポーション精製の手引き:薬用アルコール精製の手引き:ビン型グレネード精製の手引き:酸のビン精製の手引き:プラントボトル精製の手引き:マリンスフィアボトル精製の手引き:グリステニングコート精製の手引き:濃縮ポーション精製の手引き:取引をやめる")) {
+		case 1:
+			callsub S_SellManual,7144,100000; //Normal_Potion_Book
+			break;
+		case 2:
+			callsub S_SellManual,7127,100000; //Alcol_Create_Book
+			break;
+		case 3:
+			callsub S_SellManual,7128,100000; //FireBottle_Create_Book
+			break;
+		case 4:
+			callsub S_SellManual,7129,100000; //Acid_Create_Book
+			break;
+		case 5:
+			callsub S_SellManual,7130,100000; //Plant_Create_Book
+			break;
+		case 6:
+			callsub S_SellManual,7131,100000; //Mine_Create_Book
+			break;
+		case 7:
+			callsub S_SellManual,7132,100000; //Coating_Create_Book
+			break;
+		case 8:
+			callsub S_SellManual,7133,240000; //Slim_Potion_Create_Book
+			break;
+		case 9:
+			mes "[ゲヴァー・アル・シャープ]";
+			mes "それでは…";
+			mes "製作マニュアルが";
+			mes "必要になったら";
+			mes "また来てください。";
+			close;
+		}
+	case 3:
+		mes "[ゲヴァー・アル・シャープ]";
+		mes "それでは、";
+		mes "良い一日を。";
+		close;
+	}
+
+S_SellManual:
+	.@item_id = getarg(0);
+	.@zeny_req = getarg(1);
+
+	if (Zeny < .@zeny_req) {
+		mes "[ゲヴァー・アル・シャープ]";
+		mes "Zenyが";
+		mes "足りないようです。";
+		mes "所持Zenyを";
+		mes "ご確認ください。";
+		close;
+	}
+	mes "[ゲヴァー・アル・シャープ]";
+	mes getitemname(.@item_id) +"ですか？";
+	mes "代金は"+ .@zeny_req +"Zenyです。";
+	next;
+	if (select("購入する:やめる") == 1) {
+		Zeny = Zeny - .@zeny_req;
+		getitem .@item_id,1;
+		mes "[ゲヴァー・アル・シャープ]";
+		mes "いつも";
+		mes "ありがとうございます。";
+		close;
+	}
+	mes "[ゲヴァー・アル・シャープ]";
+	mes "またのお越しを";
+	mes "お待ちしております。";
+	close;
+}

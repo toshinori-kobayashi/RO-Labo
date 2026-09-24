@@ -1,0 +1,24 @@
+# terraform.tfvars としてコピーして使う（全て default があるので必須ではない）
+region  = "ap-northeast-1"
+profile = "sandbox-power"
+
+project_name = "legacy-app-lab"
+environment  = "verify"
+
+vpc_cidr          = "10.90.0.0/16"
+subnet_cidr       = "10.90.0.0/24"
+availability_zone = "ap-northeast-1a"
+
+instance_type       = "t3.medium"
+root_volume_size_gb = 30
+data_volume_size_gb = 20
+
+service_ports      = [6900, 6121, 5121]
+log_retention_days = 14
+
+docker_compose_version = "v5.5.1"
+docker_buildx_version  = "v0.37.1"
+
+# 19:30 UTC = 04:30 JST
+snapshot_time_utc     = "19:30"
+snapshot_retain_count = 7
